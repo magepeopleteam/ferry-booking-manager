@@ -1,0 +1,60 @@
+<?xml version="1.0"?>
+<ruleset name="Ferry Booking Manager">
+	<description>WordPress coding standards for Ferry Booking Manager.</description>
+
+	<file>src</file>
+	<file>ferry-booking-manager.php</file>
+	<file>uninstall.php</file>
+
+	<exclude-pattern>*/vendor/*</exclude-pattern>
+	<exclude-pattern>*/node_modules/*</exclude-pattern>
+	<exclude-pattern>*/apps/*</exclude-pattern>
+	<exclude-pattern>*/assets/*</exclude-pattern>
+
+	<arg name="extensions" value="php"/>
+	<arg name="colors"/>
+	<arg value="ps"/>
+
+	<rule ref="WordPress">
+		<!-- The plugin ships PSR-4 class files, not WordPress class-*.php files. -->
+		<exclude name="WordPress.Files.FileName"/>
+
+		<!--
+			Fires on inline `/** @var Type $var */` annotations, which exist to give
+			static analysis a concrete type after a generic return and have no
+			meaningful short description to add. Function and class docblocks all
+			carry descriptions.
+		-->
+		<exclude name="Generic.Commenting.DocComment.MissingShort"/>
+
+		<!--
+			The `fbm` prefix is a product-wide requirement: it appears in post types,
+			meta keys, options, capabilities, the REST namespace and the CSS and
+			JavaScript namespaces, and is already shipped. The sniff's four-character
+			minimum cannot be met without breaking every stored identifier.
+		-->
+		<exclude name="WordPress.NamingConventions.PrefixAllGlobals.ShortPrefixPassed"/>
+	</rule>
+
+	<config name="minimum_wp_version" value="6.0"/>
+	<config name="testVersion" value="8.0-"/>
+
+	<rule ref="PHPCompatibilityWP"/>
+
+	<rule ref="WordPress.WP.I18n">
+		<properties>
+			<property name="text_domain" type="array">
+				<element value="ferry-booking-manager"/>
+			</property>
+		</properties>
+	</rule>
+
+	<rule ref="WordPress.NamingConventions.PrefixAllGlobals">
+		<properties>
+			<property name="prefixes" type="array">
+				<element value="fbm"/>
+				<element value="FBM"/>
+			</property>
+		</properties>
+	</rule>
+</ruleset>

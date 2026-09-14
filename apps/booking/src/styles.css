@@ -1,0 +1,1970 @@
+/**
+ * Booking application styles.
+ *
+ * Everything is scoped under .fbm-frontend and uses its own tokens, so a theme
+ * that styles every input on the page cannot deform the booking form, and the
+ * booking form cannot leak into the theme. Sizes use rem so a visitor's own
+ * text-size preference still works; colours are tokens so a site can rebrand
+ * the flow with a handful of custom properties.
+ */
+
+.fbm-frontend {
+	--fbmb-bg: #ffffff;
+	--fbmb-surface: #ffffff;
+	--fbmb-surface-muted: #f6f7fb;
+	--fbmb-border: #dfe3ed;
+	--fbmb-border-strong: #c3cad9;
+	--fbmb-text: #161f2f;
+	--fbmb-text-muted: #5b6478;
+	--fbmb-text-faint: #838da3;
+	--fbmb-accent: #0b62c4;
+	--fbmb-accent-hover: #094f9f;
+	--fbmb-accent-soft: #e9f1fc;
+	--fbmb-positive: #0f7a54;
+	--fbmb-positive-soft: #e6f5ef;
+	--fbmb-warning: #a35c00;
+	--fbmb-warning-soft: #fdf2e2;
+	--fbmb-danger: #b93227;
+	--fbmb-danger-soft: #fbebe9;
+	--fbmb-radius: 0.625rem;
+	--fbmb-radius-sm: 0.375rem;
+	--fbmb-radius-lg: 0.875rem;
+	--fbmb-shadow: 0 1px 2px rgba( 22, 31, 47, 0.06 );
+	--fbmb-shadow-lg: 0 0.75rem 2rem rgba( 22, 31, 47, 0.12 );
+	--fbmb-gap: 1rem;
+
+	color: var( --fbmb-text );
+	font-size: 1rem;
+	line-height: 1.55;
+	text-align: start;
+	box-sizing: border-box;
+}
+
+/*
+ * Breaking out of a narrow content column. Themes cap prose at a readable
+ * measure, which is the right call for an article and the wrong one for a
+ * timetable, so the wide and full modifiers centre a larger box on the parent
+ * regardless of how narrow the parent is.
+ */
+/*
+ * Widening is the theme's job: the wide and full modifiers carry WordPress's
+ * own alignment classes, so a theme places the booking flow on the same centre
+ * line as the rest of the page. These rules only clear the content-width cap
+ * that a constrained layout puts on every child, and give a sensible result in
+ * a theme that has no wide alignment at all.
+ */
+.fbm-frontend--w-wide.fbm-frontend--w-wide,
+.fbm-frontend--w-full.fbm-frontend--w-full {
+	inline-size: 100%;
+	max-inline-size: none;
+}
+
+
+/*
+ * The layout below adapts on viewport width rather than the form's own width.
+ *
+ * It used to be a container query — a block theme can render the form inside a
+ * narrow column while the page is much wider, and the form's own width is the
+ * honest thing to lay it out against. That has to give way to a browser change:
+ * from Chrome 129 an element with `container-type` establishes a containing
+ * block for positioned content, and the native dropdown of a <select> inside one
+ * is placed against the container instead of the control, so it opens somewhere
+ * other than under the field it belongs to. A form whose ports cannot be chosen
+ * is worse than a form that is occasionally wider than its column, so the
+ * containment goes and the breakpoints move to the viewport.
+ */
+
+.fbm-frontend *,
+.fbm-frontend *::before,
+.fbm-frontend *::after {
+	box-sizing: inherit;
+}
+
+.fbm-frontend .fbmb {
+	display: flex;
+	flex-direction: column;
+	gap: 1.5rem;
+}
+
+/* ---------------------------------------------------------------- Loading */
+
+.fbm-frontend .fbm-frontend__loading {
+	display: flex;
+	align-items: center;
+	gap: 0.625rem;
+	padding: 1.5rem;
+	color: var( --fbmb-text-muted );
+	background: var( --fbmb-surface-muted );
+	border: 1px solid var( --fbmb-border );
+	border-radius: var( --fbmb-radius );
+}
+
+.fbm-frontend .fbm-frontend__spinner {
+	inline-size: 1.125rem;
+	block-size: 1.125rem;
+	border: 2px solid var( --fbmb-border-strong );
+	border-block-start-color: var( --fbmb-accent );
+	border-radius: 50%;
+	animation: fbmb-spin 0.8s linear infinite;
+}
+
+@keyframes fbmb-spin {
+	to {
+		transform: rotate( 360deg );
+	}
+}
+
+@media ( prefers-reduced-motion: reduce ) {
+	.fbm-frontend .fbm-frontend__spinner {
+		animation-duration: 3s;
+	}
+}
+
+.fbm-frontend .fbm-frontend__noscript {
+	margin: 0;
+	padding: 1rem;
+	background: var( --fbmb-warning-soft );
+	border: 1px solid var( --fbmb-warning );
+	border-radius: var( --fbmb-radius );
+	color: var( --fbmb-warning );
+}
+
+/* ----------------------------------------------------------------- Button */
+
+.fbm-frontend .fbmb-button {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: 0.5rem;
+	padding: 0.625rem 1.125rem;
+	border: 1px solid transparent;
+	border-radius: var( --fbmb-radius-sm );
+	font: inherit;
+	font-weight: 600;
+	line-height: 1.2;
+	cursor: pointer;
+	text-decoration: none;
+	transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+
+.fbm-frontend .fbmb-button:focus-visible {
+	outline: 2px solid var( --fbmb-accent );
+	outline-offset: 2px;
+}
+
+.fbm-frontend .fbmb-button--primary {
+	background: var( --fbmb-accent );
+	color: #ffffff;
+}
+
+.fbm-frontend .fbmb-button--primary:hover:not( :disabled ) {
+	background: var( --fbmb-accent-hover );
+}
+
+.fbm-frontend .fbmb-button--secondary {
+	background: var( --fbmb-surface );
+	border-color: var( --fbmb-border-strong );
+	color: var( --fbmb-text );
+}
+
+.fbm-frontend .fbmb-button--secondary:hover:not( :disabled ) {
+	background: var( --fbmb-surface-muted );
+}
+
+.fbm-frontend .fbmb-button--ghost {
+	background: none;
+	color: var( --fbmb-accent );
+}
+
+.fbm-frontend .fbmb-button--lg {
+	padding: 0.8125rem 1.5rem;
+	font-size: 1.0625rem;
+}
+
+.fbm-frontend .fbmb-button--sm {
+	padding: 0.375rem 0.75rem;
+	font-size: 0.875rem;
+}
+
+.fbm-frontend .fbmb-button--block {
+	inline-size: 100%;
+}
+
+.fbm-frontend .fbmb-button:disabled {
+	opacity: 0.55;
+	cursor: not-allowed;
+}
+
+/* ------------------------------------------------------------------ Field */
+
+.fbm-frontend .fbmb-field {
+	display: flex;
+	flex-direction: column;
+	gap: 0.3125rem;
+	min-inline-size: 0;
+}
+
+.fbm-frontend .fbmb-field__label {
+	font-size: 0.8125rem;
+	font-weight: 600;
+	color: var( --fbmb-text-muted );
+}
+
+.fbm-frontend .fbmb-field__required {
+	color: var( --fbmb-danger );
+	margin-inline-start: 0.125rem;
+}
+
+.fbm-frontend .fbmb-field__hint,
+.fbm-frontend .fbmb-field__error {
+	margin: 0;
+	font-size: 0.8125rem;
+}
+
+.fbm-frontend .fbmb-field__hint {
+	color: var( --fbmb-text-faint );
+}
+
+.fbm-frontend .fbmb-field__error {
+	color: var( --fbmb-danger );
+	font-weight: 500;
+}
+
+.fbm-frontend .fbmb-input,
+.fbm-frontend .fbmb-select__control {
+	inline-size: 100%;
+	min-block-size: 2.75rem;
+	padding: 0.5rem 0.75rem;
+	background: var( --fbmb-surface );
+	border: 1px solid var( --fbmb-border-strong );
+	border-radius: var( --fbmb-radius-sm );
+	color: var( --fbmb-text );
+	font: inherit;
+	line-height: 1.4;
+	appearance: none;
+	box-shadow: none;
+}
+
+.fbm-frontend .fbmb-input:focus,
+.fbm-frontend .fbmb-select__control:focus {
+	outline: 2px solid var( --fbmb-accent );
+	outline-offset: -1px;
+	border-color: var( --fbmb-accent );
+}
+
+.fbm-frontend .fbmb-field.is-invalid .fbmb-input,
+.fbm-frontend .fbmb-field.is-invalid .fbmb-party-trigger,
+.fbm-frontend .fbmb-field.is-invalid .fbmb-select__control {
+	border-color: var( --fbmb-danger );
+}
+
+.fbm-frontend .fbmb-select {
+	position: relative;
+	display: block;
+}
+
+/*
+ * Raised only while open, so the panel passes over the sticky footer bar
+ * instead of disappearing behind it on a long list of results.
+ */
+.fbm-frontend .fbmb-select.is-open {
+	z-index: 30;
+}
+
+.fbm-frontend .fbmb-select__control {
+	display: flex;
+	align-items: center;
+	padding-inline-end: 2.25rem;
+	text-align: start;
+	cursor: pointer;
+}
+
+.fbm-frontend .fbmb-select__control[disabled] {
+	cursor: not-allowed;
+	opacity: 0.6;
+}
+
+.fbm-frontend .fbmb-select__value {
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}
+
+.fbm-frontend .fbmb-select__value.is-placeholder {
+	color: var( --fbmb-text-faint );
+}
+
+.fbm-frontend .fbmb-select__arrow {
+	position: absolute;
+	inset-inline-end: 0.75rem;
+	inset-block-start: 50%;
+	transform: translateY( -50% );
+	inline-size: 1rem;
+	block-size: 1rem;
+	color: var( --fbmb-text-faint );
+	pointer-events: none;
+	transition: transform 0.15s ease;
+}
+
+.fbm-frontend .fbmb-select.is-open .fbmb-select__arrow {
+	transform: translateY( -50% ) rotate( 180deg );
+}
+
+.fbm-frontend .fbmb-select__panel {
+	position: absolute;
+	inset-inline-start: 0;
+	inset-block-start: calc( 100% + 0.25rem );
+	inline-size: 100%;
+	max-block-size: 16rem;
+	overflow-y: auto;
+	overscroll-behavior: contain;
+	padding: 0.25rem;
+	background: var( --fbmb-surface );
+	border: 1px solid var( --fbmb-border-strong );
+	border-radius: var( --fbmb-radius-sm );
+	box-shadow: var( --fbmb-shadow-lg );
+}
+
+.fbm-frontend .fbmb-select__panel.is-above {
+	inset-block-start: auto;
+	inset-block-end: calc( 100% + 0.25rem );
+}
+
+/*
+ * The results filters are sized to their trigger, which is as small as its
+ * current label. Their panels are allowed past it so "Shortest crossing" does
+ * not wrap onto two lines; a full-width field needs no such help and keeps the
+ * panel exactly under itself.
+ */
+.fbm-frontend .fbmb-results__controls .fbmb-select__panel {
+	inline-size: max-content;
+	min-inline-size: 100%;
+	max-inline-size: min( 20rem, 90vw );
+}
+
+.fbm-frontend .fbmb-select__option {
+	padding: 0.5rem 0.625rem;
+	border-radius: calc( var( --fbmb-radius-sm ) - 2px );
+	color: var( --fbmb-text );
+	line-height: 1.4;
+	cursor: pointer;
+}
+
+.fbm-frontend .fbmb-select__option.is-selected {
+	font-weight: 600;
+}
+
+.fbm-frontend .fbmb-select__option.is-active {
+	background: var( --fbmb-accent );
+	color: #ffffff;
+}
+
+.fbm-frontend .fbmb-select__option.is-disabled {
+	color: var( --fbmb-text-faint );
+	cursor: not-allowed;
+}
+
+@media ( prefers-reduced-motion: reduce ) {
+	.fbm-frontend .fbmb-select__arrow {
+		transition: none;
+	}
+}
+
+.fbm-frontend .fbmb-checkbox {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.5rem;
+	font-size: 0.875rem;
+	color: var( --fbmb-text-muted );
+	cursor: pointer;
+}
+
+.fbm-frontend .fbmb-checkbox input {
+	inline-size: 1.0625rem;
+	block-size: 1.0625rem;
+	accent-color: var( --fbmb-accent );
+	margin: 0;
+}
+
+/* ---------------------------------------------------------------- Stepper */
+
+.fbm-frontend .fbmb-stepper {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.25rem;
+	padding: 0.1875rem;
+	border: 1px solid var( --fbmb-border );
+	border-radius: 999px;
+	background: var( --fbmb-surface-muted );
+}
+
+.fbm-frontend .fbmb-stepper__button {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	inline-size: 2rem;
+	block-size: 2rem;
+	padding: 0;
+	border: 1px solid var( --fbmb-border-strong );
+	border-radius: 50%;
+	background: var( --fbmb-surface );
+	color: var( --fbmb-text );
+	cursor: pointer;
+}
+
+.fbm-frontend .fbmb-stepper__button:disabled {
+	opacity: 0.4;
+	cursor: not-allowed;
+}
+
+.fbm-frontend .fbmb-stepper__button:focus-visible {
+	outline: 2px solid var( --fbmb-accent );
+	outline-offset: 1px;
+}
+
+.fbm-frontend .fbmb-stepper__button svg {
+	inline-size: 1rem;
+	block-size: 1rem;
+}
+
+.fbm-frontend .fbmb-stepper__value {
+	min-inline-size: 1.75rem;
+	text-align: center;
+	font-variant-numeric: tabular-nums;
+	font-weight: 600;
+}
+
+/* ------------------------------------------------------------ Search form */
+
+.fbm-frontend .fbmb-search {
+	padding: 1.5rem;
+	background: var( --fbmb-surface );
+	border: 1px solid var( --fbmb-border );
+	border-radius: var( --fbmb-radius-lg );
+	box-shadow: var( --fbmb-shadow );
+	display: flex;
+	flex-direction: column;
+	gap: 1.25rem;
+}
+
+.fbm-frontend .fbmb-search__section {
+	display: flex;
+	flex-direction: column;
+	gap: 0.625rem;
+	padding-block-end: 1.25rem;
+	border-block-end: 1px solid var( --fbmb-border );
+}
+
+.fbm-frontend .fbmb-search__section:last-of-type {
+	padding-block-end: 0;
+	border-block-end: 0;
+}
+
+.fbm-frontend .fbmb-search__section-title {
+	margin: 0;
+	font-size: 0.75rem;
+	font-weight: 700;
+	letter-spacing: 0.06em;
+	text-transform: uppercase;
+	color: var( --fbmb-text-faint );
+}
+
+.fbm-frontend .fbmb-search__trip {
+	display: inline-flex;
+	gap: 0.25rem;
+	padding: 0.1875rem;
+	background: var( --fbmb-surface-muted );
+	border: 1px solid var( --fbmb-border );
+	border-radius: 999px;
+	align-self: flex-start;
+}
+
+.fbm-frontend .fbmb-toggle {
+	padding: 0.4375rem 1rem;
+	border: 0;
+	border-radius: 999px;
+	background: none;
+	font: inherit;
+	font-size: 0.875rem;
+	font-weight: 600;
+	color: var( --fbmb-text-muted );
+	cursor: pointer;
+}
+
+.fbm-frontend .fbmb-toggle.is-active {
+	background: var( --fbmb-surface );
+	color: var( --fbmb-accent );
+	box-shadow: var( --fbmb-shadow );
+}
+
+.fbm-frontend .fbmb-toggle:focus-visible {
+	outline: 2px solid var( --fbmb-accent );
+	outline-offset: 1px;
+}
+
+.fbm-frontend .fbmb-search__grid {
+	display: grid;
+	gap: var( --fbmb-gap );
+	grid-template-columns: 1fr;
+	align-items: end;
+}
+
+.fbm-frontend .fbmb-swap {
+	display: none;
+}
+
+.fbm-frontend .fbmb-search__travellers {
+	display: grid;
+	gap: var( --fbmb-gap );
+	grid-template-columns: 1fr;
+	align-items: end;
+}
+
+.fbm-frontend .fbmb-search__submit {
+	display: flex;
+}
+
+.fbm-frontend .fbmb-search__error {
+	margin: 0;
+	color: var( --fbmb-danger );
+	font-size: 0.875rem;
+	font-weight: 500;
+}
+
+.fbm-frontend .fbmb-party-trigger {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 0.5rem;
+	inline-size: 100%;
+	min-block-size: 2.75rem;
+	padding: 0.5rem 0.75rem;
+	background: var( --fbmb-surface );
+	border: 1px solid var( --fbmb-border-strong );
+	border-radius: var( --fbmb-radius-sm );
+	font: inherit;
+	color: var( --fbmb-text );
+	text-align: start;
+	cursor: pointer;
+}
+
+.fbm-frontend .fbmb-party-trigger svg {
+	inline-size: 1rem;
+	block-size: 1rem;
+	color: var( --fbmb-text-faint );
+	flex-shrink: 0;
+}
+
+.fbm-frontend .fbmb-party-trigger.is-open {
+	border-color: var( --fbmb-accent );
+	box-shadow: 0 0 0 1px var( --fbmb-accent );
+}
+
+.fbm-frontend .fbmb-party {
+	position: relative;
+	margin-block-start: 1rem;
+	padding: 0;
+	background: var( --fbmb-surface );
+	border: 1px solid var( --fbmb-border-strong );
+	border-radius: var( --fbmb-radius );
+	box-shadow: var( --fbmb-shadow-lg );
+	display: grid;
+	grid-template-columns: 1fr;
+	gap: 0;
+
+	/*
+	 * A fleet with ten vehicle types would otherwise push the page down by a
+	 * screen and a half, leaving the Search button somewhere below the fold.
+	 */
+	max-block-size: min( 60vh, 30rem );
+	overflow: auto;
+	overscroll-behavior: contain;
+}
+
+.fbm-frontend .fbmb-party__group {
+	min-inline-size: 0;
+	padding: 1rem 1.25rem;
+}
+
+.fbm-frontend .fbmb-party__heading {
+	margin: 0 0 0.5rem;
+	font-size: 0.75rem;
+	font-weight: 700;
+	letter-spacing: 0.05em;
+	text-transform: uppercase;
+	color: var( --fbmb-text-faint );
+}
+
+.fbm-frontend .fbmb-party__row {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 1rem;
+	padding-block: 0.5rem;
+	border-block-end: 1px solid var( --fbmb-border );
+}
+
+.fbm-frontend .fbmb-party__row:last-child {
+	border-block-end: 0;
+}
+
+.fbm-frontend .fbmb-party__name {
+	display: block;
+	font-weight: 600;
+}
+
+.fbm-frontend .fbmb-party__meta {
+	display: block;
+	font-size: 0.8125rem;
+	color: var( --fbmb-text-faint );
+}
+
+/*
+ * The fare sits between the name and the stepper, in the space the row's
+ * space-between already leaves. It is right-aligned against the stepper so a
+ * column of prices reads as a column.
+ */
+.fbm-frontend .fbmb-party__fare {
+	margin-inline-start: auto;
+	font-variant-numeric: tabular-nums;
+	font-size: 0.875rem;
+	font-weight: 600;
+	color: var( --fbmb-text-muted );
+	white-space: nowrap;
+}
+
+.fbm-frontend .fbmb-party__fare.is-free {
+	color: var( --fbmb-positive );
+	text-transform: uppercase;
+	font-size: 0.75rem;
+	letter-spacing: 0.04em;
+}
+
+.fbm-frontend .fbmb-party__group.is-unavailable .fbmb-party__row {
+	opacity: 0.55;
+}
+
+.fbm-frontend .fbmb-party__note {
+	display: block;
+	margin-block-start: 0.25rem;
+	font-size: 0.75rem;
+	color: var( --fbmb-text-faint );
+}
+
+.fbm-frontend .fbmb-party__footer {
+	/*
+	 * Spanning every column keeps the button its natural size. As one grid
+	 * item among the groups it was stretched to the full height of the tallest
+	 * column, which turned Done into a several-hundred-pixel bar.
+	 */
+	grid-column: 1 / -1;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 1rem;
+	position: sticky;
+	inset-block-end: 0;
+	padding: 0.75rem 1.25rem;
+	background: var( --fbmb-surface );
+	border-block-start: 1px solid var( --fbmb-border );
+}
+
+.fbm-frontend .fbmb-party__summary {
+	color: var( --fbmb-text-muted );
+	font-size: 0.875rem;
+}
+
+/* ---------------------------------------------------------------- Results */
+
+.fbm-frontend .fbmb-results {
+	display: flex;
+	flex-direction: column;
+	gap: 0.875rem;
+}
+
+.fbm-frontend .fbmb-results__header {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: flex-end;
+	justify-content: space-between;
+	gap: 0.75rem;
+}
+
+.fbm-frontend .fbmb-results__title {
+	margin: 0;
+	font-size: 1.125rem;
+	font-weight: 700;
+}
+
+.fbm-frontend .fbmb-results__subtitle {
+	margin: 0.125rem 0 0;
+	color: var( --fbmb-text-muted );
+	font-size: 0.875rem;
+}
+
+.fbm-frontend .fbmb-results__controls {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 0.5rem;
+}
+
+.fbm-frontend .fbmb-results__controls .fbmb-select__control {
+	min-block-size: 2.25rem;
+	font-size: 0.875rem;
+	inline-size: auto;
+}
+
+.fbm-frontend .fbmb-results__list {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	display: flex;
+	flex-direction: column;
+	gap: 0.625rem;
+}
+
+.fbm-frontend .fbmb-sailing {
+	display: grid;
+	gap: 1rem;
+	grid-template-columns: 1fr;
+	padding: 1rem;
+	background: var( --fbmb-surface );
+	border: 1px solid var( --fbmb-border );
+	border-radius: var( --fbmb-radius );
+	box-shadow: var( --fbmb-shadow );
+}
+
+.fbm-frontend .fbmb-sailing.is-selected {
+	border-color: var( --fbmb-accent );
+	box-shadow: 0 0 0 1px var( --fbmb-accent );
+}
+
+.fbm-frontend .fbmb-sailing.is-unavailable {
+	background: var( --fbmb-surface-muted );
+}
+
+.fbm-frontend .fbmb-sailing__times {
+	display: flex;
+	align-items: center;
+	gap: 0.625rem;
+}
+
+.fbm-frontend .fbmb-sailing__time {
+	font-size: 1.25rem;
+	font-weight: 700;
+	font-variant-numeric: tabular-nums;
+}
+
+.fbm-frontend .fbmb-sailing__line {
+	display: flex;
+	align-items: center;
+	gap: 0.25rem;
+	flex: 1 1 auto;
+	min-inline-size: 2.5rem;
+}
+
+.fbm-frontend .fbmb-sailing__dot {
+	inline-size: 0.4375rem;
+	block-size: 0.4375rem;
+	border-radius: 50%;
+	background: var( --fbmb-border-strong );
+	flex-shrink: 0;
+}
+
+.fbm-frontend .fbmb-sailing__dash {
+	flex: 1 1 auto;
+	block-size: 1px;
+	background: var( --fbmb-border-strong );
+}
+
+.fbm-frontend .fbmb-sailing__route {
+	margin: 0;
+	font-weight: 600;
+}
+
+.fbm-frontend .fbmb-sailing__meta {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.375rem;
+	margin: 0.125rem 0 0.5rem;
+	color: var( --fbmb-text-muted );
+	font-size: 0.875rem;
+}
+
+.fbm-frontend .fbmb-sailing__badges {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.375rem;
+	margin: 0;
+}
+
+.fbm-frontend .fbmb-sailing__action {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: 0.5rem;
+}
+
+.fbm-frontend .fbmb-sailing__price {
+	margin: 0;
+	display: flex;
+	flex-direction: column;
+}
+
+.fbm-frontend .fbmb-sailing__amount {
+	font-size: 1.375rem;
+	font-weight: 700;
+	font-variant-numeric: tabular-nums;
+}
+
+.fbm-frontend .fbmb-sailing__pricemeta {
+	font-size: 0.8125rem;
+	color: var( --fbmb-text-faint );
+}
+
+.fbm-frontend .fbmb-sailing__unavailable {
+	margin: 0;
+	font-size: 0.875rem;
+	font-weight: 500;
+	color: var( --fbmb-danger );
+}
+
+/* ------------------------------------------------------------------ Badge */
+
+.fbm-frontend .fbmb-badge {
+	display: inline-flex;
+	align-items: center;
+	padding: 0.125rem 0.5rem;
+	border-radius: 999px;
+	font-size: 0.75rem;
+	font-weight: 600;
+	background: var( --fbmb-surface-muted );
+	border: 1px solid var( --fbmb-border );
+	color: var( --fbmb-text-muted );
+}
+
+.fbm-frontend .fbmb-badge--positive {
+	background: var( --fbmb-positive-soft );
+	border-color: transparent;
+	color: var( --fbmb-positive );
+}
+
+.fbm-frontend .fbmb-badge--warning {
+	background: var( --fbmb-warning-soft );
+	border-color: transparent;
+	color: var( --fbmb-warning );
+}
+
+.fbm-frontend .fbmb-badge--danger {
+	background: var( --fbmb-danger-soft );
+	border-color: transparent;
+	color: var( --fbmb-danger );
+}
+
+.fbm-frontend .fbmb-badge--accent {
+	background: var( --fbmb-accent-soft );
+	border-color: transparent;
+	color: var( --fbmb-accent );
+}
+
+/* ------------------------------------------------------------------ Alert */
+
+.fbm-frontend .fbmb-alert {
+	padding: 0.875rem 1rem;
+	border-radius: var( --fbmb-radius-sm );
+	border: 1px solid;
+	font-size: 0.9375rem;
+}
+
+.fbm-frontend .fbmb-alert--error {
+	background: var( --fbmb-danger-soft );
+	border-color: var( --fbmb-danger );
+	color: #7d221b;
+}
+
+.fbm-frontend .fbmb-alert--info {
+	background: var( --fbmb-accent-soft );
+	border-color: var( --fbmb-accent );
+	color: #093f7d;
+}
+
+.fbm-frontend .fbmb-alert--success {
+	background: var( --fbmb-positive-soft );
+	border-color: var( --fbmb-positive );
+	color: #0a5138;
+}
+
+.fbm-frontend .fbmb-alert--warning {
+	background: var( --fbmb-warning-soft );
+	border-color: var( --fbmb-warning );
+	color: #74420a;
+}
+
+/* ------------------------------------------------------------------- Card */
+
+.fbm-frontend .fbmb-card {
+	padding: 1rem;
+	background: var( --fbmb-surface );
+	border: 1px solid var( --fbmb-border );
+	border-radius: var( --fbmb-radius );
+	margin-block-end: 0.625rem;
+}
+
+.fbm-frontend .fbmb-card.is-clickable {
+	cursor: pointer;
+}
+
+.fbm-frontend .fbmb-card.is-selected {
+	border-color: var( --fbmb-accent );
+}
+
+/* --------------------------------------------------------------- Skeleton */
+
+.fbm-frontend .fbmb-skeletons {
+	display: flex;
+	flex-direction: column;
+	gap: 0.625rem;
+}
+
+.fbm-frontend .fbmb-skeleton {
+	block-size: 4.5rem;
+	border-radius: var( --fbmb-radius );
+	background: linear-gradient( 90deg, #eef0f6 25%, #e3e6ef 37%, #eef0f6 63% );
+	background-size: 400% 100%;
+	animation: fbmb-shimmer 1.4s ease infinite;
+}
+
+@keyframes fbmb-shimmer {
+	0% {
+		background-position: 100% 50%;
+	}
+
+	100% {
+		background-position: 0 50%;
+	}
+}
+
+@media ( prefers-reduced-motion: reduce ) {
+	.fbm-frontend .fbmb-skeleton {
+		animation: none;
+	}
+}
+
+/* ------------------------------------------------------------------ Empty */
+
+.fbm-frontend .fbmb-empty {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 0.5rem;
+	padding: 2.5rem 1rem;
+	text-align: center;
+	background: var( --fbmb-surface-muted );
+	border: 1px dashed var( --fbmb-border-strong );
+	border-radius: var( --fbmb-radius );
+}
+
+.fbm-frontend .fbmb-empty__icon {
+	inline-size: 2.5rem;
+	block-size: 2.5rem;
+	color: var( --fbmb-text-faint );
+}
+
+.fbm-frontend .fbmb-empty__title {
+	margin: 0;
+	font-weight: 600;
+}
+
+.fbm-frontend .fbmb-empty__description {
+	margin: 0;
+	color: var( --fbmb-text-muted );
+	font-size: 0.9375rem;
+}
+
+/* ------------------------------------------------------------------ Steps */
+
+.fbm-frontend .fbmb-steps {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.75rem 1.25rem;
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+.fbm-frontend .fbmb-steps__item {
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+	font-size: 0.875rem;
+	color: var( --fbmb-text-faint );
+}
+
+.fbm-frontend .fbmb-steps__marker {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	inline-size: 1.625rem;
+	block-size: 1.625rem;
+	border-radius: 50%;
+	border: 1px solid var( --fbmb-border-strong );
+	font-size: 0.8125rem;
+	font-weight: 700;
+}
+
+.fbm-frontend .fbmb-steps__marker svg {
+	inline-size: 0.875rem;
+	block-size: 0.875rem;
+}
+
+.fbm-frontend .fbmb-steps__item.is-current {
+	color: var( --fbmb-accent );
+	font-weight: 600;
+}
+
+.fbm-frontend .fbmb-steps__item.is-current .fbmb-steps__marker {
+	border-color: var( --fbmb-accent );
+	background: var( --fbmb-accent );
+	color: #ffffff;
+}
+
+.fbm-frontend .fbmb-steps__item.is-done {
+	color: var( --fbmb-positive );
+}
+
+.fbm-frontend .fbmb-steps__item.is-done .fbmb-steps__marker {
+	border-color: var( --fbmb-positive );
+	color: var( --fbmb-positive );
+}
+
+/* ---------------------------------------------------------------- Details */
+
+.fbm-frontend .fbmb-section__title {
+	margin: 0 0 0.25rem;
+	font-size: 1.0625rem;
+	font-weight: 700;
+}
+
+.fbm-frontend .fbmb-section__note {
+	margin: 0 0 0.75rem;
+	color: var( --fbmb-text-muted );
+	font-size: 0.875rem;
+}
+
+.fbm-frontend .fbmb-details {
+	display: flex;
+	flex-direction: column;
+	gap: 1.5rem;
+}
+
+.fbm-frontend .fbmb-details__block {
+	padding: 1rem;
+	background: var( --fbmb-surface );
+	border: 1px solid var( --fbmb-border );
+	border-radius: var( --fbmb-radius );
+	margin-block-start: 0.625rem;
+}
+
+.fbm-frontend .fbmb-details__heading {
+	margin: 0 0 0.75rem;
+	font-size: 0.9375rem;
+	font-weight: 700;
+	color: var( --fbmb-text-muted );
+}
+
+.fbm-frontend .fbmb-details__grid {
+	display: grid;
+	gap: 0.875rem;
+	grid-template-columns: 1fr;
+}
+
+/* ----------------------------------------------------------------- Review */
+
+.fbm-frontend .fbmb-review__leg {
+	display: flex;
+	align-items: flex-start;
+	justify-content: space-between;
+	gap: 1rem;
+}
+
+.fbm-frontend .fbmb-review__route {
+	margin: 0;
+	font-weight: 700;
+}
+
+.fbm-frontend .fbmb-review__when,
+.fbm-frontend .fbmb-review__vessel {
+	margin: 0.125rem 0 0;
+	color: var( --fbmb-text-muted );
+	font-size: 0.875rem;
+}
+
+.fbm-frontend .fbmb-review__tag {
+	padding: 0.125rem 0.5rem;
+	border-radius: 999px;
+	background: var( --fbmb-accent-soft );
+	color: var( --fbmb-accent );
+	font-size: 0.75rem;
+	font-weight: 700;
+	white-space: nowrap;
+}
+
+.fbm-frontend .fbmb-review__customer {
+	margin: 0;
+	color: var( --fbmb-text-muted );
+}
+
+.fbm-frontend .fbmb-price {
+	inline-size: 100%;
+	border-collapse: collapse;
+	font-size: 0.9375rem;
+}
+
+.fbm-frontend .fbmb-price th,
+.fbm-frontend .fbmb-price td {
+	padding: 0.5rem 0;
+	text-align: start;
+	font-weight: 400;
+	border-block-end: 1px solid var( --fbmb-border );
+}
+
+.fbm-frontend .fbmb-price td {
+	text-align: end;
+	font-variant-numeric: tabular-nums;
+	white-space: nowrap;
+}
+
+.fbm-frontend .fbmb-price__qty {
+	margin-inline-start: 0.375rem;
+	color: var( --fbmb-text-faint );
+	font-size: 0.8125rem;
+}
+
+.fbm-frontend .fbmb-price__row--discount td {
+	color: var( --fbmb-positive );
+}
+
+.fbm-frontend .fbmb-price__total th,
+.fbm-frontend .fbmb-price__total td {
+	padding-block-start: 0.75rem;
+	border-block-end: 0;
+	font-size: 1.125rem;
+	font-weight: 700;
+}
+
+/* --------------------------------------------------------------- Payments */
+
+.fbm-frontend .fbmb-payments {
+	display: flex;
+	flex-direction: column;
+	gap: 0.5rem;
+}
+
+.fbm-frontend .fbmb-payment {
+	display: flex;
+	align-items: flex-start;
+	gap: 0.75rem;
+	padding: 0.875rem 1rem;
+	background: var( --fbmb-surface );
+	border: 1px solid var( --fbmb-border-strong );
+	border-radius: var( --fbmb-radius-sm );
+	cursor: pointer;
+}
+
+.fbm-frontend .fbmb-payment.is-selected {
+	border-color: var( --fbmb-accent );
+	background: var( --fbmb-accent-soft );
+}
+
+.fbm-frontend .fbmb-payment input {
+	margin-block-start: 0.25rem;
+	accent-color: var( --fbmb-accent );
+}
+
+.fbm-frontend .fbmb-payment__label {
+	display: block;
+	font-weight: 600;
+}
+
+.fbm-frontend .fbmb-payment__description {
+	display: block;
+	color: var( --fbmb-text-muted );
+	font-size: 0.875rem;
+}
+
+/* ---------------------------------------------------------------- Actions */
+
+.fbm-frontend .fbmb-actions {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: flex-end;
+	gap: 0.75rem;
+}
+
+.fbm-frontend .fbmb-actions--sticky {
+	position: sticky;
+	inset-block-end: 0.75rem;
+	justify-content: space-between;
+	padding: 0.875rem 1rem;
+	background: var( --fbmb-surface );
+	border: 1px solid var( --fbmb-accent );
+	border-radius: var( --fbmb-radius );
+	box-shadow: var( --fbmb-shadow-lg );
+	z-index: 2;
+}
+
+.fbm-frontend .fbmb-summary {
+	min-inline-size: 0;
+}
+
+.fbm-frontend .fbmb-summary__legs {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.75rem;
+	font-size: 0.875rem;
+	color: var( --fbmb-text-muted );
+}
+
+.fbm-frontend .fbmb-summary__total {
+	display: flex;
+	align-items: baseline;
+	gap: 0.5rem;
+	margin: 0.125rem 0 0;
+}
+
+.fbm-frontend .fbmb-summary__total strong {
+	font-size: 1.25rem;
+}
+
+/* ----------------------------------------------------------- Confirmation */
+
+.fbm-frontend .fbmb-done {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 0.75rem;
+	padding: 2.5rem 1.25rem;
+	text-align: center;
+	background: var( --fbmb-surface );
+	border: 1px solid var( --fbmb-border );
+	border-radius: var( --fbmb-radius-lg );
+}
+
+.fbm-frontend .fbmb-done__mark {
+	inline-size: 3.5rem;
+	block-size: 3.5rem;
+	color: var( --fbmb-positive );
+}
+
+.fbm-frontend .fbmb-done__mark svg {
+	inline-size: 100%;
+	block-size: 100%;
+}
+
+.fbm-frontend .fbmb-done__title {
+	margin: 0;
+	font-size: 1.375rem;
+	font-weight: 700;
+}
+
+.fbm-frontend .fbmb-done__reference {
+	display: flex;
+	flex-direction: column;
+	gap: 0.125rem;
+	margin: 0;
+	color: var( --fbmb-text-muted );
+	font-size: 0.875rem;
+}
+
+.fbm-frontend .fbmb-done__reference strong {
+	font-size: 1.5rem;
+	letter-spacing: 0.06em;
+	color: var( --fbmb-text );
+}
+
+.fbm-frontend .fbmb-done__note {
+	margin: 0;
+	max-inline-size: 42ch;
+	color: var( --fbmb-text-muted );
+}
+
+.fbm-frontend .fbmb-done__total {
+	display: flex;
+	align-items: baseline;
+	gap: 0.5rem;
+	margin: 0;
+}
+
+.fbm-frontend .fbmb-done__total strong {
+	font-size: 1.25rem;
+}
+
+/* ------------------------------------------------------------ Wider views */
+
+/*
+ * The form adapts to its own container width rather than the viewport: a
+ * block theme's content column is narrower than the page, and the form should
+ * fill what it is given. The viewport queries below still drive parts of the
+ * flow that live outside the form (results, details), where the page column
+ * is the only meaningful measure.
+ */
+
+@media ( min-width: 40rem ) {
+	.fbm-frontend .fbmb-search__grid {
+		grid-template-columns: 1fr auto 1fr;
+	}
+
+	.fbm-frontend .fbmb-search--stacked .fbmb-search__grid {
+		grid-template-columns: 1fr;
+	}
+
+	.fbm-frontend .fbmb-search__travellers {
+		grid-template-columns: 1fr 1fr;
+	}
+
+	.fbm-frontend .fbmb-search__submit {
+		align-items: flex-end;
+	}
+
+	.fbm-frontend .fbmb-swap {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		inline-size: 2.25rem;
+		block-size: 2.25rem;
+		margin-block-end: 0.25rem;
+		padding: 0;
+		border: 1px solid var( --fbmb-border-strong );
+		border-radius: 50%;
+		background: var( --fbmb-surface );
+		color: var( --fbmb-text-muted );
+		cursor: pointer;
+	}
+
+	.fbm-frontend .fbmb-swap svg {
+		inline-size: 1.125rem;
+		block-size: 1.125rem;
+	}
+
+	.fbm-frontend .fbmb-swap:focus-visible {
+		outline: 2px solid var( --fbmb-accent );
+		outline-offset: 2px;
+	}
+
+	.fbm-frontend .fbmb-party {
+		grid-template-columns: repeat( 2, minmax( 0, 1fr ) );
+	}
+
+	.fbm-frontend .fbmb-party__group + .fbm-frontend .fbmb-party__group,
+	.fbm-frontend .fbmb-party__group ~ .fbmb-party__group {
+		border-inline-start: 1px solid var( --fbmb-border );
+	}
+}
+
+@media ( min-width: 56rem ) {
+	.fbm-frontend .fbmb-search__grid {
+		grid-template-columns: 1fr auto 1fr 1fr;
+	}
+
+	.fbm-frontend .fbmb-search--stacked .fbmb-search__grid {
+		grid-template-columns: 1fr;
+	}
+
+	.fbm-frontend .fbmb-search__travellers {
+		grid-template-columns: minmax( 14rem, 22rem ) minmax( 14rem, 22rem );
+		justify-content: start;
+	}
+}
+
+@media ( min-width: 40rem ) {
+	.fbm-frontend .fbmb-sailing {
+		grid-template-columns: minmax( 8rem, 12rem ) 1fr minmax( 9rem, auto );
+		align-items: center;
+	}
+
+	.fbm-frontend .fbmb-sailing__action {
+		align-items: flex-end;
+		text-align: end;
+	}
+
+	.fbm-frontend .fbmb-details__grid {
+		grid-template-columns: repeat( auto-fit, minmax( 14rem, 1fr ) );
+	}
+}
+
+/*
+ * At a genuinely wide container the whole search reads better as one row —
+ * the pattern every traveller already knows from booking a flight. The
+ * sections stay in the markup for narrow layouts and for screen readers, and
+ * `display: contents` lets their fields join a single grid without changing
+ * the document structure.
+ */
+@media ( min-width: 66rem ) {
+	.fbm-frontend .fbmb-search:not( .fbmb-search--stacked ) .fbmb-search__body {
+		display: grid;
+		grid-template-columns: minmax( 9rem, 1fr ) auto minmax( 9rem, 1fr ) minmax( 8rem, 0.8fr ) minmax( 8rem, 0.8fr ) auto;
+		align-items: end;
+		gap: var( --fbmb-gap );
+	}
+
+	.fbm-frontend .fbmb-search:not( .fbmb-search--stacked ) .fbmb-search__body > .fbmb-search__section {
+		display: contents;
+	}
+
+	.fbm-frontend .fbmb-search:not( .fbmb-search--stacked ) .fbmb-search__body .fbmb-search__section-title {
+		display: none;
+	}
+
+	.fbm-frontend .fbmb-search:not( .fbmb-search--stacked ) .fbmb-search__body .fbmb-search__grid,
+	.fbm-frontend .fbmb-search:not( .fbmb-search--stacked ) .fbmb-search__body .fbmb-search__travellers {
+		display: contents;
+	}
+
+	.fbm-frontend .fbmb-search:not( .fbmb-search--stacked ) .fbmb-search__body .fbmb-search__submit {
+		display: flex;
+		align-items: flex-end;
+	}
+
+	.fbm-frontend .fbmb-search:not( .fbmb-search--stacked ) .fbmb-search__body .fbmb-search__submit .fbmb-button {
+		inline-size: auto;
+		white-space: nowrap;
+	}
+
+	.fbm-frontend .fbmb-search:not( .fbmb-search--stacked ) .fbmb-search__body .fbmb-search__section {
+		border-block-start: 0;
+		padding-block-start: 0;
+		margin-block-start: 0;
+	}
+}
+
+/* ------------------------------------------------------- Terms agreement */
+
+.fbm-frontend .fbmb-consent {
+	margin-block-start: var( --fbmb-gap );
+	padding: 0.875rem 1rem;
+	border: 1px solid var( --fbmb-border );
+	border-radius: var( --fbmb-radius );
+	background: var( --fbmb-surface-muted, #f7f8fb );
+}
+
+.fbm-frontend .fbmb-consent.is-invalid {
+	border-color: var( --fbmb-danger );
+	background: var( --fbmb-danger-soft );
+}
+
+.fbm-frontend .fbmb-consent__label {
+	display: flex;
+	align-items: flex-start;
+	gap: 0.625rem;
+	cursor: pointer;
+	font-size: 0.9375rem;
+}
+
+/* Sized in absolute units: a checkbox that inherits a theme's font scaling
+   can end up too small to hit on a phone. */
+.fbm-frontend .fbmb-consent__box {
+	inline-size: 1.125rem;
+	block-size: 1.125rem;
+	margin: 0.1875rem 0 0;
+	flex: 0 0 auto;
+	accent-color: var( --fbmb-accent );
+	cursor: pointer;
+}
+
+.fbm-frontend .fbmb-link {
+	color: var( --fbmb-accent );
+	text-decoration: underline;
+}
+
+.fbm-frontend .fbmb-link:hover {
+	color: var( --fbmb-accent-hover );
+}
+
+/* ------------------------------------------------ Party size explanation */
+
+/* Shown only once the ceiling is reached, so a stepper that stops responding
+   says why instead of reading as broken. */
+.fbm-frontend .fbmb-party__limit {
+	display: block;
+	margin-block-start: 0.125rem;
+	font-size: 0.8125rem;
+	font-weight: 400;
+	color: var( --fbmb-text-muted );
+}
+
+/* ------------------------------------------------- Customer account views */
+
+.fbm-frontend .fbmb-history {
+	display: grid;
+	gap: 2rem;
+}
+
+.fbm-frontend .fbmb-history__group {
+	display: grid;
+	gap: var( --fbmb-gap );
+}
+
+.fbm-frontend .fbmb-history__title {
+	margin: 0;
+	font-size: 1.0625rem;
+	font-weight: 700;
+}
+
+.fbm-frontend .fbmb-panel__action,
+.fbm-frontend .fbmb-confirmation__action {
+	margin-block-start: var( --fbmb-gap );
+}
+
+/* --------------------------------------------------------- A booking card */
+
+.fbm-frontend .fbmb-record {
+	border: 1px solid var( --fbmb-border );
+	border-radius: var( --fbmb-radius );
+	background: var( --fbmb-surface, #fff );
+	box-shadow: var( --fbmb-shadow );
+	overflow: hidden;
+}
+
+.fbm-frontend .fbmb-record__head {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: flex-start;
+	justify-content: space-between;
+	gap: 0.75rem;
+	padding: 1rem 1.125rem;
+	border-block-end: 1px solid var( --fbmb-border );
+	background: var( --fbmb-surface-muted );
+}
+
+.fbm-frontend .fbmb-record__reference {
+	margin: 0;
+	font-size: 1.0625rem;
+	font-weight: 700;
+	letter-spacing: 0.02em;
+}
+
+.fbm-frontend .fbmb-record__name {
+	margin: 0.125rem 0 0;
+	color: var( --fbmb-text-muted );
+	font-size: 0.875rem;
+}
+
+.fbm-frontend .fbmb-record__badges {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.375rem;
+}
+
+.fbm-frontend .fbmb-record__legs {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+.fbm-frontend .fbmb-record__leg {
+	display: grid;
+	gap: 0.125rem;
+	padding: 0.875rem 1.125rem;
+	border-block-end: 1px solid var( --fbmb-border );
+}
+
+.fbm-frontend .fbmb-record__leg-label {
+	font-size: 0.6875rem;
+	font-weight: 700;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+	color: var( --fbmb-text-faint );
+}
+
+.fbm-frontend .fbmb-record__route {
+	font-weight: 600;
+}
+
+.fbm-frontend .fbmb-record__when,
+.fbm-frontend .fbmb-record__vessel {
+	color: var( --fbmb-text-muted );
+	font-size: 0.875rem;
+}
+
+/* Auto-fit rather than a fixed column count: a foot-passenger booking has
+   three facts and a vehicle booking four, and neither should leave a gap. */
+.fbm-frontend .fbmb-record__facts {
+	display: grid;
+	grid-template-columns: repeat( auto-fit, minmax( 7rem, 1fr ) );
+	gap: 0.75rem 1.25rem;
+	margin: 0;
+	padding: 0.875rem 1.125rem;
+}
+
+.fbm-frontend .fbmb-record__facts div {
+	display: grid;
+	gap: 0.125rem;
+}
+
+.fbm-frontend .fbmb-record__facts dt {
+	font-size: 0.6875rem;
+	font-weight: 700;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+	color: var( --fbmb-text-faint );
+}
+
+.fbm-frontend .fbmb-record__facts dd {
+	margin: 0;
+	font-weight: 600;
+}
+
+.fbm-frontend .fbmb-record__actions {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.5rem;
+	margin: 0;
+	padding: 0 1.125rem 1.125rem;
+}
+
+/* ------------------------------------------------------- Booking lookup */
+
+.fbm-frontend .fbmb-lookup {
+	display: grid;
+	gap: var( --fbmb-gap );
+}
+
+.fbm-frontend .fbmb-lookup__form {
+	padding: 1.25rem;
+	border: 1px solid var( --fbmb-border );
+	border-radius: var( --fbmb-radius );
+	background: var( --fbmb-surface, #fff );
+}
+
+.fbm-frontend .fbmb-lookup__title {
+	margin: 0 0 0.25rem;
+	font-size: 1.0625rem;
+	font-weight: 700;
+}
+
+.fbm-frontend .fbmb-lookup__note {
+	margin: 0 0 1rem;
+	color: var( --fbmb-text-muted );
+	font-size: 0.9375rem;
+}
+
+/* The button shares the row on a wide screen and drops below on a phone. */
+.fbm-frontend .fbmb-lookup__fields {
+	display: grid;
+	gap: var( --fbmb-gap );
+	align-items: end;
+}
+
+@media ( min-width: 34rem ) {
+	.fbm-frontend .fbmb-lookup__fields {
+		grid-template-columns: 1fr 1fr auto;
+	}
+}
+
+.fbm-frontend .fbmb-lookup__error {
+	margin: 0.75rem 0 0;
+	color: var( --fbmb-danger );
+	font-size: 0.9375rem;
+}
+
+.fbm-frontend .fbmb-confirmation {
+	display: grid;
+	gap: var( --fbmb-gap );
+}
+
+.fbm-frontend .fbmb-confirmation__head {
+	display: grid;
+	gap: 0.25rem;
+}
+
+.fbm-frontend .fbmb-confirmation__title {
+	margin: 0;
+	font-size: 1.25rem;
+	font-weight: 700;
+}
+
+.fbm-frontend .fbmb-confirmation__note {
+	margin: 0;
+	color: var( --fbmb-text-muted );
+}
+
+/* ------------------------------------------------------- Booking history */
+
+/*
+ * A history is a list to search, not a stack of posters to scroll. The layout
+ * is a container query rather than a media query because the block can sit in a
+ * narrow column on one theme and the full page width on another, and it is the
+ * space it actually has that decides whether five columns fit.
+ */
+/* Viewport-based for the same reason as the search form above: this list holds
+   the status and per-page selects, whose popups must open under them. */
+
+.fbm-frontend .fbmb-history__toolbar {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: space-between;
+	gap: var( --fbmb-gap );
+	margin-block-end: var( --fbmb-gap );
+}
+
+.fbm-frontend .fbmb-history__filters {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: stretch;
+	gap: 0.5rem;
+	flex: 1 1 18rem;
+	justify-content: flex-end;
+}
+
+/* The search box and the status picker are one control group, so they share a
+   height rather than each taking the one their element type defaults to. */
+.fbm-frontend .fbmb-history__filters .fbmb-input,
+.fbm-frontend .fbmb-history__filters .fbmb-select {
+	block-size: 100%;
+	min-block-size: 2.75rem;
+}
+
+.fbm-frontend .fbmb-history__status {
+	display: flex;
+	min-inline-size: 10rem;
+}
+
+.fbm-frontend .fbmb-history__status .fbmb-select {
+	inline-size: 100%;
+}
+
+.fbm-frontend .fbmb-history__search {
+	flex: 1 1 16rem;
+	min-inline-size: 0;
+}
+
+.fbm-frontend .fbmb-history__search .fbmb-input {
+	inline-size: 100%;
+}
+
+.fbm-frontend .fbmb-segmented {
+	display: inline-flex;
+	flex-wrap: wrap;
+	padding: 0.1875rem;
+	border: 1px solid var( --fbmb-border );
+	border-radius: var( --fbmb-radius );
+	background: var( --fbmb-surface-muted, #f6f7f9 );
+}
+
+.fbm-frontend .fbmb-segmented__option {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.375rem;
+	appearance: none;
+	border: 0;
+	background: none;
+	padding: 0.375rem 0.75rem;
+	border-radius: var( --fbmb-radius-sm );
+	font: inherit;
+	font-size: 0.875rem;
+	color: var( --fbmb-text-muted, #5c6580 );
+	cursor: pointer;
+}
+
+.fbm-frontend .fbmb-segmented__option:hover {
+	color: var( --fbmb-text );
+}
+
+.fbm-frontend .fbmb-segmented__option.is-selected {
+	background: var( --fbmb-surface, #fff );
+	color: var( --fbmb-text );
+	font-weight: 600;
+	box-shadow: var( --fbmb-shadow );
+}
+
+.fbm-frontend .fbmb-segmented__count {
+	padding-inline: 0.375rem;
+	border-radius: 999px;
+	background: var( --fbmb-accent-soft, #eef4fd );
+	font-size: 0.75rem;
+	font-variant-numeric: tabular-nums;
+}
+
+.fbm-frontend .fbmb-history__summary,
+.fbm-frontend .fbmb-history__note {
+	margin: 0 0 0.5rem;
+	font-size: 0.8125rem;
+	color: var( --fbmb-text-muted, #5c6580 );
+}
+
+.fbm-frontend .fbmb-history__note {
+	padding: 0.625rem 0.875rem;
+	border-radius: var( --fbmb-radius-sm );
+	background: var( --fbmb-accent-soft, #eef4fd );
+}
+
+.fbm-frontend .fbmb-list {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	border: 1px solid var( --fbmb-border );
+	border-radius: var( --fbmb-radius );
+	overflow: hidden;
+	background: var( --fbmb-surface, #fff );
+}
+
+.fbm-frontend .fbmb-list__item + .fbmb-list__item {
+	border-block-start: 1px solid var( --fbmb-border );
+}
+
+.fbm-frontend .fbmb-list__item.is-open {
+	background: var( --fbmb-surface-muted, #fafbfd );
+}
+
+/*
+ * Every row is its own grid, so an `auto` action column would size itself to
+ * that row's buttons and each row would land on a different set of column
+ * edges. Fixed tracks keep the list reading as columns rather than as a stack
+ * of slightly different rows.
+ */
+.fbm-frontend .fbmb-list__row {
+	display: grid;
+	grid-template-columns: 11rem minmax( 12rem, 1fr ) 9rem 9rem 12rem;
+	align-items: center;
+	gap: var( --fbmb-gap );
+	padding: 0.875rem 1rem;
+}
+
+.fbm-frontend .fbmb-list__ref,
+.fbm-frontend .fbmb-list__journey,
+.fbm-frontend .fbmb-list__money {
+	display: flex;
+	flex-direction: column;
+	gap: 0.125rem;
+	min-inline-size: 0;
+}
+
+.fbm-frontend .fbmb-list__ref {
+	align-items: flex-start;
+	gap: 0.375rem;
+}
+
+.fbm-frontend .fbmb-list__reference {
+	font-weight: 700;
+	font-variant-numeric: tabular-nums;
+	letter-spacing: 0.01em;
+}
+
+.fbm-frontend .fbmb-list__route {
+	font-weight: 600;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.fbm-frontend .fbmb-list__when,
+.fbm-frontend .fbmb-list__party,
+.fbm-frontend .fbmb-list__balance {
+	font-size: 0.8125rem;
+	color: var( --fbmb-text-muted, #5c6580 );
+}
+
+.fbm-frontend .fbmb-list__total {
+	font-weight: 600;
+	font-variant-numeric: tabular-nums;
+}
+
+.fbm-frontend .fbmb-list__balance {
+	color: var( --fbmb-warning, #b26a00 );
+}
+
+.fbm-frontend .fbmb-list__actions {
+	display: flex;
+	align-items: center;
+	gap: 0.375rem;
+	justify-content: flex-end;
+}
+
+/* "Hide details" is longer than "Details"; letting it wrap would make the row
+   grow taller the moment it is opened. */
+.fbm-frontend .fbmb-list__actions .fbmb-button {
+	white-space: nowrap;
+}
+
+.fbm-frontend .fbmb-list__detail {
+	padding: 0 1rem 1rem;
+}
+
+.fbm-frontend .fbmb-list__detail .fbmb-record {
+	margin: 0;
+}
+
+.fbm-frontend .fbmb-pager {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 0.75rem;
+	margin-block-start: var( --fbmb-gap );
+}
+
+.fbm-frontend .fbmb-pager__status {
+	font-size: 0.875rem;
+	color: var( --fbmb-text-muted, #5c6580 );
+}
+
+.fbm-frontend .fbmb-pager__size {
+	margin-inline-start: auto;
+}
+
+.fbm-frontend .fbmb-visually-hidden {
+	position: absolute;
+	inline-size: 1px;
+	block-size: 1px;
+	padding: 0;
+	margin: -1px;
+	overflow: hidden;
+	clip-path: inset( 50% );
+	white-space: nowrap;
+	border: 0;
+}
+
+/* Narrower than about 60rem the five columns stop fitting, so the row becomes
+   two stacked blocks with the money and actions on their own line. */
+@media ( max-width: 60rem ) {
+	.fbm-frontend .fbmb-list__row {
+		grid-template-columns: minmax( 0, 1fr ) auto;
+		row-gap: 0.5rem;
+	}
+
+	.fbm-frontend .fbmb-list__ref {
+		flex-direction: row;
+		align-items: center;
+	}
+
+	.fbm-frontend .fbmb-list__journey {
+		grid-column: 1 / -1;
+	}
+
+	.fbm-frontend .fbmb-list__party {
+		grid-column: 1;
+	}
+
+	.fbm-frontend .fbmb-list__money {
+		grid-column: 2;
+		align-items: flex-end;
+		text-align: end;
+	}
+
+	.fbm-frontend .fbmb-list__actions {
+		grid-column: 1 / -1;
+		justify-content: flex-start;
+	}
+}
+
+@media ( max-width: 34rem ) {
+	.fbm-frontend .fbmb-history__filters {
+		justify-content: flex-start;
+	}
+
+	.fbm-frontend .fbmb-pager__size {
+		margin-inline-start: 0;
+	}
+}

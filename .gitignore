@@ -1,0 +1,11 @@
+apps/**/node_modules/
+apps/**/.next/
+apps/**/out/
+vendor/
+*.log
+.phpunit.result.cache
+*.tsbuildinfo
+apps/**/next-env.d.ts
+Pasted image*.png
+.DS_Store
+Thumbs.db

@@ -1,0 +1,266 @@
+<?php
+/**
+ * Admin application renderer.
+ *
+ * @package FerryBookingManager
+ */
+
+declare( strict_types=1 );
+
+namespace FBM\Admin;
+
+use FBM\Contracts\LoggerInterface;
+
+defined( 'ABSPATH' ) || exit;
+
+/**
+ * Serves the pre-built Next.js dashboard from the plugin's own assets.
+ *
+ * The Next.js application is exported at build time (`next build` with
+ * `output: 'export'`) and post-processed into `assets/admin/app/fbm-app.json`,
+ * which lists the emitted stylesheets and script chunks plus the pre-rendered
+ * shell markup. WordPress enqueues those files itself, so no Node process and no
+ * runtime bundler is ever required on the customer's host.
+ *
+ * The exported `__NEXT_DATA__` payload carries an empty asset prefix; it is
+ * rewritten here with the real plugin URL so that any lazily imported chunk
+ * resolves against the plugin directory rather than the site root.
+ */
+final class AppRenderer {
+
+	/**
+	 * Directory (relative to the plugin root) holding the exported application.
+	 */
+	private const APP_DIR = 'assets/admin/app/';
+
+	/**
+	 * Manifest filename produced by the build script.
+	 */
+	private const MANIFEST = 'fbm-app.json';
+
+	/**
+	 * Root element id the exported application hydrates into.
+	 */
+	private const ROOT_ID = '__next';
+
+	/**
+	 * Logger.
+	 *
+	 * @var LoggerInterface
+	 */
+	private LoggerInterface $logger;
+
+	/**
+	 * Cached manifest for this request.
+	 *
+	 * @var array<string, mixed>|null
+	 */
+	private ?array $manifest = null;
+
+	/**
+	 * Constructor.
+	 *
+	 * @param LoggerInterface $logger Logger.
+	 */
+	public function __construct( LoggerInterface $logger ) {
+		$this->logger = $logger;
+	}
+
+	/**
+	 * Determines whether a usable production build is present.
+	 *
+	 * @return bool
+	 */
+	public function is_built(): bool {
+		$manifest = $this->manifest();
+
+		return array() !== $manifest && ! empty( $manifest['scripts'] );
+	}
+
+	/**
+	 * Returns the absolute URL of the exported application directory.
+	 *
+	 * No trailing slash: Next appends "/_next/" itself.
+	 *
+	 * @return string
+	 */
+	public function asset_prefix(): string {
+		return untrailingslashit( FBM_URL . self::APP_DIR );
+	}
+
+	/**
+	 * Returns the stylesheet URLs to enqueue, in document order.
+	 *
+	 * @return string[]
+	 */
+	public function styles(): array {
+		return $this->urls( 'styles' );
+	}
+
+	/**
+	 * Returns the script URLs to enqueue, in document order.
+	 *
+	 * @return string[]
+	 */
+	public function scripts(): array {
+		return $this->urls( 'scripts' );
+	}
+
+	/**
+	 * Prints the application root and the hydration payload.
+	 *
+	 * @return void
+	 */
+	public function render(): void {
+		if ( ! $this->is_built() ) {
+			$this->render_missing_build();
+
+			return;
+		}
+
+		$manifest  = $this->manifest();
+		$next_data = is_array( $manifest['nextData'] ?? null ) ? $manifest['nextData'] : array();
+
+		$next_data['assetPrefix'] = $this->asset_prefix();
+
+		$shell = is_string( $manifest['html'] ?? null ) ? $manifest['html'] : '';
+
+		printf(
+			'<div id="%s">%s</div>',
+			esc_attr( self::ROOT_ID ),
+			$this->safe_shell( $shell ) // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Build-generated markup, validated by safe_shell().
+		);
+
+		printf(
+			'<script id="__NEXT_DATA__" type="application/json">%s</script>',
+			wp_json_encode( $next_data, JSON_UNESCAPED_SLASHES | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT ) // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- JSON encoded with HTML-safe flags.
+		);
+	}
+
+	/**
+	 * Renders a build-missing message instead of a blank screen.
+	 *
+	 * @return void
+	 */
+	private function render_missing_build(): void {
+		$this->logger->error(
+			'Admin application build is missing.',
+			array( 'expected' => self::APP_DIR . self::MANIFEST )
+		);
+
+		echo '<div class="notice notice-error"><p><strong>';
+		esc_html_e( 'The Ferry Manager dashboard has not been built.', 'ferry-booking-manager' );
+		echo '</strong></p><p>';
+		printf(
+			/* translators: %s: build command. */
+			esc_html__( 'Run %s inside the plugin folder to produce the dashboard bundle, then reload this page.', 'ferry-booking-manager' ),
+			'<code>npm --prefix apps/admin ci &amp;&amp; npm --prefix apps/admin run build</code>'
+		);
+		echo '</p></div>';
+	}
+
+	/**
+	 * Maps manifest-relative paths to absolute URLs.
+	 *
+	 * @param string $key Manifest key holding a list of relative paths.
+	 * @return string[]
+	 */
+	private function urls( string $key ): array {
+		$manifest = $this->manifest();
+		$paths    = isset( $manifest[ $key ] ) && is_array( $manifest[ $key ] ) ? $manifest[ $key ] : array();
+		$base     = trailingslashit( FBM_URL . self::APP_DIR );
+		$urls     = array();
+
+		foreach ( $paths as $path ) {
+			if ( ! is_string( $path ) || '' === $path ) {
+				continue;
+			}
+
+			// Only relative paths inside the exported app are ever served.
+			if ( false !== strpos( $path, '..' ) || preg_match( '#^[a-z]+://#i', $path ) ) {
+				continue;
+			}
+
+			$urls[] = $base . ltrim( $path, '/' );
+		}
+
+		return $urls;
+	}
+
+	/**
+	 * Loads and validates the build manifest.
+	 *
+	 * @return array<string, mixed>
+	 */
+	private function manifest(): array {
+		if ( null !== $this->manifest ) {
+			return $this->manifest;
+		}
+
+		$file = FBM_PATH . self::APP_DIR . self::MANIFEST;
+
+		if ( ! is_readable( $file ) ) {
+			$this->manifest = array();
+
+			return $this->manifest;
+		}
+
+		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
+		$raw     = (string) file_get_contents( $file );
+		$decoded = json_decode( $raw, true );
+
+		if ( ! is_array( $decoded ) ) {
+			$this->logger->error( 'Admin application manifest could not be decoded.', array( 'file' => $file ) );
+			$this->manifest = array();
+
+			return $this->manifest;
+		}
+
+		$this->manifest = $decoded;
+
+		return $this->manifest;
+	}
+
+	/**
+	 * Validates the pre-rendered shell before it is printed into wp-admin.
+	 *
+	 * The shell is produced by our own build step, so it is not re-escaped:
+	 * React hydrates against this markup and any normalisation would force a
+	 * full client re-render. Instead the markup is rejected outright if it
+	 * carries anything executable, which is the only property that matters
+	 * here — a manifest that can be tampered with implies write access to the
+	 * plugin directory, where PHP would already be the easier target.
+	 *
+	 * @param string $html Pre-rendered shell markup.
+	 * @return string Shell markup, or an empty string when it fails validation.
+	 */
+	private function safe_shell( string $html ): string {
+		if ( '' === $html ) {
+			return '';
+		}
+
+		$executable = array(
+			'#<\s*script#i',
+			'#<\s*iframe#i',
+			'#<\s*object#i',
+			'#<\s*embed#i',
+			'#<\s*form#i',
+			'#\son[a-z]+\s*=#i',
+			'#javascript\s*:#i',
+			'#srcdoc\s*=#i',
+		);
+
+		foreach ( $executable as $pattern ) {
+			if ( preg_match( $pattern, $html ) ) {
+				$this->logger->error(
+					'Admin shell markup rejected: executable content detected in the build manifest.',
+					array( 'pattern' => $pattern )
+				);
+
+				return '';
+			}
+		}
+
+		return $html;
+	}
+}

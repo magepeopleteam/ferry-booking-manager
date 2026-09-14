@@ -1,0 +1,114 @@
+/**
+ * Ferry Booking Manager - wp-admin integration layer.
+ *
+ * Only concerned with handing the WordPress admin canvas over to the dashboard.
+ * All dashboard styling lives in the exported application stylesheet.
+ */
+
+/*
+ * Full-screen takeover.
+ *
+ * The dashboard is an application, not a WordPress form: two navigation columns
+ * and two account menus stacked on one screen make an operator choose between
+ * them on every click, and the outer one leads nowhere useful here. The admin
+ * bar and the admin menu are therefore hidden and the canvas handed over whole.
+ *
+ * The negative body margin cancels the padding WordPress puts on <html> to make
+ * room for the fixed admin bar. It is set on <body> rather than <html> because
+ * the class that marks this screen is a body class, and this is the same
+ * technique the block editor uses for its own full-screen mode.
+ *
+ * The way back is the button in the dashboard header, which is the only exit,
+ * so it is never removed.
+ */
+.fbm-admin-screen {
+	margin-top: -32px;
+	height: calc( 100% + 32px );
+}
+
+.fbm-admin-screen #wpadminbar,
+.fbm-admin-screen #adminmenumain {
+	display: none;
+}
+
+.fbm-admin-screen #wpcontent,
+.fbm-admin-screen #wpfooter {
+	margin-left: 0;
+}
+
+.fbm-admin-screen #wpcontent {
+	padding-left: 0;
+}
+
+.fbm-admin-screen #wpbody-content {
+	padding-bottom: 0;
+	float: none;
+}
+
+.fbm-admin-screen #wpfooter {
+	display: none;
+}
+
+.fbm-admin-screen .update-nag,
+.fbm-admin-screen .notice,
+.fbm-admin-screen div.error,
+.fbm-admin-screen div.updated {
+	margin: 12px 20px 0;
+}
+
+.fbm-admin-wrap {
+	margin: 0;
+	padding: 0;
+}
+
+/* Shell placeholder shown before the application stylesheet arrives. */
+#__next {
+	min-height: 200px;
+}
+
+.fbm-boot-error {
+	margin: 24px;
+	padding: 20px 24px;
+	border-left: 4px solid #b32d2e;
+	background: #fff;
+	box-shadow: 0 1px 2px rgba( 0, 0, 0, 0.08 );
+}
+
+.fbm-boot-error__title {
+	margin: 0 0 8px;
+	font-size: 15px;
+}
+
+.fbm-boot-error__text {
+	margin: 0;
+	color: #50575e;
+}
+
+@media screen and (max-width: 782px) {
+	.fbm-admin-screen .notice {
+		margin: 12px 12px 0;
+	}
+
+	/* The admin bar is taller here, so there is more padding to cancel. */
+	.fbm-admin-screen {
+		margin-top: -46px;
+		height: calc( 100% + 46px );
+	}
+}
+
+/*
+ * Below 600px the admin bar stops being fixed, so WordPress drops the padding
+ * from <html> and offsets #wpbody instead. There is nothing left to cancel with
+ * a negative margin — applying one would lift the page off the top of the
+ * screen — so the offset is removed where it actually is.
+ */
+@media screen and (max-width: 600px) {
+	.fbm-admin-screen {
+		margin-top: 0;
+		height: auto;
+	}
+
+	.fbm-admin-screen #wpbody {
+		padding-top: 0;
+	}
+}
