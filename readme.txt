@@ -127,7 +127,7 @@ this plugin.
 
 == Installation ==
 
-1. Upload the plugin to `/wp-content/plugins/ferry-booking-manager/`.
+1. Upload the plugin to `/wp-content/plugins/magepeople-ferry-booking-system/`.
 2. Activate it through the Plugins screen.
 3. Open **Ferry Manager** in the admin menu.
 4. Add your ports, then your vessels, then the routes between them.
@@ -175,4 +175,24 @@ POS, agent tools, reports, automations and webhooks.
 
 == Changelog ==
 
-See CHANGELOG.md for the full history.
+= 1.0.0 =
+* Initial release: vessels, ports, routes, sailings, passenger and vehicle
+  types, a bulk schedule generator, and a capacity-and-hold-aware
+  availability engine shared by search, the admin wizard, the counter and
+  the importer.
+* Native checkout and optional WooCommerce integration, both driven by the
+  same server-authoritative pricing engine.
+* REST API (`fbm/v1`) with capability-gated endpoints for dashboard,
+  search, availability, bookings, setup, settings, pricing and reference
+  data.
+* Admin dashboard: a single "Ferry Manager" screen hosting a pre-built
+  Next.js application, with working Ports, Vessels, Routes and Sailings
+  management.
+* Fifteen `fbm_` capabilities and five operational roles (Ferry Manager,
+  Booking Manager, Cashier, Check-In Staff, Agent) provisioned on
+  activation.
+* No custom database tables; everything is stored in normal WordPress
+  posts, post meta and options.
+
+See [CHANGELOG.md](https://github.com/magepeopleteam/magepeople-ferry-booking-system/blob/main/CHANGELOG.md)
+for full development-level detail.

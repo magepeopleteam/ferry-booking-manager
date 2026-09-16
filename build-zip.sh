@@ -13,7 +13,7 @@
 
 set -euo pipefail
 
-PLUGIN_SLUG="ferry-booking-manager"
+PLUGIN_SLUG="magepeople-ferry-booking-system"
 PLUGIN_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 OUT_DIR="${1:-/tmp}"
 STAGE_DIR="$(mktemp -d)/${PLUGIN_SLUG}"
