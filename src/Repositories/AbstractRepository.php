@@ -145,7 +145,7 @@ abstract class AbstractRepository {
 				'orderby'  => 'title',
 				'order'    => 'asc',
 				'include'  => array(),
-				'exclude'  => array(),
+				'exclude'  => array(), // phpcs:ignore WordPressVIPMinimum.Performance.WPQueryParams.PostNotIn_exclude -- Operator-scale listings (vessels, ports, routes), not a VIP-scale collection.
 			)
 		);
 
@@ -173,7 +173,7 @@ abstract class AbstractRepository {
 		}
 
 		if ( array() !== (array) $args['exclude'] ) {
-			$query_args['post__not_in'] = array_map( 'absint', (array) $args['exclude'] );
+			$query_args['post__not_in'] = array_map( 'absint', (array) $args['exclude'] ); // phpcs:ignore WordPressVIPMinimum.Performance.WPQueryParams.PostNotIn_post__not_in -- Operator-scale listings (vessels, ports, routes), not a VIP-scale collection.
 		}
 
 		$meta_query = $this->build_meta_query( $args );
@@ -185,7 +185,7 @@ abstract class AbstractRepository {
 		$query_args = $this->apply_order( $query_args, (string) $args['orderby'], (string) $args['order'] );
 
 		/**
-		 * Filters the WP_Query arguments used by a Ferry Booking Manager listing.
+		 * Filters the WP_Query arguments used by a MagePeople Ferry Booking System listing.
 		 *
 		 * @since 1.0.0
 		 *
@@ -263,7 +263,7 @@ abstract class AbstractRepository {
 		if ( $id > 0 && null === $existing ) {
 			return new WP_Error(
 				'fbm_not_found',
-				__( 'The record could not be found.', 'ferry-booking-manager' ),
+				__( 'The record could not be found.', 'magepeople-ferry-booking-system' ),
 				array( 'status' => 404 )
 			);
 		}
@@ -320,13 +320,13 @@ abstract class AbstractRepository {
 		if ( null === $saved ) {
 			return new WP_Error(
 				'fbm_save_failed',
-				__( 'The record was saved but could not be read back.', 'ferry-booking-manager' ),
+				__( 'The record was saved but could not be read back.', 'magepeople-ferry-booking-system' ),
 				array( 'status' => 500 )
 			);
 		}
 
 		/**
-		 * Fires after a Ferry Booking Manager entity is created or updated.
+		 * Fires after a MagePeople Ferry Booking System entity is created or updated.
 		 *
 		 * @since 1.0.0
 		 *
@@ -351,7 +351,7 @@ abstract class AbstractRepository {
 		if ( null === $entity ) {
 			return new WP_Error(
 				'fbm_not_found',
-				__( 'The record could not be found.', 'ferry-booking-manager' ),
+				__( 'The record could not be found.', 'magepeople-ferry-booking-system' ),
 				array( 'status' => 404 )
 			);
 		}
@@ -367,7 +367,7 @@ abstract class AbstractRepository {
 		if ( ! $result ) {
 			return new WP_Error(
 				'fbm_delete_failed',
-				__( 'The record could not be deleted.', 'ferry-booking-manager' ),
+				__( 'The record could not be deleted.', 'magepeople-ferry-booking-system' ),
 				array( 'status' => 500 )
 			);
 		}
@@ -375,7 +375,7 @@ abstract class AbstractRepository {
 		$this->flush();
 
 		/**
-		 * Fires after a Ferry Booking Manager entity is deleted.
+		 * Fires after a MagePeople Ferry Booking System entity is deleted.
 		 *
 		 * @since 1.0.0
 		 *
@@ -443,7 +443,7 @@ abstract class AbstractRepository {
 			array(
 				'posts_per_page' => 1,
 				'post_status'    => array( 'publish', 'draft', 'trash' ),
-				'post__not_in'   => $exclude_id > 0 ? array( $exclude_id ) : array(),
+				'post__not_in'   => $exclude_id > 0 ? array( $exclude_id ) : array(), // phpcs:ignore WordPressVIPMinimum.Performance.WPQueryParams.PostNotIn_post__not_in -- Single record excluded from a uniqueness check, not a bulk exclusion.
 				// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query -- Indexed scalar key, single-row lookup.
 				'meta_query'     => array(
 					array(

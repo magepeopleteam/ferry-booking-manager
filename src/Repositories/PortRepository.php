@@ -53,7 +53,7 @@ final class PortRepository extends AbstractRepository {
 						'This port is used by %d route and cannot be deleted. Remove it from the route first.',
 						'This port is used by %d routes and cannot be deleted. Remove it from those routes first.',
 						$references,
-						'ferry-booking-manager'
+						'magepeople-ferry-booking-system'
 					),
 					$references
 				),

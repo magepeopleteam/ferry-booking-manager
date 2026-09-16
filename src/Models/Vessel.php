@@ -59,8 +59,8 @@ final class Vessel extends Entity {
 	 */
 	public static function labels(): array {
 		return array(
-			'plural'   => __( 'Vessels', 'ferry-booking-manager' ),
-			'singular' => __( 'Vessel', 'ferry-booking-manager' ),
+			'plural'   => __( 'Vessels', 'magepeople-ferry-booking-system' ),
+			'singular' => __( 'Vessel', 'magepeople-ferry-booking-system' ),
 		);
 	}
 
@@ -79,14 +79,14 @@ final class Vessel extends Entity {
 				'min'         => 2,
 				'max'         => 16,
 				'searchable'  => true,
-				'description' => __( 'Vessel code', 'ferry-booking-manager' ),
+				'description' => __( 'Vessel code', 'magepeople-ferry-booking-system' ),
 			),
 			'registration'       => array(
 				'type'        => 'string',
 				'meta'        => '_fbm_registration',
 				'max'         => 64,
 				'searchable'  => true,
-				'description' => __( 'Registration number', 'ferry-booking-manager' ),
+				'description' => __( 'Registration number', 'magepeople-ferry-booking-system' ),
 			),
 			'passenger_capacity' => array(
 				'type'        => 'int',
@@ -94,58 +94,58 @@ final class Vessel extends Entity {
 				'required'    => true,
 				'min'         => 0,
 				'max'         => 100000,
-				'description' => __( 'Passenger capacity', 'ferry-booking-manager' ),
+				'description' => __( 'Passenger capacity', 'magepeople-ferry-booking-system' ),
 			),
 			'vehicle_capacity'   => array(
 				'type'        => 'int',
 				'meta'        => '_fbm_vehicle_capacity',
 				'min'         => 0,
 				'max'         => 100000,
-				'description' => __( 'Vehicle capacity', 'ferry-booking-manager' ),
+				'description' => __( 'Vehicle capacity', 'magepeople-ferry-booking-system' ),
 			),
 			'deck_capacity'      => array(
 				'type'        => 'float',
 				'meta'        => '_fbm_deck_capacity',
 				'min'         => 0,
 				'max'         => 100000,
-				'description' => __( 'Vehicle deck capacity (lane metres)', 'ferry-booking-manager' ),
+				'description' => __( 'Vehicle deck capacity (lane metres)', 'magepeople-ferry-booking-system' ),
 			),
 			'crew_capacity'      => array(
 				'type'        => 'int',
 				'meta'        => '_fbm_crew_capacity',
 				'min'         => 0,
 				'max'         => 10000,
-				'description' => __( 'Crew capacity', 'ferry-booking-manager' ),
+				'description' => __( 'Crew capacity', 'magepeople-ferry-booking-system' ),
 			),
 			'speed_knots'        => array(
 				'type'        => 'float',
 				'meta'        => '_fbm_speed_knots',
 				'min'         => 0,
 				'max'         => 200,
-				'description' => __( 'Service speed (knots)', 'ferry-booking-manager' ),
+				'description' => __( 'Service speed (knots)', 'magepeople-ferry-booking-system' ),
 			),
 			'facilities'         => array(
 				'type'        => 'string_list',
 				'meta'        => '_fbm_facilities',
-				'description' => __( 'Facilities', 'ferry-booking-manager' ),
+				'description' => __( 'Facilities', 'magepeople-ferry-booking-system' ),
 			),
 			'images'             => array(
 				'type'        => 'id_list',
 				'meta'        => '_fbm_images',
-				'description' => __( 'Gallery images', 'ferry-booking-manager' ),
+				'description' => __( 'Gallery images', 'magepeople-ferry-booking-system' ),
 			),
 			'description'        => array(
 				'type'        => 'text',
 				'meta'        => '_fbm_description',
 				'max'         => 2000,
-				'description' => __( 'Description', 'ferry-booking-manager' ),
+				'description' => __( 'Description', 'magepeople-ferry-booking-system' ),
 			),
 			'status'             => array(
 				'type'        => 'enum',
 				'meta'        => '_fbm_status',
 				'enum'        => array( self::STATUS_ACTIVE, self::STATUS_MAINTENANCE, self::STATUS_INACTIVE ),
 				'default'     => self::STATUS_ACTIVE,
-				'description' => __( 'Status', 'ferry-booking-manager' ),
+				'description' => __( 'Status', 'magepeople-ferry-booking-system' ),
 			),
 		);
 	}

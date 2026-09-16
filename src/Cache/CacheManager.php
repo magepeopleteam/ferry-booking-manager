@@ -153,7 +153,7 @@ final class CacheManager {
 		$this->versions[ $group ] = $version;
 
 		/**
-		 * Fires after a Ferry Booking Manager cache group is invalidated.
+		 * Fires after a MagePeople Ferry Booking System cache group is invalidated.
 		 *
 		 * @since 1.0.0
 		 *
@@ -189,7 +189,7 @@ final class CacheManager {
 		);
 
 		/**
-		 * Filters the cache groups Ferry Booking Manager knows about.
+		 * Filters the cache groups MagePeople Ferry Booking System knows about.
 		 *
 		 * @since 1.0.0
 		 *

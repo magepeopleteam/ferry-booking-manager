@@ -57,26 +57,26 @@ final class PassengerTypeController extends EntityController {
 		$max = isset( $attributes['max_age'] ) ? (int) $attributes['max_age'] : PassengerType::NO_AGE_LIMIT;
 
 		if ( PassengerType::NO_AGE_LIMIT !== $min && PassengerType::NO_AGE_LIMIT !== $max && $max < $min ) {
-			$fields['max_age'] = __( 'The maximum age must be the same as or above the minimum age.', 'ferry-booking-manager' );
+			$fields['max_age'] = __( 'The maximum age must be the same as or above the minimum age.', 'magepeople-ferry-booking-system' );
 		}
 
 		$min_per = isset( $attributes['min_per_booking'] ) ? (int) $attributes['min_per_booking'] : 0;
 		$max_per = isset( $attributes['max_per_booking'] ) ? (int) $attributes['max_per_booking'] : 0;
 
 		if ( $max_per > 0 && $min_per > $max_per ) {
-			$fields['min_per_booking'] = __( 'The minimum per booking cannot be above the maximum.', 'ferry-booking-manager' );
+			$fields['min_per_booking'] = __( 'The minimum per booking cannot be above the maximum.', 'magepeople-ferry-booking-system' );
 		}
 
 		$mode = isset( $attributes['price_mode'] ) ? (string) $attributes['price_mode'] : PassengerType::PRICE_FIXED;
 
 		if ( PassengerType::PRICE_PERCENT === $mode && ! empty( $attributes['is_base'] ) ) {
-			$fields['price_mode'] = __( 'The base passenger type sets the fare that percentages are taken from, so it cannot itself be a percentage.', 'ferry-booking-manager' );
+			$fields['price_mode'] = __( 'The base passenger type sets the fare that percentages are taken from, so it cannot itself be a percentage.', 'magepeople-ferry-booking-system' );
 		}
 
 		if ( array() !== $fields ) {
 			return new WP_Error(
 				'fbm_validation_failed',
-				__( 'Please correct the highlighted fields.', 'ferry-booking-manager' ),
+				__( 'Please correct the highlighted fields.', 'magepeople-ferry-booking-system' ),
 				array(
 					'status' => 400,
 					'fields' => $fields,

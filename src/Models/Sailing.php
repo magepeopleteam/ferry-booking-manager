@@ -69,8 +69,8 @@ final class Sailing extends Entity {
 	 */
 	public static function labels(): array {
 		return array(
-			'plural'   => __( 'Sailings', 'ferry-booking-manager' ),
-			'singular' => __( 'Sailing', 'ferry-booking-manager' ),
+			'plural'   => __( 'Sailings', 'magepeople-ferry-booking-system' ),
+			'singular' => __( 'Sailing', 'magepeople-ferry-booking-system' ),
 		);
 	}
 
@@ -86,81 +86,81 @@ final class Sailing extends Entity {
 				'meta'        => '_fbm_route_id',
 				'references'  => Route::POST_TYPE,
 				'required'    => true,
-				'description' => __( 'Route', 'ferry-booking-manager' ),
+				'description' => __( 'Route', 'magepeople-ferry-booking-system' ),
 			),
 			'vessel_id'                   => array(
 				'type'        => 'id',
 				'meta'        => '_fbm_vessel_id',
 				'references'  => Vessel::POST_TYPE,
 				'required'    => true,
-				'description' => __( 'Vessel', 'ferry-booking-manager' ),
+				'description' => __( 'Vessel', 'magepeople-ferry-booking-system' ),
 			),
 			'departure_datetime'          => array(
 				'type'        => 'datetime',
 				'meta'        => '_fbm_departure_datetime',
 				'required'    => true,
-				'description' => __( 'Departure', 'ferry-booking-manager' ),
+				'description' => __( 'Departure', 'magepeople-ferry-booking-system' ),
 			),
 			'arrival_datetime'            => array(
 				'type'        => 'datetime',
 				'meta'        => '_fbm_arrival_datetime',
-				'description' => __( 'Arrival', 'ferry-booking-manager' ),
+				'description' => __( 'Arrival', 'magepeople-ferry-booking-system' ),
 			),
 			'departure_ts'                => array(
 				'type'        => 'int',
 				'meta'        => '_fbm_departure_ts',
 				'readonly'    => true,
-				'description' => __( 'Departure timestamp (UTC)', 'ferry-booking-manager' ),
+				'description' => __( 'Departure timestamp (UTC)', 'magepeople-ferry-booking-system' ),
 			),
 			'arrival_ts'                  => array(
 				'type'        => 'int',
 				'meta'        => '_fbm_arrival_ts',
 				'readonly'    => true,
-				'description' => __( 'Arrival timestamp (UTC)', 'ferry-booking-manager' ),
+				'description' => __( 'Arrival timestamp (UTC)', 'magepeople-ferry-booking-system' ),
 			),
 			'departure_date'              => array(
 				'type'        => 'date',
 				'meta'        => '_fbm_departure_date',
 				'readonly'    => true,
-				'description' => __( 'Departure date', 'ferry-booking-manager' ),
+				'description' => __( 'Departure date', 'magepeople-ferry-booking-system' ),
 			),
 			'booking_open'                => array(
 				'type'        => 'datetime',
 				'meta'        => '_fbm_booking_open',
-				'description' => __( 'Bookings open', 'ferry-booking-manager' ),
+				'description' => __( 'Bookings open', 'magepeople-ferry-booking-system' ),
 			),
 			'booking_close'               => array(
 				'type'        => 'datetime',
 				'meta'        => '_fbm_booking_close',
-				'description' => __( 'Bookings close', 'ferry-booking-manager' ),
+				'description' => __( 'Bookings close', 'magepeople-ferry-booking-system' ),
 			),
 			'passenger_capacity_override' => array(
 				'type'        => 'int',
 				'meta'        => '_fbm_passenger_capacity_override',
 				'min'         => 0,
 				'max'         => 100000,
-				'description' => __( 'Passenger capacity override', 'ferry-booking-manager' ),
+				'description' => __( 'Passenger capacity override', 'magepeople-ferry-booking-system' ),
 			),
 			'vehicle_capacity_override'   => array(
 				'type'        => 'int',
 				'meta'        => '_fbm_vehicle_capacity_override',
 				'min'         => 0,
 				'max'         => 100000,
-				'description' => __( 'Vehicle capacity override', 'ferry-booking-manager' ),
+				'description' => __( 'Vehicle capacity override', 'magepeople-ferry-booking-system' ),
 			),
 			'deck_capacity_override'      => array(
 				'type'        => 'float',
 				'meta'        => '_fbm_deck_capacity_override',
 				'min'         => 0,
 				'max'         => 100000,
-				'description' => __( 'Lane metre override', 'ferry-booking-manager' ),
+				'description' => __( 'Lane metre override', 'magepeople-ferry-booking-system' ),
 			),
 			'price_adjustment_type'       => array(
 				'type'        => 'enum',
 				'meta'        => '_fbm_price_adjustment_type',
 				'enum'        => array( 'none', 'percent', 'fixed' ),
 				'default'     => 'none',
-				'description' => __( 'Fare adjustment for this departure', 'ferry-booking-manager' ),
+				'description' => __( 'Fare adjustment for this departure', 'magepeople-ferry-booking-system' ),
 			),
 			'price_adjustment'            => array(
 				'type'        => 'float',
@@ -168,13 +168,13 @@ final class Sailing extends Entity {
 				'default'     => 0.0,
 				'min'         => -100000,
 				'max'         => 100000,
-				'description' => __( 'Fare adjustment amount', 'ferry-booking-manager' ),
+				'description' => __( 'Fare adjustment amount', 'magepeople-ferry-booking-system' ),
 			),
 			'notes'                       => array(
 				'type'        => 'text',
 				'meta'        => '_fbm_notes',
 				'max'         => 2000,
-				'description' => __( 'Operational notes', 'ferry-booking-manager' ),
+				'description' => __( 'Operational notes', 'magepeople-ferry-booking-system' ),
 			),
 			'status'                      => array(
 				'type'        => 'enum',
@@ -187,7 +187,7 @@ final class Sailing extends Entity {
 					self::STATUS_CANCELLED,
 				),
 				'default'     => self::STATUS_SCHEDULED,
-				'description' => __( 'Status', 'ferry-booking-manager' ),
+				'description' => __( 'Status', 'magepeople-ferry-booking-system' ),
 			),
 		);
 	}

@@ -1,6 +1,6 @@
 # Changelog
 
-All notable changes to Ferry Booking Manager are documented here.
+All notable changes to MagePeople Ferry Booking System are documented here.
 This project follows [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]

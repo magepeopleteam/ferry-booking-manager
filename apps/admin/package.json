@@ -2,7 +2,7 @@
   "name": "@fbm/admin",
   "version": "1.0.0",
   "private": true,
-  "description": "Ferry Booking Manager admin dashboard (Next.js, exported for WordPress).",
+  "description": "MagePeople Ferry Booking System admin dashboard (Next.js, exported for WordPress).",
   "scripts": {
     "dev": "next dev",
     "build": "node scripts/check-translations.mjs && next build && node scripts/prepare-wp-build.mjs",

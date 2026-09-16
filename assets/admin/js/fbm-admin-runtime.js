@@ -1,5 +1,5 @@
 /**
- * Ferry Booking Manager - admin runtime bootstrap.
+ * MagePeople Ferry Booking System - admin runtime bootstrap.
  *
  * Loaded before the exported dashboard chunks. It guarantees the configuration
  * object exists, records boot failures where a human can see them, and exposes

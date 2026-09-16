@@ -2,7 +2,7 @@
  * Dashboard route registry.
  *
  * One declaration per sidebar destination: the capability that gates it, the
- * icon, and whether the screen is delivered by Ferry Booking Manager Pro. The
+ * icon, and whether the screen is delivered by MagePeople Ferry Booking System Pro. The
  * sidebar, the router and the permission guard all read from this list, so a
  * route can never appear in navigation without a capability behind it.
  */

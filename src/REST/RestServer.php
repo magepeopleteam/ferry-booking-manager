@@ -101,7 +101,7 @@ final class RestServer {
 		}
 
 		/**
-		 * Fires after Ferry Booking Manager has registered its REST routes.
+		 * Fires after MagePeople Ferry Booking System has registered its REST routes.
 		 *
 		 * @since 1.0.0
 		 *

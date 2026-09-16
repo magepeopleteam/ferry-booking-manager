@@ -14,7 +14,7 @@ defined( 'ABSPATH' ) || exit;
 /**
  * Describes a unit of plugin functionality.
  *
- * Providers are the single extension point used by Ferry Booking Manager Pro and
+ * Providers are the single extension point used by MagePeople Ferry Booking System Pro and
  * by third parties; they never contain business logic themselves.
  */
 interface ServiceProviderInterface {

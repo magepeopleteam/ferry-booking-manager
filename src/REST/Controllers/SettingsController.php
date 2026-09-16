@@ -102,7 +102,7 @@ final class SettingsController extends AbstractController {
 					'permission_callback' => $this->can( Capabilities::MANAGE_SETTINGS ),
 					'args'                => array(
 						'to' => array(
-							'description'       => __( 'Address to send the test to.', 'ferry-booking-manager' ),
+							'description'       => __( 'Address to send the test to.', 'magepeople-ferry-booking-system' ),
 							'type'              => 'string',
 							'default'           => '',
 							'sanitize_callback' => 'sanitize_email',
@@ -188,9 +188,9 @@ final class SettingsController extends AbstractController {
 		if ( ! is_email( $to ) ) {
 			return $this->fail(
 				'fbm_invalid_email',
-				__( 'That is not a valid email address.', 'ferry-booking-manager' ),
+				__( 'That is not a valid email address.', 'magepeople-ferry-booking-system' ),
 				400,
-				array( 'fields' => array( 'to' => __( 'Enter a valid email address.', 'ferry-booking-manager' ) ) )
+				array( 'fields' => array( 'to' => __( 'Enter a valid email address.', 'magepeople-ferry-booking-system' ) ) )
 			);
 		}
 
@@ -204,11 +204,11 @@ final class SettingsController extends AbstractController {
 
 		$body = sprintf(
 			'<p>%1$s</p><p>%2$s</p>',
-			esc_html__( 'This is a test message from Ferry Booking Manager. If you are reading it, booking emails can reach your customers.', 'ferry-booking-manager' ),
+			esc_html__( 'This is a test message from MagePeople Ferry Booking System. If you are reading it, booking emails can reach your customers.', 'magepeople-ferry-booking-system' ),
 			esc_html(
 				sprintf(
 					/* translators: 1: sender name, 2: sender address. */
-					__( 'Sent as %1$s <%2$s>.', 'ferry-booking-manager' ),
+					__( 'Sent as %1$s <%2$s>.', 'magepeople-ferry-booking-system' ),
 					$from_name,
 					$from_address
 				)
@@ -219,7 +219,7 @@ final class SettingsController extends AbstractController {
 			$to,
 			sprintf(
 				/* translators: %s: site name. */
-				__( '[%s] Ferry Booking Manager test email', 'ferry-booking-manager' ),
+				__( '[%s] MagePeople Ferry Booking System test email', 'magepeople-ferry-booking-system' ),
 				(string) get_bloginfo( 'name' )
 			),
 			$body,
@@ -229,7 +229,7 @@ final class SettingsController extends AbstractController {
 		if ( ! $sent ) {
 			return $this->fail(
 				'fbm_mail_failed',
-				__( 'WordPress could not send the message. Check your SMTP settings or mail plugin.', 'ferry-booking-manager' ),
+				__( 'WordPress could not send the message. Check your SMTP settings or mail plugin.', 'magepeople-ferry-booking-system' ),
 				500
 			);
 		}

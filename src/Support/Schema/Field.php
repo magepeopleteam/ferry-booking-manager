@@ -262,7 +262,7 @@ final class Field {
 			if ( $this->required ) {
 				return $this->error(
 					/* translators: %s: field name. */
-					sprintf( __( '%s is required.', 'ferry-booking-manager' ), $this->label() )
+					sprintf( __( '%s is required.', 'magepeople-ferry-booking-system' ), $this->label() )
 				);
 			}
 
@@ -274,7 +274,7 @@ final class Field {
 				if ( ! is_email( (string) $value ) ) {
 					return $this->error(
 						/* translators: %s: field name. */
-						sprintf( __( '%s must be a valid email address.', 'ferry-booking-manager' ), $this->label() )
+						sprintf( __( '%s must be a valid email address.', 'magepeople-ferry-booking-system' ), $this->label() )
 					);
 				}
 				break;
@@ -284,7 +284,7 @@ final class Field {
 					return $this->error(
 						sprintf(
 							/* translators: 1: field name, 2: comma separated list of allowed values. */
-							__( '%1$s must be one of: %2$s.', 'ferry-booking-manager' ),
+							__( '%1$s must be one of: %2$s.', 'magepeople-ferry-booking-system' ),
 							$this->label(),
 							implode( ', ', $this->enum )
 						)
@@ -296,7 +296,7 @@ final class Field {
 				if ( '' !== $this->references && get_post_type( (int) $value ) !== $this->references ) {
 					return $this->error(
 						/* translators: %s: field name. */
-						sprintf( __( '%s does not refer to an existing record.', 'ferry-booking-manager' ), $this->label() )
+						sprintf( __( '%s does not refer to an existing record.', 'magepeople-ferry-booking-system' ), $this->label() )
 					);
 				}
 				break;
@@ -640,9 +640,9 @@ final class Field {
 			return $this->error(
 				$a_length
 					/* translators: 1: field name, 2: minimum number of characters. */
-					? sprintf( __( '%1$s must be at least %2$d characters.', 'ferry-booking-manager' ), $this->label(), (int) $min )
+					? sprintf( __( '%1$s must be at least %2$d characters.', 'magepeople-ferry-booking-system' ), $this->label(), (int) $min )
 					/* translators: 1: field name, 2: minimum value. */
-					: sprintf( __( '%1$s must be %2$s or more.', 'ferry-booking-manager' ), $this->label(), (string) $min )
+					: sprintf( __( '%1$s must be %2$s or more.', 'magepeople-ferry-booking-system' ), $this->label(), (string) $min )
 			);
 		}
 
@@ -650,9 +650,9 @@ final class Field {
 			return $this->error(
 				$a_length
 					/* translators: 1: field name, 2: maximum number of characters. */
-					? sprintf( __( '%1$s must be %2$d characters or fewer.', 'ferry-booking-manager' ), $this->label(), (int) $max )
+					? sprintf( __( '%1$s must be %2$d characters or fewer.', 'magepeople-ferry-booking-system' ), $this->label(), (int) $max )
 					/* translators: 1: field name, 2: maximum value. */
-					: sprintf( __( '%1$s must be %2$s or less.', 'ferry-booking-manager' ), $this->label(), (string) $max )
+					: sprintf( __( '%1$s must be %2$s or less.', 'magepeople-ferry-booking-system' ), $this->label(), (string) $max )
 			);
 		}
 

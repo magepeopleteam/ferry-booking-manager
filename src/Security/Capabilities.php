@@ -12,7 +12,7 @@ namespace FBM\Security;
 defined( 'ABSPATH' ) || exit;
 
 /**
- * Single source of truth for every Ferry Booking Manager capability.
+ * Single source of truth for every MagePeople Ferry Booking System capability.
  *
  * Nothing in the plugin may gate behaviour on `manage_options` alone; every
  * privileged operation maps to one of these capabilities so that site owners can
@@ -80,21 +80,21 @@ final class Capabilities {
 	 */
 	public static function labels(): array {
 		$labels = array(
-			self::ACCESS_DASHBOARD => __( 'Access the Ferry Manager dashboard', 'ferry-booking-manager' ),
-			self::MANAGE_SETTINGS  => __( 'Manage settings', 'ferry-booking-manager' ),
-			self::MANAGE_VESSELS   => __( 'Manage vessels', 'ferry-booking-manager' ),
-			self::MANAGE_PORTS     => __( 'Manage ports', 'ferry-booking-manager' ),
-			self::MANAGE_ROUTES    => __( 'Manage routes', 'ferry-booking-manager' ),
-			self::MANAGE_SAILINGS  => __( 'Manage sailings', 'ferry-booking-manager' ),
-			self::MANAGE_PRICING   => __( 'Manage pricing', 'ferry-booking-manager' ),
-			self::MANAGE_BOOKINGS  => __( 'View and manage bookings', 'ferry-booking-manager' ),
-			self::CREATE_BOOKING   => __( 'Create bookings', 'ferry-booking-manager' ),
-			self::MODIFY_BOOKING   => __( 'Modify bookings', 'ferry-booking-manager' ),
-			self::CANCEL_BOOKING   => __( 'Cancel bookings', 'ferry-booking-manager' ),
-			self::ISSUE_REFUND     => __( 'Issue refunds', 'ferry-booking-manager' ),
-			self::CHECKIN          => __( 'Check in and board passengers', 'ferry-booking-manager' ),
-			self::VIEW_REPORTS     => __( 'View reports', 'ferry-booking-manager' ),
-			self::MANAGE_AGENTS    => __( 'Manage agents', 'ferry-booking-manager' ),
+			self::ACCESS_DASHBOARD => __( 'Access the Ferry Manager dashboard', 'magepeople-ferry-booking-system' ),
+			self::MANAGE_SETTINGS  => __( 'Manage settings', 'magepeople-ferry-booking-system' ),
+			self::MANAGE_VESSELS   => __( 'Manage vessels', 'magepeople-ferry-booking-system' ),
+			self::MANAGE_PORTS     => __( 'Manage ports', 'magepeople-ferry-booking-system' ),
+			self::MANAGE_ROUTES    => __( 'Manage routes', 'magepeople-ferry-booking-system' ),
+			self::MANAGE_SAILINGS  => __( 'Manage sailings', 'magepeople-ferry-booking-system' ),
+			self::MANAGE_PRICING   => __( 'Manage pricing', 'magepeople-ferry-booking-system' ),
+			self::MANAGE_BOOKINGS  => __( 'View and manage bookings', 'magepeople-ferry-booking-system' ),
+			self::CREATE_BOOKING   => __( 'Create bookings', 'magepeople-ferry-booking-system' ),
+			self::MODIFY_BOOKING   => __( 'Modify bookings', 'magepeople-ferry-booking-system' ),
+			self::CANCEL_BOOKING   => __( 'Cancel bookings', 'magepeople-ferry-booking-system' ),
+			self::ISSUE_REFUND     => __( 'Issue refunds', 'magepeople-ferry-booking-system' ),
+			self::CHECKIN          => __( 'Check in and board passengers', 'magepeople-ferry-booking-system' ),
+			self::VIEW_REPORTS     => __( 'View reports', 'magepeople-ferry-booking-system' ),
+			self::MANAGE_AGENTS    => __( 'Manage agents', 'magepeople-ferry-booking-system' ),
 		);
 
 		/**

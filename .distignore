@@ -1,0 +1,16 @@
+.git
+.gitignore
+.distignore
+apps
+vendor
+tests
+docs
+node_modules
+.next
+composer.json
+composer.lock
+phpcs.xml
+phpunit.xml
+build-zip.sh
+*.png
+*.log

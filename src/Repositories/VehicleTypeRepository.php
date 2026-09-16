@@ -95,7 +95,7 @@ final class VehicleTypeRepository extends AbstractRepository {
 						'This vehicle type is used by %d booking and cannot be deleted. Set it to inactive instead so it stops being sold.',
 						'This vehicle type is used by %d bookings and cannot be deleted. Set it to inactive instead so it stops being sold.',
 						$references,
-						'ferry-booking-manager'
+						'magepeople-ferry-booking-system'
 					),
 					$references
 				),
@@ -115,6 +115,6 @@ final class VehicleTypeRepository extends AbstractRepository {
 	protected function derive_name( Entity $entity ): string {
 		$code = (string) $entity->get( 'code' );
 
-		return '' !== $code ? ucfirst( strtolower( $code ) ) : __( 'Vehicle type', 'ferry-booking-manager' );
+		return '' !== $code ? ucfirst( strtolower( $code ) ) : __( 'Vehicle type', 'magepeople-ferry-booking-system' );
 	}
 }

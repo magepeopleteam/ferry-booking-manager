@@ -34,7 +34,7 @@ final class Deactivator {
 		flush_rewrite_rules();
 
 		/**
-		 * Fires at the end of Ferry Booking Manager deactivation.
+		 * Fires at the end of MagePeople Ferry Booking System deactivation.
 		 *
 		 * @since 1.0.0
 		 */

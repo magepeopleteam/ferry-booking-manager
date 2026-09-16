@@ -114,7 +114,7 @@ final class PostTypes {
 		}
 
 		/**
-		 * Fires once Ferry Booking Manager post types and meta are registered.
+		 * Fires once MagePeople Ferry Booking System post types and meta are registered.
 		 *
 		 * @since 1.0.0
 		 */
@@ -169,7 +169,7 @@ final class PostTypes {
 		);
 
 		/**
-		 * Filters the arguments used to register a Ferry Booking Manager post type.
+		 * Filters the arguments used to register a MagePeople Ferry Booking System post type.
 		 *
 		 * @since 1.0.0
 		 *

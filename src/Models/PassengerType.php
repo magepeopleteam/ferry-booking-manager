@@ -83,8 +83,8 @@ final class PassengerType extends Entity {
 	 */
 	public static function labels(): array {
 		return array(
-			'plural'   => __( 'Passenger types', 'ferry-booking-manager' ),
-			'singular' => __( 'Passenger type', 'ferry-booking-manager' ),
+			'plural'   => __( 'Passenger types', 'magepeople-ferry-booking-system' ),
+			'singular' => __( 'Passenger type', 'magepeople-ferry-booking-system' ),
 		);
 	}
 
@@ -103,7 +103,7 @@ final class PassengerType extends Entity {
 				'min'         => 2,
 				'max'         => 20,
 				'searchable'  => true,
-				'description' => __( 'Passenger type code', 'ferry-booking-manager' ),
+				'description' => __( 'Passenger type code', 'magepeople-ferry-booking-system' ),
 			),
 			'min_age'         => array(
 				'type'        => 'int',
@@ -111,7 +111,7 @@ final class PassengerType extends Entity {
 				'default'     => self::NO_AGE_LIMIT,
 				'min'         => self::NO_AGE_LIMIT,
 				'max'         => 130,
-				'description' => __( 'Minimum age', 'ferry-booking-manager' ),
+				'description' => __( 'Minimum age', 'magepeople-ferry-booking-system' ),
 			),
 			'max_age'         => array(
 				'type'        => 'int',
@@ -119,45 +119,45 @@ final class PassengerType extends Entity {
 				'default'     => self::NO_AGE_LIMIT,
 				'min'         => self::NO_AGE_LIMIT,
 				'max'         => 130,
-				'description' => __( 'Maximum age', 'ferry-booking-manager' ),
+				'description' => __( 'Maximum age', 'magepeople-ferry-booking-system' ),
 			),
 			'requires_dob'    => array(
 				'type'        => 'bool',
 				'meta'        => '_fbm_pt_requires_dob',
 				'default'     => false,
-				'description' => __( 'Require date of birth', 'ferry-booking-manager' ),
+				'description' => __( 'Require date of birth', 'magepeople-ferry-booking-system' ),
 			),
 			'requires_adult'  => array(
 				'type'        => 'bool',
 				'meta'        => '_fbm_pt_requires_adult',
 				'default'     => false,
-				'description' => __( 'Must travel with an adult', 'ferry-booking-manager' ),
+				'description' => __( 'Must travel with an adult', 'magepeople-ferry-booking-system' ),
 			),
 			'occupies_seat'   => array(
 				'type'        => 'bool',
 				'meta'        => '_fbm_pt_occupies_seat',
 				'default'     => true,
-				'description' => __( 'Occupies a passenger seat', 'ferry-booking-manager' ),
+				'description' => __( 'Occupies a passenger seat', 'magepeople-ferry-booking-system' ),
 			),
 			'is_base'         => array(
 				'type'        => 'bool',
 				'meta'        => '_fbm_pt_is_base',
 				'default'     => false,
-				'description' => __( 'Base fare for percentage pricing', 'ferry-booking-manager' ),
+				'description' => __( 'Base fare for percentage pricing', 'magepeople-ferry-booking-system' ),
 			),
 			'price_mode'      => array(
 				'type'        => 'enum',
 				'meta'        => '_fbm_pt_price_mode',
 				'enum'        => array( self::PRICE_FIXED, self::PRICE_PERCENT, self::PRICE_FREE ),
 				'default'     => self::PRICE_FIXED,
-				'description' => __( 'Fare mode', 'ferry-booking-manager' ),
+				'description' => __( 'Fare mode', 'magepeople-ferry-booking-system' ),
 			),
 			'base_price'      => array(
 				'type'        => 'money',
 				'meta'        => '_fbm_pt_base_price',
 				'default'     => 0,
 				'min'         => 0,
-				'description' => __( 'Fare', 'ferry-booking-manager' ),
+				'description' => __( 'Fare', 'magepeople-ferry-booking-system' ),
 			),
 			'price_percent'   => array(
 				'type'        => 'float',
@@ -165,7 +165,7 @@ final class PassengerType extends Entity {
 				'default'     => 100.0,
 				'min'         => 0,
 				'max'         => 100,
-				'description' => __( 'Percentage of the base fare', 'ferry-booking-manager' ),
+				'description' => __( 'Percentage of the base fare', 'magepeople-ferry-booking-system' ),
 			),
 			'min_per_booking' => array(
 				'type'        => 'int',
@@ -173,7 +173,7 @@ final class PassengerType extends Entity {
 				'default'     => 0,
 				'min'         => 0,
 				'max'         => 99,
-				'description' => __( 'Minimum per booking', 'ferry-booking-manager' ),
+				'description' => __( 'Minimum per booking', 'magepeople-ferry-booking-system' ),
 			),
 			'max_per_booking' => array(
 				'type'        => 'int',
@@ -181,7 +181,7 @@ final class PassengerType extends Entity {
 				'default'     => 9,
 				'min'         => 0,
 				'max'         => 99,
-				'description' => __( 'Maximum per booking', 'ferry-booking-manager' ),
+				'description' => __( 'Maximum per booking', 'magepeople-ferry-booking-system' ),
 			),
 			'sort_order'      => array(
 				'type'        => 'int',
@@ -189,20 +189,20 @@ final class PassengerType extends Entity {
 				'default'     => 0,
 				'min'         => 0,
 				'max'         => 999,
-				'description' => __( 'Display order', 'ferry-booking-manager' ),
+				'description' => __( 'Display order', 'magepeople-ferry-booking-system' ),
 			),
 			'description'     => array(
 				'type'        => 'text',
 				'meta'        => '_fbm_pt_description',
 				'max'         => 500,
-				'description' => __( 'Description shown to customers', 'ferry-booking-manager' ),
+				'description' => __( 'Description shown to customers', 'magepeople-ferry-booking-system' ),
 			),
 			'status'          => array(
 				'type'        => 'enum',
 				'meta'        => '_fbm_status',
 				'enum'        => array( self::STATUS_ACTIVE, self::STATUS_INACTIVE ),
 				'default'     => self::STATUS_ACTIVE,
-				'description' => __( 'Status', 'ferry-booking-manager' ),
+				'description' => __( 'Status', 'magepeople-ferry-booking-system' ),
 			),
 		);
 	}

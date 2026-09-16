@@ -24,7 +24,7 @@ final class Components {
 	/**
 	 * Block namespace.
 	 */
-	private const NAMESPACE = 'ferry-booking-manager';
+	private const NAMESPACE = 'magepeople-ferry-booking-system';
 
 	/**
 	 * Asset loader, which needs to know what a page contains.
@@ -59,7 +59,7 @@ final class Components {
 	public static function catalogue(): array {
 		$catalogue = array(
 			'booking'      => array(
-				'title'      => __( 'Ferry Booking', 'ferry-booking-manager' ),
+				'title'      => __( 'Ferry Booking', 'magepeople-ferry-booking-system' ),
 				'shortcode'  => 'fbm_booking',
 				'attributes' => array(
 					'origin'      => array(
@@ -77,7 +77,7 @@ final class Components {
 				),
 			),
 			'search'       => array(
-				'title'      => __( 'Ferry Search Form', 'ferry-booking-manager' ),
+				'title'      => __( 'Ferry Search Form', 'magepeople-ferry-booking-system' ),
 				'shortcode'  => 'fbm_search',
 				'attributes' => array(
 					'origin'      => array(
@@ -99,12 +99,12 @@ final class Components {
 				),
 			),
 			'confirmation' => array(
-				'title'      => __( 'Ferry Booking Confirmation', 'ferry-booking-manager' ),
+				'title'      => __( 'Ferry Booking Confirmation', 'magepeople-ferry-booking-system' ),
 				'shortcode'  => 'fbm_confirmation',
 				'attributes' => array(),
 			),
 			'my-bookings'  => array(
-				'title'      => __( 'My Ferry Bookings', 'ferry-booking-manager' ),
+				'title'      => __( 'My Ferry Bookings', 'magepeople-ferry-booking-system' ),
 				'shortcode'  => 'fbm_my_bookings',
 				'attributes' => array(
 					// A history is a table of crossings, not prose. It defaults
@@ -118,7 +118,7 @@ final class Components {
 				),
 			),
 			'lookup'       => array(
-				'title'      => __( 'Find a Ferry Booking', 'ferry-booking-manager' ),
+				'title'      => __( 'Find a Ferry Booking', 'magepeople-ferry-booking-system' ),
 				'shortcode'  => 'fbm_lookup',
 				'attributes' => array(),
 			),
@@ -244,13 +244,13 @@ final class Components {
 	 */
 	private function fallback( string $component ): string {
 		$message = 'booking' === $component || 'search' === $component
-			? __( 'Loading the timetable…', 'ferry-booking-manager' )
-			: __( 'Loading…', 'ferry-booking-manager' );
+			? __( 'Loading the timetable…', 'magepeople-ferry-booking-system' )
+			: __( 'Loading…', 'magepeople-ferry-booking-system' );
 
 		return sprintf(
 			'<div class="fbm-frontend__loading" role="status" aria-live="polite"><span class="fbm-frontend__spinner" aria-hidden="true"></span><span>%1$s</span></div><noscript><p class="fbm-frontend__noscript">%2$s</p></noscript>',
 			esc_html( $message ),
-			esc_html__( 'Booking online needs JavaScript. Please enable it, or contact us to book by phone.', 'ferry-booking-manager' )
+			esc_html__( 'Booking online needs JavaScript. Please enable it, or contact us to book by phone.', 'magepeople-ferry-booking-system' )
 		);
 	}
 

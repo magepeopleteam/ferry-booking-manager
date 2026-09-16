@@ -98,7 +98,7 @@ abstract class EntityController extends AbstractController {
 			array(
 				'args'   => array(
 					'id' => array(
-						'description'       => __( 'Record id.', 'ferry-booking-manager' ),
+						'description'       => __( 'Record id.', 'magepeople-ferry-booking-system' ),
 						'type'              => 'integer',
 						'required'          => true,
 						'sanitize_callback' => 'absint',
@@ -121,7 +121,7 @@ abstract class EntityController extends AbstractController {
 					'permission_callback' => $this->can( $capability ),
 					'args'                => array(
 						'force' => array(
-							'description' => __( 'Bypass the trash and delete permanently.', 'ferry-booking-manager' ),
+							'description' => __( 'Bypass the trash and delete permanently.', 'magepeople-ferry-booking-system' ),
 							'type'        => 'boolean',
 							'default'     => false,
 						),
@@ -321,13 +321,13 @@ abstract class EntityController extends AbstractController {
 			$message = $trashed
 				? sprintf(
 					/* translators: 1: field name, 2: the duplicate value. */
-					__( 'A deleted record in the trash still uses the %1$s “%2$s”. Choose a different one, or empty the trash first.', 'ferry-booking-manager' ),
+					__( 'A deleted record in the trash still uses the %1$s “%2$s”. Choose a different one, or empty the trash first.', 'magepeople-ferry-booking-system' ),
 					$field->label(),
 					(string) $value
 				)
 				: sprintf(
 					/* translators: 1: field name, 2: the duplicate value. */
-					__( 'Another record already uses the %1$s “%2$s”. Choose a different one.', 'ferry-booking-manager' ),
+					__( 'Another record already uses the %1$s “%2$s”. Choose a different one.', 'magepeople-ferry-booking-system' ),
 					$field->label(),
 					(string) $value
 				);
@@ -341,12 +341,12 @@ abstract class EntityController extends AbstractController {
 						$name => $trashed
 							? sprintf(
 								/* translators: %s: the duplicate value. */
-								__( '“%s” is used by a record in the trash.', 'ferry-booking-manager' ),
+								__( '“%s” is used by a record in the trash.', 'magepeople-ferry-booking-system' ),
 								(string) $value
 							)
 							: sprintf(
 								/* translators: %s: the duplicate value. */
-								__( '“%s” is already in use.', 'ferry-booking-manager' ),
+								__( '“%s” is already in use.', 'magepeople-ferry-booking-system' ),
 								(string) $value
 							),
 					),
@@ -403,7 +403,7 @@ abstract class EntityController extends AbstractController {
 		$status = $this->repository->schema()->field( 'status' );
 
 		$params['status'] = array(
-			'description'       => __( 'Limit results to a status.', 'ferry-booking-manager' ),
+			'description'       => __( 'Limit results to a status.', 'magepeople-ferry-booking-system' ),
 			'type'              => 'string',
 			'default'           => '',
 			'enum'              => array_merge( array( '' ), null === $status ? array() : $status->enum ),
@@ -411,7 +411,7 @@ abstract class EntityController extends AbstractController {
 		);
 
 		$params['orderby'] = array(
-			'description'       => __( 'Field to sort by.', 'ferry-booking-manager' ),
+			'description'       => __( 'Field to sort by.', 'magepeople-ferry-booking-system' ),
 			'type'              => 'string',
 			'default'           => $this->default_orderby,
 			'sanitize_callback' => 'sanitize_key',
@@ -432,7 +432,7 @@ abstract class EntityController extends AbstractController {
 		$args = $this->repository->schema()->rest_args( $creating );
 
 		$args['name'] = array(
-			'description' => __( 'Display name.', 'ferry-booking-manager' ),
+			'description' => __( 'Display name.', 'magepeople-ferry-booking-system' ),
 			'type'        => 'string',
 			'required'    => false,
 		);
@@ -457,7 +457,7 @@ abstract class EntityController extends AbstractController {
 	protected function not_found(): WP_REST_Response {
 		return $this->fail(
 			'fbm_not_found',
-			__( 'The record could not be found.', 'ferry-booking-manager' ),
+			__( 'The record could not be found.', 'magepeople-ferry-booking-system' ),
 			404
 		);
 	}

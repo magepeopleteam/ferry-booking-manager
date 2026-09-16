@@ -3,7 +3,7 @@
   "private": true,
   "version": "1.0.0",
   "type": "module",
-  "description": "Ferry Booking Manager customer booking application.",
+  "description": "MagePeople Ferry Booking System customer booking application.",
   "scripts": {
     "build": "node scripts/check-translations.mjs && vite build && node scripts/write-manifest.mjs",
     "dev": "vite build --watch",

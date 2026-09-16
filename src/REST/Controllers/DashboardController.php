@@ -65,7 +65,7 @@ final class DashboardController extends AbstractController {
 					'permission_callback' => $this->can( Capabilities::ACCESS_DASHBOARD ),
 					'args'                => array(
 						'date' => array(
-							'description'       => __( 'Operating day, YYYY-MM-DD. Defaults to today.', 'ferry-booking-manager' ),
+							'description'       => __( 'Operating day, YYYY-MM-DD. Defaults to today.', 'magepeople-ferry-booking-system' ),
 							'type'              => 'string',
 							'default'           => '',
 							'sanitize_callback' => 'sanitize_text_field',

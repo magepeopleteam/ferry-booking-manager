@@ -58,7 +58,7 @@ final class CustomerController extends AbstractController {
 					'permission_callback' => $this->can( Capabilities::CREATE_BOOKING ),
 					'args'                => array(
 						'search' => array(
-							'description'       => __( 'Name or email to search for.', 'ferry-booking-manager' ),
+							'description'       => __( 'Name or email to search for.', 'magepeople-ferry-booking-system' ),
 							'type'              => 'string',
 							'default'           => '',
 							'sanitize_callback' => 'sanitize_text_field',
@@ -71,19 +71,19 @@ final class CustomerController extends AbstractController {
 					'permission_callback' => $this->can( Capabilities::CREATE_BOOKING ),
 					'args'                => array(
 						'name'  => array(
-							'description'       => __( 'Customer name.', 'ferry-booking-manager' ),
+							'description'       => __( 'Customer name.', 'magepeople-ferry-booking-system' ),
 							'type'              => 'string',
 							'required'          => true,
 							'sanitize_callback' => 'sanitize_text_field',
 						),
 						'email' => array(
-							'description'       => __( 'Customer email address.', 'ferry-booking-manager' ),
+							'description'       => __( 'Customer email address.', 'magepeople-ferry-booking-system' ),
 							'type'              => 'string',
 							'required'          => true,
 							'sanitize_callback' => 'sanitize_email',
 						),
 						'phone' => array(
-							'description'       => __( 'Customer phone number.', 'ferry-booking-manager' ),
+							'description'       => __( 'Customer phone number.', 'magepeople-ferry-booking-system' ),
 							'type'              => 'string',
 							'default'           => '',
 							'sanitize_callback' => 'sanitize_text_field',
@@ -144,9 +144,9 @@ final class CustomerController extends AbstractController {
 		if ( ! is_email( $email ) ) {
 			return $this->fail(
 				'fbm_invalid_email',
-				__( 'That is not a valid email address.', 'ferry-booking-manager' ),
+				__( 'That is not a valid email address.', 'magepeople-ferry-booking-system' ),
 				400,
-				array( 'fields' => array( 'email' => __( 'Enter a valid email address.', 'ferry-booking-manager' ) ) )
+				array( 'fields' => array( 'email' => __( 'Enter a valid email address.', 'magepeople-ferry-booking-system' ) ) )
 			);
 		}
 

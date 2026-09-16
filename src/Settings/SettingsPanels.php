@@ -70,12 +70,12 @@ final class SettingsPanels {
 	 */
 	public static function groups(): array {
 		return array(
-			'operation'  => __( 'Operation', 'ferry-booking-manager' ),
-			'travellers' => __( 'Travellers', 'ferry-booking-manager' ),
-			'money'      => __( 'Money', 'ferry-booking-manager' ),
-			'tickets'    => __( 'Tickets and messages', 'ferry-booking-manager' ),
-			'system'     => __( 'System', 'ferry-booking-manager' ),
-			'more'       => __( 'More', 'ferry-booking-manager' ),
+			'operation'  => __( 'Operation', 'magepeople-ferry-booking-system' ),
+			'travellers' => __( 'Travellers', 'magepeople-ferry-booking-system' ),
+			'money'      => __( 'Money', 'magepeople-ferry-booking-system' ),
+			'tickets'    => __( 'Tickets and messages', 'magepeople-ferry-booking-system' ),
+			'system'     => __( 'System', 'magepeople-ferry-booking-system' ),
+			'more'       => __( 'More', 'magepeople-ferry-booking-system' ),
 		);
 	}
 
@@ -240,56 +240,56 @@ final class SettingsPanels {
 	private static function general(): array {
 		return array(
 			'id'          => 'general',
-			'label'       => __( 'General', 'ferry-booking-manager' ),
+			'label'       => __( 'General', 'magepeople-ferry-booking-system' ),
 			'group'       => 'operation',
-			'description' => __( 'Who you are, how customers reach you, and how prices are shown.', 'ferry-booking-manager' ),
+			'description' => __( 'Who you are, how customers reach you, and how prices are shown.', 'magepeople-ferry-booking-system' ),
 			'sections'    => array(
 				array(
-					'title'  => __( 'Operator', 'ferry-booking-manager' ),
+					'title'  => __( 'Operator', 'magepeople-ferry-booking-system' ),
 					'fields' => array(
 						SettingField::make( 'company_name' )
-							->label( __( 'Company name', 'ferry-booking-manager' ) )
-							->help( __( 'Shown on confirmations, tickets and emails.', 'ferry-booking-manager' ) )
+							->label( __( 'Company name', 'magepeople-ferry-booking-system' ) )
+							->help( __( 'Shown on confirmations, tickets and emails.', 'magepeople-ferry-booking-system' ) )
 							->default_to( (string) get_bloginfo( 'name' ) ),
 						SettingField::make( 'company_logo', SettingField::TYPE_URL )
-							->label( __( 'Logo URL', 'ferry-booking-manager' ) )
-							->help( __( 'Used on printed documents. Leave empty to use the company name as text.', 'ferry-booking-manager' ) ),
+							->label( __( 'Logo URL', 'magepeople-ferry-booking-system' ) )
+							->help( __( 'Used on printed documents. Leave empty to use the company name as text.', 'magepeople-ferry-booking-system' ) ),
 						SettingField::make( 'support_email', SettingField::TYPE_EMAIL )
-							->label( __( 'Support email', 'ferry-booking-manager' ) )
-							->help( __( 'Where customers are told to write if something goes wrong.', 'ferry-booking-manager' ) )
+							->label( __( 'Support email', 'magepeople-ferry-booking-system' ) )
+							->help( __( 'Where customers are told to write if something goes wrong.', 'magepeople-ferry-booking-system' ) )
 							->default_to( (string) get_option( 'admin_email', '' ) ),
 						SettingField::make( 'support_phone', SettingField::TYPE_TEL )
-							->label( __( 'Support phone', 'ferry-booking-manager' ) ),
+							->label( __( 'Support phone', 'magepeople-ferry-booking-system' ) ),
 					),
 				),
 				array(
-					'title'       => __( 'Currency and policies', 'ferry-booking-manager' ),
+					'title'       => __( 'Currency and policies', 'magepeople-ferry-booking-system' ),
 					'description' => self::currency_notice(),
 					'fields'      => array(
 						SettingField::make( 'currency', SettingField::TYPE_CURRENCY )
-							->label( __( 'Currency code', 'ferry-booking-manager' ) )
+							->label( __( 'Currency code', 'magepeople-ferry-booking-system' ) )
 							->placeholder( 'EUR' )
-							->help( __( 'Three-letter ISO code, such as EUR or GBP.', 'ferry-booking-manager' ) ),
+							->help( __( 'Three-letter ISO code, such as EUR or GBP.', 'magepeople-ferry-booking-system' ) ),
 						SettingField::make( 'currency_symbol', SettingField::TYPE_TEXT )
-							->label( __( 'Currency symbol', 'ferry-booking-manager' ) )
+							->label( __( 'Currency symbol', 'magepeople-ferry-booking-system' ) )
 							->placeholder( '€' )
-							->help( __( 'Leave empty to use the usual symbol for the code above, or the code itself where there is no established symbol.', 'ferry-booking-manager' ) ),
+							->help( __( 'Leave empty to use the usual symbol for the code above, or the code itself where there is no established symbol.', 'magepeople-ferry-booking-system' ) ),
 						SettingField::make( 'currency_position', SettingField::TYPE_SELECT )
-							->label( __( 'Symbol position', 'ferry-booking-manager' ) )
+							->label( __( 'Symbol position', 'magepeople-ferry-booking-system' ) )
 							->options(
 								array(
-									'left'        => __( 'Before the amount (€84.00)', 'ferry-booking-manager' ),
-									'right'       => __( 'After the amount (84.00€)', 'ferry-booking-manager' ),
-									'left_space'  => __( 'Before, with a space (€ 84.00)', 'ferry-booking-manager' ),
-									'right_space' => __( 'After, with a space (84.00 €)', 'ferry-booking-manager' ),
+									'left'        => __( 'Before the amount (€84.00)', 'magepeople-ferry-booking-system' ),
+									'right'       => __( 'After the amount (84.00€)', 'magepeople-ferry-booking-system' ),
+									'left_space'  => __( 'Before, with a space (€ 84.00)', 'magepeople-ferry-booking-system' ),
+									'right_space' => __( 'After, with a space (84.00 €)', 'magepeople-ferry-booking-system' ),
 								)
 							)
 							->default_to( 'left' ),
 						SettingField::make( 'currency_decimals', SettingField::TYPE_NUMBER )
-							->label( __( 'Decimal places', 'ferry-booking-manager' ) )
+							->label( __( 'Decimal places', 'magepeople-ferry-booking-system' ) )
 							->range( 0, 4 )
 							->default_to( 2 )
-							->help( __( 'Zero for a currency with no minor unit, such as the yen.', 'ferry-booking-manager' ) ),
+							->help( __( 'Zero for a currency with no minor unit, such as the yen.', 'magepeople-ferry-booking-system' ) ),
 
 						/*
 						 * Both separators are chosen from a list rather than
@@ -300,42 +300,42 @@ final class SettingsPanels {
 						 * price on the site ambiguous.
 						 */
 						SettingField::make( 'currency_decimal_separator', SettingField::TYPE_SELECT )
-							->label( __( 'Decimal separator', 'ferry-booking-manager' ) )
+							->label( __( 'Decimal separator', 'magepeople-ferry-booking-system' ) )
 							->options(
 								array(
-									'.' => __( 'Point (84.00)', 'ferry-booking-manager' ),
-									',' => __( 'Comma (84,00)', 'ferry-booking-manager' ),
+									'.' => __( 'Point (84.00)', 'magepeople-ferry-booking-system' ),
+									',' => __( 'Comma (84,00)', 'magepeople-ferry-booking-system' ),
 								)
 							)
 							->default_to( '.' ),
 						SettingField::make( 'currency_thousand_separator', SettingField::TYPE_SELECT )
-							->label( __( 'Thousands separator', 'ferry-booking-manager' ) )
+							->label( __( 'Thousands separator', 'magepeople-ferry-booking-system' ) )
 							->options(
 								array(
-									','  => __( 'Comma (1,284.00)', 'ferry-booking-manager' ),
-									'.'  => __( 'Point (1.284,00)', 'ferry-booking-manager' ),
-									' '  => __( 'Space (1 284.00)', 'ferry-booking-manager' ),
-									'\'' => __( 'Apostrophe (1\'284.00)', 'ferry-booking-manager' ),
-									''   => __( 'None (1284.00)', 'ferry-booking-manager' ),
+									','  => __( 'Comma (1,284.00)', 'magepeople-ferry-booking-system' ),
+									'.'  => __( 'Point (1.284,00)', 'magepeople-ferry-booking-system' ),
+									' '  => __( 'Space (1 284.00)', 'magepeople-ferry-booking-system' ),
+									'\'' => __( 'Apostrophe (1\'284.00)', 'magepeople-ferry-booking-system' ),
+									''   => __( 'None (1284.00)', 'magepeople-ferry-booking-system' ),
 								)
 							)
 							->default_to( ',' ),
 						SettingField::make( 'frontend_primary_color', SettingField::TYPE_COLOR )
-							->label( __( 'Accent colour', 'ferry-booking-manager' ) )
-							->help( __( 'Used for buttons and highlights in the booking form.', 'ferry-booking-manager' ) )
+							->label( __( 'Accent colour', 'magepeople-ferry-booking-system' ) )
+							->help( __( 'Used for buttons and highlights in the booking form.', 'magepeople-ferry-booking-system' ) )
 							// Must match --fbmb-accent in the booking stylesheet. If the
 							// two drift, the swatch on this screen stops describing the
 							// colour the customer actually sees.
 							->default_to( '#0b62c4' ),
 						SettingField::make( 'terms_url', SettingField::TYPE_URL )
-							->label( __( 'Terms and conditions URL', 'ferry-booking-manager' ) ),
+							->label( __( 'Terms and conditions URL', 'magepeople-ferry-booking-system' ) ),
 						SettingField::make( 'cancellation_policy_url', SettingField::TYPE_URL )
-							->label( __( 'Cancellation policy URL', 'ferry-booking-manager' ) ),
+							->label( __( 'Cancellation policy URL', 'magepeople-ferry-booking-system' ) ),
 					),
 				),
 				array(
-					'title'       => __( 'Booking pages', 'ferry-booking-manager' ),
-					'description' => __( 'The plugin keeps these pages for you. Delete one and it is recreated on the next update.', 'ferry-booking-manager' ),
+					'title'       => __( 'Booking pages', 'magepeople-ferry-booking-system' ),
+					'description' => __( 'The plugin keeps these pages for you. Delete one and it is recreated on the next update.', 'magepeople-ferry-booking-system' ),
 					'custom'      => self::CUSTOM_PAGES,
 				),
 			),
@@ -357,12 +357,12 @@ final class SettingsPanels {
 		if ( function_exists( 'get_woocommerce_currency' ) ) {
 			return sprintf(
 				/* translators: %s: the ISO currency code WooCommerce is configured with. */
-				__( 'WooCommerce is active, so its currency settings are used and these are ignored. It is currently set to %s.', 'ferry-booking-manager' ),
+				__( 'WooCommerce is active, so its currency settings are used and these are ignored. It is currently set to %s.', 'magepeople-ferry-booking-system' ),
 				(string) get_woocommerce_currency()
 			);
 		}
 
-		return __( 'How prices are written everywhere the plugin shows one. If WooCommerce is activated later, its own currency settings take over from these.', 'ferry-booking-manager' );
+		return __( 'How prices are written everywhere the plugin shows one. If WooCommerce is activated later, its own currency settings take over from these.', 'magepeople-ferry-booking-system' );
 	}
 
 	/**
@@ -373,62 +373,62 @@ final class SettingsPanels {
 	private static function booking(): array {
 		return array(
 			'id'          => 'booking',
-			'label'       => __( 'Booking', 'ferry-booking-manager' ),
+			'label'       => __( 'Booking', 'magepeople-ferry-booking-system' ),
 			'group'       => 'operation',
-			'description' => __( 'How far ahead people may book, how long a seat is held, and what a reference looks like.', 'ferry-booking-manager' ),
+			'description' => __( 'How far ahead people may book, how long a seat is held, and what a reference looks like.', 'magepeople-ferry-booking-system' ),
 			'sections'    => array(
 				array(
-					'title'  => __( 'Booking window', 'ferry-booking-manager' ),
+					'title'  => __( 'Booking window', 'magepeople-ferry-booking-system' ),
 					'fields' => array(
 						SettingField::make( 'hold_minutes', SettingField::TYPE_NUMBER )
-							->label( __( 'Hold a seat for', 'ferry-booking-manager' ) )
-							->unit( __( 'minutes', 'ferry-booking-manager' ) )
-							->help( __( 'How long a seat stays reserved while the customer is paying.', 'ferry-booking-manager' ) )
+							->label( __( 'Hold a seat for', 'magepeople-ferry-booking-system' ) )
+							->unit( __( 'minutes', 'magepeople-ferry-booking-system' ) )
+							->help( __( 'How long a seat stays reserved while the customer is paying.', 'magepeople-ferry-booking-system' ) )
 							->range( 1, 240 )
 							->default_to( 15 ),
 						SettingField::make( 'min_lead_minutes', SettingField::TYPE_NUMBER )
-							->label( __( 'Close sales before departure', 'ferry-booking-manager' ) )
-							->unit( __( 'minutes', 'ferry-booking-manager' ) )
-							->help( __( 'Zero keeps a sailing on sale until it leaves.', 'ferry-booking-manager' ) )
+							->label( __( 'Close sales before departure', 'magepeople-ferry-booking-system' ) )
+							->unit( __( 'minutes', 'magepeople-ferry-booking-system' ) )
+							->help( __( 'Zero keeps a sailing on sale until it leaves.', 'magepeople-ferry-booking-system' ) )
 							->range( 0, 525600 )
 							->default_to( 0 ),
 						SettingField::make( 'max_lead_days', SettingField::TYPE_NUMBER )
-							->label( __( 'Sell no further ahead than', 'ferry-booking-manager' ) )
-							->unit( __( 'days', 'ferry-booking-manager' ) )
-							->help( __( 'Zero means any published sailing may be booked.', 'ferry-booking-manager' ) )
+							->label( __( 'Sell no further ahead than', 'magepeople-ferry-booking-system' ) )
+							->unit( __( 'days', 'magepeople-ferry-booking-system' ) )
+							->help( __( 'Zero means any published sailing may be booked.', 'magepeople-ferry-booking-system' ) )
 							->range( 0, 7300 )
 							->default_to( 0 ),
 					),
 				),
 				array(
-					'title'  => __( 'Limits per booking', 'ferry-booking-manager' ),
+					'title'  => __( 'Limits per booking', 'magepeople-ferry-booking-system' ),
 					'fields' => array(
 						SettingField::make( 'max_passengers_per_booking', SettingField::TYPE_NUMBER )
-							->label( __( 'Most passengers in one booking', 'ferry-booking-manager' ) )
-							->help( __( 'Larger parties are asked to contact you instead. Zero removes the limit.', 'ferry-booking-manager' ) )
+							->label( __( 'Most passengers in one booking', 'magepeople-ferry-booking-system' ) )
+							->help( __( 'Larger parties are asked to contact you instead. Zero removes the limit.', 'magepeople-ferry-booking-system' ) )
 							->range( 0, 500 )
 							->default_to( 9 ),
 						SettingField::make( 'max_vehicles_per_booking', SettingField::TYPE_NUMBER )
-							->label( __( 'Most vehicles in one booking', 'ferry-booking-manager' ) )
-							->help( __( 'Zero removes the limit.', 'ferry-booking-manager' ) )
+							->label( __( 'Most vehicles in one booking', 'magepeople-ferry-booking-system' ) )
+							->help( __( 'Zero removes the limit.', 'magepeople-ferry-booking-system' ) )
 							->range( 0, 100 )
 							->default_to( 4 ),
 					),
 				),
 				array(
-					'title'  => __( 'References and accounts', 'ferry-booking-manager' ),
+					'title'  => __( 'References and accounts', 'magepeople-ferry-booking-system' ),
 					'fields' => array(
 						SettingField::make( 'booking_reference_prefix', SettingField::TYPE_SLUG )
-							->label( __( 'Booking reference prefix', 'ferry-booking-manager' ) )
-							->help( __( 'References read like FBM-2071. Changing this does not renumber existing bookings.', 'ferry-booking-manager' ) )
+							->label( __( 'Booking reference prefix', 'magepeople-ferry-booking-system' ) )
+							->help( __( 'References read like FBM-2071. Changing this does not renumber existing bookings.', 'magepeople-ferry-booking-system' ) )
 							->default_to( 'FBM' ),
 						SettingField::make( 'allow_guest_checkout', SettingField::TYPE_SWITCH )
-							->label( __( 'Allow booking without an account', 'ferry-booking-manager' ) )
-							->help( __( 'Turn this off to require customers to log in first.', 'ferry-booking-manager' ) )
+							->label( __( 'Allow booking without an account', 'magepeople-ferry-booking-system' ) )
+							->help( __( 'Turn this off to require customers to log in first.', 'magepeople-ferry-booking-system' ) )
 							->default_to( true ),
 						SettingField::make( 'require_phone', SettingField::TYPE_SWITCH )
-							->label( __( 'Require a phone number', 'ferry-booking-manager' ) )
-							->help( __( 'Useful if you need to reach passengers about a delay.', 'ferry-booking-manager' ) )
+							->label( __( 'Require a phone number', 'magepeople-ferry-booking-system' ) )
+							->help( __( 'Useful if you need to reach passengers about a delay.', 'magepeople-ferry-booking-system' ) )
 							->default_to( false ),
 					),
 				),
@@ -444,16 +444,16 @@ final class SettingsPanels {
 	private static function passenger(): array {
 		return array(
 			'id'          => 'passenger',
-			'label'       => __( 'Passenger', 'ferry-booking-manager' ),
+			'label'       => __( 'Passenger', 'magepeople-ferry-booking-system' ),
 			'group'       => 'travellers',
-			'description' => __( 'What you ask about each traveller. Ask for less and more people finish booking.', 'ferry-booking-manager' ),
+			'description' => __( 'What you ask about each traveller. Ask for less and more people finish booking.', 'magepeople-ferry-booking-system' ),
 			'sections'    => array(
 				array(
-					'title'       => __( 'Passenger fields', 'ferry-booking-manager' ),
-					'description' => __( 'First and last name are always collected — a passenger manifest is a named list. Everything else is yours to decide, and each passenger type can demand more on top.', 'ferry-booking-manager' ),
+					'title'       => __( 'Passenger fields', 'magepeople-ferry-booking-system' ),
+					'description' => __( 'First and last name are always collected — a passenger manifest is a named list. Everything else is yours to decide, and each passenger type can demand more on top.', 'magepeople-ferry-booking-system' ),
 					'elsewhere'   => array(
 						'path'  => '/passengers/fields',
-						'label' => __( 'Edit the passenger form', 'ferry-booking-manager' ),
+						'label' => __( 'Edit the passenger form', 'magepeople-ferry-booking-system' ),
 					),
 				),
 			),
@@ -468,25 +468,25 @@ final class SettingsPanels {
 	private static function vehicles(): array {
 		return array(
 			'id'          => 'vehicles',
-			'label'       => __( 'Vehicles', 'ferry-booking-manager' ),
+			'label'       => __( 'Vehicles', 'magepeople-ferry-booking-system' ),
 			'group'       => 'travellers',
-			'description' => __( 'Whether you carry vehicles at all, and what you need to know about each one.', 'ferry-booking-manager' ),
+			'description' => __( 'Whether you carry vehicles at all, and what you need to know about each one.', 'magepeople-ferry-booking-system' ),
 			'sections'    => array(
 				array(
-					'title'  => __( 'Vehicle rules', 'ferry-booking-manager' ),
+					'title'  => __( 'Vehicle rules', 'magepeople-ferry-booking-system' ),
 					'fields' => array(
 						SettingField::make( 'vehicles_enabled', SettingField::TYPE_SWITCH )
-							->label( __( 'Carry vehicles', 'ferry-booking-manager' ) )
-							->help( __( 'Turn this off for a foot-passenger service. The booking form then never mentions vehicles, and a request carrying one is refused.', 'ferry-booking-manager' ) )
+							->label( __( 'Carry vehicles', 'magepeople-ferry-booking-system' ) )
+							->help( __( 'Turn this off for a foot-passenger service. The booking form then never mentions vehicles, and a request carrying one is refused.', 'magepeople-ferry-booking-system' ) )
 							->default_to( true ),
 					),
 				),
 				array(
-					'title'       => __( 'Vehicle fields', 'ferry-booking-manager' ),
-					'description' => __( 'Choose which details the booking form collects for each vehicle. Each vehicle type can demand more on top — a camper can ask for height where a bicycle does not.', 'ferry-booking-manager' ),
+					'title'       => __( 'Vehicle fields', 'magepeople-ferry-booking-system' ),
+					'description' => __( 'Choose which details the booking form collects for each vehicle. Each vehicle type can demand more on top — a camper can ask for height where a bicycle does not.', 'magepeople-ferry-booking-system' ),
 					'elsewhere'   => array(
 						'path'  => '/vehicles/fields',
-						'label' => __( 'Edit the vehicle form', 'ferry-booking-manager' ),
+						'label' => __( 'Edit the vehicle form', 'magepeople-ferry-booking-system' ),
 					),
 				),
 			),
@@ -501,44 +501,44 @@ final class SettingsPanels {
 	private static function availability(): array {
 		return array(
 			'id'          => 'availability',
-			'label'       => __( 'Availability', 'ferry-booking-manager' ),
+			'label'       => __( 'Availability', 'magepeople-ferry-booking-system' ),
 			'group'       => 'operation',
-			'description' => __( 'How much of a vessel you sell, and what customers are told about what is left.', 'ferry-booking-manager' ),
+			'description' => __( 'How much of a vessel you sell, and what customers are told about what is left.', 'magepeople-ferry-booking-system' ),
 			'sections'    => array(
 				array(
-					'title'       => __( 'Capacity', 'ferry-booking-manager' ),
-					'description' => __( 'Held-back places never appear as available, on any channel. Use them for crew, staff travel or a safety margin.', 'ferry-booking-manager' ),
+					'title'       => __( 'Capacity', 'magepeople-ferry-booking-system' ),
+					'description' => __( 'Held-back places never appear as available, on any channel. Use them for crew, staff travel or a safety margin.', 'magepeople-ferry-booking-system' ),
 					'fields'      => array(
 						SettingField::make( 'seats_held_back', SettingField::TYPE_NUMBER )
-							->label( __( 'Passenger places held back', 'ferry-booking-manager' ) )
-							->unit( __( 'places', 'ferry-booking-manager' ) )
-							->help( __( 'Subtracted from every sailing before anything is offered for sale.', 'ferry-booking-manager' ) )
+							->label( __( 'Passenger places held back', 'magepeople-ferry-booking-system' ) )
+							->unit( __( 'places', 'magepeople-ferry-booking-system' ) )
+							->help( __( 'Subtracted from every sailing before anything is offered for sale.', 'magepeople-ferry-booking-system' ) )
 							->range( 0, 1000 )
 							->default_to( 0 ),
 						SettingField::make( 'vehicle_spaces_held_back', SettingField::TYPE_NUMBER )
-							->label( __( 'Vehicle spaces held back', 'ferry-booking-manager' ) )
-							->unit( __( 'spaces', 'ferry-booking-manager' ) )
+							->label( __( 'Vehicle spaces held back', 'magepeople-ferry-booking-system' ) )
+							->unit( __( 'spaces', 'magepeople-ferry-booking-system' ) )
 							->range( 0, 1000 )
 							->default_to( 0 ),
 					),
 				),
 				array(
-					'title'  => __( 'What customers see', 'ferry-booking-manager' ),
+					'title'  => __( 'What customers see', 'magepeople-ferry-booking-system' ),
 					'fields' => array(
 						SettingField::make( 'show_remaining_seats', SettingField::TYPE_SWITCH )
-							->label( __( 'Show how many places are left', 'ferry-booking-manager' ) )
-							->help( __( 'Shown only once a sailing is nearly full, so it reads as useful rather than as pressure.', 'ferry-booking-manager' ) )
+							->label( __( 'Show how many places are left', 'magepeople-ferry-booking-system' ) )
+							->help( __( 'Shown only once a sailing is nearly full, so it reads as useful rather than as pressure.', 'magepeople-ferry-booking-system' ) )
 							->default_to( true ),
 						SettingField::make( 'capacity_warning_percent', SettingField::TYPE_NUMBER )
-							->label( __( 'Treat a sailing as filling up at', 'ferry-booking-manager' ) )
+							->label( __( 'Treat a sailing as filling up at', 'magepeople-ferry-booking-system' ) )
 							->unit( '%' )
-							->help( __( 'Used for the load bars on the dashboard and the remaining-places notice.', 'ferry-booking-manager' ) )
+							->help( __( 'Used for the load bars on the dashboard and the remaining-places notice.', 'magepeople-ferry-booking-system' ) )
 							->range( 1, 100 )
 							->default_to( 80 ),
 						SettingField::make( 'low_availability_places', SettingField::TYPE_NUMBER )
-							->label( __( 'Or when this many places are left', 'ferry-booking-manager' ) )
-							->unit( __( 'places', 'ferry-booking-manager' ) )
-							->help( __( 'Whichever happens first. A large vessel can be far from the percentage and still be down to its last few places.', 'ferry-booking-manager' ) )
+							->label( __( 'Or when this many places are left', 'magepeople-ferry-booking-system' ) )
+							->unit( __( 'places', 'magepeople-ferry-booking-system' ) )
+							->help( __( 'Whichever happens first. A large vessel can be far from the percentage and still be down to its last few places.', 'magepeople-ferry-booking-system' ) )
 							->range( 0, 500 )
 							->default_to( 10 ),
 					),
@@ -555,16 +555,16 @@ final class SettingsPanels {
 	private static function checkout(): array {
 		return array(
 			'id'          => 'checkout',
-			'label'       => __( 'Checkout', 'ferry-booking-manager' ),
+			'label'       => __( 'Checkout', 'magepeople-ferry-booking-system' ),
 			'group'       => 'operation',
-			'description' => __( 'Which checkout takes the money, and what the customer must agree to.', 'ferry-booking-manager' ),
+			'description' => __( 'Which checkout takes the money, and what the customer must agree to.', 'magepeople-ferry-booking-system' ),
 			'sections'    => array(
 				array(
-					'title'       => __( 'Checkout engine', 'ferry-booking-manager' ),
-					'description' => __( 'Which engine takes the money, the default method and the payment deadline are all set beside the payment methods themselves.', 'ferry-booking-manager' ),
+					'title'       => __( 'Checkout engine', 'magepeople-ferry-booking-system' ),
+					'description' => __( 'Which engine takes the money, the default method and the payment deadline are all set beside the payment methods themselves.', 'magepeople-ferry-booking-system' ),
 					'elsewhere'   => array(
 						'path'  => '/payments',
-						'label' => __( 'Open Payments', 'ferry-booking-manager' ),
+						'label' => __( 'Open Payments', 'magepeople-ferry-booking-system' ),
 					),
 				),
 				array(
@@ -574,34 +574,34 @@ final class SettingsPanels {
 					'hidden' => true,
 					'fields' => array(
 						SettingField::make( 'checkout_engine', SettingField::TYPE_SELECT )
-							->label( __( 'Take payment through', 'ferry-booking-manager' ) )
+							->label( __( 'Take payment through', 'magepeople-ferry-booking-system' ) )
 							->options(
 								array(
-									Settings::CHECKOUT_NATIVE      => __( 'Ferry checkout (cash, transfer, at the port)', 'ferry-booking-manager' ),
-									Settings::CHECKOUT_WOOCOMMERCE => __( 'WooCommerce checkout and payment gateways', 'ferry-booking-manager' ),
+									Settings::CHECKOUT_NATIVE      => __( 'Ferry checkout (cash, transfer, at the port)', 'magepeople-ferry-booking-system' ),
+									Settings::CHECKOUT_WOOCOMMERCE => __( 'WooCommerce checkout and payment gateways', 'magepeople-ferry-booking-system' ),
 								)
 							)
-							->help( __( 'WooCommerce brings its own gateways, coupons and tax handling. The built-in checkout takes offline payments without any of that.', 'ferry-booking-manager' ) )
+							->help( __( 'WooCommerce brings its own gateways, coupons and tax handling. The built-in checkout takes offline payments without any of that.', 'magepeople-ferry-booking-system' ) )
 							->default_to( Settings::CHECKOUT_NATIVE )
 							->wide(),
 						SettingField::make( 'default_payment_method', SettingField::TYPE_KEY )
-							->label( __( 'Default payment method', 'ferry-booking-manager' ) )
-							->help( __( 'Pre-selected on the payment step. Must be one of the methods enabled on the Payments tab.', 'ferry-booking-manager' ) )
+							->label( __( 'Default payment method', 'magepeople-ferry-booking-system' ) )
+							->help( __( 'Pre-selected on the payment step. Must be one of the methods enabled on the Payments tab.', 'magepeople-ferry-booking-system' ) )
 							->default_to( 'bank_transfer' ),
 						SettingField::make( 'payment_deadline_minutes', SettingField::TYPE_NUMBER )
-							->label( __( 'Payment deadline', 'ferry-booking-manager' ) )
-							->unit( __( 'minutes', 'ferry-booking-manager' ) )
-							->help( __( 'Shown to the customer on the confirmation. Zero means no deadline is stated.', 'ferry-booking-manager' ) )
+							->label( __( 'Payment deadline', 'magepeople-ferry-booking-system' ) )
+							->unit( __( 'minutes', 'magepeople-ferry-booking-system' ) )
+							->help( __( 'Shown to the customer on the confirmation. Zero means no deadline is stated.', 'magepeople-ferry-booking-system' ) )
 							->range( 0, 525600 )
 							->default_to( 0 ),
 					),
 				),
 				array(
-					'title'  => __( 'Agreements', 'ferry-booking-manager' ),
+					'title'  => __( 'Agreements', 'magepeople-ferry-booking-system' ),
 					'fields' => array(
 						SettingField::make( 'require_terms', SettingField::TYPE_SWITCH )
-							->label( __( 'Require agreement to the terms', 'ferry-booking-manager' ) )
-							->help( __( 'Adds a tick box to the details step. Needs a terms URL on the General tab.', 'ferry-booking-manager' ) )
+							->label( __( 'Require agreement to the terms', 'magepeople-ferry-booking-system' ) )
+							->help( __( 'Adds a tick box to the details step. Needs a terms URL on the General tab.', 'magepeople-ferry-booking-system' ) )
 							->default_to( false ),
 					),
 				),
@@ -617,33 +617,33 @@ final class SettingsPanels {
 	private static function woocommerce(): array {
 		return array(
 			'id'          => 'woocommerce',
-			'label'       => __( 'WooCommerce', 'ferry-booking-manager' ),
+			'label'       => __( 'WooCommerce', 'magepeople-ferry-booking-system' ),
 			'group'       => 'money',
-			'description' => __( 'Only used when the checkout engine is set to WooCommerce.', 'ferry-booking-manager' ),
+			'description' => __( 'Only used when the checkout engine is set to WooCommerce.', 'magepeople-ferry-booking-system' ),
 			'sections'    => array(
 				array(
-					'title'       => __( 'Orders', 'ferry-booking-manager' ),
-					'description' => __( 'A booking becomes one order carrying the booking total. No product is created per sailing.', 'ferry-booking-manager' ),
+					'title'       => __( 'Orders', 'magepeople-ferry-booking-system' ),
+					'description' => __( 'A booking becomes one order carrying the booking total. No product is created per sailing.', 'magepeople-ferry-booking-system' ),
 					'fields'      => array(
 						SettingField::make( 'wc_order_status', SettingField::TYPE_SELECT )
-							->label( __( 'Create orders as', 'ferry-booking-manager' ) )
+							->label( __( 'Create orders as', 'magepeople-ferry-booking-system' ) )
 							->options( self::wc_unpaid_statuses() )
-							->help( __( 'The status a new order is given while it waits to be paid.', 'ferry-booking-manager' ) )
+							->help( __( 'The status a new order is given while it waits to be paid.', 'magepeople-ferry-booking-system' ) )
 							->default_to( 'pending' ),
 						SettingField::make( 'wc_cancel_on_refund', SettingField::TYPE_SWITCH )
-							->label( __( 'Cancel the booking when its order is refunded', 'ferry-booking-manager' ) )
-							->help( __( 'Turn this off if you refund partially and want to keep the crossing booked.', 'ferry-booking-manager' ) )
+							->label( __( 'Cancel the booking when its order is refunded', 'magepeople-ferry-booking-system' ) )
+							->help( __( 'Turn this off if you refund partially and want to keep the crossing booked.', 'magepeople-ferry-booking-system' ) )
 							->default_to( true ),
 					),
 				),
 				array(
-					'title'       => __( 'Tax', 'ferry-booking-manager' ),
-					'description' => __( 'Lets WooCommerce apply the rate you already configured there to the ferry line.', 'ferry-booking-manager' ),
+					'title'       => __( 'Tax', 'magepeople-ferry-booking-system' ),
+					'description' => __( 'Lets WooCommerce apply the rate you already configured there to the ferry line.', 'magepeople-ferry-booking-system' ),
 					'fields'      => array(
 						SettingField::make( 'wc_tax_class', SettingField::TYPE_SELECT )
-							->label( __( 'Tax class for the ferry line', 'ferry-booking-manager' ) )
+							->label( __( 'Tax class for the ferry line', 'magepeople-ferry-booking-system' ) )
 							->options( self::wc_tax_classes() )
-							->help( __( 'The rate WooCommerce applies to the crossing. These are the classes configured in WooCommerce.', 'ferry-booking-manager' ) )
+							->help( __( 'The rate WooCommerce applies to the crossing. These are the classes configured in WooCommerce.', 'magepeople-ferry-booking-system' ) )
 							->default_to( '' ),
 					),
 				),
@@ -663,7 +663,7 @@ final class SettingsPanels {
 	 * @return array<string, string>
 	 */
 	private static function wc_unpaid_statuses(): array {
-		$fallback = array( 'pending' => __( 'Pending payment', 'ferry-booking-manager' ) );
+		$fallback = array( 'pending' => __( 'Pending payment', 'magepeople-ferry-booking-system' ) );
 
 		if ( ! function_exists( 'wc_get_order_statuses' ) ) {
 			return $fallback;
@@ -693,7 +693,7 @@ final class SettingsPanels {
 	 * @return array<string, string>
 	 */
 	private static function wc_tax_classes(): array {
-		$options = array( '' => __( 'Standard rate', 'ferry-booking-manager' ) );
+		$options = array( '' => __( 'Standard rate', 'magepeople-ferry-booking-system' ) );
 
 		if ( ! class_exists( 'WC_Tax' ) ) {
 			return $options;
@@ -719,16 +719,16 @@ final class SettingsPanels {
 	private static function payments(): array {
 		return array(
 			'id'          => 'payments',
-			'label'       => __( 'Payments', 'ferry-booking-manager' ),
+			'label'       => __( 'Payments', 'magepeople-ferry-booking-system' ),
 			'group'       => 'money',
-			'description' => __( 'The methods the built-in ferry checkout offers.', 'ferry-booking-manager' ),
+			'description' => __( 'The methods the built-in ferry checkout offers.', 'magepeople-ferry-booking-system' ),
 			'sections'    => array(
 				array(
-					'title'       => __( 'Payment methods', 'ferry-booking-manager' ),
-					'description' => __( 'These are offered by the ferry checkout. WooCommerce mode uses its own gateways instead.', 'ferry-booking-manager' ),
+					'title'       => __( 'Payment methods', 'magepeople-ferry-booking-system' ),
+					'description' => __( 'These are offered by the ferry checkout. WooCommerce mode uses its own gateways instead.', 'magepeople-ferry-booking-system' ),
 					'elsewhere'   => array(
 						'path'  => '/payments',
-						'label' => __( 'Open Payments', 'ferry-booking-manager' ),
+						'label' => __( 'Open Payments', 'magepeople-ferry-booking-system' ),
 					),
 				),
 			),
@@ -743,16 +743,16 @@ final class SettingsPanels {
 	private static function emails(): array {
 		return array(
 			'id'          => 'emails',
-			'label'       => __( 'Emails', 'ferry-booking-manager' ),
+			'label'       => __( 'Emails', 'magepeople-ferry-booking-system' ),
 			'group'       => 'tickets',
-			'description' => __( 'Who messages come from, and which ones are sent.', 'ferry-booking-manager' ),
+			'description' => __( 'Who messages come from, and which ones are sent.', 'magepeople-ferry-booking-system' ),
 			'sections'    => array(
 				array(
-					'title'       => __( 'Sender and messages', 'ferry-booking-manager' ),
-					'description' => __( 'Who messages come from, which ones go out, the wording of each one and a delivery test are all on the Emails screen.', 'ferry-booking-manager' ),
+					'title'       => __( 'Sender and messages', 'magepeople-ferry-booking-system' ),
+					'description' => __( 'Who messages come from, which ones go out, the wording of each one and a delivery test are all on the Emails screen.', 'magepeople-ferry-booking-system' ),
 					'elsewhere'   => array(
 						'path'  => '/emails',
-						'label' => __( 'Open Emails', 'ferry-booking-manager' ),
+						'label' => __( 'Open Emails', 'magepeople-ferry-booking-system' ),
 					),
 				),
 				array(
@@ -761,17 +761,17 @@ final class SettingsPanels {
 					'hidden' => true,
 					'fields' => array(
 						SettingField::make( 'email_from_name' )
-							->label( __( 'From name', 'ferry-booking-manager' ) )
+							->label( __( 'From name', 'magepeople-ferry-booking-system' ) )
 							->default_to( (string) get_bloginfo( 'name' ) ),
 						SettingField::make( 'email_from_address', SettingField::TYPE_EMAIL )
-							->label( __( 'From address', 'ferry-booking-manager' ) )
+							->label( __( 'From address', 'magepeople-ferry-booking-system' ) )
 							->default_to( (string) get_option( 'admin_email', '' ) ),
 						SettingField::make( 'admin_notification_email', SettingField::TYPE_EMAIL )
-							->label( __( 'Send admin notices to', 'ferry-booking-manager' ) )
+							->label( __( 'Send admin notices to', 'magepeople-ferry-booking-system' ) )
 							->default_to( (string) get_option( 'admin_email', '' ) ),
 						SettingField::make( 'email_footer_text', SettingField::TYPE_TEXTAREA )
-							->label( __( 'Footer text', 'ferry-booking-manager' ) )
-							->help( __( 'Added to the bottom of every customer message. Good place for a port address or a check-in reminder.', 'ferry-booking-manager' ) )
+							->label( __( 'Footer text', 'magepeople-ferry-booking-system' ) )
+							->help( __( 'Added to the bottom of every customer message. Good place for a port address or a check-in reminder.', 'magepeople-ferry-booking-system' ) )
 							->wide(),
 					),
 				),
@@ -779,18 +779,18 @@ final class SettingsPanels {
 					'hidden' => true,
 					'fields' => array(
 						SettingField::make( 'send_booking_received', SettingField::TYPE_SWITCH )
-							->label( __( 'Booking received', 'ferry-booking-manager' ) )
-							->help( __( 'Sent as soon as a booking is made, before payment clears.', 'ferry-booking-manager' ) )
+							->label( __( 'Booking received', 'magepeople-ferry-booking-system' ) )
+							->help( __( 'Sent as soon as a booking is made, before payment clears.', 'magepeople-ferry-booking-system' ) )
 							->default_to( true ),
 						SettingField::make( 'send_booking_confirmed', SettingField::TYPE_SWITCH )
-							->label( __( 'Booking confirmed', 'ferry-booking-manager' ) )
-							->help( __( 'Sent when payment is settled and the crossing is secured.', 'ferry-booking-manager' ) )
+							->label( __( 'Booking confirmed', 'magepeople-ferry-booking-system' ) )
+							->help( __( 'Sent when payment is settled and the crossing is secured.', 'magepeople-ferry-booking-system' ) )
 							->default_to( true ),
 						SettingField::make( 'send_booking_cancelled', SettingField::TYPE_SWITCH )
-							->label( __( 'Booking cancelled', 'ferry-booking-manager' ) )
+							->label( __( 'Booking cancelled', 'magepeople-ferry-booking-system' ) )
 							->default_to( true ),
 						SettingField::make( 'notify_admin_on_booking', SettingField::TYPE_SWITCH )
-							->label( __( 'Tell staff about new bookings', 'ferry-booking-manager' ) )
+							->label( __( 'Tell staff about new bookings', 'magepeople-ferry-booking-system' ) )
 							->default_to( true ),
 					),
 				),
@@ -809,9 +809,9 @@ final class SettingsPanels {
 	private static function pdf(): array {
 		return array(
 			'id'          => 'pdf',
-			'label'       => __( 'PDF', 'ferry-booking-manager' ),
+			'label'       => __( 'PDF', 'magepeople-ferry-booking-system' ),
 			'group'       => 'tickets',
-			'description' => __( 'Printable tickets and boarding passes.', 'ferry-booking-manager' ),
+			'description' => __( 'Printable tickets and boarding passes.', 'magepeople-ferry-booking-system' ),
 			'locked'      => true,
 			'sections'    => array(),
 		);
@@ -827,9 +827,9 @@ final class SettingsPanels {
 	private static function qr(): array {
 		return array(
 			'id'          => 'qr',
-			'label'       => __( 'QR', 'ferry-booking-manager' ),
+			'label'       => __( 'QR', 'magepeople-ferry-booking-system' ),
 			'group'       => 'tickets',
-			'description' => __( 'Scannable codes and check-in at the gate.', 'ferry-booking-manager' ),
+			'description' => __( 'Scannable codes and check-in at the gate.', 'magepeople-ferry-booking-system' ),
 			'locked'      => true,
 			'sections'    => array(),
 		);
@@ -843,16 +843,16 @@ final class SettingsPanels {
 	private static function taxes(): array {
 		return array(
 			'id'          => 'taxes',
-			'label'       => __( 'Taxes', 'ferry-booking-manager' ),
+			'label'       => __( 'Taxes', 'magepeople-ferry-booking-system' ),
 			'group'       => 'money',
-			'description' => __( 'Tax on ferry fares. In WooCommerce mode the rate configured in WooCommerce applies instead, set on the WooCommerce tab.', 'ferry-booking-manager' ),
+			'description' => __( 'Tax on ferry fares. In WooCommerce mode the rate configured in WooCommerce applies instead, set on the WooCommerce tab.', 'magepeople-ferry-booking-system' ),
 			'sections'    => array(
 				array(
-					'title'       => __( 'Fare tax', 'ferry-booking-manager' ),
-					'description' => __( 'Tax is set beside the fares it applies to, so a rate and the prices it changes are never edited in two places.', 'ferry-booking-manager' ),
+					'title'       => __( 'Fare tax', 'magepeople-ferry-booking-system' ),
+					'description' => __( 'Tax is set beside the fares it applies to, so a rate and the prices it changes are never edited in two places.', 'magepeople-ferry-booking-system' ),
 					'elsewhere'   => array(
 						'path'  => '/pricing/charges',
-						'label' => __( 'Open Pricing', 'ferry-booking-manager' ),
+						'label' => __( 'Open Pricing', 'magepeople-ferry-booking-system' ),
 					),
 				),
 				array(
@@ -862,30 +862,30 @@ final class SettingsPanels {
 					'store'  => self::STORE_PRICING,
 					'fields' => array(
 						SettingField::make( 'tax_enabled', SettingField::TYPE_SWITCH )
-							->label( __( 'Charge tax on fares', 'ferry-booking-manager' ) )
+							->label( __( 'Charge tax on fares', 'magepeople-ferry-booking-system' ) )
 							->default_to( false ),
 						SettingField::make( 'tax_label' )
-							->label( __( 'Tax name', 'ferry-booking-manager' ) )
-							->help( __( 'Shown on the price breakdown, for example VAT or IVA.', 'ferry-booking-manager' ) )
-							->default_to( __( 'VAT', 'ferry-booking-manager' ) ),
+							->label( __( 'Tax name', 'magepeople-ferry-booking-system' ) )
+							->help( __( 'Shown on the price breakdown, for example VAT or IVA.', 'magepeople-ferry-booking-system' ) )
+							->default_to( __( 'VAT', 'magepeople-ferry-booking-system' ) ),
 						SettingField::make( 'tax_rate', SettingField::TYPE_PERCENT )
-							->label( __( 'Tax rate', 'ferry-booking-manager' ) )
+							->label( __( 'Tax rate', 'magepeople-ferry-booking-system' ) )
 							->unit( '%' )
 							->range( 0, 100 )
 							->default_to( 0.0 ),
 						SettingField::make( 'tax_mode', SettingField::TYPE_SELECT )
-							->label( __( 'Fares include tax', 'ferry-booking-manager' ) )
+							->label( __( 'Fares include tax', 'magepeople-ferry-booking-system' ) )
 							->options(
 								array(
-									PricingSettings::TAX_EXCLUSIVE => __( 'No — add tax on top', 'ferry-booking-manager' ),
-									PricingSettings::TAX_INCLUSIVE => __( 'Yes — the fare already contains it', 'ferry-booking-manager' ),
+									PricingSettings::TAX_EXCLUSIVE => __( 'No — add tax on top', 'magepeople-ferry-booking-system' ),
+									PricingSettings::TAX_INCLUSIVE => __( 'Yes — the fare already contains it', 'magepeople-ferry-booking-system' ),
 								)
 							)
-							->help( __( 'Most passenger fares are advertised with tax included.', 'ferry-booking-manager' ) )
+							->help( __( 'Most passenger fares are advertised with tax included.', 'magepeople-ferry-booking-system' ) )
 							->default_to( PricingSettings::TAX_EXCLUSIVE )
 							->wide(),
 						SettingField::make( 'tax_applies_to_fees', SettingField::TYPE_SWITCH )
-							->label( __( 'Tax booking fees as well as fares', 'ferry-booking-manager' ) )
+							->label( __( 'Tax booking fees as well as fares', 'magepeople-ferry-booking-system' ) )
 							->default_to( true ),
 					),
 				),
@@ -901,31 +901,31 @@ final class SettingsPanels {
 	private static function integrations(): array {
 		return array(
 			'id'          => 'integrations',
-			'label'       => __( 'Integrations', 'ferry-booking-manager' ),
+			'label'       => __( 'Integrations', 'magepeople-ferry-booking-system' ),
 			'group'       => 'system',
-			'description' => __( 'Sending booking events on to other systems.', 'ferry-booking-manager' ),
+			'description' => __( 'Sending booking events on to other systems.', 'magepeople-ferry-booking-system' ),
 			'sections'    => array(
 				array(
-					'title'       => __( 'Analytics', 'ferry-booking-manager' ),
-					'description' => __( 'The booking form pushes a purchase event to the data layer when a booking completes, so your existing tag manager can pick it up.', 'ferry-booking-manager' ),
+					'title'       => __( 'Analytics', 'magepeople-ferry-booking-system' ),
+					'description' => __( 'The booking form pushes a purchase event to the data layer when a booking completes, so your existing tag manager can pick it up.', 'magepeople-ferry-booking-system' ),
 					'fields'      => array(
 						SettingField::make( 'analytics_events', SettingField::TYPE_SWITCH )
-							->label( __( 'Push booking events to the data layer', 'ferry-booking-manager' ) )
+							->label( __( 'Push booking events to the data layer', 'magepeople-ferry-booking-system' ) )
 							->default_to( false ),
 						SettingField::make( 'ga4_measurement_id' )
-							->label( __( 'GA4 measurement ID', 'ferry-booking-manager' ) )
+							->label( __( 'GA4 measurement ID', 'magepeople-ferry-booking-system' ) )
 							->placeholder( 'G-XXXXXXX' )
-							->help( __( 'Optional. Included in the event so a tag can route it to the right property.', 'ferry-booking-manager' ) ),
+							->help( __( 'Optional. Included in the event so a tag can route it to the right property.', 'magepeople-ferry-booking-system' ) ),
 					),
 				),
 				array(
-					'title'       => __( 'Webhooks', 'ferry-booking-manager' ),
-					'description' => __( 'Post a signed message to another system when something happens. Payloads carry references and amounts, never passenger details.', 'ferry-booking-manager' ),
+					'title'       => __( 'Webhooks', 'magepeople-ferry-booking-system' ),
+					'description' => __( 'Post a signed message to another system when something happens. Payloads carry references and amounts, never passenger details.', 'magepeople-ferry-booking-system' ),
 					'custom'      => self::CUSTOM_WEBHOOKS,
 				),
 				array(
-					'title'       => __( 'Import and export', 'ferry-booking-manager' ),
-					'description' => __( 'Move ports, vessels, routes, sailings and fare types in and out as CSV.', 'ferry-booking-manager' ),
+					'title'       => __( 'Import and export', 'magepeople-ferry-booking-system' ),
+					'description' => __( 'Move ports, vessels, routes, sailings and fare types in and out as CSV.', 'magepeople-ferry-booking-system' ),
 					'custom'      => self::CUSTOM_TRANSFER,
 				),
 			),
@@ -940,13 +940,13 @@ final class SettingsPanels {
 	private static function roles(): array {
 		return array(
 			'id'          => 'roles',
-			'label'       => __( 'Roles', 'ferry-booking-manager' ),
+			'label'       => __( 'Roles', 'magepeople-ferry-booking-system' ),
 			'group'       => 'system',
-			'description' => __( 'What each kind of staff account is allowed to do.', 'ferry-booking-manager' ),
+			'description' => __( 'What each kind of staff account is allowed to do.', 'magepeople-ferry-booking-system' ),
 			'sections'    => array(
 				array(
-					'title'       => __( 'Staff permissions', 'ferry-booking-manager' ),
-					'description' => __( 'Administrators always keep every permission. Changes apply the next time the person loads a page.', 'ferry-booking-manager' ),
+					'title'       => __( 'Staff permissions', 'magepeople-ferry-booking-system' ),
+					'description' => __( 'Administrators always keep every permission. Changes apply the next time the person loads a page.', 'magepeople-ferry-booking-system' ),
 					'custom'      => self::CUSTOM_ROLES,
 				),
 			),
@@ -961,51 +961,51 @@ final class SettingsPanels {
 	private static function advanced(): array {
 		return array(
 			'id'          => 'advanced',
-			'label'       => __( 'Advanced', 'ferry-booking-manager' ),
+			'label'       => __( 'Advanced', 'magepeople-ferry-booking-system' ),
 			'group'       => 'system',
-			'description' => __( 'Logging, caching and what happens to your data if you remove the plugin.', 'ferry-booking-manager' ),
+			'description' => __( 'Logging, caching and what happens to your data if you remove the plugin.', 'magepeople-ferry-booking-system' ),
 			'sections'    => array(
 				array(
-					'title'  => __( 'Diagnostics', 'ferry-booking-manager' ),
+					'title'  => __( 'Diagnostics', 'magepeople-ferry-booking-system' ),
 					'fields' => array(
 						SettingField::make( 'log_level', SettingField::TYPE_SELECT )
-							->label( __( 'Record log entries from', 'ferry-booking-manager' ) )
+							->label( __( 'Record log entries from', 'magepeople-ferry-booking-system' ) )
 							->options(
 								array(
-									''            => __( 'Follow WP_DEBUG', 'ferry-booking-manager' ),
-									Logger::DEBUG => __( 'Everything, including debug', 'ferry-booking-manager' ),
-									Logger::INFO  => __( 'Information and above', 'ferry-booking-manager' ),
-									Logger::ERROR => __( 'Errors only', 'ferry-booking-manager' ),
-									'off'         => __( 'Nothing', 'ferry-booking-manager' ),
+									''            => __( 'Follow WP_DEBUG', 'magepeople-ferry-booking-system' ),
+									Logger::DEBUG => __( 'Everything, including debug', 'magepeople-ferry-booking-system' ),
+									Logger::INFO  => __( 'Information and above', 'magepeople-ferry-booking-system' ),
+									Logger::ERROR => __( 'Errors only', 'magepeople-ferry-booking-system' ),
+									'off'         => __( 'Nothing', 'magepeople-ferry-booking-system' ),
 								)
 							)
-							->help( __( 'Debug logging is noisy and is meant for tracking down a specific problem, not for leaving on.', 'ferry-booking-manager' ) )
+							->help( __( 'Debug logging is noisy and is meant for tracking down a specific problem, not for leaving on.', 'magepeople-ferry-booking-system' ) )
 							->default_to( '' ),
 					),
 				),
 				array(
-					'title'  => __( 'Performance', 'ferry-booking-manager' ),
+					'title'  => __( 'Performance', 'magepeople-ferry-booking-system' ),
 					'fields' => array(
 						SettingField::make( 'cache_seconds', SettingField::TYPE_NUMBER )
-							->label( __( 'Cache search and availability for', 'ferry-booking-manager' ) )
-							->unit( __( 'seconds', 'ferry-booking-manager' ) )
-							->help( __( 'Cleared immediately whenever a booking changes, so a longer window does not risk overselling.', 'ferry-booking-manager' ) )
+							->label( __( 'Cache search and availability for', 'magepeople-ferry-booking-system' ) )
+							->unit( __( 'seconds', 'magepeople-ferry-booking-system' ) )
+							->help( __( 'Cleared immediately whenever a booking changes, so a longer window does not risk overselling.', 'magepeople-ferry-booking-system' ) )
 							->range( 0, 3600 )
 							->default_to( 300 ),
 						SettingField::make( 'public_rate_limit', SettingField::TYPE_NUMBER )
-							->label( __( 'Public requests allowed per minute', 'ferry-booking-manager' ) )
-							->unit( __( 'per visitor', 'ferry-booking-manager' ) )
-							->help( __( 'Applies to searching, pricing and booking from the front end.', 'ferry-booking-manager' ) )
+							->label( __( 'Public requests allowed per minute', 'magepeople-ferry-booking-system' ) )
+							->unit( __( 'per visitor', 'magepeople-ferry-booking-system' ) )
+							->help( __( 'Applies to searching, pricing and booking from the front end.', 'magepeople-ferry-booking-system' ) )
 							->range( 5, 6000 )
 							->default_to( 60 ),
 					),
 				),
 				array(
-					'title'  => __( 'Removing the plugin', 'ferry-booking-manager' ),
+					'title'  => __( 'Removing the plugin', 'magepeople-ferry-booking-system' ),
 					'fields' => array(
 						SettingField::make( 'delete_data_on_uninstall', SettingField::TYPE_SWITCH )
-							->label( __( 'Delete all ferry data when the plugin is deleted', 'ferry-booking-manager' ) )
-							->help( __( 'Off by default. When on, deleting the plugin permanently removes every vessel, route, sailing and booking. There is no undo.', 'ferry-booking-manager' ) )
+							->label( __( 'Delete all ferry data when the plugin is deleted', 'magepeople-ferry-booking-system' ) )
+							->help( __( 'Off by default. When on, deleting the plugin permanently removes every vessel, route, sailing and booking. There is no undo.', 'magepeople-ferry-booking-system' ) )
 							->default_to( false )
 							->wide(),
 					),

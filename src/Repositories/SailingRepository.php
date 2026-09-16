@@ -54,7 +54,7 @@ final class SailingRepository extends AbstractRepository {
 						'This sailing has %d booking and cannot be deleted. Cancel the sailing instead so passengers are notified.',
 						'This sailing has %d bookings and cannot be deleted. Cancel the sailing instead so passengers are notified.',
 						$bookings,
-						'ferry-booking-manager'
+						'magepeople-ferry-booking-system'
 					),
 					$bookings
 				),
@@ -195,7 +195,7 @@ final class SailingRepository extends AbstractRepository {
 		$ids = $this->ids(
 			array(
 				'posts_per_page' => 50,
-				'post__not_in'   => $exclude_id > 0 ? array( $exclude_id ) : array(),
+				'post__not_in'   => $exclude_id > 0 ? array( $exclude_id ) : array(), // phpcs:ignore WordPressVIPMinimum.Performance.WPQueryParams.PostNotIn_post__not_in -- Single sailing excluded from a schedule-conflict check, not a bulk exclusion.
 				// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query -- Indexed scalar keys, bounded result set.
 				'meta_query'     => array(
 					'relation' => 'AND',

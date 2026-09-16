@@ -207,25 +207,25 @@ final class ScheduleGenerator {
 		$route = $this->routes->find( $route_id );
 
 		if ( null === $route ) {
-			$fields['route_id'] = __( 'Choose a route.', 'ferry-booking-manager' );
+			$fields['route_id'] = __( 'Choose a route.', 'magepeople-ferry-booking-system' );
 		}
 
 		if ( $vessel_id < 1 ) {
-			$fields['vessel_id'] = __( 'Choose a vessel.', 'ferry-booking-manager' );
+			$fields['vessel_id'] = __( 'Choose a vessel.', 'magepeople-ferry-booking-system' );
 		}
 
 		if ( ! Time::is_valid( $from ) ) {
-			$fields['date_from'] = __( 'Enter a start date.', 'ferry-booking-manager' );
+			$fields['date_from'] = __( 'Enter a start date.', 'magepeople-ferry-booking-system' );
 		}
 
 		if ( ! Time::is_valid( $to ) ) {
-			$fields['date_to'] = __( 'Enter an end date.', 'ferry-booking-manager' );
+			$fields['date_to'] = __( 'Enter an end date.', 'magepeople-ferry-booking-system' );
 		}
 
 		$weekdays = array_values( array_unique( array_filter( $weekdays, static fn( $day ) => $day >= 0 && $day <= 6 ) ) );
 
 		if ( array() === $weekdays ) {
-			$fields['weekdays'] = __( 'Choose at least one day of the week.', 'ferry-booking-manager' );
+			$fields['weekdays'] = __( 'Choose at least one day of the week.', 'magepeople-ferry-booking-system' );
 		}
 
 		$times = array_values(
@@ -242,13 +242,13 @@ final class ScheduleGenerator {
 		);
 
 		if ( array() === $times ) {
-			$fields['times'] = __( 'Enter at least one departure time as HH:MM.', 'ferry-booking-manager' );
+			$fields['times'] = __( 'Enter at least one departure time as HH:MM.', 'magepeople-ferry-booking-system' );
 		}
 
 		if ( array() !== $fields ) {
 			return new WP_Error(
 				'fbm_invalid_schedule',
-				__( 'The schedule could not be generated. Check the highlighted fields.', 'ferry-booking-manager' ),
+				__( 'The schedule could not be generated. Check the highlighted fields.', 'magepeople-ferry-booking-system' ),
 				array(
 					'status' => 422,
 					'fields' => $fields,
@@ -262,10 +262,10 @@ final class ScheduleGenerator {
 		if ( $end < $start ) {
 			return new WP_Error(
 				'fbm_invalid_schedule',
-				__( 'The end date falls before the start date.', 'ferry-booking-manager' ),
+				__( 'The end date falls before the start date.', 'magepeople-ferry-booking-system' ),
 				array(
 					'status' => 422,
-					'fields' => array( 'date_to' => __( 'Choose a date on or after the start date.', 'ferry-booking-manager' ) ),
+					'fields' => array( 'date_to' => __( 'Choose a date on or after the start date.', 'magepeople-ferry-booking-system' ) ),
 				)
 			);
 		}
@@ -289,7 +289,7 @@ final class ScheduleGenerator {
 						'fbm_schedule_too_large',
 						sprintf(
 							/* translators: %d: maximum number of sailings. */
-							__( 'That pattern would create more than %d sailings. Narrow the date range or the number of departure times and run it again.', 'ferry-booking-manager' ),
+							__( 'That pattern would create more than %d sailings. Narrow the date range or the number of departure times and run it again.', 'magepeople-ferry-booking-system' ),
 							self::MAX_SAILINGS
 						),
 						array( 'status' => 422 )

@@ -57,8 +57,8 @@ final class Port extends Entity {
 	 */
 	public static function labels(): array {
 		return array(
-			'plural'   => __( 'Ports', 'ferry-booking-manager' ),
-			'singular' => __( 'Port', 'ferry-booking-manager' ),
+			'plural'   => __( 'Ports', 'magepeople-ferry-booking-system' ),
+			'singular' => __( 'Port', 'magepeople-ferry-booking-system' ),
 		);
 	}
 
@@ -77,48 +77,48 @@ final class Port extends Entity {
 				'min'         => 2,
 				'max'         => 16,
 				'searchable'  => true,
-				'description' => __( 'Port code', 'ferry-booking-manager' ),
+				'description' => __( 'Port code', 'magepeople-ferry-booking-system' ),
 			),
 			'city'                  => array(
 				'type'        => 'string',
 				'meta'        => '_fbm_city',
 				'max'         => 120,
 				'searchable'  => true,
-				'description' => __( 'City', 'ferry-booking-manager' ),
+				'description' => __( 'City', 'magepeople-ferry-booking-system' ),
 			),
 			'country'               => array(
 				'type'        => 'string',
 				'meta'        => '_fbm_country',
 				'max'         => 2,
-				'description' => __( 'Country code', 'ferry-booking-manager' ),
+				'description' => __( 'Country code', 'magepeople-ferry-booking-system' ),
 			),
 			'address'               => array(
 				'type'        => 'text',
 				'meta'        => '_fbm_address',
 				'max'         => 500,
-				'description' => __( 'Address', 'ferry-booking-manager' ),
+				'description' => __( 'Address', 'magepeople-ferry-booking-system' ),
 			),
 			'latitude'              => array(
 				'type'        => 'latitude',
 				'meta'        => '_fbm_latitude',
-				'description' => __( 'Latitude', 'ferry-booking-manager' ),
+				'description' => __( 'Latitude', 'magepeople-ferry-booking-system' ),
 			),
 			'longitude'             => array(
 				'type'        => 'longitude',
 				'meta'        => '_fbm_longitude',
-				'description' => __( 'Longitude', 'ferry-booking-manager' ),
+				'description' => __( 'Longitude', 'magepeople-ferry-booking-system' ),
 			),
 			'checkin_instructions'  => array(
 				'type'        => 'text',
 				'meta'        => '_fbm_checkin_instructions',
 				'max'         => 2000,
-				'description' => __( 'Check-in instructions', 'ferry-booking-manager' ),
+				'description' => __( 'Check-in instructions', 'magepeople-ferry-booking-system' ),
 			),
 			'boarding_instructions' => array(
 				'type'        => 'text',
 				'meta'        => '_fbm_boarding_instructions',
 				'max'         => 2000,
-				'description' => __( 'Boarding instructions', 'ferry-booking-manager' ),
+				'description' => __( 'Boarding instructions', 'magepeople-ferry-booking-system' ),
 			),
 			'checkin_minutes'       => array(
 				'type'        => 'int',
@@ -126,31 +126,31 @@ final class Port extends Entity {
 				'default'     => 30,
 				'min'         => 0,
 				'max'         => 1440,
-				'description' => __( 'Check-in closes (minutes before departure)', 'ferry-booking-manager' ),
+				'description' => __( 'Check-in closes (minutes before departure)', 'magepeople-ferry-booking-system' ),
 			),
 			'contact_phone'         => array(
 				'type'        => 'string',
 				'meta'        => '_fbm_contact_phone',
 				'max'         => 40,
-				'description' => __( 'Contact phone', 'ferry-booking-manager' ),
+				'description' => __( 'Contact phone', 'magepeople-ferry-booking-system' ),
 			),
 			'contact_email'         => array(
 				'type'        => 'email',
 				'meta'        => '_fbm_contact_email',
-				'description' => __( 'Contact email', 'ferry-booking-manager' ),
+				'description' => __( 'Contact email', 'magepeople-ferry-booking-system' ),
 			),
 			'timezone'              => array(
 				'type'        => 'string',
 				'meta'        => '_fbm_timezone',
 				'max'         => 64,
-				'description' => __( 'Timezone', 'ferry-booking-manager' ),
+				'description' => __( 'Timezone', 'magepeople-ferry-booking-system' ),
 			),
 			'status'                => array(
 				'type'        => 'enum',
 				'meta'        => '_fbm_status',
 				'enum'        => array( self::STATUS_ACTIVE, self::STATUS_INACTIVE ),
 				'default'     => self::STATUS_ACTIVE,
-				'description' => __( 'Status', 'ferry-booking-manager' ),
+				'description' => __( 'Status', 'magepeople-ferry-booking-system' ),
 			),
 		);
 	}

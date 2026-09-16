@@ -78,8 +78,8 @@ final class Menu {
 	 */
 	public function register_menu(): void {
 		$this->hook_suffix = (string) add_menu_page(
-			__( 'Ferry Manager', 'ferry-booking-manager' ),
-			__( 'Ferry Manager', 'ferry-booking-manager' ),
+			__( 'Ferry Manager', 'magepeople-ferry-booking-system' ),
+			__( 'Ferry Manager', 'magepeople-ferry-booking-system' ),
 			Capabilities::ACCESS_DASHBOARD,
 			self::PAGE_SLUG,
 			array( $this, 'render_page' ),
@@ -136,14 +136,14 @@ final class Menu {
 	public function render_page(): void {
 		if ( ! current_user_can( Capabilities::ACCESS_DASHBOARD ) ) {
 			wp_die(
-				esc_html__( 'You do not have permission to access the Ferry Manager dashboard.', 'ferry-booking-manager' ),
-				esc_html__( 'Permission denied', 'ferry-booking-manager' ),
+				esc_html__( 'You do not have permission to access the Ferry Manager dashboard.', 'magepeople-ferry-booking-system' ),
+				esc_html__( 'Permission denied', 'magepeople-ferry-booking-system' ),
 				array( 'response' => 403 )
 			);
 		}
 
 		echo '<div class="wrap fbm-admin-wrap">';
-		echo '<h1 class="screen-reader-text">' . esc_html__( 'Ferry Manager', 'ferry-booking-manager' ) . '</h1>';
+		echo '<h1 class="screen-reader-text">' . esc_html__( 'Ferry Manager', 'magepeople-ferry-booking-system' ) . '</h1>';
 
 		$this->renderer->render();
 

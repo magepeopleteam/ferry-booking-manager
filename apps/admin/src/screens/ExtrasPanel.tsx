@@ -163,7 +163,7 @@ export function ExtrasPanel(): JSX.Element {
 		return (
 			<EmptyState
 				icon="tag"
-				title={ fbmText( 'Available in Ferry Booking Manager Pro.' ) }
+				title={ fbmText( 'Available in MagePeople Ferry Booking System Pro.' ) }
 				description={ fbmText( 'Sell meals, pets, bicycles, priority boarding and anything else you carry, charged per booking, per passenger or per vehicle.' ) }
 			/>
 		);

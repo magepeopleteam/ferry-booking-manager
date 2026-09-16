@@ -29,14 +29,14 @@ final class PayAtPort implements PaymentGatewayInterface {
 	 * {@inheritDoc}
 	 */
 	public function get_title(): string {
-		return __( 'Pay at the port', 'ferry-booking-manager' );
+		return __( 'Pay at the port', 'magepeople-ferry-booking-system' );
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	public function get_description(): string {
-		return __( 'Pay at the terminal before boarding.', 'ferry-booking-manager' );
+		return __( 'Pay at the terminal before boarding.', 'magepeople-ferry-booking-system' );
 	}
 
 	/**

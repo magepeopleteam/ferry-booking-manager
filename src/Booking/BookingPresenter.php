@@ -235,8 +235,8 @@ final class BookingPresenter {
 		$legs = array();
 
 		foreach ( array(
-			array( (int) $booking->get( 'sailing_id' ), __( 'Outbound', 'ferry-booking-manager' ) ),
-			array( (int) $booking->get( 'return_sailing_id' ), __( 'Return', 'ferry-booking-manager' ) ),
+			array( (int) $booking->get( 'sailing_id' ), __( 'Outbound', 'magepeople-ferry-booking-system' ) ),
+			array( (int) $booking->get( 'return_sailing_id' ), __( 'Return', 'magepeople-ferry-booking-system' ) ),
 		) as $candidate ) {
 			$leg = $this->leg( $candidate[0], $candidate[1] );
 
@@ -336,13 +336,13 @@ final class BookingPresenter {
 	 */
 	public static function status_label( string $status ): string {
 		$labels = array(
-			Booking::STATUS_PENDING   => __( 'Awaiting payment', 'ferry-booking-manager' ),
-			Booking::STATUS_ON_HOLD   => __( 'Held', 'ferry-booking-manager' ),
-			Booking::STATUS_CONFIRMED => __( 'Confirmed', 'ferry-booking-manager' ),
-			Booking::STATUS_COMPLETED => __( 'Travelled', 'ferry-booking-manager' ),
-			Booking::STATUS_CANCELLED => __( 'Cancelled', 'ferry-booking-manager' ),
-			Booking::STATUS_REFUNDED  => __( 'Refunded', 'ferry-booking-manager' ),
-			Booking::STATUS_FAILED    => __( 'Not completed', 'ferry-booking-manager' ),
+			Booking::STATUS_PENDING   => __( 'Awaiting payment', 'magepeople-ferry-booking-system' ),
+			Booking::STATUS_ON_HOLD   => __( 'Held', 'magepeople-ferry-booking-system' ),
+			Booking::STATUS_CONFIRMED => __( 'Confirmed', 'magepeople-ferry-booking-system' ),
+			Booking::STATUS_COMPLETED => __( 'Travelled', 'magepeople-ferry-booking-system' ),
+			Booking::STATUS_CANCELLED => __( 'Cancelled', 'magepeople-ferry-booking-system' ),
+			Booking::STATUS_REFUNDED  => __( 'Refunded', 'magepeople-ferry-booking-system' ),
+			Booking::STATUS_FAILED    => __( 'Not completed', 'magepeople-ferry-booking-system' ),
 		);
 
 		return $labels[ $status ] ?? $status;
@@ -356,11 +356,11 @@ final class BookingPresenter {
 	 */
 	public static function payment_label( string $status ): string {
 		$labels = array(
-			Booking::PAYMENT_UNPAID    => __( 'Unpaid', 'ferry-booking-manager' ),
-			Booking::PAYMENT_PARTIAL   => __( 'Part paid', 'ferry-booking-manager' ),
-			Booking::PAYMENT_PAID      => __( 'Paid', 'ferry-booking-manager' ),
-			Booking::PAYMENT_REFUNDED  => __( 'Refunded', 'ferry-booking-manager' ),
-			Booking::PAYMENT_CANCELLED => __( 'Cancelled', 'ferry-booking-manager' ),
+			Booking::PAYMENT_UNPAID    => __( 'Unpaid', 'magepeople-ferry-booking-system' ),
+			Booking::PAYMENT_PARTIAL   => __( 'Part paid', 'magepeople-ferry-booking-system' ),
+			Booking::PAYMENT_PAID      => __( 'Paid', 'magepeople-ferry-booking-system' ),
+			Booking::PAYMENT_REFUNDED  => __( 'Refunded', 'magepeople-ferry-booking-system' ),
+			Booking::PAYMENT_CANCELLED => __( 'Cancelled', 'magepeople-ferry-booking-system' ),
 		);
 
 		return $labels[ $status ] ?? $status;

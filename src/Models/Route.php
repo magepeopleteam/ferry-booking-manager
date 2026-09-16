@@ -57,8 +57,8 @@ final class Route extends Entity {
 	 */
 	public static function labels(): array {
 		return array(
-			'plural'   => __( 'Routes', 'ferry-booking-manager' ),
-			'singular' => __( 'Route', 'ferry-booking-manager' ),
+			'plural'   => __( 'Routes', 'magepeople-ferry-booking-system' ),
+			'singular' => __( 'Route', 'magepeople-ferry-booking-system' ),
 		);
 	}
 
@@ -75,26 +75,26 @@ final class Route extends Entity {
 				'unique'      => true,
 				'max'         => 24,
 				'searchable'  => true,
-				'description' => __( 'Route code', 'ferry-booking-manager' ),
+				'description' => __( 'Route code', 'magepeople-ferry-booking-system' ),
 			),
 			'origin_port'        => array(
 				'type'        => 'id',
 				'meta'        => '_fbm_origin_port',
 				'references'  => Port::POST_TYPE,
 				'required'    => true,
-				'description' => __( 'Origin port', 'ferry-booking-manager' ),
+				'description' => __( 'Origin port', 'magepeople-ferry-booking-system' ),
 			),
 			'destination_port'   => array(
 				'type'        => 'id',
 				'meta'        => '_fbm_destination_port',
 				'references'  => Port::POST_TYPE,
 				'required'    => true,
-				'description' => __( 'Destination port', 'ferry-booking-manager' ),
+				'description' => __( 'Destination port', 'magepeople-ferry-booking-system' ),
 			),
 			'intermediate_ports' => array(
 				'type'        => 'id_list',
 				'meta'        => '_fbm_intermediate_ports',
-				'description' => __( 'Intermediate ports', 'ferry-booking-manager' ),
+				'description' => __( 'Intermediate ports', 'magepeople-ferry-booking-system' ),
 			),
 			'duration'           => array(
 				'type'        => 'int',
@@ -102,53 +102,53 @@ final class Route extends Entity {
 				'required'    => true,
 				'min'         => 1,
 				'max'         => 20160,
-				'description' => __( 'Duration (minutes)', 'ferry-booking-manager' ),
+				'description' => __( 'Duration (minutes)', 'magepeople-ferry-booking-system' ),
 			),
 			'distance'           => array(
 				'type'        => 'float',
 				'meta'        => '_fbm_distance',
 				'min'         => 0,
 				'max'         => 100000,
-				'description' => __( 'Distance (nautical miles)', 'ferry-booking-manager' ),
+				'description' => __( 'Distance (nautical miles)', 'magepeople-ferry-booking-system' ),
 			),
 			'default_vessel'     => array(
 				'type'        => 'id',
 				'meta'        => '_fbm_default_vessel',
 				'references'  => Vessel::POST_TYPE,
-				'description' => __( 'Default vessel', 'ferry-booking-manager' ),
+				'description' => __( 'Default vessel', 'magepeople-ferry-booking-system' ),
 			),
 			'allows_vehicles'    => array(
 				'type'        => 'bool',
 				'meta'        => '_fbm_allows_vehicles',
 				'default'     => true,
-				'description' => __( 'Accepts vehicles', 'ferry-booking-manager' ),
+				'description' => __( 'Accepts vehicles', 'magepeople-ferry-booking-system' ),
 			),
 			'passenger_prices'   => array(
 				'type'        => 'map',
 				'map_of'      => 'money',
 				'meta'        => '_fbm_route_passenger_prices',
 				'default'     => array(),
-				'description' => __( 'Passenger fares by type, in minor units', 'ferry-booking-manager' ),
+				'description' => __( 'Passenger fares by type, in minor units', 'magepeople-ferry-booking-system' ),
 			),
 			'vehicle_prices'     => array(
 				'type'        => 'map',
 				'map_of'      => 'money',
 				'meta'        => '_fbm_route_vehicle_prices',
 				'default'     => array(),
-				'description' => __( 'Vehicle fares by type, in minor units', 'ferry-booking-manager' ),
+				'description' => __( 'Vehicle fares by type, in minor units', 'magepeople-ferry-booking-system' ),
 			),
 			'description'        => array(
 				'type'        => 'text',
 				'meta'        => '_fbm_description',
 				'max'         => 2000,
-				'description' => __( 'Description', 'ferry-booking-manager' ),
+				'description' => __( 'Description', 'magepeople-ferry-booking-system' ),
 			),
 			'status'             => array(
 				'type'        => 'enum',
 				'meta'        => '_fbm_status',
 				'enum'        => array( self::STATUS_ACTIVE, self::STATUS_INACTIVE ),
 				'default'     => self::STATUS_ACTIVE,
-				'description' => __( 'Status', 'ferry-booking-manager' ),
+				'description' => __( 'Status', 'magepeople-ferry-booking-system' ),
 			),
 		);
 	}

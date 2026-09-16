@@ -87,23 +87,23 @@ final class PricingController extends AbstractController {
 					'permission_callback' => $this->permissions->rest_public_callback( 'quote', 90 ),
 					'args'                => array(
 						'sailing_id'        => array(
-							'description'       => __( 'Outbound sailing id.', 'ferry-booking-manager' ),
+							'description'       => __( 'Outbound sailing id.', 'magepeople-ferry-booking-system' ),
 							'type'              => 'integer',
 							'required'          => true,
 							'sanitize_callback' => 'absint',
 						),
 						'return_sailing_id' => array(
-							'description'       => __( 'Return sailing id.', 'ferry-booking-manager' ),
+							'description'       => __( 'Return sailing id.', 'magepeople-ferry-booking-system' ),
 							'type'              => 'integer',
 							'default'           => 0,
 							'sanitize_callback' => 'absint',
 						),
 						'passengers'        => array(
-							'description' => __( 'Passenger type id to quantity.', 'ferry-booking-manager' ),
+							'description' => __( 'Passenger type id to quantity.', 'magepeople-ferry-booking-system' ),
 							'type'        => array( 'object', 'array' ),
 						),
 						'vehicles'          => array(
-							'description' => __( 'Vehicle type id to quantity.', 'ferry-booking-manager' ),
+							'description' => __( 'Vehicle type id to quantity.', 'magepeople-ferry-booking-system' ),
 							'type'        => array( 'object', 'array' ),
 						),
 					),

@@ -141,7 +141,7 @@ export function AgentsScreen(): JSX.Element {
 				<PageHeader title={ fbmText( 'Agents' ) } badge={ <span className="fbm-badge fbm-badge--pro">PRO</span> } />
 				<EmptyState
 					icon="briefcase"
-					title={ fbmText( 'Available in Ferry Booking Manager Pro.' ) }
+					title={ fbmText( 'Available in MagePeople Ferry Booking System Pro.' ) }
 					description={ fbmText(
 						'Travel agencies with their own logins, commission terms, a prepaid account and a credit limit — each seeing only their own bookings.'
 					) }

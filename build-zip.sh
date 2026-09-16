@@ -28,6 +28,7 @@ rsync -a "${PLUGIN_DIR}/" "${STAGE_DIR}/" \
 	--exclude 'docs/' \
 	--exclude '.git/' \
 	--exclude '.gitignore' \
+	--exclude '.distignore' \
 	--exclude 'node_modules/' \
 	--exclude '.next/' \
 	--exclude 'composer.json' \

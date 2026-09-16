@@ -29,14 +29,14 @@ final class Manual implements PaymentGatewayInterface {
 	 * {@inheritDoc}
 	 */
 	public function get_title(): string {
-		return __( 'Manual payment', 'ferry-booking-manager' );
+		return __( 'Manual payment', 'magepeople-ferry-booking-system' );
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	public function get_description(): string {
-		return __( 'An offline or custom payment arrangement with the operator.', 'ferry-booking-manager' );
+		return __( 'An offline or custom payment arrangement with the operator.', 'magepeople-ferry-booking-system' );
 	}
 
 	/**

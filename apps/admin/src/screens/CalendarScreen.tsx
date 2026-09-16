@@ -177,7 +177,7 @@ export function CalendarScreen(): JSX.Element {
 				/>
 				<EmptyState
 					icon="calendar"
-					title={ fbmText( 'Available in Ferry Booking Manager Pro.' ) }
+					title={ fbmText( 'Available in MagePeople Ferry Booking System Pro.' ) }
 					description={ fbmText(
 						'A day, week and month view of every crossing, showing how full each one is, with delays and cancellations made from the same screen.'
 					) }

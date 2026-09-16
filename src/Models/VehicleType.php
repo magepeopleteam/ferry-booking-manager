@@ -80,8 +80,8 @@ final class VehicleType extends Entity {
 	 */
 	public static function labels(): array {
 		return array(
-			'plural'   => __( 'Vehicle types', 'ferry-booking-manager' ),
-			'singular' => __( 'Vehicle type', 'ferry-booking-manager' ),
+			'plural'   => __( 'Vehicle types', 'magepeople-ferry-booking-system' ),
+			'singular' => __( 'Vehicle type', 'magepeople-ferry-booking-system' ),
 		);
 	}
 
@@ -100,14 +100,14 @@ final class VehicleType extends Entity {
 				'min'         => 2,
 				'max'         => 20,
 				'searchable'  => true,
-				'description' => __( 'Vehicle type code', 'ferry-booking-manager' ),
+				'description' => __( 'Vehicle type code', 'magepeople-ferry-booking-system' ),
 			),
 			'category'              => array(
 				'type'        => 'enum',
 				'meta'        => '_fbm_vt_category',
 				'enum'        => self::CATEGORIES,
 				'default'     => 'car',
-				'description' => __( 'Category', 'ferry-booking-manager' ),
+				'description' => __( 'Category', 'magepeople-ferry-booking-system' ),
 			),
 			'length'                => array(
 				'type'        => 'float',
@@ -115,7 +115,7 @@ final class VehicleType extends Entity {
 				'default'     => 0.0,
 				'min'         => 0,
 				'max'         => 100,
-				'description' => __( 'Maximum length in metres', 'ferry-booking-manager' ),
+				'description' => __( 'Maximum length in metres', 'magepeople-ferry-booking-system' ),
 			),
 			'width'                 => array(
 				'type'        => 'float',
@@ -123,7 +123,7 @@ final class VehicleType extends Entity {
 				'default'     => 0.0,
 				'min'         => 0,
 				'max'         => 20,
-				'description' => __( 'Maximum width in metres', 'ferry-booking-manager' ),
+				'description' => __( 'Maximum width in metres', 'magepeople-ferry-booking-system' ),
 			),
 			'height'                => array(
 				'type'        => 'float',
@@ -131,7 +131,7 @@ final class VehicleType extends Entity {
 				'default'     => 0.0,
 				'min'         => 0,
 				'max'         => 20,
-				'description' => __( 'Maximum height in metres', 'ferry-booking-manager' ),
+				'description' => __( 'Maximum height in metres', 'magepeople-ferry-booking-system' ),
 			),
 			'weight'                => array(
 				'type'        => 'float',
@@ -139,7 +139,7 @@ final class VehicleType extends Entity {
 				'default'     => 0.0,
 				'min'         => 0,
 				'max'         => 100000,
-				'description' => __( 'Maximum weight in kilograms', 'ferry-booking-manager' ),
+				'description' => __( 'Maximum weight in kilograms', 'magepeople-ferry-booking-system' ),
 			),
 			'lane_metres'           => array(
 				'type'        => 'float',
@@ -147,7 +147,7 @@ final class VehicleType extends Entity {
 				'default'     => 0.0,
 				'min'         => 0,
 				'max'         => 100,
-				'description' => __( 'Lane metres consumed', 'ferry-booking-manager' ),
+				'description' => __( 'Lane metres consumed', 'magepeople-ferry-booking-system' ),
 			),
 			'capacity_units'        => array(
 				'type'        => 'int',
@@ -155,7 +155,7 @@ final class VehicleType extends Entity {
 				'default'     => 1,
 				'min'         => 0,
 				'max'         => 50,
-				'description' => __( 'Vehicle slots consumed', 'ferry-booking-manager' ),
+				'description' => __( 'Vehicle slots consumed', 'magepeople-ferry-booking-system' ),
 			),
 			'included_passengers'   => array(
 				'type'        => 'int',
@@ -163,45 +163,45 @@ final class VehicleType extends Entity {
 				'default'     => 0,
 				'min'         => 0,
 				'max'         => 99,
-				'description' => __( 'Passenger fares included in the vehicle fare', 'ferry-booking-manager' ),
+				'description' => __( 'Passenger fares included in the vehicle fare', 'magepeople-ferry-booking-system' ),
 			),
 			'base_price'            => array(
 				'type'        => 'money',
 				'meta'        => '_fbm_vt_base_price',
 				'default'     => 0,
 				'min'         => 0,
-				'description' => __( 'Fare', 'ferry-booking-manager' ),
+				'description' => __( 'Fare', 'magepeople-ferry-booking-system' ),
 			),
 			'price_per_metre'       => array(
 				'type'        => 'money',
 				'meta'        => '_fbm_vt_price_per_metre',
 				'default'     => 0,
 				'min'         => 0,
-				'description' => __( 'Additional fare per lane metre', 'ferry-booking-manager' ),
+				'description' => __( 'Additional fare per lane metre', 'magepeople-ferry-booking-system' ),
 			),
 			'requires_registration' => array(
 				'type'        => 'bool',
 				'meta'        => '_fbm_vt_requires_registration',
 				'default'     => true,
-				'description' => __( 'Require a registration number', 'ferry-booking-manager' ),
+				'description' => __( 'Require a registration number', 'magepeople-ferry-booking-system' ),
 			),
 			'requires_driver'       => array(
 				'type'        => 'bool',
 				'meta'        => '_fbm_vt_requires_driver',
 				'default'     => true,
-				'description' => __( 'Require driver details', 'ferry-booking-manager' ),
+				'description' => __( 'Require driver details', 'magepeople-ferry-booking-system' ),
 			),
 			'requires_dimensions'   => array(
 				'type'        => 'bool',
 				'meta'        => '_fbm_vt_requires_dimensions',
 				'default'     => false,
-				'description' => __( 'Require the exact dimensions', 'ferry-booking-manager' ),
+				'description' => __( 'Require the exact dimensions', 'magepeople-ferry-booking-system' ),
 			),
 			'allows_trailer'        => array(
 				'type'        => 'bool',
 				'meta'        => '_fbm_vt_allows_trailer',
 				'default'     => false,
-				'description' => __( 'Allow a trailer', 'ferry-booking-manager' ),
+				'description' => __( 'Allow a trailer', 'magepeople-ferry-booking-system' ),
 			),
 			'max_per_booking'       => array(
 				'type'        => 'int',
@@ -209,7 +209,7 @@ final class VehicleType extends Entity {
 				'default'     => 4,
 				'min'         => 0,
 				'max'         => 99,
-				'description' => __( 'Maximum per booking', 'ferry-booking-manager' ),
+				'description' => __( 'Maximum per booking', 'magepeople-ferry-booking-system' ),
 			),
 			'sort_order'            => array(
 				'type'        => 'int',
@@ -217,20 +217,20 @@ final class VehicleType extends Entity {
 				'default'     => 0,
 				'min'         => 0,
 				'max'         => 999,
-				'description' => __( 'Display order', 'ferry-booking-manager' ),
+				'description' => __( 'Display order', 'magepeople-ferry-booking-system' ),
 			),
 			'description'           => array(
 				'type'        => 'text',
 				'meta'        => '_fbm_vt_description',
 				'max'         => 500,
-				'description' => __( 'Description shown to customers', 'ferry-booking-manager' ),
+				'description' => __( 'Description shown to customers', 'magepeople-ferry-booking-system' ),
 			),
 			'status'                => array(
 				'type'        => 'enum',
 				'meta'        => '_fbm_status',
 				'enum'        => array( self::STATUS_ACTIVE, self::STATUS_INACTIVE ),
 				'default'     => self::STATUS_ACTIVE,
-				'description' => __( 'Status', 'ferry-booking-manager' ),
+				'description' => __( 'Status', 'magepeople-ferry-booking-system' ),
 			),
 		);
 	}

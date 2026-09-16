@@ -238,21 +238,21 @@ final class SetupStatus {
 		$fields = array();
 
 		if ( '' === trim( (string) ( $details['company_name'] ?? '' ) ) ) {
-			$fields['company_name'] = __( 'Enter the name customers know you by.', 'ferry-booking-manager' );
+			$fields['company_name'] = __( 'Enter the name customers know you by.', 'magepeople-ferry-booking-system' );
 		}
 
 		if ( ! is_email( (string) ( $details['support_email'] ?? '' ) ) ) {
-			$fields['support_email'] = __( 'Enter a valid email address.', 'ferry-booking-manager' );
+			$fields['support_email'] = __( 'Enter a valid email address.', 'magepeople-ferry-booking-system' );
 		}
 
 		if ( isset( $details['currency'] ) && ! preg_match( '/^[A-Za-z]{3}$/', trim( (string) $details['currency'] ) ) ) {
-			$fields['currency'] = __( 'Use a three-letter currency code, such as EUR or GBP.', 'ferry-booking-manager' );
+			$fields['currency'] = __( 'Use a three-letter currency code, such as EUR or GBP.', 'magepeople-ferry-booking-system' );
 		}
 
 		if ( array() !== $fields ) {
 			return new WP_Error(
 				'fbm_setup_business',
-				__( 'Some details need another look.', 'ferry-booking-manager' ),
+				__( 'Some details need another look.', 'magepeople-ferry-booking-system' ),
 				array(
 					'status' => 422,
 					'fields' => $fields,
@@ -284,7 +284,7 @@ final class SetupStatus {
 		if ( empty( $status['business'] ) ) {
 			return new WP_Error(
 				'fbm_setup_incomplete',
-				__( 'Confirm your business details first.', 'ferry-booking-manager' ),
+				__( 'Confirm your business details first.', 'magepeople-ferry-booking-system' ),
 				array( 'status' => 422 )
 			);
 		}
@@ -292,7 +292,7 @@ final class SetupStatus {
 		if ( empty( $status['crossing']['ready'] ) ) {
 			return new WP_Error(
 				'fbm_setup_incomplete',
-				__( 'Finish your first crossing first: it needs two ports, a vessel, a route, a future sailing and a fare.', 'ferry-booking-manager' ),
+				__( 'Finish your first crossing first: it needs two ports, a vessel, a route, a future sailing and a fare.', 'magepeople-ferry-booking-system' ),
 				array( 'status' => 422 )
 			);
 		}

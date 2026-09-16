@@ -77,7 +77,7 @@ final class NotificationService {
 
 		$subject = sprintf(
 			/* translators: 1: company name, 2: booking reference. */
-			__( '%1$s — we have received your booking %2$s', 'ferry-booking-manager' ),
+			__( '%1$s — we have received your booking %2$s', 'magepeople-ferry-booking-system' ),
 			(string) $settings['company_name'],
 			$booking->number()
 		);
@@ -88,8 +88,8 @@ final class NotificationService {
 			$this->body(
 				$booking,
 				array(
-					'heading' => __( 'Your booking has been received', 'ferry-booking-manager' ),
-					'lede'    => __( 'Thank you for booking with us. Your booking is being processed and your seats are held.', 'ferry-booking-manager' ),
+					'heading' => __( 'Your booking has been received', 'magepeople-ferry-booking-system' ),
+					'lede'    => __( 'Thank you for booking with us. Your booking is being processed and your seats are held.', 'magepeople-ferry-booking-system' ),
 				)
 			),
 			'booking_confirmation'
@@ -111,7 +111,7 @@ final class NotificationService {
 
 		$subject = sprintf(
 			/* translators: 1: company name, 2: booking reference. */
-			__( '%1$s — booking %2$s confirmed', 'ferry-booking-manager' ),
+			__( '%1$s — booking %2$s confirmed', 'magepeople-ferry-booking-system' ),
 			(string) $settings['company_name'],
 			$booking->number()
 		);
@@ -122,8 +122,8 @@ final class NotificationService {
 			$this->body(
 				$booking,
 				array(
-					'heading' => __( 'Your booking is confirmed', 'ferry-booking-manager' ),
-					'lede'    => __( 'Payment has been received and your crossing is confirmed. Please bring your booking reference to check-in.', 'ferry-booking-manager' ),
+					'heading' => __( 'Your booking is confirmed', 'magepeople-ferry-booking-system' ),
+					'lede'    => __( 'Payment has been received and your crossing is confirmed. Please bring your booking reference to check-in.', 'magepeople-ferry-booking-system' ),
 				)
 			),
 			'payment_confirmation'
@@ -146,7 +146,7 @@ final class NotificationService {
 
 		$subject = sprintf(
 			/* translators: 1: company name, 2: booking reference. */
-			__( '%1$s — booking %2$s cancelled', 'ferry-booking-manager' ),
+			__( '%1$s — booking %2$s cancelled', 'magepeople-ferry-booking-system' ),
 			(string) $settings['company_name'],
 			$booking->number()
 		);
@@ -157,14 +157,14 @@ final class NotificationService {
 			$this->body(
 				$booking,
 				array(
-					'heading' => __( 'Your booking has been cancelled', 'ferry-booking-manager' ),
+					'heading' => __( 'Your booking has been cancelled', 'magepeople-ferry-booking-system' ),
 					'lede'    => '' !== $reason
 						? sprintf(
 							/* translators: %s: cancellation reason. */
-							__( 'Your booking was cancelled: %s', 'ferry-booking-manager' ),
+							__( 'Your booking was cancelled: %s', 'magepeople-ferry-booking-system' ),
 							$reason
 						)
-						: __( 'Your booking has been cancelled.', 'ferry-booking-manager' ),
+						: __( 'Your booking has been cancelled.', 'magepeople-ferry-booking-system' ),
 				)
 			),
 			'cancellation',
@@ -193,17 +193,17 @@ final class NotificationService {
 
 		$subject = sprintf(
 			/* translators: %s: booking reference. */
-			__( '[Ferry] New booking %s', 'ferry-booking-manager' ),
+			__( '[Ferry] New booking %s', 'magepeople-ferry-booking-system' ),
 			$booking->number()
 		);
 
 		$body = $this->body(
 			$booking,
 			array(
-				'heading' => __( 'New booking received', 'ferry-booking-manager' ),
+				'heading' => __( 'New booking received', 'magepeople-ferry-booking-system' ),
 				'lede'    => sprintf(
 					/* translators: 1: customer name, 2: booking reference. */
-					__( '%1$s booked reference %2$s through the website.', 'ferry-booking-manager' ),
+					__( '%1$s booked reference %2$s through the website.', 'magepeople-ferry-booking-system' ),
 					(string) $booking->get( 'customer_name' ),
 					$booking->number()
 				),
@@ -230,7 +230,7 @@ final class NotificationService {
 			'',
 			sprintf(
 				/* translators: %s: booking reference. */
-				__( 'Booking reference: %s', 'ferry-booking-manager' ),
+				__( 'Booking reference: %s', 'magepeople-ferry-booking-system' ),
 				$booking->number()
 			),
 		);
@@ -245,7 +245,7 @@ final class NotificationService {
 		$lines[] = '';
 		$lines[] = sprintf(
 			/* translators: %s: formatted total. */
-			__( 'Total: %s', 'ferry-booking-manager' ),
+			__( 'Total: %s', 'magepeople-ferry-booking-system' ),
 			$this->money( (int) $booking->get( 'total' ), (string) $booking->get( 'currency' ) )
 		);
 
@@ -254,7 +254,7 @@ final class NotificationService {
 		if ( $passengers > 0 ) {
 			$lines[] = sprintf(
 				/* translators: %d: number of passengers. */
-				_n( 'Passengers: %d', 'Passengers: %d', $passengers, 'ferry-booking-manager' ),
+				_n( 'Passengers: %d', 'Passengers: %d', $passengers, 'magepeople-ferry-booking-system' ),
 				$passengers
 			);
 		}
@@ -264,7 +264,7 @@ final class NotificationService {
 		if ( $vehicles > 0 ) {
 			$lines[] = sprintf(
 				/* translators: %d: number of vehicles. */
-				_n( 'Vehicles: %d', 'Vehicles: %d', $vehicles, 'ferry-booking-manager' ),
+				_n( 'Vehicles: %d', 'Vehicles: %d', $vehicles, 'magepeople-ferry-booking-system' ),
 				$vehicles
 			);
 		}
@@ -272,14 +272,14 @@ final class NotificationService {
 		$lines[] = '';
 		$lines[] = sprintf(
 			/* translators: %s: company name. */
-			__( 'Thank you for travelling with %s.', 'ferry-booking-manager' ),
+			__( 'Thank you for travelling with %s.', 'magepeople-ferry-booking-system' ),
 			(string) $settings['company_name']
 		);
 
 		if ( '' !== (string) $settings['support_phone'] ) {
 			$lines[] = sprintf(
 				/* translators: %s: support phone number. */
-				__( 'Questions? Call %s.', 'ferry-booking-manager' ),
+				__( 'Questions? Call %s.', 'magepeople-ferry-booking-system' ),
 				(string) $settings['support_phone']
 			);
 		}
@@ -306,8 +306,8 @@ final class NotificationService {
 		$lines = array();
 
 		foreach ( array(
-			__( 'Outbound', 'ferry-booking-manager' ) => (int) $booking->get( 'sailing_id' ),
-			__( 'Return', 'ferry-booking-manager' )   => (int) $booking->get( 'return_sailing_id' ),
+			__( 'Outbound', 'magepeople-ferry-booking-system' ) => (int) $booking->get( 'sailing_id' ),
+			__( 'Return', 'magepeople-ferry-booking-system' )   => (int) $booking->get( 'return_sailing_id' ),
 		) as $label => $sailing_id ) {
 			if ( $sailing_id < 1 ) {
 				continue;
@@ -430,7 +430,7 @@ final class NotificationService {
 		$sent = wp_mail( $to, $subject, $body, $headers );
 
 		/**
-		 * Fires after a Ferry Booking Manager email has been attempted.
+		 * Fires after a MagePeople Ferry Booking System email has been attempted.
 		 *
 		 * @since 1.0.0
 		 *

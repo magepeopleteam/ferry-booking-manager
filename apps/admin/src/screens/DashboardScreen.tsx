@@ -139,7 +139,7 @@ export function DashboardScreen(): JSX.Element {
 								key={ key }
 								label={ fbmText( metric.label ) }
 								value="—"
-								hint={ fbmText( 'Needs Ferry Booking Manager Pro' ) }
+								hint={ fbmText( 'Needs MagePeople Ferry Booking System Pro' ) }
 								icon={ ICONS[ key ] }
 							/>
 						);

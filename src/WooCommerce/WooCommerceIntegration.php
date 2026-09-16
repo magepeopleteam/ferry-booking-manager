@@ -160,7 +160,7 @@ final class WooCommerceIntegration {
 			return;
 		}
 
-		$result = $this->bookings->cancel( $booking_id, __( 'The WooCommerce order was cancelled.', 'ferry-booking-manager' ) );
+		$result = $this->bookings->cancel( $booking_id, __( 'The WooCommerce order was cancelled.', 'magepeople-ferry-booking-system' ) );
 
 		if ( is_wp_error( $result ) ) {
 			$this->logger->error(

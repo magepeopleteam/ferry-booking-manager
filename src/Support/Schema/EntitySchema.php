@@ -64,7 +64,7 @@ final class EntitySchema {
 		$this->capability = $capability;
 
 		/**
-		 * Filters the field definitions of a Ferry Booking Manager entity.
+		 * Filters the field definitions of a MagePeople Ferry Booking System entity.
 		 *
 		 * This is how Pro and third parties add persisted properties without
 		 * touching the Free entity classes.

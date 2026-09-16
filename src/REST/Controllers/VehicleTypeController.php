@@ -60,17 +60,17 @@ final class VehicleTypeController extends EntityController {
 		// unlimited on every sailing. That is almost never intended, and the
 		// failure only shows up as an overloaded deck on sailing day.
 		if ( 0 === $units && $lane <= 0.0 && $len <= 0.0 ) {
-			$fields['capacity_units'] = __( 'Set a vehicle slot count, a length or the lane metres, otherwise this type consumes no deck space and can be sold without limit.', 'ferry-booking-manager' );
+			$fields['capacity_units'] = __( 'Set a vehicle slot count, a length or the lane metres, otherwise this type consumes no deck space and can be sold without limit.', 'magepeople-ferry-booking-system' );
 		}
 
 		if ( isset( $attributes['price_per_metre'] ) && (int) $attributes['price_per_metre'] > 0 && $lane <= 0.0 && $len <= 0.0 ) {
-			$fields['price_per_metre'] = __( 'A per-metre fare needs a length or lane metres to multiply by.', 'ferry-booking-manager' );
+			$fields['price_per_metre'] = __( 'A per-metre fare needs a length or lane metres to multiply by.', 'magepeople-ferry-booking-system' );
 		}
 
 		if ( array() !== $fields ) {
 			return new WP_Error(
 				'fbm_validation_failed',
-				__( 'Please correct the highlighted fields.', 'ferry-booking-manager' ),
+				__( 'Please correct the highlighted fields.', 'magepeople-ferry-booking-system' ),
 				array(
 					'status' => 400,
 					'fields' => $fields,

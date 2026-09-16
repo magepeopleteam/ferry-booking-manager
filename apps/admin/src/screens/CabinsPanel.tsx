@@ -154,7 +154,7 @@ export function CabinsPanel(): JSX.Element {
 		return (
 			<EmptyState
 				icon="ship"
-				title={ fbmText( 'Available in Ferry Booking Manager Pro.' ) }
+				title={ fbmText( 'Available in MagePeople Ferry Booking System Pro.' ) }
 				description={ fbmText( 'Sell cabins and berths with their own stock, so the last family cabin selling out does not close the inside doubles.' ) }
 			/>
 		);

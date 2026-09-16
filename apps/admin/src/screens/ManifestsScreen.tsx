@@ -155,7 +155,7 @@ export function ManifestsScreen(): JSX.Element {
 				/>
 				<EmptyState
 					icon="list"
-					title={ fbmText( 'Available in Ferry Booking Manager Pro.' ) }
+					title={ fbmText( 'Available in MagePeople Ferry Booking System Pro.' ) }
 					description={ fbmText( 'A named passenger and vehicle list for every sailing, showing who has checked in and boarded, exportable as CSV or PDF.' ) }
 				/>
 			</>

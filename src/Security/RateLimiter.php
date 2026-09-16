@@ -71,7 +71,7 @@ final class RateLimiter {
 		if ( $count >= $limit ) {
 			return new WP_Error(
 				'fbm_rate_limited',
-				__( 'Too many requests. Please wait a moment and try again.', 'ferry-booking-manager' ),
+				__( 'Too many requests. Please wait a moment and try again.', 'magepeople-ferry-booking-system' ),
 				array(
 					'status'      => 429,
 					'retry_after' => $window,

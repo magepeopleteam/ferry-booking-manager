@@ -148,7 +148,7 @@ final class BookingController extends AbstractController {
 			array(
 				'args' => array(
 					'id' => array(
-						'description'       => __( 'Booking id.', 'ferry-booking-manager' ),
+						'description'       => __( 'Booking id.', 'magepeople-ferry-booking-system' ),
 						'type'              => 'integer',
 						'required'          => true,
 						'sanitize_callback' => 'absint',
@@ -183,13 +183,13 @@ final class BookingController extends AbstractController {
 					'permission_callback' => $this->can( Capabilities::MANAGE_BOOKINGS ),
 					'args'                => array(
 						'search' => array(
-							'description'       => __( 'Reference, customer or email to match.', 'ferry-booking-manager' ),
+							'description'       => __( 'Reference, customer or email to match.', 'magepeople-ferry-booking-system' ),
 							'type'              => 'string',
 							'default'           => '',
 							'sanitize_callback' => 'sanitize_text_field',
 						),
 						'status' => array(
-							'description'       => __( 'Status to limit the export to.', 'ferry-booking-manager' ),
+							'description'       => __( 'Status to limit the export to.', 'magepeople-ferry-booking-system' ),
 							'type'              => 'string',
 							'default'           => '',
 							'sanitize_callback' => 'sanitize_key',
@@ -225,33 +225,33 @@ final class BookingController extends AbstractController {
 					'permission_callback' => 'is_user_logged_in',
 					'args'                => array(
 						'page'     => array(
-							'description'       => __( 'Page of the history.', 'ferry-booking-manager' ),
+							'description'       => __( 'Page of the history.', 'magepeople-ferry-booking-system' ),
 							'type'              => 'integer',
 							'default'           => 1,
 							'minimum'           => 1,
 							'sanitize_callback' => 'absint',
 						),
 						'per_page' => array(
-							'description'       => __( 'Bookings shown per page.', 'ferry-booking-manager' ),
+							'description'       => __( 'Bookings shown per page.', 'magepeople-ferry-booking-system' ),
 							'type'              => 'integer',
 							'default'           => 20,
 							'enum'              => self::PER_PAGE_OPTIONS,
 							'sanitize_callback' => 'absint',
 						),
 						'search'   => array(
-							'description'       => __( 'Match a reference, route, port or vessel.', 'ferry-booking-manager' ),
+							'description'       => __( 'Match a reference, route, port or vessel.', 'magepeople-ferry-booking-system' ),
 							'type'              => 'string',
 							'default'           => '',
 							'sanitize_callback' => 'sanitize_text_field',
 						),
 						'status'   => array(
-							'description'       => __( 'Limit to one booking status.', 'ferry-booking-manager' ),
+							'description'       => __( 'Limit to one booking status.', 'magepeople-ferry-booking-system' ),
 							'type'              => 'string',
 							'default'           => '',
 							'sanitize_callback' => 'sanitize_key',
 						),
 						'when'     => array(
-							'description'       => __( 'Upcoming crossings, past ones, or both.', 'ferry-booking-manager' ),
+							'description'       => __( 'Upcoming crossings, past ones, or both.', 'magepeople-ferry-booking-system' ),
 							'type'              => 'string',
 							'default'           => 'upcoming',
 							'enum'              => array( 'upcoming', 'past', 'all' ),
@@ -272,13 +272,13 @@ final class BookingController extends AbstractController {
 					'permission_callback' => $this->permissions->rest_public_callback( 'lookup', 20 ),
 					'args'                => array(
 						'reference' => array(
-							'description'       => __( 'Booking reference.', 'ferry-booking-manager' ),
+							'description'       => __( 'Booking reference.', 'magepeople-ferry-booking-system' ),
 							'type'              => 'string',
 							'required'          => true,
 							'sanitize_callback' => 'sanitize_text_field',
 						),
 						'email'     => array(
-							'description'       => __( 'Email used for the booking.', 'ferry-booking-manager' ),
+							'description'       => __( 'Email used for the booking.', 'magepeople-ferry-booking-system' ),
 							'type'              => 'string',
 							'required'          => true,
 							'sanitize_callback' => 'sanitize_email',
@@ -342,7 +342,7 @@ final class BookingController extends AbstractController {
 		if ( ! $booking instanceof Booking || ! $this->may_read( $booking ) ) {
 			return $this->fail(
 				'fbm_booking_not_found',
-				__( 'That booking could not be found.', 'ferry-booking-manager' ),
+				__( 'That booking could not be found.', 'magepeople-ferry-booking-system' ),
 				404
 			);
 		}
@@ -401,7 +401,7 @@ final class BookingController extends AbstractController {
 	private function refuse(): WP_REST_Response {
 		return $this->fail(
 			'fbm_booking_not_found',
-			__( 'That booking could not be found.', 'ferry-booking-manager' ),
+			__( 'That booking could not be found.', 'magepeople-ferry-booking-system' ),
 			404
 		);
 	}
@@ -419,7 +419,7 @@ final class BookingController extends AbstractController {
 			return $this->refuse();
 		}
 
-		$result = $this->bookings->cancel( (int) $request->get_param( 'id' ), __( 'Cancelled from the dashboard.', 'ferry-booking-manager' ) );
+		$result = $this->bookings->cancel( (int) $request->get_param( 'id' ), __( 'Cancelled from the dashboard.', 'magepeople-ferry-booking-system' ) );
 
 		if ( is_wp_error( $result ) ) {
 			return Response::from_wp_error( $result );
@@ -428,7 +428,7 @@ final class BookingController extends AbstractController {
 		if ( null === $result ) {
 			return $this->fail(
 				'fbm_booking_not_found',
-				__( 'That booking could not be found.', 'ferry-booking-manager' ),
+				__( 'That booking could not be found.', 'magepeople-ferry-booking-system' ),
 				404
 			);
 		}
@@ -457,7 +457,7 @@ final class BookingController extends AbstractController {
 		if ( false === $handle ) {
 			return $this->fail(
 				'fbm_export_failed',
-				__( 'The export could not be built.', 'ferry-booking-manager' ),
+				__( 'The export could not be built.', 'magepeople-ferry-booking-system' ),
 				500
 			);
 		}
@@ -468,34 +468,34 @@ final class BookingController extends AbstractController {
 		fputcsv(
 			$handle,
 			array(
-				__( 'Reference', 'ferry-booking-manager' ),
-				__( 'Booking status', 'ferry-booking-manager' ),
-				__( 'Payment status', 'ferry-booking-manager' ),
-				__( 'Customer', 'ferry-booking-manager' ),
-				__( 'Email', 'ferry-booking-manager' ),
-				__( 'Phone', 'ferry-booking-manager' ),
-				__( 'Journey', 'ferry-booking-manager' ),
-				__( 'From', 'ferry-booking-manager' ),
-				__( 'To', 'ferry-booking-manager' ),
-				__( 'Route', 'ferry-booking-manager' ),
-				__( 'Vessel', 'ferry-booking-manager' ),
-				__( 'Departure', 'ferry-booking-manager' ),
-				__( 'Return', 'ferry-booking-manager' ),
-				__( 'Passengers', 'ferry-booking-manager' ),
-				__( 'Vehicles', 'ferry-booking-manager' ),
-				__( 'Passenger details', 'ferry-booking-manager' ),
-				__( 'Vehicle details', 'ferry-booking-manager' ),
-				__( 'Subtotal', 'ferry-booking-manager' ),
-				__( 'Discount', 'ferry-booking-manager' ),
-				__( 'Tax', 'ferry-booking-manager' ),
-				__( 'Fees', 'ferry-booking-manager' ),
-				__( 'Total', 'ferry-booking-manager' ),
-				__( 'Paid', 'ferry-booking-manager' ),
-				__( 'Balance', 'ferry-booking-manager' ),
-				__( 'Currency', 'ferry-booking-manager' ),
-				__( 'Payment method', 'ferry-booking-manager' ),
-				__( 'Channel', 'ferry-booking-manager' ),
-				__( 'Created', 'ferry-booking-manager' ),
+				__( 'Reference', 'magepeople-ferry-booking-system' ),
+				__( 'Booking status', 'magepeople-ferry-booking-system' ),
+				__( 'Payment status', 'magepeople-ferry-booking-system' ),
+				__( 'Customer', 'magepeople-ferry-booking-system' ),
+				__( 'Email', 'magepeople-ferry-booking-system' ),
+				__( 'Phone', 'magepeople-ferry-booking-system' ),
+				__( 'Journey', 'magepeople-ferry-booking-system' ),
+				__( 'From', 'magepeople-ferry-booking-system' ),
+				__( 'To', 'magepeople-ferry-booking-system' ),
+				__( 'Route', 'magepeople-ferry-booking-system' ),
+				__( 'Vessel', 'magepeople-ferry-booking-system' ),
+				__( 'Departure', 'magepeople-ferry-booking-system' ),
+				__( 'Return', 'magepeople-ferry-booking-system' ),
+				__( 'Passengers', 'magepeople-ferry-booking-system' ),
+				__( 'Vehicles', 'magepeople-ferry-booking-system' ),
+				__( 'Passenger details', 'magepeople-ferry-booking-system' ),
+				__( 'Vehicle details', 'magepeople-ferry-booking-system' ),
+				__( 'Subtotal', 'magepeople-ferry-booking-system' ),
+				__( 'Discount', 'magepeople-ferry-booking-system' ),
+				__( 'Tax', 'magepeople-ferry-booking-system' ),
+				__( 'Fees', 'magepeople-ferry-booking-system' ),
+				__( 'Total', 'magepeople-ferry-booking-system' ),
+				__( 'Paid', 'magepeople-ferry-booking-system' ),
+				__( 'Balance', 'magepeople-ferry-booking-system' ),
+				__( 'Currency', 'magepeople-ferry-booking-system' ),
+				__( 'Payment method', 'magepeople-ferry-booking-system' ),
+				__( 'Channel', 'magepeople-ferry-booking-system' ),
+				__( 'Created', 'magepeople-ferry-booking-system' ),
 			)
 		);
 
@@ -570,8 +570,8 @@ final class BookingController extends AbstractController {
 			(string) $booking->get( 'customer_email' ),
 			(string) $booking->get( 'customer_phone' ),
 			'return' === (string) $booking->get( 'booking_type' )
-				? __( 'Return', 'ferry-booking-manager' )
-				: __( 'One way', 'ferry-booking-manager' ),
+				? __( 'Return', 'magepeople-ferry-booking-system' )
+				: __( 'One way', 'magepeople-ferry-booking-system' ),
 			(string) ( $out['origin'] ?? '' ),
 			(string) ( $out['destination'] ?? '' ),
 			(string) ( $out['route'] ?? '' ),
@@ -782,7 +782,7 @@ final class BookingController extends AbstractController {
 		if ( null === $booking || 0 !== strcasecmp( (string) $booking->get( 'customer_email' ), $email ) ) {
 			return $this->fail(
 				'fbm_booking_not_found',
-				__( 'No booking matches that reference and email address.', 'ferry-booking-manager' ),
+				__( 'No booking matches that reference and email address.', 'magepeople-ferry-booking-system' ),
 				404
 			);
 		}
@@ -825,7 +825,7 @@ final class BookingController extends AbstractController {
 		if ( ! $user instanceof \WP_User || 0 === (int) $user->ID ) {
 			return $this->fail(
 				'fbm_not_signed_in',
-				__( 'Please sign in to see your bookings.', 'ferry-booking-manager' ),
+				__( 'Please sign in to see your bookings.', 'magepeople-ferry-booking-system' ),
 				401
 			);
 		}
@@ -1016,7 +1016,7 @@ final class BookingController extends AbstractController {
 
 		foreach ( array( 'customer_name', 'customer_email', 'customer_phone', 'booking_status', 'payment_status', 'payment_method', 'internal_notes' ) as $key ) {
 			$args[ $key ] = array(
-				'description' => __( 'Editable booking field.', 'ferry-booking-manager' ),
+				'description' => __( 'Editable booking field.', 'magepeople-ferry-booking-system' ),
 				'type'        => 'string',
 			);
 		}
@@ -1032,25 +1032,25 @@ final class BookingController extends AbstractController {
 	private function create_args(): array {
 		return array(
 			'sailing_id'        => array(
-				'description'       => __( 'Outbound sailing id.', 'ferry-booking-manager' ),
+				'description'       => __( 'Outbound sailing id.', 'magepeople-ferry-booking-system' ),
 				'type'              => 'integer',
 				'required'          => true,
 				'sanitize_callback' => 'absint',
 			),
 			'return_sailing_id' => array(
-				'description'       => __( 'Return sailing id.', 'ferry-booking-manager' ),
+				'description'       => __( 'Return sailing id.', 'magepeople-ferry-booking-system' ),
 				'type'              => 'integer',
 				'default'           => 0,
 				'sanitize_callback' => 'absint',
 			),
 			'idempotency_key'   => array(
-				'description'       => __( 'Client-generated key that makes a retried request safe.', 'ferry-booking-manager' ),
+				'description'       => __( 'Client-generated key that makes a retried request safe.', 'magepeople-ferry-booking-system' ),
 				'type'              => 'string',
 				'default'           => '',
 				'sanitize_callback' => 'sanitize_text_field',
 			),
 			'payment_method'    => array(
-				'description'       => __( 'Native checkout payment method.', 'ferry-booking-manager' ),
+				'description'       => __( 'Native checkout payment method.', 'magepeople-ferry-booking-system' ),
 				'type'              => 'string',
 				'default'           => '',
 				'sanitize_callback' => 'sanitize_key',

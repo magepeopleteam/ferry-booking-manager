@@ -217,7 +217,7 @@ final class BookingService {
 		if ( ! $sailing instanceof Sailing ) {
 			return new WP_Error(
 				'fbm_sailing_not_found',
-				__( 'That sailing could not be found.', 'ferry-booking-manager' ),
+				__( 'That sailing could not be found.', 'magepeople-ferry-booking-system' ),
 				array( 'status' => 404 )
 			);
 		}
@@ -231,7 +231,7 @@ final class BookingService {
 			if ( ! $return_sailing instanceof Sailing ) {
 				return new WP_Error(
 					'fbm_return_sailing_not_found',
-					__( 'That return sailing could not be found.', 'ferry-booking-manager' ),
+					__( 'That return sailing could not be found.', 'magepeople-ferry-booking-system' ),
 					array( 'status' => 404 )
 				);
 			}
@@ -250,7 +250,7 @@ final class BookingService {
 		if ( array() === $passengers && array() === $vehicles ) {
 			return new WP_Error(
 				'fbm_empty_party',
-				__( 'Add at least one passenger or vehicle before booking.', 'ferry-booking-manager' ),
+				__( 'Add at least one passenger or vehicle before booking.', 'magepeople-ferry-booking-system' ),
 				array( 'status' => 400 )
 			);
 		}
@@ -339,7 +339,7 @@ final class BookingService {
 
 			return new WP_Error(
 				'fbm_booking_failed',
-				__( 'The booking could not be created. Please try again.', 'ferry-booking-manager' ),
+				__( 'The booking could not be created. Please try again.', 'magepeople-ferry-booking-system' ),
 				array( 'status' => 500 )
 			);
 		}
@@ -477,7 +477,7 @@ final class BookingService {
 		if ( ! function_exists( 'wc_create_order' ) ) {
 			return new WP_Error(
 				'fbm_woocommerce_missing',
-				__( 'WooCommerce is not available on this site.', 'ferry-booking-manager' ),
+				__( 'WooCommerce is not available on this site.', 'magepeople-ferry-booking-system' ),
 				array( 'status' => 409 )
 			);
 		}
@@ -515,7 +515,7 @@ final class BookingService {
 
 			return new WP_Error(
 				'fbm_wc_order_failed',
-				__( 'The checkout could not be started. Please try again.', 'ferry-booking-manager' ),
+				__( 'The checkout could not be started. Please try again.', 'magepeople-ferry-booking-system' ),
 				array( 'status' => 500 )
 			);
 		}
@@ -523,7 +523,7 @@ final class BookingService {
 		$order->add_order_note(
 			sprintf(
 				/* translators: %s: booking reference. */
-				__( 'Ferry booking %s', 'ferry-booking-manager' ),
+				__( 'Ferry booking %s', 'magepeople-ferry-booking-system' ),
 				$booking->number()
 			)
 		);
@@ -535,7 +535,7 @@ final class BookingService {
 		$line->set_name(
 			sprintf(
 				/* translators: 1: route, 2: booking reference. */
-				__( 'Ferry crossing — %1$s (%2$s)', 'ferry-booking-manager' ),
+				__( 'Ferry crossing — %1$s (%2$s)', 'magepeople-ferry-booking-system' ),
 				$this->route_label( (int) $booking->get( 'sailing_id' ) ),
 				$booking->number()
 			)
@@ -629,10 +629,10 @@ final class BookingService {
 		if ( null === $gateway ) {
 			return new WP_Error(
 				'fbm_payment_method_unavailable',
-				__( 'That payment method is not available.', 'ferry-booking-manager' ),
+				__( 'That payment method is not available.', 'magepeople-ferry-booking-system' ),
 				array(
 					'status' => 400,
-					'fields' => array( 'payment_method' => __( 'Choose a payment method.', 'ferry-booking-manager' ) ),
+					'fields' => array( 'payment_method' => __( 'Choose a payment method.', 'magepeople-ferry-booking-system' ) ),
 				)
 			);
 		}
@@ -838,7 +838,7 @@ final class BookingService {
 			$order = wc_get_order( $wc_order_id );
 
 			if ( $order instanceof \WC_Order ) {
-				$order->update_status( 'cancelled', '' !== $reason ? $reason : __( 'Ferry booking cancelled.', 'ferry-booking-manager' ) );
+				$order->update_status( 'cancelled', '' !== $reason ? $reason : __( 'Ferry booking cancelled.', 'magepeople-ferry-booking-system' ) );
 			}
 		}
 
@@ -876,7 +876,7 @@ final class BookingService {
 		if ( ! $booking instanceof Booking ) {
 			return new WP_Error(
 				'fbm_not_found',
-				__( 'That booking could not be found.', 'ferry-booking-manager' ),
+				__( 'That booking could not be found.', 'magepeople-ferry-booking-system' ),
 				array( 'status' => 404 )
 			);
 		}
@@ -888,7 +888,7 @@ final class BookingService {
 			$name = sanitize_text_field( (string) $input['customer_name'] );
 
 			if ( '' === $name ) {
-				$fields['customer_name'] = __( 'A name is required.', 'ferry-booking-manager' );
+				$fields['customer_name'] = __( 'A name is required.', 'magepeople-ferry-booking-system' );
 			} else {
 				$attributes['customer_name'] = $name;
 			}
@@ -898,7 +898,7 @@ final class BookingService {
 			$email = sanitize_email( (string) $input['customer_email'] );
 
 			if ( '' === $email || ! is_email( $email ) ) {
-				$fields['customer_email'] = __( 'A valid email address is required.', 'ferry-booking-manager' );
+				$fields['customer_email'] = __( 'A valid email address is required.', 'magepeople-ferry-booking-system' );
 			} else {
 				$attributes['customer_email'] = $email;
 			}
@@ -925,7 +925,7 @@ final class BookingService {
 			$candidate = sanitize_key( (string) $input['booking_status'] );
 
 			if ( null !== $statuses && ! in_array( $candidate, $statuses->enum, true ) ) {
-				$fields['booking_status'] = __( 'That is not a booking status.', 'ferry-booking-manager' );
+				$fields['booking_status'] = __( 'That is not a booking status.', 'magepeople-ferry-booking-system' );
 			} else {
 				$next_status                   = $candidate;
 				$attributes['booking_status']  = $candidate;
@@ -937,7 +937,7 @@ final class BookingService {
 			$candidate = sanitize_key( (string) $input['payment_status'] );
 
 			if ( null !== $payments && ! in_array( $candidate, $payments->enum, true ) ) {
-				$fields['payment_status'] = __( 'That is not a payment status.', 'ferry-booking-manager' );
+				$fields['payment_status'] = __( 'That is not a payment status.', 'magepeople-ferry-booking-system' );
 			} else {
 				$attributes['payment_status'] = $candidate;
 			}
@@ -946,7 +946,7 @@ final class BookingService {
 		if ( array() !== $fields ) {
 			return new WP_Error(
 				'fbm_validation_failed',
-				__( 'Please correct the highlighted fields.', 'ferry-booking-manager' ),
+				__( 'Please correct the highlighted fields.', 'magepeople-ferry-booking-system' ),
 				array(
 					'status' => 400,
 					'fields' => $fields,
@@ -980,7 +980,7 @@ final class BookingService {
 						'fbm_capacity_taken',
 						sprintf(
 							/* translators: %s: the reason the sailing cannot take the booking. */
-							__( 'This booking cannot be reinstated: %s', 'ferry-booking-manager' ),
+							__( 'This booking cannot be reinstated: %s', 'magepeople-ferry-booking-system' ),
 							$check->get_error_message()
 						),
 						array(
@@ -1077,18 +1077,18 @@ final class BookingService {
 			if ( $deadline >= 60 ) {
 				$reference = sprintf(
 					/* translators: %d: payment deadline in hours. */
-					__( 'Please complete your transfer within %d hours and quote the booking reference.', 'ferry-booking-manager' ),
+					__( 'Please complete your transfer within %d hours and quote the booking reference.', 'magepeople-ferry-booking-system' ),
 					(int) ceil( $deadline / 60 )
 				);
 			} else {
 				$reference = sprintf(
 					/* translators: %d: payment deadline in minutes. */
-					__( 'Please complete your transfer within %d minutes and quote the booking reference.', 'ferry-booking-manager' ),
+					__( 'Please complete your transfer within %d minutes and quote the booking reference.', 'magepeople-ferry-booking-system' ),
 					$deadline
 				);
 			}
 		} elseif ( in_array( $method, array( 'cash', 'pay_at_port', 'manual' ), true ) ) {
-			$reference = __( 'Your booking is held for you. Please complete payment at the terminal before boarding.', 'ferry-booking-manager' );
+			$reference = __( 'Your booking is held for you. Please complete payment at the terminal before boarding.', 'magepeople-ferry-booking-system' );
 		}
 
 		/**
@@ -1230,10 +1230,10 @@ final class BookingService {
 		if ( $amount > $quote->subtotal() ) {
 			return new WP_Error(
 				'fbm_discount_too_large',
-				__( 'A discount cannot be larger than the fare.', 'ferry-booking-manager' ),
+				__( 'A discount cannot be larger than the fare.', 'magepeople-ferry-booking-system' ),
 				array(
 					'status' => 400,
-					'fields' => array( 'manual_discount' => __( 'That is more than the fare.', 'ferry-booking-manager' ) ),
+					'fields' => array( 'manual_discount' => __( 'That is more than the fare.', 'magepeople-ferry-booking-system' ) ),
 				)
 			);
 		}
@@ -1242,7 +1242,7 @@ final class BookingService {
 
 		$quote->add_amount(
 			Quote::LINE_DISCOUNT,
-			'' !== $reason ? $reason : __( 'Discount', 'ferry-booking-manager' ),
+			'' !== $reason ? $reason : __( 'Discount', 'magepeople-ferry-booking-system' ),
 			-$amount,
 			array(
 				'rule'   => 'manual',
@@ -1272,7 +1272,7 @@ final class BookingService {
 		if ( array() !== $vehicles && empty( $settings['vehicles_enabled'] ) ) {
 			return new WP_Error(
 				'fbm_vehicles_disabled',
-				__( 'This service does not carry vehicles.', 'ferry-booking-manager' ),
+				__( 'This service does not carry vehicles.', 'magepeople-ferry-booking-system' ),
 				array( 'status' => 400 )
 			);
 		}
@@ -1289,7 +1289,7 @@ final class BookingService {
 						'One booking can carry up to %d passenger. Please contact us to arrange a larger party.',
 						'One booking can carry up to %d passengers. Please contact us to arrange a larger party.',
 						$max_passengers,
-						'ferry-booking-manager'
+						'magepeople-ferry-booking-system'
 					),
 					$max_passengers
 				),
@@ -1309,7 +1309,7 @@ final class BookingService {
 						'One booking can carry up to %d vehicle. Please contact us to arrange more.',
 						'One booking can carry up to %d vehicles. Please contact us to arrange more.',
 						$max_vehicles,
-						'ferry-booking-manager'
+						'magepeople-ferry-booking-system'
 					),
 					$max_vehicles
 				),
@@ -1445,7 +1445,7 @@ final class BookingService {
 
 			return new WP_Error(
 				'fbm_validation_failed',
-				__( 'Please correct the highlighted fields.', 'ferry-booking-manager' ),
+				__( 'Please correct the highlighted fields.', 'magepeople-ferry-booking-system' ),
 				array(
 					'status' => 400,
 					'fields' => $map,
@@ -1506,17 +1506,17 @@ final class BookingService {
 		$user_id = 0;
 
 		if ( '' === $name ) {
-			$errors['customer_name'] = __( 'Full name is required.', 'ferry-booking-manager' );
+			$errors['customer_name'] = __( 'Full name is required.', 'magepeople-ferry-booking-system' );
 		}
 
 		if ( '' === $email || ! is_email( $email ) ) {
-			$errors['customer_email'] = __( 'A valid email address is required.', 'ferry-booking-manager' );
+			$errors['customer_email'] = __( 'A valid email address is required.', 'magepeople-ferry-booking-system' );
 		}
 
 		$settings = Settings::all();
 
 		if ( (bool) $settings['require_phone'] && '' === $phone ) {
-			$errors['customer_phone'] = __( 'A phone number is required.', 'ferry-booking-manager' );
+			$errors['customer_phone'] = __( 'A phone number is required.', 'magepeople-ferry-booking-system' );
 		}
 
 		/*
@@ -1527,7 +1527,7 @@ final class BookingService {
 		 */
 		if ( ! $staff ) {
 			if ( ! (bool) $settings['allow_guest_checkout'] && ! is_user_logged_in() ) {
-				$errors['customer'] = __( 'Please sign in before booking.', 'ferry-booking-manager' );
+				$errors['customer'] = __( 'Please sign in before booking.', 'magepeople-ferry-booking-system' );
 			}
 
 			// Checked here as well as on the form. A tick box the server does
@@ -1536,14 +1536,14 @@ final class BookingService {
 			$requires_terms = (bool) $settings['require_terms'] && '' !== (string) $settings['terms_url'];
 
 			if ( $requires_terms && ! in_array( $input['accepted_terms'] ?? null, array( true, 1, '1', 'yes', 'true', 'on' ), true ) ) {
-				$errors['accepted_terms'] = __( 'Please agree to the terms and conditions.', 'ferry-booking-manager' );
+				$errors['accepted_terms'] = __( 'Please agree to the terms and conditions.', 'magepeople-ferry-booking-system' );
 			}
 		}
 
 		if ( array() !== $errors ) {
 			return new WP_Error(
 				'fbm_validation_failed',
-				__( 'Please correct the highlighted fields.', 'ferry-booking-manager' ),
+				__( 'Please correct the highlighted fields.', 'magepeople-ferry-booking-system' ),
 				array(
 					'status' => 400,
 					'fields' => $errors,

@@ -268,7 +268,7 @@ export function CheckinScreen(): JSX.Element {
 				/>
 				<EmptyState
 					icon="scan"
-					title={ fbmText( 'Available in Ferry Booking Manager Pro.' ) }
+					title={ fbmText( 'Available in MagePeople Ferry Booking System Pro.' ) }
 					description={ fbmText( 'Scan tickets from a phone camera, check passengers in and board them, with duplicate-scan protection and a history you can audit.' ) }
 				/>
 			</>

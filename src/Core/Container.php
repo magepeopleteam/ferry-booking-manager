@@ -100,13 +100,13 @@ final class Container implements ContainerInterface {
 
 		if ( ! isset( $this->factories[ $id ] ) ) {
 			throw new InvalidArgumentException(
-				sprintf( 'Ferry Booking Manager: service "%s" is not registered.', esc_html( $id ) )
+				sprintf( 'MagePeople Ferry Booking System: service "%s" is not registered.', esc_html( $id ) )
 			);
 		}
 
 		if ( isset( $this->resolving[ $id ] ) ) {
 			throw new InvalidArgumentException(
-				sprintf( 'Ferry Booking Manager: circular dependency detected while resolving "%s".', esc_html( $id ) )
+				sprintf( 'MagePeople Ferry Booking System: circular dependency detected while resolving "%s".', esc_html( $id ) )
 			);
 		}
 

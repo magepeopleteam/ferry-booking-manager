@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
-<ruleset name="Ferry Booking Manager">
-	<description>WordPress coding standards for Ferry Booking Manager.</description>
+<ruleset name="MagePeople Ferry Booking System">
+	<description>WordPress coding standards for MagePeople Ferry Booking System.</description>
 
 	<file>src</file>
 	<file>ferry-booking-manager.php</file>

@@ -136,7 +136,7 @@ final class PassengerTypeRepository extends AbstractRepository {
 
 		$others = $this->ids(
 			array(
-				'post__not_in' => array( $keep_id ),
+				'post__not_in' => array( $keep_id ), // phpcs:ignore WordPressVIPMinimum.Performance.WPQueryParams.PostNotIn_post__not_in -- Single record excluded on a small, fixed configuration set (passenger types).
 				'meta_query'   => array( // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query -- Dedicated scalar key on a small configuration set.
 					array(
 						'key'     => $field->meta_key,
@@ -175,7 +175,7 @@ final class PassengerTypeRepository extends AbstractRepository {
 						'This passenger type is used by %d booking and cannot be deleted. Set it to inactive instead so it stops being sold.',
 						'This passenger type is used by %d bookings and cannot be deleted. Set it to inactive instead so it stops being sold.',
 						$references,
-						'ferry-booking-manager'
+						'magepeople-ferry-booking-system'
 					),
 					$references
 				),
@@ -195,6 +195,6 @@ final class PassengerTypeRepository extends AbstractRepository {
 	protected function derive_name( Entity $entity ): string {
 		$code = (string) $entity->get( 'code' );
 
-		return '' !== $code ? ucfirst( strtolower( $code ) ) : __( 'Passenger type', 'ferry-booking-manager' );
+		return '' !== $code ? ucfirst( strtolower( $code ) ) : __( 'Passenger type', 'magepeople-ferry-booking-system' );
 	}
 }

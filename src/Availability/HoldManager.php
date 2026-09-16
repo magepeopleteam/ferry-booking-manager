@@ -160,7 +160,7 @@ final class HoldManager {
 
 		$schedules[ self::CLEANUP_SCHEDULE ] = array(
 			'interval' => 5 * MINUTE_IN_SECONDS,
-			'display'  => __( 'Every five minutes (Ferry Booking Manager)', 'ferry-booking-manager' ),
+			'display'  => __( 'Every five minutes (MagePeople Ferry Booking System)', 'magepeople-ferry-booking-system' ),
 		);
 
 		return $schedules;
@@ -218,7 +218,7 @@ final class HoldManager {
 		if ( ! $sailing instanceof Sailing ) {
 			return new WP_Error(
 				'fbm_sailing_not_found',
-				__( 'That sailing could not be found.', 'ferry-booking-manager' ),
+				__( 'That sailing could not be found.', 'magepeople-ferry-booking-system' ),
 				array( 'status' => 404 )
 			);
 		}
@@ -273,7 +273,7 @@ final class HoldManager {
 		if ( Booking::STATUS_ON_HOLD !== $booking->get( 'booking_status' ) ) {
 			return new WP_Error(
 				'fbm_not_on_hold',
-				__( 'That booking is not being held.', 'ferry-booking-manager' ),
+				__( 'That booking is not being held.', 'magepeople-ferry-booking-system' ),
 				array( 'status' => 409 )
 			);
 		}
@@ -297,7 +297,7 @@ final class HoldManager {
 		if ( ! in_array( $status, Booking::CONSUMING_STATUSES, true ) ) {
 			return new WP_Error(
 				'fbm_invalid_status',
-				__( 'A booking cannot be confirmed into that status.', 'ferry-booking-manager' ),
+				__( 'A booking cannot be confirmed into that status.', 'magepeople-ferry-booking-system' ),
 				array( 'status' => 400 )
 			);
 		}
@@ -324,7 +324,7 @@ final class HoldManager {
 				if ( is_wp_error( $recheck ) ) {
 					return new WP_Error(
 						'fbm_hold_expired',
-						__( 'This booking was held for too long and the space has since been taken. Please start again.', 'ferry-booking-manager' ),
+						__( 'This booking was held for too long and the space has since been taken. Please start again.', 'magepeople-ferry-booking-system' ),
 						array(
 							'status' => 409,
 							'detail' => $recheck->get_error_message(),
@@ -562,7 +562,7 @@ final class HoldManager {
 		if ( ! $settled ) {
 			return new WP_Error(
 				'fbm_capacity_busy',
-				__( 'This sailing is being booked by several people at once. Please try again in a moment.', 'ferry-booking-manager' ),
+				__( 'This sailing is being booked by several people at once. Please try again in a moment.', 'magepeople-ferry-booking-system' ),
 				array( 'status' => 409 )
 			);
 		}
@@ -603,7 +603,7 @@ final class HoldManager {
 
 				return new WP_Error(
 					'fbm_capacity_taken',
-					__( 'Someone else booked that space while you were checking out. Please choose again.', 'ferry-booking-manager' ),
+					__( 'Someone else booked that space while you were checking out. Please choose again.', 'magepeople-ferry-booking-system' ),
 					array(
 						'status'  => 409,
 						'measure' => $measure,

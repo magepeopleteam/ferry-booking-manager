@@ -93,7 +93,7 @@ abstract class AbstractController {
 	protected function collection_params(): array {
 		return array(
 			'page'     => array(
-				'description'       => __( 'Current page of the collection.', 'ferry-booking-manager' ),
+				'description'       => __( 'Current page of the collection.', 'magepeople-ferry-booking-system' ),
 				'type'              => 'integer',
 				'default'           => 1,
 				'minimum'           => 1,
@@ -101,7 +101,7 @@ abstract class AbstractController {
 				'validate_callback' => 'rest_validate_request_arg',
 			),
 			'per_page' => array(
-				'description'       => __( 'Maximum number of items returned per page.', 'ferry-booking-manager' ),
+				'description'       => __( 'Maximum number of items returned per page.', 'magepeople-ferry-booking-system' ),
 				'type'              => 'integer',
 				'default'           => 20,
 				'enum'              => self::PER_PAGE_OPTIONS,
@@ -109,14 +109,14 @@ abstract class AbstractController {
 				'validate_callback' => 'rest_validate_request_arg',
 			),
 			'search'   => array(
-				'description'       => __( 'Limit results to those matching a string.', 'ferry-booking-manager' ),
+				'description'       => __( 'Limit results to those matching a string.', 'magepeople-ferry-booking-system' ),
 				'type'              => 'string',
 				'default'           => '',
 				'sanitize_callback' => 'sanitize_text_field',
 				'validate_callback' => 'rest_validate_request_arg',
 			),
 			'order'    => array(
-				'description'       => __( 'Sort direction.', 'ferry-booking-manager' ),
+				'description'       => __( 'Sort direction.', 'magepeople-ferry-booking-system' ),
 				'type'              => 'string',
 				'default'           => 'desc',
 				'enum'              => array( 'asc', 'desc' ),

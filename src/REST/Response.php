@@ -146,7 +146,7 @@ final class Response {
 			$code    = is_array( $data ) && isset( $data['code'] ) ? (string) $data['code'] : 'fbm_error';
 			$message = is_array( $data ) && isset( $data['message'] )
 				? (string) $data['message']
-				: __( 'The request could not be completed.', 'ferry-booking-manager' );
+				: __( 'The request could not be completed.', 'magepeople-ferry-booking-system' );
 			$extra   = is_array( $data ) && isset( $data['data'] ) && is_array( $data['data'] ) ? $data['data'] : array();
 
 			if ( 0 !== strpos( $code, 'fbm_' ) ) {

@@ -1,5 +1,5 @@
 /**
- * Next.js configuration for the Ferry Booking Manager dashboard.
+ * Next.js configuration for the MagePeople Ferry Booking System dashboard.
  *
  * The dashboard is exported to static HTML/JS at build time and served by
  * WordPress from the plugin's assets directory. No Node process ever runs on

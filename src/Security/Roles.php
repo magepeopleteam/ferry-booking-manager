@@ -38,11 +38,11 @@ final class Roles {
 	public static function definitions(): array {
 		$definitions = array(
 			self::FERRY_MANAGER   => array(
-				'label'        => __( 'Ferry Manager', 'ferry-booking-manager' ),
+				'label'        => __( 'Ferry Manager', 'magepeople-ferry-booking-system' ),
 				'capabilities' => Capabilities::all(),
 			),
 			self::BOOKING_MANAGER => array(
-				'label'        => __( 'Ferry Booking Manager', 'ferry-booking-manager' ),
+				'label'        => __( 'MagePeople Ferry Booking System', 'magepeople-ferry-booking-system' ),
 				'capabilities' => array(
 					Capabilities::ACCESS_DASHBOARD,
 					Capabilities::MANAGE_SAILINGS,
@@ -55,7 +55,7 @@ final class Roles {
 				),
 			),
 			self::CASHIER         => array(
-				'label'        => __( 'Ferry Cashier', 'ferry-booking-manager' ),
+				'label'        => __( 'Ferry Cashier', 'magepeople-ferry-booking-system' ),
 				'capabilities' => array(
 					Capabilities::ACCESS_DASHBOARD,
 					Capabilities::MANAGE_BOOKINGS,
@@ -64,14 +64,14 @@ final class Roles {
 				),
 			),
 			self::CHECKIN_STAFF   => array(
-				'label'        => __( 'Ferry Check-In Staff', 'ferry-booking-manager' ),
+				'label'        => __( 'Ferry Check-In Staff', 'magepeople-ferry-booking-system' ),
 				'capabilities' => array(
 					Capabilities::ACCESS_DASHBOARD,
 					Capabilities::CHECKIN,
 				),
 			),
 			self::AGENT           => array(
-				'label'        => __( 'Ferry Agent', 'ferry-booking-manager' ),
+				'label'        => __( 'Ferry Agent', 'magepeople-ferry-booking-system' ),
 				'capabilities' => array(
 					Capabilities::ACCESS_DASHBOARD,
 					Capabilities::CREATE_BOOKING,
@@ -80,7 +80,7 @@ final class Roles {
 		);
 
 		/**
-		 * Filters the roles provisioned by Ferry Booking Manager.
+		 * Filters the roles provisioned by MagePeople Ferry Booking System.
 		 *
 		 * @since 1.0.0
 		 *

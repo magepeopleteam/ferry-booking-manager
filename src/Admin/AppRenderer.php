@@ -149,11 +149,11 @@ final class AppRenderer {
 		);
 
 		echo '<div class="notice notice-error"><p><strong>';
-		esc_html_e( 'The Ferry Manager dashboard has not been built.', 'ferry-booking-manager' );
+		esc_html_e( 'The Ferry Manager dashboard has not been built.', 'magepeople-ferry-booking-system' );
 		echo '</strong></p><p>';
 		printf(
 			/* translators: %s: build command. */
-			esc_html__( 'Run %s inside the plugin folder to produce the dashboard bundle, then reload this page.', 'ferry-booking-manager' ),
+			esc_html__( 'Run %s inside the plugin folder to produce the dashboard bundle, then reload this page.', 'magepeople-ferry-booking-system' ),
 			'<code>npm --prefix apps/admin ci &amp;&amp; npm --prefix apps/admin run build</code>'
 		);
 		echo '</p></div>';

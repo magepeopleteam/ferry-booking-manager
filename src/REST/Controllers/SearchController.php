@@ -110,13 +110,13 @@ final class SearchController extends AbstractController {
 					'permission_callback' => $this->permissions->rest_public_callback( 'fares', 120 ),
 					'args'                => array(
 						'origin'      => array(
-							'description'       => __( 'Departure port id.', 'ferry-booking-manager' ),
+							'description'       => __( 'Departure port id.', 'magepeople-ferry-booking-system' ),
 							'type'              => 'integer',
 							'default'           => 0,
 							'sanitize_callback' => 'absint',
 						),
 						'destination' => array(
-							'description'       => __( 'Arrival port id.', 'ferry-booking-manager' ),
+							'description'       => __( 'Arrival port id.', 'magepeople-ferry-booking-system' ),
 							'type'              => 'integer',
 							'default'           => 0,
 							'sanitize_callback' => 'absint',
@@ -378,31 +378,31 @@ final class SearchController extends AbstractController {
 	private function search_args(): array {
 		return array(
 			'origin'        => array(
-				'description'       => __( 'Departure port id.', 'ferry-booking-manager' ),
+				'description'       => __( 'Departure port id.', 'magepeople-ferry-booking-system' ),
 				'type'              => 'integer',
 				'required'          => true,
 				'sanitize_callback' => 'absint',
 			),
 			'destination'   => array(
-				'description'       => __( 'Arrival port id.', 'ferry-booking-manager' ),
+				'description'       => __( 'Arrival port id.', 'magepeople-ferry-booking-system' ),
 				'type'              => 'integer',
 				'required'          => true,
 				'sanitize_callback' => 'absint',
 			),
 			'date'          => array(
-				'description'       => __( 'Departure date, YYYY-MM-DD.', 'ferry-booking-manager' ),
+				'description'       => __( 'Departure date, YYYY-MM-DD.', 'magepeople-ferry-booking-system' ),
 				'type'              => 'string',
 				'required'          => true,
 				'sanitize_callback' => 'sanitize_text_field',
 			),
 			'return_date'   => array(
-				'description'       => __( 'Return date, YYYY-MM-DD.', 'ferry-booking-manager' ),
+				'description'       => __( 'Return date, YYYY-MM-DD.', 'magepeople-ferry-booking-system' ),
 				'type'              => 'string',
 				'default'           => '',
 				'sanitize_callback' => 'sanitize_text_field',
 			),
 			'flexible_days' => array(
-				'description'       => __( 'Days either side of the chosen date to include.', 'ferry-booking-manager' ),
+				'description'       => __( 'Days either side of the chosen date to include.', 'magepeople-ferry-booking-system' ),
 				'type'              => 'integer',
 				'default'           => 0,
 				'minimum'           => 0,
@@ -410,12 +410,12 @@ final class SearchController extends AbstractController {
 				'sanitize_callback' => 'absint',
 			),
 			'passengers'    => array(
-				'description' => __( 'Passenger type id to quantity.', 'ferry-booking-manager' ),
+				'description' => __( 'Passenger type id to quantity.', 'magepeople-ferry-booking-system' ),
 				'type'        => array( 'object', 'string' ),
 				'default'     => array(),
 			),
 			'vehicles'      => array(
-				'description' => __( 'Vehicle type id to quantity.', 'ferry-booking-manager' ),
+				'description' => __( 'Vehicle type id to quantity.', 'magepeople-ferry-booking-system' ),
 				'type'        => array( 'object', 'string' ),
 				'default'     => array(),
 			),

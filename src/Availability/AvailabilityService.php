@@ -112,7 +112,7 @@ final class AvailabilityService {
 		if ( ! $sailing instanceof Sailing ) {
 			return new WP_Error(
 				'fbm_sailing_not_found',
-				__( 'That sailing could not be found.', 'ferry-booking-manager' ),
+				__( 'That sailing could not be found.', 'magepeople-ferry-booking-system' ),
 				array( 'status' => 404 )
 			);
 		}
@@ -547,22 +547,22 @@ final class AvailabilityService {
 	private function reason_message( string $reason ): string {
 		switch ( $reason ) {
 			case 'cancelled':
-				return __( 'This sailing has been cancelled.', 'ferry-booking-manager' );
+				return __( 'This sailing has been cancelled.', 'magepeople-ferry-booking-system' );
 
 			case 'not_open_yet':
-				return __( 'Bookings for this sailing have not opened yet.', 'ferry-booking-manager' );
+				return __( 'Bookings for this sailing have not opened yet.', 'magepeople-ferry-booking-system' );
 
 			case 'booking_closed':
-				return __( 'Bookings for this sailing have closed.', 'ferry-booking-manager' );
+				return __( 'Bookings for this sailing have closed.', 'magepeople-ferry-booking-system' );
 
 			case 'too_far_ahead':
-				return __( 'This sailing is not on sale yet.', 'ferry-booking-manager' );
+				return __( 'This sailing is not on sale yet.', 'magepeople-ferry-booking-system' );
 
 			case 'departed':
-				return __( 'This sailing has already departed.', 'ferry-booking-manager' );
+				return __( 'This sailing has already departed.', 'magepeople-ferry-booking-system' );
 
 			default:
-				return __( 'This sailing is not available for booking.', 'ferry-booking-manager' );
+				return __( 'This sailing is not available for booking.', 'magepeople-ferry-booking-system' );
 		}
 	}
 
@@ -579,14 +579,14 @@ final class AvailabilityService {
 		switch ( $measure ) {
 			case Availability::VEHICLES:
 				return 0 === (int) $remaining
-					? __( 'The vehicle deck on this sailing is full.', 'ferry-booking-manager' )
+					? __( 'The vehicle deck on this sailing is full.', 'magepeople-ferry-booking-system' )
 					: sprintf(
 						/* translators: %d: number of vehicle spaces left. */
 						_n(
 							'Only %d vehicle space is left on this sailing.',
 							'Only %d vehicle spaces are left on this sailing.',
 							(int) $remaining,
-							'ferry-booking-manager'
+							'magepeople-ferry-booking-system'
 						),
 						(int) $remaining
 					);
@@ -594,20 +594,20 @@ final class AvailabilityService {
 			case Availability::LANE_METRES:
 				return sprintf(
 					/* translators: %s: remaining lane metres. */
-					__( 'Only %s lane metres are left on this sailing.', 'ferry-booking-manager' ),
+					__( 'Only %s lane metres are left on this sailing.', 'magepeople-ferry-booking-system' ),
 					number_format_i18n( (float) $remaining, 1 )
 				);
 
 			default:
 				return 0 === (int) $remaining
-					? __( 'This sailing is sold out.', 'ferry-booking-manager' )
+					? __( 'This sailing is sold out.', 'magepeople-ferry-booking-system' )
 					: sprintf(
 						/* translators: %d: number of seats left. */
 						_n(
 							'Only %d seat is left on this sailing.',
 							'Only %d seats are left on this sailing.',
 							(int) $remaining,
-							'ferry-booking-manager'
+							'magepeople-ferry-booking-system'
 						),
 						(int) $remaining
 					);

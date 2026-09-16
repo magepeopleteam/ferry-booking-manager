@@ -72,7 +72,7 @@ final class CoreServiceProvider extends ServiceProvider {
 				}
 
 				/**
-				 * Fires during the daily Ferry Booking Manager maintenance run.
+				 * Fires during the daily MagePeople Ferry Booking System maintenance run.
 				 *
 				 * @since 1.0.0
 				 *

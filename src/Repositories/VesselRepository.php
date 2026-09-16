@@ -54,7 +54,7 @@ final class VesselRepository extends AbstractRepository {
 						'This vessel is assigned to %d sailing and cannot be deleted. Reassign or cancel that sailing first.',
 						'This vessel is assigned to %d sailings and cannot be deleted. Reassign or cancel those sailings first.',
 						$sailings,
-						'ferry-booking-manager'
+						'magepeople-ferry-booking-system'
 					),
 					$sailings
 				),
@@ -73,7 +73,7 @@ final class VesselRepository extends AbstractRepository {
 						'This vessel is the default for %d route and cannot be deleted.',
 						'This vessel is the default for %d routes and cannot be deleted.',
 						$routes,
-						'ferry-booking-manager'
+						'magepeople-ferry-booking-system'
 					),
 					$routes
 				),

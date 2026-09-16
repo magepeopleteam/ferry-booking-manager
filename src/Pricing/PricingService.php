@@ -117,7 +117,7 @@ final class PricingService {
 		if ( ! $sailing instanceof Sailing ) {
 			return new WP_Error(
 				'fbm_sailing_not_found',
-				__( 'That sailing could not be found.', 'ferry-booking-manager' ),
+				__( 'That sailing could not be found.', 'magepeople-ferry-booking-system' ),
 				array( 'status' => 404 )
 			);
 		}
@@ -128,7 +128,7 @@ final class PricingService {
 		if ( array() === $passengers && array() === $vehicles ) {
 			return new WP_Error(
 				'fbm_empty_quote',
-				__( 'Add at least one passenger or vehicle before asking for a price.', 'ferry-booking-manager' ),
+				__( 'Add at least one passenger or vehicle before asking for a price.', 'magepeople-ferry-booking-system' ),
 				array( 'status' => 400 )
 			);
 		}
@@ -148,7 +148,7 @@ final class PricingService {
 			if ( ! $return_sailing instanceof Sailing ) {
 				return new WP_Error(
 					'fbm_return_sailing_not_found',
-					__( 'That return sailing could not be found.', 'ferry-booking-manager' ),
+					__( 'That return sailing could not be found.', 'magepeople-ferry-booking-system' ),
 					array( 'status' => 404 )
 				);
 			}
@@ -161,10 +161,10 @@ final class PricingService {
 		$quote->return_sailing_id = $return_sailing instanceof Sailing ? $return_sailing->id : 0;
 		$quote->currency          = $this->currency();
 
-		$this->add_leg( $quote, $sailing, $passengers, $vehicles, __( 'Outbound', 'ferry-booking-manager' ) );
+		$this->add_leg( $quote, $sailing, $passengers, $vehicles, __( 'Outbound', 'magepeople-ferry-booking-system' ) );
 
 		if ( $return_sailing instanceof Sailing ) {
-			$this->add_leg( $quote, $return_sailing, $passengers, $vehicles, __( 'Return', 'ferry-booking-manager' ) );
+			$this->add_leg( $quote, $return_sailing, $passengers, $vehicles, __( 'Return', 'magepeople-ferry-booking-system' ) );
 		}
 
 		$quote->usage = $this->usage( $passengers, $vehicles );
@@ -478,7 +478,7 @@ final class PricingService {
 		if ( $is_return && (float) $settings['return_discount'] > 0 ) {
 			$quote->add_amount(
 				Quote::LINE_DISCOUNT,
-				__( 'Return journey discount', 'ferry-booking-manager' ),
+				__( 'Return journey discount', 'magepeople-ferry-booking-system' ),
 				-Money::percentage( $gross, (float) $settings['return_discount'] ),
 				array( 'rule' => 'return' )
 			);
@@ -498,7 +498,7 @@ final class PricingService {
 				Quote::LINE_DISCOUNT,
 				sprintf(
 					/* translators: %d: number of passengers needed for the discount. */
-					__( 'Group discount (%d or more)', 'ferry-booking-manager' ),
+					__( 'Group discount (%d or more)', 'magepeople-ferry-booking-system' ),
 					$threshold
 				),
 				-Money::percentage( $gross, (float) $settings['group_discount'] ),
@@ -510,7 +510,7 @@ final class PricingService {
 		if ( $quote->discount() > $gross ) {
 			$quote->add_amount(
 				Quote::LINE_DISCOUNT,
-				__( 'Discount cap', 'ferry-booking-manager' ),
+				__( 'Discount cap', 'magepeople-ferry-booking-system' ),
 				$quote->discount() - $gross,
 				array( 'rule' => 'cap' )
 			);
@@ -538,7 +538,7 @@ final class PricingService {
 		if ( (int) $settings['passenger_fee'] > 0 && $heads > 0 ) {
 			$quote->add(
 				Quote::LINE_FEE,
-				__( 'Passenger fee', 'ferry-booking-manager' ),
+				__( 'Passenger fee', 'magepeople-ferry-booking-system' ),
 				(int) $heads,
 				(int) $settings['passenger_fee'],
 				array( 'rule' => 'passenger' )
@@ -550,7 +550,7 @@ final class PricingService {
 		if ( (int) $settings['vehicle_fee'] > 0 && $units > 0 ) {
 			$quote->add(
 				Quote::LINE_FEE,
-				__( 'Vehicle fee', 'ferry-booking-manager' ),
+				__( 'Vehicle fee', 'magepeople-ferry-booking-system' ),
 				(int) $units,
 				(int) $settings['vehicle_fee'],
 				array( 'rule' => 'vehicle' )
@@ -599,7 +599,7 @@ final class PricingService {
 			Quote::LINE_TAX,
 			sprintf(
 				/* translators: 1: tax label, 2: tax rate. */
-				__( '%1$s at %2$s%%', 'ferry-booking-manager' ),
+				__( '%1$s at %2$s%%', 'magepeople-ferry-booking-system' ),
 				(string) $settings['tax_label'],
 				number_format_i18n( $rate, $whole_rate ? 0 : 2 )
 			),
@@ -660,7 +660,7 @@ final class PricingService {
 		if ( array_sum( $passengers ) + array_sum( $vehicles ) > self::MAX_UNITS ) {
 			return new WP_Error(
 				'fbm_party_too_large',
-				__( 'That is too large a party for one booking. Please split it.', 'ferry-booking-manager' ),
+				__( 'That is too large a party for one booking. Please split it.', 'magepeople-ferry-booking-system' ),
 				array( 'status' => 400 )
 			);
 		}
@@ -669,7 +669,7 @@ final class PricingService {
 			$type = $this->passenger_types->find( (int) $type_id );
 
 			if ( ! $type instanceof PassengerType || ! $type->is_active() ) {
-				$fields[ 'passengers.' . $type_id ] = __( 'That passenger type is not on sale.', 'ferry-booking-manager' );
+				$fields[ 'passengers.' . $type_id ] = __( 'That passenger type is not on sale.', 'magepeople-ferry-booking-system' );
 				continue;
 			}
 
@@ -679,7 +679,7 @@ final class PricingService {
 			if ( $max > 0 && $quantity > $max ) {
 				$fields[ 'passengers.' . $type_id ] = sprintf(
 					/* translators: 1: passenger type, 2: maximum allowed. */
-					__( 'At most %2$d %1$s can be booked at once.', 'ferry-booking-manager' ),
+					__( 'At most %2$d %1$s can be booked at once.', 'magepeople-ferry-booking-system' ),
 					$type->name,
 					$max
 				);
@@ -688,7 +688,7 @@ final class PricingService {
 			if ( $min > 0 && $quantity < $min ) {
 				$fields[ 'passengers.' . $type_id ] = sprintf(
 					/* translators: 1: passenger type, 2: minimum required. */
-					__( 'At least %2$d %1$s must be booked.', 'ferry-booking-manager' ),
+					__( 'At least %2$d %1$s must be booked.', 'magepeople-ferry-booking-system' ),
 					$type->name,
 					$min
 				);
@@ -702,14 +702,14 @@ final class PricingService {
 		// A child or infant travelling alone is not a pricing problem, it is a
 		// safeguarding one, so it is refused before a fare is ever shown.
 		if ( 0 === $adults && array() !== $passengers ) {
-			$fields['passengers'] = __( 'These passenger types must travel with an accompanying adult.', 'ferry-booking-manager' );
+			$fields['passengers'] = __( 'These passenger types must travel with an accompanying adult.', 'magepeople-ferry-booking-system' );
 		}
 
 		foreach ( $vehicles as $type_id => $quantity ) {
 			$type = $this->vehicle_types->find( (int) $type_id );
 
 			if ( ! $type instanceof VehicleType || ! $type->is_active() ) {
-				$fields[ 'vehicles.' . $type_id ] = __( 'That vehicle type is not on sale.', 'ferry-booking-manager' );
+				$fields[ 'vehicles.' . $type_id ] = __( 'That vehicle type is not on sale.', 'magepeople-ferry-booking-system' );
 				continue;
 			}
 
@@ -718,7 +718,7 @@ final class PricingService {
 			if ( $max > 0 && $quantity > $max ) {
 				$fields[ 'vehicles.' . $type_id ] = sprintf(
 					/* translators: 1: vehicle type, 2: maximum allowed. */
-					__( 'At most %2$d %1$s can be booked at once.', 'ferry-booking-manager' ),
+					__( 'At most %2$d %1$s can be booked at once.', 'magepeople-ferry-booking-system' ),
 					$type->name,
 					$max
 				);
@@ -729,14 +729,14 @@ final class PricingService {
 			$route = $this->routes->find( $sailing->route_id() );
 
 			if ( $route instanceof Route && ! (bool) $route->get( 'allows_vehicles' ) ) {
-				$fields['vehicles'] = __( 'This crossing does not carry vehicles.', 'ferry-booking-manager' );
+				$fields['vehicles'] = __( 'This crossing does not carry vehicles.', 'magepeople-ferry-booking-system' );
 			}
 		}
 
 		if ( array() !== $fields ) {
 			return new WP_Error(
 				'fbm_validation_failed',
-				__( 'Please correct the highlighted fields.', 'ferry-booking-manager' ),
+				__( 'Please correct the highlighted fields.', 'magepeople-ferry-booking-system' ),
 				array(
 					'status' => 400,
 					'fields' => $fields,
@@ -757,7 +757,7 @@ final class PricingService {
 	private function leg_label( string $leg, string $name ): string {
 		return sprintf(
 			/* translators: 1: journey leg, 2: passenger or vehicle type. */
-			__( '%1$s — %2$s', 'ferry-booking-manager' ),
+			__( '%1$s — %2$s', 'magepeople-ferry-booking-system' ),
 			$leg,
 			$name
 		);

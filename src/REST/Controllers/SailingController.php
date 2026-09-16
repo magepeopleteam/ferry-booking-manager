@@ -168,11 +168,11 @@ final class SailingController extends EntityController {
 			if ( $arrives <= $departs ) {
 				return new WP_Error(
 					'fbm_invalid_sailing',
-					__( 'The arrival must be after the departure.', 'ferry-booking-manager' ),
+					__( 'The arrival must be after the departure.', 'magepeople-ferry-booking-system' ),
 					array(
 						'status' => 422,
 						'fields' => array(
-							'arrival_datetime' => __( 'Arrival must be later than departure. Journeys that run past midnight are fine — use the next day’s date.', 'ferry-booking-manager' ),
+							'arrival_datetime' => __( 'Arrival must be later than departure. Journeys that run past midnight are fine — use the next day’s date.', 'magepeople-ferry-booking-system' ),
 						),
 					)
 				);
@@ -185,10 +185,10 @@ final class SailingController extends EntityController {
 		if ( '' !== $open && '' !== $close && Time::local_to_timestamp( $close ) <= Time::local_to_timestamp( $open ) ) {
 			return new WP_Error(
 				'fbm_invalid_sailing',
-				__( 'Bookings would close before they open.', 'ferry-booking-manager' ),
+				__( 'Bookings would close before they open.', 'magepeople-ferry-booking-system' ),
 				array(
 					'status' => 422,
-					'fields' => array( 'booking_close' => __( 'Choose a time after bookings open.', 'ferry-booking-manager' ) ),
+					'fields' => array( 'booking_close' => __( 'Choose a time after bookings open.', 'magepeople-ferry-booking-system' ) ),
 				)
 			);
 		}
@@ -206,13 +206,13 @@ final class SailingController extends EntityController {
 					'fbm_vessel_conflict',
 					sprintf(
 						/* translators: %s: the conflicting sailing's name. */
-						__( 'That vessel is already sailing at this time on “%s”. A vessel cannot be in two places at once.', 'ferry-booking-manager' ),
+						__( 'That vessel is already sailing at this time on “%s”. A vessel cannot be in two places at once.', 'magepeople-ferry-booking-system' ),
 						null === $other ? '' : $other->name
 					),
 					array(
 						'status' => 409,
 						'fields' => array(
-							'vessel_id' => __( 'This vessel is already committed to another sailing in that window.', 'ferry-booking-manager' ),
+							'vessel_id' => __( 'This vessel is already committed to another sailing in that window.', 'magepeople-ferry-booking-system' ),
 						),
 					)
 				);
@@ -276,7 +276,7 @@ final class SailingController extends EntityController {
 
 		foreach ( array( 'route_id', 'vessel_id' ) as $param ) {
 			$params[ $param ] = array(
-				'description'       => __( 'Filter by record id.', 'ferry-booking-manager' ),
+				'description'       => __( 'Filter by record id.', 'magepeople-ferry-booking-system' ),
 				'type'              => 'integer',
 				'default'           => 0,
 				'sanitize_callback' => 'absint',
@@ -285,7 +285,7 @@ final class SailingController extends EntityController {
 
 		foreach ( array( 'from', 'to', 'date' ) as $param ) {
 			$params[ $param ] = array(
-				'description'       => __( 'Filter by departure date.', 'ferry-booking-manager' ),
+				'description'       => __( 'Filter by departure date.', 'magepeople-ferry-booking-system' ),
 				'type'              => 'string',
 				'default'           => '',
 				'sanitize_callback' => 'sanitize_text_field',
@@ -382,37 +382,37 @@ final class SailingController extends EntityController {
 	private function schedule_params(): array {
 		return array(
 			'route_id'  => array(
-				'description'       => __( 'Route to schedule.', 'ferry-booking-manager' ),
+				'description'       => __( 'Route to schedule.', 'magepeople-ferry-booking-system' ),
 				'type'              => 'integer',
 				'sanitize_callback' => 'absint',
 			),
 			'vessel_id' => array(
-				'description'       => __( 'Vessel to assign.', 'ferry-booking-manager' ),
+				'description'       => __( 'Vessel to assign.', 'magepeople-ferry-booking-system' ),
 				'type'              => 'integer',
 				'sanitize_callback' => 'absint',
 			),
 			'date_from' => array(
-				'description'       => __( 'First date in the range.', 'ferry-booking-manager' ),
+				'description'       => __( 'First date in the range.', 'magepeople-ferry-booking-system' ),
 				'type'              => 'string',
 				'sanitize_callback' => 'sanitize_text_field',
 			),
 			'date_to'   => array(
-				'description'       => __( 'Last date in the range.', 'ferry-booking-manager' ),
+				'description'       => __( 'Last date in the range.', 'magepeople-ferry-booking-system' ),
 				'type'              => 'string',
 				'sanitize_callback' => 'sanitize_text_field',
 			),
 			'weekdays'  => array(
-				'description' => __( 'Days of the week to sail, 0 for Sunday through 6 for Saturday.', 'ferry-booking-manager' ),
+				'description' => __( 'Days of the week to sail, 0 for Sunday through 6 for Saturday.', 'magepeople-ferry-booking-system' ),
 				'type'        => 'array',
 				'items'       => array( 'type' => 'integer' ),
 			),
 			'times'     => array(
-				'description' => __( 'Departure times as HH:MM.', 'ferry-booking-manager' ),
+				'description' => __( 'Departure times as HH:MM.', 'magepeople-ferry-booking-system' ),
 				'type'        => 'array',
 				'items'       => array( 'type' => 'string' ),
 			),
 			'commit'    => array(
-				'description' => __( 'Create the sailings instead of previewing them.', 'ferry-booking-manager' ),
+				'description' => __( 'Create the sailings instead of previewing them.', 'magepeople-ferry-booking-system' ),
 				'type'        => 'boolean',
 				'default'     => false,
 			),

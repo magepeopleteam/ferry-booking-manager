@@ -103,7 +103,7 @@ final class Seeder {
 	public static function passenger_type_defaults(): array {
 		$defaults = array(
 			array(
-				'name'       => __( 'Adult', 'ferry-booking-manager' ),
+				'name'       => __( 'Adult', 'magepeople-ferry-booking-system' ),
 				'code'       => 'ADULT',
 				'min_age'    => 18,
 				'max_age'    => PassengerType::NO_AGE_LIMIT,
@@ -111,7 +111,7 @@ final class Seeder {
 				'sort_order' => 10,
 			),
 			array(
-				'name'       => __( 'Senior', 'ferry-booking-manager' ),
+				'name'       => __( 'Senior', 'magepeople-ferry-booking-system' ),
 				'code'       => 'SENIOR',
 				'min_age'    => 65,
 				'max_age'    => PassengerType::NO_AGE_LIMIT,
@@ -120,7 +120,7 @@ final class Seeder {
 				'sort_order' => 20,
 			),
 			array(
-				'name'       => __( 'Student', 'ferry-booking-manager' ),
+				'name'       => __( 'Student', 'magepeople-ferry-booking-system' ),
 				'code'       => 'STUDENT',
 				'min_age'    => 16,
 				'max_age'    => 30,
@@ -129,7 +129,7 @@ final class Seeder {
 				'sort_order' => 30,
 			),
 			array(
-				'name'       => __( 'Child', 'ferry-booking-manager' ),
+				'name'       => __( 'Child', 'magepeople-ferry-booking-system' ),
 				'code'       => 'CHILD',
 				'min_age'    => 2,
 				'max_age'    => 17,
@@ -140,7 +140,7 @@ final class Seeder {
 				'sort_order' => 40,
 			),
 			array(
-				'name'       => __( 'Infant', 'ferry-booking-manager' ),
+				'name'       => __( 'Infant', 'magepeople-ferry-booking-system' ),
 				'code'       => 'INFANT',
 				'min_age'    => 0,
 				'max_age'    => 1,
@@ -175,7 +175,7 @@ final class Seeder {
 	public static function vehicle_type_defaults(): array {
 		$defaults = array(
 			array(
-				'name'       => __( 'Bicycle', 'ferry-booking-manager' ),
+				'name'       => __( 'Bicycle', 'magepeople-ferry-booking-system' ),
 				'code'       => 'BICYCLE',
 				'category'   => 'bicycle',
 				'length'     => 1.8,
@@ -186,7 +186,7 @@ final class Seeder {
 				'sort_order' => 10,
 			),
 			array(
-				'name'       => __( 'Motorcycle', 'ferry-booking-manager' ),
+				'name'       => __( 'Motorcycle', 'magepeople-ferry-booking-system' ),
 				'code'       => 'MOTORCYCLE',
 				'category'   => 'motorcycle',
 				'length'     => 2.2,
@@ -194,7 +194,7 @@ final class Seeder {
 				'sort_order' => 20,
 			),
 			array(
-				'name'       => __( 'Car', 'ferry-booking-manager' ),
+				'name'       => __( 'Car', 'magepeople-ferry-booking-system' ),
 				'code'       => 'CAR',
 				'category'   => 'car',
 				'length'     => 4.5,
@@ -202,7 +202,7 @@ final class Seeder {
 				'sort_order' => 30,
 			),
 			array(
-				'name'       => __( 'Car with trailer', 'ferry-booking-manager' ),
+				'name'       => __( 'Car with trailer', 'magepeople-ferry-booking-system' ),
 				'code'       => 'CAR_TRAILER',
 				'category'   => 'car',
 				'length'     => 8.0,
@@ -211,7 +211,7 @@ final class Seeder {
 				'sort_order' => 40,
 			),
 			array(
-				'name'       => __( 'SUV or 4x4', 'ferry-booking-manager' ),
+				'name'       => __( 'SUV or 4x4', 'magepeople-ferry-booking-system' ),
 				'code'       => 'SUV',
 				'category'   => 'suv',
 				'length'     => 5.0,
@@ -219,7 +219,7 @@ final class Seeder {
 				'sort_order' => 50,
 			),
 			array(
-				'name'       => __( 'Van', 'ferry-booking-manager' ),
+				'name'       => __( 'Van', 'magepeople-ferry-booking-system' ),
 				'code'       => 'VAN',
 				'category'   => 'van',
 				'length'     => 6.0,
@@ -227,7 +227,7 @@ final class Seeder {
 				'sort_order' => 60,
 			),
 			array(
-				'name'       => __( 'Camper or motorhome', 'ferry-booking-manager' ),
+				'name'       => __( 'Camper or motorhome', 'magepeople-ferry-booking-system' ),
 				'code'       => 'CAMPER',
 				'category'   => 'camper',
 				'length'     => 7.5,
@@ -237,7 +237,7 @@ final class Seeder {
 				'sort_order' => 70,
 			),
 			array(
-				'name'       => __( 'Minibus', 'ferry-booking-manager' ),
+				'name'       => __( 'Minibus', 'magepeople-ferry-booking-system' ),
 				'code'       => 'MINIBUS',
 				'category'   => 'minibus',
 				'length'     => 7.0,
@@ -246,7 +246,7 @@ final class Seeder {
 				'sort_order' => 80,
 			),
 			array(
-				'name'       => __( 'Coach or bus', 'ferry-booking-manager' ),
+				'name'       => __( 'Coach or bus', 'magepeople-ferry-booking-system' ),
 				'code'       => 'BUS',
 				'category'   => 'bus',
 				'length'     => 12.0,
@@ -257,7 +257,7 @@ final class Seeder {
 				'sort_order' => 90,
 			),
 			array(
-				'name'       => __( 'Truck', 'ferry-booking-manager' ),
+				'name'       => __( 'Truck', 'magepeople-ferry-booking-system' ),
 				'code'       => 'TRUCK',
 				'category'   => 'truck',
 				'length'     => 16.5,

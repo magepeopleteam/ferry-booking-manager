@@ -41,7 +41,7 @@ final class FieldConfigController extends AbstractController {
 			array(
 				'args' => array(
 					'group' => array(
-						'description'       => __( 'Field group.', 'ferry-booking-manager' ),
+						'description'       => __( 'Field group.', 'magepeople-ferry-booking-system' ),
 						'type'              => 'string',
 						'required'          => true,
 						'enum'              => array( FieldConfig::GROUP_PASSENGER, FieldConfig::GROUP_VEHICLE ),
@@ -59,11 +59,11 @@ final class FieldConfigController extends AbstractController {
 					'permission_callback' => $this->can( Capabilities::MANAGE_SETTINGS ),
 					'args'                => array(
 						'modes'  => array(
-							'description' => __( 'Field key to mode map.', 'ferry-booking-manager' ),
+							'description' => __( 'Field key to mode map.', 'magepeople-ferry-booking-system' ),
 							'type'        => 'object',
 						),
 						'custom' => array(
-							'description' => __( 'Operator-defined extra fields.', 'ferry-booking-manager' ),
+							'description' => __( 'Operator-defined extra fields.', 'magepeople-ferry-booking-system' ),
 							'type'        => 'array',
 						),
 					),

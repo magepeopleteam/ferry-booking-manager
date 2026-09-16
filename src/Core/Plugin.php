@@ -94,8 +94,6 @@ final class Plugin {
 		$this->container->instance( 'plugin', $this );
 		$this->container->instance( 'container', $this->container );
 
-		$this->load_textdomain();
-
 		foreach ( $this->provider_classes() as $class_name ) {
 			if ( ! class_exists( $class_name ) ) {
 				continue;
@@ -118,7 +116,7 @@ final class Plugin {
 		/**
 		 * Fires once the Free plugin container is fully booted.
 		 *
-		 * This is the supported entry point for Ferry Booking Manager Pro and for
+		 * This is the supported entry point for MagePeople Ferry Booking System Pro and for
 		 * third-party integrations that need to resolve or decorate Free services.
 		 *
 		 * @since 1.0.0
@@ -160,25 +158,12 @@ final class Plugin {
 	}
 
 	/**
-	 * Loads the plugin translations.
-	 *
-	 * @return void
-	 */
-	private function load_textdomain(): void {
-		load_plugin_textdomain(
-			'ferry-booking-manager',
-			false,
-			dirname( FBM_BASENAME ) . '/languages'
-		);
-	}
-
-	/**
 	 * Prevents cloning of the kernel.
 	 *
 	 * @return void
 	 */
 	public function __clone() {
-		_doing_it_wrong( __METHOD__, esc_html__( 'The Ferry Booking Manager kernel cannot be cloned.', 'ferry-booking-manager' ), '1.0.0' );
+		_doing_it_wrong( __METHOD__, esc_html__( 'The MagePeople Ferry Booking System kernel cannot be cloned.', 'magepeople-ferry-booking-system' ), '1.0.0' );
 	}
 
 	/**
@@ -187,6 +172,6 @@ final class Plugin {
 	 * @return void
 	 */
 	public function __wakeup() {
-		_doing_it_wrong( __METHOD__, esc_html__( 'The Ferry Booking Manager kernel cannot be unserialised.', 'ferry-booking-manager' ), '1.0.0' );
+		_doing_it_wrong( __METHOD__, esc_html__( 'The MagePeople Ferry Booking System kernel cannot be unserialised.', 'magepeople-ferry-booking-system' ), '1.0.0' );
 	}
 }

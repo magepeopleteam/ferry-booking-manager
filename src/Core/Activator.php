@@ -47,7 +47,7 @@ final class Activator {
 		}
 
 		/**
-		 * Fires at the end of Ferry Booking Manager activation.
+		 * Fires at the end of MagePeople Ferry Booking System activation.
 		 *
 		 * @since 1.0.0
 		 */

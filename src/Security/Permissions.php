@@ -49,7 +49,7 @@ final class Permissions {
 		$allowed = current_user_can( $capability, ...$args );
 
 		/**
-		 * Filters a Ferry Booking Manager capability check.
+		 * Filters a MagePeople Ferry Booking System capability check.
 		 *
 		 * @since 1.0.0
 		 *
@@ -83,7 +83,7 @@ final class Permissions {
 		if ( ! is_user_logged_in() ) {
 			return new WP_Error(
 				'fbm_not_authenticated',
-				__( 'You must be signed in to perform this action.', 'ferry-booking-manager' ),
+				__( 'You must be signed in to perform this action.', 'magepeople-ferry-booking-system' ),
 				array( 'status' => 401 )
 			);
 		}
@@ -91,7 +91,7 @@ final class Permissions {
 		if ( ! $this->current_user_can( $capability, ...$args ) ) {
 			return new WP_Error(
 				'fbm_forbidden',
-				__( 'You do not have permission to perform this action.', 'ferry-booking-manager' ),
+				__( 'You do not have permission to perform this action.', 'magepeople-ferry-booking-system' ),
 				array( 'status' => 403 )
 			);
 		}
@@ -126,7 +126,7 @@ final class Permissions {
 			if ( ! $allowed && ! is_user_logged_in() ) {
 				return new WP_Error(
 					'fbm_public_api_disabled',
-					__( 'Online booking is not available.', 'ferry-booking-manager' ),
+					__( 'Online booking is not available.', 'magepeople-ferry-booking-system' ),
 					array( 'status' => 403 )
 				);
 			}

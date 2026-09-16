@@ -36,7 +36,7 @@ export function PlaceholderScreen( { route }: PlaceholderScreenProps ): JSX.Elem
 				icon={ route.icon }
 				title={
 					missing
-						? fbmText( 'Available in Ferry Booking Manager Pro.' )
+						? fbmText( 'Available in MagePeople Ferry Booking System Pro.' )
 						: fbmText( 'Coming in a later phase.' )
 				}
 				description={ fbmFormat( 'This module is delivered in development phase %s.', route.phase ) }

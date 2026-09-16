@@ -77,7 +77,7 @@ final class RouteRepository extends AbstractRepository {
 						'This route has %d scheduled sailing and cannot be deleted. Remove the sailing first.',
 						'This route has %d scheduled sailings and cannot be deleted. Remove those sailings first.',
 						$sailings,
-						'ferry-booking-manager'
+						'magepeople-ferry-booking-system'
 					),
 					$sailings
 				),

@@ -29,14 +29,14 @@ final class BankTransfer implements PaymentGatewayInterface {
 	 * {@inheritDoc}
 	 */
 	public function get_title(): string {
-		return __( 'Bank transfer', 'ferry-booking-manager' );
+		return __( 'Bank transfer', 'magepeople-ferry-booking-system' );
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	public function get_description(): string {
-		return __( 'Transfer the total to our account and quote your booking reference.', 'ferry-booking-manager' );
+		return __( 'Transfer the total to our account and quote your booking reference.', 'magepeople-ferry-booking-system' );
 	}
 
 	/**

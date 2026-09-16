@@ -113,67 +113,67 @@ final class FieldConfig {
 	private static function passenger_catalogue(): array {
 		return array(
 			'first_name'              => array(
-				'label'   => __( 'First name', 'ferry-booking-manager' ),
+				'label'   => __( 'First name', 'magepeople-ferry-booking-system' ),
 				'type'    => 'text',
 				'default' => self::MODE_REQUIRED,
 				'locked'  => true,
-				'hint'    => __( 'Always collected: passenger manifests are named lists.', 'ferry-booking-manager' ),
+				'hint'    => __( 'Always collected: passenger manifests are named lists.', 'magepeople-ferry-booking-system' ),
 			),
 			'last_name'               => array(
-				'label'   => __( 'Last name', 'ferry-booking-manager' ),
+				'label'   => __( 'Last name', 'magepeople-ferry-booking-system' ),
 				'type'    => 'text',
 				'default' => self::MODE_REQUIRED,
 				'locked'  => true,
 			),
 			'gender'                  => array(
-				'label'   => __( 'Gender', 'ferry-booking-manager' ),
+				'label'   => __( 'Gender', 'magepeople-ferry-booking-system' ),
 				'type'    => 'select',
 				'default' => self::MODE_OFF,
 			),
 			'date_of_birth'           => array(
-				'label'   => __( 'Date of birth', 'ferry-booking-manager' ),
+				'label'   => __( 'Date of birth', 'magepeople-ferry-booking-system' ),
 				'type'    => 'date',
 				'default' => self::MODE_OPTIONAL,
-				'hint'    => __( 'Passenger types that verify an age band ask for this regardless of the setting here.', 'ferry-booking-manager' ),
+				'hint'    => __( 'Passenger types that verify an age band ask for this regardless of the setting here.', 'magepeople-ferry-booking-system' ),
 			),
 			'nationality'             => array(
-				'label'   => __( 'Nationality', 'ferry-booking-manager' ),
+				'label'   => __( 'Nationality', 'magepeople-ferry-booking-system' ),
 				'type'    => 'text',
 				'default' => self::MODE_OFF,
 			),
 			'phone'                   => array(
-				'label'   => __( 'Phone', 'ferry-booking-manager' ),
+				'label'   => __( 'Phone', 'magepeople-ferry-booking-system' ),
 				'type'    => 'tel',
 				'default' => self::MODE_OFF,
 			),
 			'email'                   => array(
-				'label'   => __( 'Email', 'ferry-booking-manager' ),
+				'label'   => __( 'Email', 'magepeople-ferry-booking-system' ),
 				'type'    => 'email',
 				'default' => self::MODE_OFF,
 			),
 			'document_type'           => array(
-				'label'   => __( 'Document type', 'ferry-booking-manager' ),
+				'label'   => __( 'Document type', 'magepeople-ferry-booking-system' ),
 				'type'    => 'select',
 				'default' => self::MODE_OFF,
 			),
 			'document_number'         => array(
-				'label'   => __( 'Document number', 'ferry-booking-manager' ),
+				'label'   => __( 'Document number', 'magepeople-ferry-booking-system' ),
 				'type'    => 'text',
 				'default' => self::MODE_OFF,
-				'hint'    => __( 'Required by law on most international crossings.', 'ferry-booking-manager' ),
+				'hint'    => __( 'Required by law on most international crossings.', 'magepeople-ferry-booking-system' ),
 			),
 			'document_expiry'         => array(
-				'label'   => __( 'Document expiry', 'ferry-booking-manager' ),
+				'label'   => __( 'Document expiry', 'magepeople-ferry-booking-system' ),
 				'type'    => 'date',
 				'default' => self::MODE_OFF,
 			),
 			'emergency_contact_name'  => array(
-				'label'   => __( 'Emergency contact name', 'ferry-booking-manager' ),
+				'label'   => __( 'Emergency contact name', 'magepeople-ferry-booking-system' ),
 				'type'    => 'text',
 				'default' => self::MODE_OFF,
 			),
 			'emergency_contact_phone' => array(
-				'label'   => __( 'Emergency contact phone', 'ferry-booking-manager' ),
+				'label'   => __( 'Emergency contact phone', 'magepeople-ferry-booking-system' ),
 				'type'    => 'tel',
 				'default' => self::MODE_OFF,
 			),
@@ -188,64 +188,64 @@ final class FieldConfig {
 	private static function vehicle_catalogue(): array {
 		return array(
 			'registration'    => array(
-				'label'   => __( 'Registration number', 'ferry-booking-manager' ),
+				'label'   => __( 'Registration number', 'magepeople-ferry-booking-system' ),
 				'type'    => 'text',
 				'default' => self::MODE_REQUIRED,
-				'hint'    => __( 'Vehicle types can also demand this individually.', 'ferry-booking-manager' ),
+				'hint'    => __( 'Vehicle types can also demand this individually.', 'magepeople-ferry-booking-system' ),
 			),
 			'make'            => array(
-				'label'   => __( 'Make', 'ferry-booking-manager' ),
+				'label'   => __( 'Make', 'magepeople-ferry-booking-system' ),
 				'type'    => 'text',
 				'default' => self::MODE_OPTIONAL,
 			),
 			'model'           => array(
-				'label'   => __( 'Model', 'ferry-booking-manager' ),
+				'label'   => __( 'Model', 'magepeople-ferry-booking-system' ),
 				'type'    => 'text',
 				'default' => self::MODE_OPTIONAL,
 			),
 			'colour'          => array(
-				'label'   => __( 'Colour', 'ferry-booking-manager' ),
+				'label'   => __( 'Colour', 'magepeople-ferry-booking-system' ),
 				'type'    => 'text',
 				'default' => self::MODE_OFF,
 			),
 			'length'          => array(
-				'label'   => __( 'Length', 'ferry-booking-manager' ),
+				'label'   => __( 'Length', 'magepeople-ferry-booking-system' ),
 				'type'    => 'number',
 				'default' => self::MODE_OFF,
-				'hint'    => __( 'Collect this when you sell deck space by lane metre.', 'ferry-booking-manager' ),
+				'hint'    => __( 'Collect this when you sell deck space by lane metre.', 'magepeople-ferry-booking-system' ),
 			),
 			'width'           => array(
-				'label'   => __( 'Width', 'ferry-booking-manager' ),
+				'label'   => __( 'Width', 'magepeople-ferry-booking-system' ),
 				'type'    => 'number',
 				'default' => self::MODE_OFF,
 			),
 			'height'          => array(
-				'label'   => __( 'Height', 'ferry-booking-manager' ),
+				'label'   => __( 'Height', 'magepeople-ferry-booking-system' ),
 				'type'    => 'number',
 				'default' => self::MODE_OFF,
 			),
 			'weight'          => array(
-				'label'   => __( 'Weight', 'ferry-booking-manager' ),
+				'label'   => __( 'Weight', 'magepeople-ferry-booking-system' ),
 				'type'    => 'number',
 				'default' => self::MODE_OFF,
 			),
 			'driver_name'     => array(
-				'label'   => __( 'Driver name', 'ferry-booking-manager' ),
+				'label'   => __( 'Driver name', 'magepeople-ferry-booking-system' ),
 				'type'    => 'text',
 				'default' => self::MODE_OPTIONAL,
 			),
 			'driver_document' => array(
-				'label'   => __( 'Driver licence number', 'ferry-booking-manager' ),
+				'label'   => __( 'Driver licence number', 'magepeople-ferry-booking-system' ),
 				'type'    => 'text',
 				'default' => self::MODE_OFF,
 			),
 			'trailer'         => array(
-				'label'   => __( 'Trailer', 'ferry-booking-manager' ),
+				'label'   => __( 'Trailer', 'magepeople-ferry-booking-system' ),
 				'type'    => 'switch',
 				'default' => self::MODE_OFF,
 			),
 			'trailer_length'  => array(
-				'label'   => __( 'Trailer length', 'ferry-booking-manager' ),
+				'label'   => __( 'Trailer length', 'magepeople-ferry-booking-system' ),
 				'type'    => 'number',
 				'default' => self::MODE_OFF,
 			),
@@ -466,7 +466,7 @@ final class FieldConfig {
 			if ( '' === $value && $required ) {
 				$errors[ $key ] = sprintf(
 					/* translators: %s: field label. */
-					__( '%s is required.', 'ferry-booking-manager' ),
+					__( '%s is required.', 'magepeople-ferry-booking-system' ),
 					$field['label']
 				);
 				continue;
@@ -487,7 +487,7 @@ final class FieldConfig {
 		if ( array() !== $errors ) {
 			return new WP_Error(
 				'fbm_validation_failed',
-				__( 'Please correct the highlighted fields.', 'ferry-booking-manager' ),
+				__( 'Please correct the highlighted fields.', 'magepeople-ferry-booking-system' ),
 				array(
 					'status' => 400,
 					'fields' => $errors,
@@ -545,7 +545,7 @@ final class FieldConfig {
 		if ( 'email' === $type && ! is_email( $value ) ) {
 			return sprintf(
 				/* translators: %s: field label. */
-				__( '%s must be a valid email address.', 'ferry-booking-manager' ),
+				__( '%s must be a valid email address.', 'magepeople-ferry-booking-system' ),
 				$label
 			);
 		}
@@ -556,7 +556,7 @@ final class FieldConfig {
 			if ( 3 !== count( $parts ) || ! checkdate( $parts[1], $parts[2], $parts[0] ) ) {
 				return sprintf(
 					/* translators: %s: field label. */
-					__( '%s must be a real date.', 'ferry-booking-manager' ),
+					__( '%s must be a real date.', 'magepeople-ferry-booking-system' ),
 					$label
 				);
 			}
@@ -565,7 +565,7 @@ final class FieldConfig {
 		if ( 'number' === $type && ! is_numeric( $value ) ) {
 			return sprintf(
 				/* translators: %s: field label. */
-				__( '%s must be a number.', 'ferry-booking-manager' ),
+				__( '%s must be a number.', 'magepeople-ferry-booking-system' ),
 				$label
 			);
 		}

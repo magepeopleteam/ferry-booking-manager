@@ -167,52 +167,52 @@ final class MetricsService {
 			'today'      => Time::now( 'Y-m-d' ),
 			'metrics'    => array(
 				'sailings'   => array(
-					'label' => __( 'Sailings today', 'ferry-booking-manager' ),
+					'label' => __( 'Sailings today', 'magepeople-ferry-booking-system' ),
 					'value' => count( $departures ),
 					'hint'  => $this->departure_hint( $departures ),
 				),
 				'passengers' => array(
-					'label' => __( 'Passengers today', 'ferry-booking-manager' ),
+					'label' => __( 'Passengers today', 'magepeople-ferry-booking-system' ),
 					'value' => $travelling['passengers'],
 					'hint'  => $this->load_hint( $departures ),
 				),
 				'vehicles'   => array(
-					'label' => __( 'Vehicles today', 'ferry-booking-manager' ),
+					'label' => __( 'Vehicles today', 'magepeople-ferry-booking-system' ),
 					'value' => $travelling['vehicles'],
 					'hint'  => '',
 				),
 				'revenue'    => array(
-					'label' => __( 'Sold today', 'ferry-booking-manager' ),
+					'label' => __( 'Sold today', 'magepeople-ferry-booking-system' ),
 					'value' => $sold['total'],
 					'money' => true,
 					'hint'  => $this->count_hint( $sold['count'] ),
 				),
 				'checked_in' => array(
-					'label' => __( 'Checked in', 'ferry-booking-manager' ),
+					'label' => __( 'Checked in', 'magepeople-ferry-booking-system' ),
 					'value' => $travelling['checked_in'],
 					'hint'  => '',
 					'pro'   => true,
 				),
 				'boarded'    => array(
-					'label' => __( 'Boarded', 'ferry-booking-manager' ),
+					'label' => __( 'Boarded', 'magepeople-ferry-booking-system' ),
 					'value' => $travelling['boarded'],
 					'hint'  => '',
 					'pro'   => true,
 				),
 				'pending'    => array(
-					'label' => __( 'Awaiting payment', 'ferry-booking-manager' ),
+					'label' => __( 'Awaiting payment', 'magepeople-ferry-booking-system' ),
 					'value' => $outstanding['amount'],
 					'money' => true,
 					'hint'  => $this->count_hint( $outstanding['count'] ),
 					'tone'  => $outstanding['count'] > 0 ? 'warning' : 'muted',
 				),
 				'cancelled'  => array(
-					'label' => __( 'Cancelled today', 'ferry-booking-manager' ),
+					'label' => __( 'Cancelled today', 'magepeople-ferry-booking-system' ),
 					'value' => $sold['cancelled'],
 					'hint'  => '',
 				),
 				'refunds'    => array(
-					'label' => __( 'Refunded today', 'ferry-booking-manager' ),
+					'label' => __( 'Refunded today', 'magepeople-ferry-booking-system' ),
 					'value' => $sold['refunded'],
 					'money' => true,
 					'hint'  => '',
@@ -489,7 +489,7 @@ final class MetricsService {
 	 */
 	private function departure_hint( array $departures ): string {
 		if ( array() === $departures ) {
-			return __( 'Nothing scheduled', 'ferry-booking-manager' );
+			return __( 'Nothing scheduled', 'magepeople-ferry-booking-system' );
 		}
 
 		$first = $departures[0]['time'] ?? '';
@@ -499,7 +499,7 @@ final class MetricsService {
 			? (string) $first
 			: sprintf(
 				/* translators: 1: first departure time, 2: last departure time. */
-				__( '%1$s to %2$s', 'ferry-booking-manager' ),
+				__( '%1$s to %2$s', 'magepeople-ferry-booking-system' ),
 				(string) $first,
 				(string) $last
 			);
@@ -526,7 +526,7 @@ final class MetricsService {
 
 		return sprintf(
 			/* translators: %d: percentage of the day's seats sold. */
-			__( '%d%% of today’s seats', 'ferry-booking-manager' ),
+			__( '%d%% of today’s seats', 'magepeople-ferry-booking-system' ),
 			(int) round( ( $booked / $capacity ) * 100 )
 		);
 	}
@@ -544,7 +544,7 @@ final class MetricsService {
 
 		return sprintf(
 			/* translators: %d: number of bookings. */
-			_n( '%d booking', '%d bookings', $count, 'ferry-booking-manager' ),
+			_n( '%d booking', '%d bookings', $count, 'magepeople-ferry-booking-system' ),
 			$count
 		);
 	}

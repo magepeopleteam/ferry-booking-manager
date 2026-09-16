@@ -99,12 +99,12 @@ final class HealthController extends AbstractController {
 			'properties' => array(
 				'status'       => array(
 					'type'        => 'string',
-					'description' => __( 'Always "ok" when the plugin is running.', 'ferry-booking-manager' ),
+					'description' => __( 'Always "ok" when the plugin is running.', 'magepeople-ferry-booking-system' ),
 					'readonly'    => true,
 				),
 				'version'      => array(
 					'type'        => 'string',
-					'description' => __( 'Plugin version.', 'ferry-booking-manager' ),
+					'description' => __( 'Plugin version.', 'magepeople-ferry-booking-system' ),
 					'readonly'    => true,
 				),
 				'php'          => array(

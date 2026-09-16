@@ -152,7 +152,7 @@ export function ReportsScreen(): JSX.Element {
 				/>
 				<EmptyState
 					icon="chart"
-					title={ fbmText( 'Available in Ferry Booking Manager Pro.' ) }
+					title={ fbmText( 'Available in MagePeople Ferry Booking System Pro.' ) }
 					description={ fbmText( 'Revenue over time, and where it came from: by route, vessel, sales channel, payment method, fare type and extra.' ) }
 				/>
 			</>

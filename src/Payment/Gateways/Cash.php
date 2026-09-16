@@ -29,14 +29,14 @@ final class Cash implements PaymentGatewayInterface {
 	 * {@inheritDoc}
 	 */
 	public function get_title(): string {
-		return __( 'Cash', 'ferry-booking-manager' );
+		return __( 'Cash', 'magepeople-ferry-booking-system' );
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	public function get_description(): string {
-		return __( 'Pay with cash at the terminal before boarding.', 'ferry-booking-manager' );
+		return __( 'Pay with cash at the terminal before boarding.', 'magepeople-ferry-booking-system' );
 	}
 
 	/**

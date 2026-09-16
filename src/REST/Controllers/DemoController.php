@@ -75,7 +75,7 @@ final class DemoController extends AbstractController {
 					'permission_callback' => $this->can( Capabilities::MANAGE_SETTINGS ),
 					'args'                => array(
 						'step' => array(
-							'description'       => __( 'Zero-based import step.', 'ferry-booking-manager' ),
+							'description'       => __( 'Zero-based import step.', 'magepeople-ferry-booking-system' ),
 							'type'              => 'integer',
 							'default'           => 0,
 							'minimum'           => 0,

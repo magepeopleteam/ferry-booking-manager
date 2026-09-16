@@ -150,14 +150,14 @@ final class DemoContent {
 		$total  = array_sum( $counts );
 
 		return array(
-			'title'       => __( 'New York Harbor & Sound Ferries', 'ferry-booking-manager' ),
-			'description' => __( 'A complete demo operation: harbour crossings to Staten Island, Governors Island and DUMBO, plus vehicle ferries across Long Island Sound. Priced, scheduled ten days ahead in both directions, and ready to book.', 'ferry-booking-manager' ),
+			'title'       => __( 'New York Harbor & Sound Ferries', 'magepeople-ferry-booking-system' ),
+			'description' => __( 'A complete demo operation: harbour crossings to Staten Island, Governors Island and DUMBO, plus vehicle ferries across Long Island Sound. Priced, scheduled ten days ahead in both directions, and ready to book.', 'magepeople-ferry-booking-system' ),
 			'includes'    => array(
-				__( '8 terminals in New York and Connecticut', 'ferry-booking-manager' ),
-				__( '5 vessels, two of them carrying vehicles', 'ferry-booking-manager' ),
-				__( '10 routes — every crossing has its return', 'ferry-booking-manager' ),
-				__( 'Fares for every passenger and vehicle type', 'ferry-booking-manager' ),
-				__( '10 days of departures, open for booking', 'ferry-booking-manager' ),
+				__( '8 terminals in New York and Connecticut', 'magepeople-ferry-booking-system' ),
+				__( '5 vessels, two of them carrying vehicles', 'magepeople-ferry-booking-system' ),
+				__( '10 routes — every crossing has its return', 'magepeople-ferry-booking-system' ),
+				__( 'Fares for every passenger and vehicle type', 'magepeople-ferry-booking-system' ),
+				__( '10 days of departures, open for booking', 'magepeople-ferry-booking-system' ),
 			),
 			'installed'   => $total > 0,
 			'counts'      => $counts,
@@ -216,7 +216,7 @@ final class DemoContent {
 		if ( $index < 0 || $index >= $this->steps() ) {
 			return new WP_Error(
 				'fbm_demo_step',
-				__( 'That import step does not exist.', 'ferry-booking-manager' ),
+				__( 'That import step does not exist.', 'magepeople-ferry-booking-system' ),
 				array( 'status' => 400 )
 			);
 		}
@@ -340,7 +340,7 @@ final class DemoContent {
 
 		$this->apply_branding();
 
-		return __( 'Terminals and vessels', 'ferry-booking-manager' );
+		return __( 'Terminals and vessels', 'magepeople-ferry-booking-system' );
 	}
 
 	/**
@@ -387,7 +387,7 @@ final class DemoContent {
 			$this->remember( $this->routes->save( $fields, $id, $route['name'] ) );
 		}
 
-		return __( 'Routes and fares', 'ferry-booking-manager' );
+		return __( 'Routes and fares', 'magepeople-ferry-booking-system' );
 	}
 
 	/**
@@ -432,7 +432,7 @@ final class DemoContent {
 		}
 
 		/* translators: %s: date the departures were scheduled for. */
-		return sprintf( __( 'Departures for %s', 'ferry-booking-manager' ), $day );
+		return sprintf( __( 'Departures for %s', 'magepeople-ferry-booking-system' ), $day );
 	}
 
 	/**
@@ -493,7 +493,7 @@ final class DemoContent {
 		}
 
 		if ( '' === (string) Settings::get( 'company_name', '' ) ) {
-			$changes['company_name'] = __( 'New York Harbor & Sound Ferries', 'ferry-booking-manager' );
+			$changes['company_name'] = __( 'New York Harbor & Sound Ferries', 'magepeople-ferry-booking-system' );
 		}
 
 		if ( array() !== $changes ) {
@@ -631,7 +631,7 @@ final class DemoContent {
 						'latitude'             => $latitude,
 						'longitude'            => $longitude,
 						'checkin_minutes'      => $checkin,
-						'checkin_instructions' => __( 'Bring your booking reference. Foot passengers may check in at the kiosk; vehicles use the marshalling lanes.', 'ferry-booking-manager' ),
+						'checkin_instructions' => __( 'Bring your booking reference. Foot passengers may check in at the kiosk; vehicles use the marshalling lanes.', 'magepeople-ferry-booking-system' ),
 						'contact_email'        => 'terminal@example.com',
 					)
 				),
@@ -648,11 +648,11 @@ final class DemoContent {
 	 */
 	private static function vessels(): array {
 		$rows = array(
-			array( 'SIF-01', 'MV Staten Islander', 4400, 0, 16.0, __( 'Step-free access, open upper deck, snack bar', 'ferry-booking-manager' ) ),
-			array( 'HRB-02', 'MV Harbor Spirit', 399, 0, 24.0, __( 'Wi-Fi, bar service, bicycle racks', 'ferry-booking-manager' ) ),
-			array( 'GOV-03', 'MV Governors Belle', 600, 0, 14.0, __( 'Open deck, bicycle racks, step-free access', 'ferry-booking-manager' ) ),
-			array( 'SND-04', 'MV Grand Republic', 1000, 100, 17.0, __( 'Vehicle deck, cafeteria, sun deck, pet area', 'ferry-booking-manager' ) ),
-			array( 'SND-05', 'MV Cross Sound', 950, 120, 18.0, __( 'Vehicle deck, cafeteria, quiet lounge', 'ferry-booking-manager' ) ),
+			array( 'SIF-01', 'MV Staten Islander', 4400, 0, 16.0, __( 'Step-free access, open upper deck, snack bar', 'magepeople-ferry-booking-system' ) ),
+			array( 'HRB-02', 'MV Harbor Spirit', 399, 0, 24.0, __( 'Wi-Fi, bar service, bicycle racks', 'magepeople-ferry-booking-system' ) ),
+			array( 'GOV-03', 'MV Governors Belle', 600, 0, 14.0, __( 'Open deck, bicycle racks, step-free access', 'magepeople-ferry-booking-system' ) ),
+			array( 'SND-04', 'MV Grand Republic', 1000, 100, 17.0, __( 'Vehicle deck, cafeteria, sun deck, pet area', 'magepeople-ferry-booking-system' ) ),
+			array( 'SND-05', 'MV Cross Sound', 950, 120, 18.0, __( 'Vehicle deck, cafeteria, quiet lounge', 'magepeople-ferry-booking-system' ) ),
 		);
 
 		$vessels = array();
@@ -752,16 +752,16 @@ final class DemoContent {
 		 * crossing time plus a turnaround long enough to unload and load.
 		 */
 		$rows = array(
-			array( 'NY-BAT-STG', 'Battery Park → St. George', 'NYBAT', 'NYSTG', 25, 5.2, 'SIF-01', false, $harbour, 400, __( 'The classic harbour crossing, past the Statue of Liberty.', 'ferry-booking-manager' ), 0 ),
-			array( 'NY-STG-BAT', 'St. George → Battery Park', 'NYSTG', 'NYBAT', 25, 5.2, 'SIF-01', false, $harbour, 400, __( 'The return crossing into Lower Manhattan.', 'ferry-booking-manager' ), 40 ),
-			array( 'NY-BAT-GOV', 'Battery Park → Governors Island', 'NYBAT', 'NYGOV', 8, 1.1, 'GOV-03', false, $harbour, 400, __( 'A short hop to the island parks and the Hills.', 'ferry-booking-manager' ), 0 ),
-			array( 'NY-GOV-BAT', 'Governors Island → Battery Park', 'NYGOV', 'NYBAT', 8, 1.1, 'GOV-03', false, $harbour, 400, __( 'Back to the Battery.', 'ferry-booking-manager' ), 25 ),
-			array( 'NY-DUM-BAT', 'DUMBO → Battery Park', 'NYDUM', 'NYBAT', 12, 2.4, 'HRB-02', false, $harbour, 425, __( 'Under the Brooklyn Bridge to Lower Manhattan.', 'ferry-booking-manager' ), 0 ),
-			array( 'NY-BAT-DUM', 'Battery Park → DUMBO', 'NYBAT', 'NYDUM', 12, 2.4, 'HRB-02', false, $harbour, 425, __( 'Across the East River to Brooklyn Bridge Park.', 'ferry-booking-manager' ), 30 ),
-			array( 'LI-PTJ-BRI', 'Port Jefferson → Bridgeport', 'NYPTJ', 'CTBRI', 75, 16.0, 'SND-04', true, $sound, 1950, __( 'Across Long Island Sound with your vehicle.', 'ferry-booking-manager' ), 0 ),
-			array( 'LI-BRI-PTJ', 'Bridgeport → Port Jefferson', 'CTBRI', 'NYPTJ', 75, 16.0, 'SND-04', true, $sound, 1950, __( 'The Connecticut side of the Sound crossing.', 'ferry-booking-manager' ), 105 ),
-			array( 'LI-ORP-NLO', 'Orient Point → New London', 'NYORP', 'CTNLO', 80, 16.5, 'SND-05', true, $sound, 2100, __( 'The North Fork crossing to Connecticut.', 'ferry-booking-manager' ), 0 ),
-			array( 'LI-NLO-ORP', 'New London → Orient Point', 'CTNLO', 'NYORP', 80, 16.5, 'SND-05', true, $sound, 2100, __( 'Back to the North Fork of Long Island.', 'ferry-booking-manager' ), 110 ),
+			array( 'NY-BAT-STG', 'Battery Park → St. George', 'NYBAT', 'NYSTG', 25, 5.2, 'SIF-01', false, $harbour, 400, __( 'The classic harbour crossing, past the Statue of Liberty.', 'magepeople-ferry-booking-system' ), 0 ),
+			array( 'NY-STG-BAT', 'St. George → Battery Park', 'NYSTG', 'NYBAT', 25, 5.2, 'SIF-01', false, $harbour, 400, __( 'The return crossing into Lower Manhattan.', 'magepeople-ferry-booking-system' ), 40 ),
+			array( 'NY-BAT-GOV', 'Battery Park → Governors Island', 'NYBAT', 'NYGOV', 8, 1.1, 'GOV-03', false, $harbour, 400, __( 'A short hop to the island parks and the Hills.', 'magepeople-ferry-booking-system' ), 0 ),
+			array( 'NY-GOV-BAT', 'Governors Island → Battery Park', 'NYGOV', 'NYBAT', 8, 1.1, 'GOV-03', false, $harbour, 400, __( 'Back to the Battery.', 'magepeople-ferry-booking-system' ), 25 ),
+			array( 'NY-DUM-BAT', 'DUMBO → Battery Park', 'NYDUM', 'NYBAT', 12, 2.4, 'HRB-02', false, $harbour, 425, __( 'Under the Brooklyn Bridge to Lower Manhattan.', 'magepeople-ferry-booking-system' ), 0 ),
+			array( 'NY-BAT-DUM', 'Battery Park → DUMBO', 'NYBAT', 'NYDUM', 12, 2.4, 'HRB-02', false, $harbour, 425, __( 'Across the East River to Brooklyn Bridge Park.', 'magepeople-ferry-booking-system' ), 30 ),
+			array( 'LI-PTJ-BRI', 'Port Jefferson → Bridgeport', 'NYPTJ', 'CTBRI', 75, 16.0, 'SND-04', true, $sound, 1950, __( 'Across Long Island Sound with your vehicle.', 'magepeople-ferry-booking-system' ), 0 ),
+			array( 'LI-BRI-PTJ', 'Bridgeport → Port Jefferson', 'CTBRI', 'NYPTJ', 75, 16.0, 'SND-04', true, $sound, 1950, __( 'The Connecticut side of the Sound crossing.', 'magepeople-ferry-booking-system' ), 105 ),
+			array( 'LI-ORP-NLO', 'Orient Point → New London', 'NYORP', 'CTNLO', 80, 16.5, 'SND-05', true, $sound, 2100, __( 'The North Fork crossing to Connecticut.', 'magepeople-ferry-booking-system' ), 0 ),
+			array( 'LI-NLO-ORP', 'New London → Orient Point', 'CTNLO', 'NYORP', 80, 16.5, 'SND-05', true, $sound, 2100, __( 'Back to the North Fork of Long Island.', 'magepeople-ferry-booking-system' ), 110 ),
 		);
 
 		$routes = array();

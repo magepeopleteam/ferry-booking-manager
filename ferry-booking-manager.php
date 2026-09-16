@@ -1,6 +1,6 @@
 <?php
 /**
- * Plugin Name:       Ferry Booking Manager
+ * Plugin Name:       MagePeople Ferry Booking System
  * Plugin URI:        https://mage-people.com/ferry-booking-manager/
  * Description:       Production-grade ferry booking and ferry operations management for WordPress. Vessels, ports, routes, sailings, passengers, vehicles, availability, pricing, bookings, WooCommerce and native checkout.
  * Version:           1.0.0
@@ -10,7 +10,7 @@
  * Author URI:        https://mage-people.com/
  * License:           GPL-2.0-or-later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
- * Text Domain:       ferry-booking-manager
+ * Text Domain:       magepeople-ferry-booking-system
  * Domain Path:       /languages
  *
  * @package FerryBookingManager
@@ -42,7 +42,7 @@ function fbm_environment_notice( $message ) {
 	add_action(
 		'admin_notices',
 		function () use ( $message ) {
-			echo '<div class="notice notice-error"><p><strong>Ferry Booking Manager</strong> &mdash; ' . esc_html( $message ) . '</p></div>';
+			echo '<div class="notice notice-error"><p><strong>MagePeople Ferry Booking System</strong> &mdash; ' . esc_html( $message ) . '</p></div>';
 		}
 	);
 }
@@ -59,7 +59,7 @@ function fbm_environment_is_supported() {
 		fbm_environment_notice(
 			sprintf(
 				/* translators: 1: required PHP version, 2: current PHP version. */
-				__( 'requires PHP %1$s or newer. This site runs PHP %2$s, so the plugin has not been loaded.', 'ferry-booking-manager' ),
+				__( 'requires PHP %1$s or newer. This site runs PHP %2$s, so the plugin has not been loaded.', 'magepeople-ferry-booking-system' ),
 				FBM_MIN_PHP,
 				PHP_VERSION
 			)
@@ -72,7 +72,7 @@ function fbm_environment_is_supported() {
 		fbm_environment_notice(
 			sprintf(
 				/* translators: 1: required WordPress version, 2: current WordPress version. */
-				__( 'requires WordPress %1$s or newer. This site runs WordPress %2$s, so the plugin has not been loaded.', 'ferry-booking-manager' ),
+				__( 'requires WordPress %1$s or newer. This site runs WordPress %2$s, so the plugin has not been loaded.', 'magepeople-ferry-booking-system' ),
 				FBM_MIN_WP,
 				$wp_version
 			)

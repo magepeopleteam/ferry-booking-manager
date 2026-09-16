@@ -285,7 +285,7 @@ export function PosScreen(): JSX.Element {
 				<PageHeader title={ fbmText( 'Counter' ) } badge={ <span className="fbm-badge fbm-badge--pro">PRO</span> } />
 				<EmptyState
 					icon="card"
-					title={ fbmText( 'Available in Ferry Booking Manager Pro.' ) }
+					title={ fbmText( 'Available in MagePeople Ferry Booking System Pro.' ) }
 					description={ fbmText( 'A fast till for selling at the quayside, taking cash or card and printing a ticket on a receipt printer.' ) }
 				/>
 			</>

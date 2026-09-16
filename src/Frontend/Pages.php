@@ -52,28 +52,28 @@ final class Pages {
 	public static function definitions(): array {
 		$definitions = array(
 			'booking'      => array(
-				'title'       => __( 'Book a Crossing', 'ferry-booking-manager' ),
+				'title'       => __( 'Book a Crossing', 'magepeople-ferry-booking-system' ),
 				'block'       => 'ferry-booking-manager/booking',
 				'shortcode'   => 'fbm_booking',
-				'description' => __( 'Search, choose a sailing and pay. The whole booking flow lives here.', 'ferry-booking-manager' ),
+				'description' => __( 'Search, choose a sailing and pay. The whole booking flow lives here.', 'magepeople-ferry-booking-system' ),
 			),
 			'confirmation' => array(
-				'title'       => __( 'Booking Confirmation', 'ferry-booking-manager' ),
+				'title'       => __( 'Booking Confirmation', 'magepeople-ferry-booking-system' ),
 				'block'       => 'ferry-booking-manager/confirmation',
 				'shortcode'   => 'fbm_confirmation',
-				'description' => __( 'Where a customer lands after paying. Shows their reference and tickets.', 'ferry-booking-manager' ),
+				'description' => __( 'Where a customer lands after paying. Shows their reference and tickets.', 'magepeople-ferry-booking-system' ),
 			),
 			'my_bookings'  => array(
-				'title'       => __( 'My Bookings', 'ferry-booking-manager' ),
+				'title'       => __( 'My Bookings', 'magepeople-ferry-booking-system' ),
 				'block'       => 'ferry-booking-manager/my-bookings',
 				'shortcode'   => 'fbm_my_bookings',
-				'description' => __( 'A customer’s upcoming and past crossings.', 'ferry-booking-manager' ),
+				'description' => __( 'A customer’s upcoming and past crossings.', 'magepeople-ferry-booking-system' ),
 			),
 			'lookup'       => array(
-				'title'       => __( 'Find My Booking', 'ferry-booking-manager' ),
+				'title'       => __( 'Find My Booking', 'magepeople-ferry-booking-system' ),
 				'block'       => 'ferry-booking-manager/lookup',
 				'shortcode'   => 'fbm_lookup',
-				'description' => __( 'Lets a guest retrieve a booking with a reference and email address.', 'ferry-booking-manager' ),
+				'description' => __( 'Lets a guest retrieve a booking with a reference and email address.', 'magepeople-ferry-booking-system' ),
 			),
 		);
 
@@ -281,7 +281,7 @@ final class Pages {
 		if ( isset( $definitions[ $key ] ) ) {
 			$states['fbm_page'] = sprintf(
 				/* translators: %s: the ferry page's purpose, e.g. "Book a Crossing". */
-				__( 'Ferry — %s', 'ferry-booking-manager' ),
+				__( 'Ferry — %s', 'magepeople-ferry-booking-system' ),
 				(string) $definitions[ $key ]['title']
 			);
 		}

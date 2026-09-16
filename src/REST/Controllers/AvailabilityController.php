@@ -84,7 +84,7 @@ final class AvailabilityController extends AbstractController {
 			array(
 				'args' => array(
 					'id' => array(
-						'description'       => __( 'Sailing id.', 'ferry-booking-manager' ),
+						'description'       => __( 'Sailing id.', 'magepeople-ferry-booking-system' ),
 						'type'              => 'integer',
 						'required'          => true,
 						'sanitize_callback' => 'absint',
@@ -109,7 +109,7 @@ final class AvailabilityController extends AbstractController {
 					'permission_callback' => $this->permissions->rest_public_callback( 'availability', 120 ),
 					'args'                => array(
 						'sailings' => array(
-							'description'       => __( 'Comma-separated sailing ids.', 'ferry-booking-manager' ),
+							'description'       => __( 'Comma-separated sailing ids.', 'magepeople-ferry-booking-system' ),
 							'type'              => 'string',
 							'default'           => '',
 							'sanitize_callback' => 'sanitize_text_field',
@@ -171,7 +171,7 @@ final class AvailabilityController extends AbstractController {
 		if ( array() === $ids ) {
 			return $this->fail(
 				'fbm_missing_sailings',
-				__( 'List the sailing ids you want availability for.', 'ferry-booking-manager' ),
+				__( 'List the sailing ids you want availability for.', 'magepeople-ferry-booking-system' ),
 				400
 			);
 		}
@@ -181,7 +181,7 @@ final class AvailabilityController extends AbstractController {
 				'fbm_batch_too_large',
 				sprintf(
 					/* translators: %d: maximum number of sailings per request. */
-					__( 'Ask about at most %d sailings at a time.', 'ferry-booking-manager' ),
+					__( 'Ask about at most %d sailings at a time.', 'magepeople-ferry-booking-system' ),
 					self::MAX_BATCH
 				),
 				400
@@ -206,21 +206,21 @@ final class AvailabilityController extends AbstractController {
 	private function quote_args(): array {
 		return array(
 			'passengers'  => array(
-				'description'       => __( 'Passenger seats requested.', 'ferry-booking-manager' ),
+				'description'       => __( 'Passenger seats requested.', 'magepeople-ferry-booking-system' ),
 				'type'              => 'integer',
 				'default'           => 0,
 				'minimum'           => 0,
 				'sanitize_callback' => 'absint',
 			),
 			'vehicles'    => array(
-				'description'       => __( 'Vehicle spaces requested.', 'ferry-booking-manager' ),
+				'description'       => __( 'Vehicle spaces requested.', 'magepeople-ferry-booking-system' ),
 				'type'              => 'integer',
 				'default'           => 0,
 				'minimum'           => 0,
 				'sanitize_callback' => 'absint',
 			),
 			'lane_metres' => array(
-				'description' => __( 'Lane metres requested.', 'ferry-booking-manager' ),
+				'description' => __( 'Lane metres requested.', 'magepeople-ferry-booking-system' ),
 				'type'        => 'number',
 				'default'     => 0,
 				'minimum'     => 0,

@@ -58,12 +58,11 @@ function fbm_uninstall_site() {
 	foreach ( array( 'fbm_vessel', 'fbm_port', 'fbm_route', 'fbm_sailing', 'fbm_booking', 'fbm_passenger_type', 'fbm_vehicle_type' ) as $post_type ) {
 		$ids = get_posts(
 			array(
-				'post_type'        => $post_type,
-				'post_status'      => 'any',
-				'numberposts'      => -1,
-				'fields'           => 'ids',
-				'no_found_rows'    => true,
-				'suppress_filters' => true,
+				'post_type'     => $post_type,
+				'post_status'   => 'any',
+				'numberposts'   => -1,
+				'fields'        => 'ids',
+				'no_found_rows' => true,
 			)
 		);
 

@@ -1,19 +1,18 @@
-=== Ferry Booking Manager ===
+=== MagePeople Ferry Booking System ===
 Contributors: magepeople
 Tags: ferry, booking, ticketing, woocommerce, transport
 Requires at least: 6.0
-Tested up to: 6.8
+Tested up to: 7.1
 Requires PHP: 8.0
 Stable tag: 1.0.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-Ferry booking and ferry operations management for WordPress. Vessels, ports,
-routes, sailings, passengers, vehicles, availability, pricing and bookings.
+Ferry booking and operations management for WordPress: vessels, routes, sailings, availability, pricing and bookings.
 
 == Description ==
 
-Ferry Booking Manager turns WordPress into a ferry reservation and operations
+MagePeople Ferry Booking System turns WordPress into a ferry reservation and operations
 system. Manage your fleet and terminals, publish a timetable, sell passenger and
 vehicle tickets through WooCommerce or a built-in checkout, and run the quayside
 from one dashboard.
@@ -110,7 +109,7 @@ direct edits to the plugin.
 
 **Upgrade to Pro**
 
-Ferry Booking Manager Pro extends the same free-plugin container and services.
+MagePeople Ferry Booking System Pro extends the same free-plugin container and services.
 It adds advanced commercial and operational tools including:
 
 * PDF tickets and ticket download links
@@ -123,7 +122,7 @@ It adds advanced commercial and operational tools including:
 * Agent accounts, commission handling and wallet tools
 * Reports, automations, webhooks, calendars and email templates
 
-If you need that expanded toolset, install Ferry Booking Manager Pro alongside
+If you need that expanded toolset, install MagePeople Ferry Booking System Pro alongside
 this plugin.
 
 == Installation ==

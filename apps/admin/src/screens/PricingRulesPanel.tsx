@@ -234,7 +234,7 @@ export function PricingRulesPanel(): JSX.Element {
 		return (
 			<EmptyState
 				icon="tag"
-				title={ fbmText( 'Available in Ferry Booking Manager Pro.' ) }
+				title={ fbmText( 'Available in MagePeople Ferry Booking System Pro.' ) }
 				description={ fbmText( 'Change fares by season, day of the week, departure time, how far ahead someone books, or how full the sailing already is.' ) }
 			/>
 		);

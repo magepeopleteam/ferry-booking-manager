@@ -44,11 +44,11 @@ final class RouteController extends EntityController {
 		if ( $origin > 0 && $origin === $destination ) {
 			return new WP_Error(
 				'fbm_invalid_route',
-				__( 'A route must start and finish at different ports.', 'ferry-booking-manager' ),
+				__( 'A route must start and finish at different ports.', 'magepeople-ferry-booking-system' ),
 				array(
 					'status' => 422,
 					'fields' => array(
-						'destination_port' => __( 'Choose a different destination port.', 'ferry-booking-manager' ),
+						'destination_port' => __( 'Choose a different destination port.', 'magepeople-ferry-booking-system' ),
 					),
 				)
 			);
@@ -59,11 +59,11 @@ final class RouteController extends EntityController {
 		if ( in_array( $origin, $intermediate, true ) || in_array( $destination, $intermediate, true ) ) {
 			return new WP_Error(
 				'fbm_invalid_route',
-				__( 'A port cannot be both a terminus and an intermediate call on the same route.', 'ferry-booking-manager' ),
+				__( 'A port cannot be both a terminus and an intermediate call on the same route.', 'magepeople-ferry-booking-system' ),
 				array(
 					'status' => 422,
 					'fields' => array(
-						'intermediate_ports' => __( 'Remove the origin and destination from the intermediate calls.', 'ferry-booking-manager' ),
+						'intermediate_ports' => __( 'Remove the origin and destination from the intermediate calls.', 'magepeople-ferry-booking-system' ),
 					),
 				)
 			);
@@ -73,10 +73,10 @@ final class RouteController extends EntityController {
 			if ( get_post_type( $port_id ) !== Port::POST_TYPE ) {
 				return new WP_Error(
 					'fbm_invalid_route',
-					__( 'One of the intermediate calls does not refer to an existing port.', 'ferry-booking-manager' ),
+					__( 'One of the intermediate calls does not refer to an existing port.', 'magepeople-ferry-booking-system' ),
 					array(
 						'status' => 422,
-						'fields' => array( 'intermediate_ports' => __( 'Unknown port.', 'ferry-booking-manager' ) ),
+						'fields' => array( 'intermediate_ports' => __( 'Unknown port.', 'magepeople-ferry-booking-system' ) ),
 					)
 				);
 			}
@@ -109,7 +109,7 @@ final class RouteController extends EntityController {
 
 		foreach ( array( 'origin_port', 'destination_port', 'serves_port' ) as $param ) {
 			$params[ $param ] = array(
-				'description'       => __( 'Filter by port id.', 'ferry-booking-manager' ),
+				'description'       => __( 'Filter by port id.', 'magepeople-ferry-booking-system' ),
 				'type'              => 'integer',
 				'default'           => 0,
 				'sanitize_callback' => 'absint',
