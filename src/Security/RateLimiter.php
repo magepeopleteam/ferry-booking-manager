@@ -95,7 +95,23 @@ final class RateLimiter {
 	private function fingerprint(): string {
 		$address = '';
 
-		foreach ( array( 'HTTP_CF_CONNECTING_IP', 'HTTP_X_REAL_IP', 'REMOTE_ADDR' ) as $key ) {
+		/**
+		 * Filters the $_SERVER keys the visitor's address is read from, in order.
+		 *
+		 * Only the connection address is trusted by default: forwarding headers
+		 * are set by the client and would let anyone reset their own limit. A
+		 * site behind a reverse proxy it controls can put that proxy's header,
+		 * such as HTTP_CF_CONNECTING_IP, in front of REMOTE_ADDR here.
+		 *
+		 * @since 1.0.0
+		 *
+		 * @param string[] $keys $_SERVER keys.
+		 */
+		$keys = (array) apply_filters( 'mpfbs_client_ip_headers', array( 'REMOTE_ADDR' ) );
+
+		foreach ( $keys as $key ) {
+			$key = (string) $key;
+
 			if ( ! empty( $_SERVER[ $key ] ) ) {
 				$candidate = sanitize_text_field( wp_unslash( (string) $_SERVER[ $key ] ) );
 

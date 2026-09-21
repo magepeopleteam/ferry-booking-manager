@@ -39,6 +39,32 @@ final class AppRenderer {
 	private const MANIFEST = 'mpfbs-app.json';
 
 	/**
+	 * Markup the pre-rendered loading shell may contain.
+	 *
+	 * The shell is a skeleton of plain boxes. Everything else is stripped, and
+	 * the allowlist matches what the build emits exactly, so the application
+	 * still hydrates against the markup it rendered.
+	 *
+	 * @var array<string, array<string, bool>>
+	 */
+	private const SHELL_TAGS = array(
+		'div'  => array(
+			'class'       => true,
+			'role'        => true,
+			'style'       => true,
+			'aria-hidden' => true,
+			'aria-label'  => true,
+		),
+		'span' => array(
+			'class'       => true,
+			'role'        => true,
+			'style'       => true,
+			'aria-hidden' => true,
+			'aria-label'  => true,
+		),
+	);
+
+	/**
 	 * Root element id the exported application hydrates into.
 	 */
 	private const ROOT_ID = '__next';
@@ -128,12 +154,16 @@ final class AppRenderer {
 		printf(
 			'<div id="%s">%s</div>',
 			esc_attr( self::ROOT_ID ),
-			$this->safe_shell( $shell ) // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Build-generated markup, validated by safe_shell().
+			wp_kses( $shell, self::SHELL_TAGS )
 		);
 
-		printf(
-			'<script id="__NEXT_DATA__" type="application/json">%s</script>',
-			wp_json_encode( $next_data, JSON_UNESCAPED_SLASHES | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT ) // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- JSON encoded with HTML-safe flags.
+		// The hydration payload the exported application reads at startup.
+		wp_print_inline_script_tag(
+			(string) wp_json_encode( $next_data, JSON_UNESCAPED_SLASHES | JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT ),
+			array(
+				'id'   => '__NEXT_DATA__',
+				'type' => 'application/json',
+			)
 		);
 	}
 
@@ -219,48 +249,5 @@ final class AppRenderer {
 		$this->manifest = $decoded;
 
 		return $this->manifest;
-	}
-
-	/**
-	 * Validates the pre-rendered shell before it is printed into wp-admin.
-	 *
-	 * The shell is produced by our own build step, so it is not re-escaped:
-	 * React hydrates against this markup and any normalisation would force a
-	 * full client re-render. Instead the markup is rejected outright if it
-	 * carries anything executable, which is the only property that matters
-	 * here — a manifest that can be tampered with implies write access to the
-	 * plugin directory, where PHP would already be the easier target.
-	 *
-	 * @param string $html Pre-rendered shell markup.
-	 * @return string Shell markup, or an empty string when it fails validation.
-	 */
-	private function safe_shell( string $html ): string {
-		if ( '' === $html ) {
-			return '';
-		}
-
-		$executable = array(
-			'#<\s*script#i',
-			'#<\s*iframe#i',
-			'#<\s*object#i',
-			'#<\s*embed#i',
-			'#<\s*form#i',
-			'#\son[a-z]+\s*=#i',
-			'#javascript\s*:#i',
-			'#srcdoc\s*=#i',
-		);
-
-		foreach ( $executable as $pattern ) {
-			if ( preg_match( $pattern, $html ) ) {
-				$this->logger->error(
-					'Admin shell markup rejected: executable content detected in the build manifest.',
-					array( 'pattern' => $pattern )
-				);
-
-				return '';
-			}
-		}
-
-		return $html;
 	}
 }

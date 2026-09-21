@@ -55,6 +55,9 @@ function mpfbs_uninstall_site() {
 
 	delete_option( MPFBS\Support\Options::REGISTRY );
 
+	// Customer phone numbers stored by the staff booking form.
+	delete_metadata( 'user', 0, 'mpfbs_phone', '', true );
+
 	foreach ( array( 'mpfbs_vessel', 'mpfbs_port', 'mpfbs_route', 'mpfbs_sailing', 'mpfbs_booking', 'mpfbs_passenger_type', 'mpfbs_vehicle_type' ) as $post_type ) {
 		$ids = get_posts(
 			array(

@@ -523,7 +523,7 @@ final class BookingController extends AbstractController {
 
 			foreach ( $result['items'] as $booking ) {
 				if ( $booking instanceof Booking ) {
-					fputcsv( $handle, $this->export_row( $booking ) );
+					fputcsv( $handle, array_map( array( $this, 'csv_cell' ), $this->export_row( $booking ) ) );
 				}
 			}
 
@@ -548,6 +548,24 @@ final class BookingController extends AbstractController {
 		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- A CSV body; escaping would quote-mangle every cell.
 		echo $csv;
 		exit;
+	}
+
+	/**
+	 * Stops a cell being read as a spreadsheet formula.
+	 *
+	 * Names, emails and phone numbers come from the public booking form, so a
+	 * value such as `=HYPERLINK(...)` would otherwise run when staff open the
+	 * export in a spreadsheet. A leading apostrophe makes it plain text.
+	 *
+	 * @param string $value Cell value.
+	 * @return string
+	 */
+	private function csv_cell( string $value ): string {
+		if ( '' !== $value && in_array( $value[0], array( '=', '+', '-', '@', "\t", "\r" ), true ) && ! is_numeric( $value ) ) {
+			return "'" . $value;
+		}
+
+		return $value;
 	}
 
 	/**
