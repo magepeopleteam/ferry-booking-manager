@@ -132,6 +132,29 @@ To rebuild the assets (Node.js 20 or newer):
 `cd apps/admin && npm ci && npm run build`
 `cd apps/booking && npm ci && npm run build`
 
+**Third-party libraries**
+
+The compiled bundles include these libraries, all under the MIT licence,
+which is compatible with the GPL:
+
+* React and React DOM - https://github.com/facebook/react
+* Next.js - https://github.com/vercel/next.js
+* Preact - https://github.com/preactjs/preact
+
+== Privacy ==
+
+The plugin stores the booking details a customer or member of staff enters
+(names, email, phone, travel document fields you choose to collect) as
+WordPress posts and post meta on your own site. It does not send any data to
+external services and does not contact any server of its own.
+
+An optional setting on Settings > Integrations pushes a purchase event to the
+page's `dataLayer` when a booking completes, for a tag manager you already
+run. It is off by default and sends nothing by itself.
+
+Booking data is only deleted on uninstall when "Delete all ferry data when the
+plugin is deleted" is switched on under Settings > Advanced.
+
 == Frequently Asked Questions ==
 
 = Does this require WooCommerce? =

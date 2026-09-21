@@ -188,7 +188,12 @@ final class CustomerController extends AbstractController {
 		}
 
 		if ( '' !== $phone ) {
-			update_user_meta( (int) $user_id, 'billing_phone', $phone );
+			update_user_meta( (int) $user_id, 'mpfbs_phone', $phone );
+
+			// Shared with WooCommerce so its checkout is pre-filled too.
+			if ( class_exists( 'WooCommerce' ) ) {
+				update_user_meta( (int) $user_id, 'billing_phone', $phone );
+			}
 		}
 
 		$user = get_user_by( 'id', (int) $user_id );
@@ -214,8 +219,27 @@ final class CustomerController extends AbstractController {
 			'id'    => (int) $user->ID,
 			'name'  => (string) $user->display_name,
 			'email' => (string) $user->user_email,
-			'phone' => (string) get_user_meta( $user->ID, 'billing_phone', true ),
+			'phone' => $this->phone( $user ),
 		);
+	}
+
+	/**
+	 * Returns a customer's phone number.
+	 *
+	 * Falls back to the WooCommerce billing phone for customers who were
+	 * created by WooCommerce rather than by this plugin.
+	 *
+	 * @param WP_User $user User.
+	 * @return string
+	 */
+	private function phone( WP_User $user ): string {
+		$phone = (string) get_user_meta( $user->ID, 'mpfbs_phone', true );
+
+		if ( '' === $phone ) {
+			$phone = (string) get_user_meta( $user->ID, 'billing_phone', true );
+		}
+
+		return $phone;
 	}
 
 	/**
