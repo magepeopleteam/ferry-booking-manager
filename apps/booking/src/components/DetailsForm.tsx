@@ -83,8 +83,8 @@ function CaptureInput( {
 
 	if ( field.type === 'switch' ) {
 		return (
-			<div className="fbmb-field">
-				<label className="fbmb-checkbox">
+			<div className="mpfbsb-field">
+				<label className="mpfbsb-checkbox">
 					<input
 						type="checkbox"
 						checked={ value === '1' }
@@ -93,7 +93,7 @@ function CaptureInput( {
 					<span>{ field.label }</span>
 				</label>
 				{ error ? (
-					<p className="fbmb-field__error" role="alert">
+					<p className="mpfbsb-field__error" role="alert">
 						{ error }
 					</p>
 				) : null }
@@ -155,10 +155,10 @@ export function PartyDetails( {
 		list.find( ( item ) => item.id === id )?.name ?? '';
 
 	return (
-		<div className="fbmb-details">
+		<div className="mpfbsb-details">
 			{ passengers.length > 0 ? (
 				<section>
-					<h3 className="fbmb-section__title">{ t( 'Passenger details' ) }</h3>
+					<h3 className="mpfbsb-section__title">{ t( 'Passenger details' ) }</h3>
 					{ passengers.map( ( member, index ) => {
 						const type = passengerTypes.find( ( item ) => item.id === member.type_id );
 						const fields = type?.requires_dob
@@ -166,16 +166,16 @@ export function PartyDetails( {
 							: passengerFields;
 
 						return (
-							<div className="fbmb-details__block" key={ `p-${ index }` }>
-								<h4 className="fbmb-details__heading">
+							<div className="mpfbsb-details__block" key={ `p-${ index }` }>
+								<h4 className="mpfbsb-details__heading">
 									{ tf( '%1$s %2$s', typeName( member.type_id, passengerTypes ), String( passengerIndex( passengers, index ) ) ) }
 								</h4>
-								<div className="fbmb-details__grid">
+								<div className="mpfbsb-details__grid">
 									{ fields.map( ( field ) => (
 										<CaptureInput
 											key={ field.key }
 											field={ field }
-											idPrefix={ `fbm-p${ index }` }
+											idPrefix={ `mpfbs-p${ index }` }
 											value={ member.details[ field.key ] ?? '' }
 											error={ errors[ `passengers.${ index }.${ field.key }` ] }
 											onChange={ ( value ) => onPassenger( index, field.key, value ) }
@@ -190,20 +190,20 @@ export function PartyDetails( {
 
 			{ vehicles.length > 0 ? (
 				<section>
-					<h3 className="fbmb-section__title">{ t( 'Vehicle details' ) }</h3>
+					<h3 className="mpfbsb-section__title">{ t( 'Vehicle details' ) }</h3>
 					{ vehicles.map( ( member, index ) => {
 						const type = vehicleTypes.find( ( item ) => item.id === member.type_id );
 						const fields = adjustVehicleFields( vehicleFields, type );
 
 						return (
-							<div className="fbmb-details__block" key={ `v-${ index }` }>
-								<h4 className="fbmb-details__heading">{ typeName( member.type_id, vehicleTypes ) }</h4>
-								<div className="fbmb-details__grid">
+							<div className="mpfbsb-details__block" key={ `v-${ index }` }>
+								<h4 className="mpfbsb-details__heading">{ typeName( member.type_id, vehicleTypes ) }</h4>
+								<div className="mpfbsb-details__grid">
 									{ fields.map( ( field ) => (
 										<CaptureInput
 											key={ field.key }
 											field={ field }
-											idPrefix={ `fbm-v${ index }` }
+											idPrefix={ `mpfbs-v${ index }` }
 											value={ member.details[ field.key ] ?? '' }
 											error={ errors[ `vehicles.${ index }.${ field.key }` ] }
 											onChange={ ( value ) => onVehicle( index, field.key, value ) }
@@ -304,22 +304,22 @@ export function CustomerForm( { customer, errors, onChange }: CustomerFormProps 
 
 	return (
 		<section>
-			<h3 className="fbmb-section__title">{ t( 'Your details' ) }</h3>
-			<p className="fbmb-section__note">{ t( 'We send your tickets and any schedule changes to this address.' ) }</p>
+			<h3 className="mpfbsb-section__title">{ t( 'Your details' ) }</h3>
+			<p className="mpfbsb-section__note">{ t( 'We send your booking confirmation and any schedule changes to this address.' ) }</p>
 
-			<div className="fbmb-details__grid">
-				<Field label={ t( 'Full name' ) } htmlFor="fbm-customer-name" required error={ errors.customer_name }>
+			<div className="mpfbsb-details__grid">
+				<Field label={ t( 'Full name' ) } htmlFor="mpfbs-customer-name" required error={ errors.customer_name }>
 					<Input
-						id="fbm-customer-name"
+						id="mpfbs-customer-name"
 						value={ customer.name }
 						autoComplete="name"
 						onChange={ ( value ) => onChange( 'name', value ) }
 					/>
 				</Field>
 
-				<Field label={ t( 'Email' ) } htmlFor="fbm-customer-email" required error={ errors.customer_email }>
+				<Field label={ t( 'Email' ) } htmlFor="mpfbs-customer-email" required error={ errors.customer_email }>
 					<Input
-						id="fbm-customer-email"
+						id="mpfbs-customer-email"
 						type="email"
 						value={ customer.email }
 						autoComplete="email"
@@ -329,13 +329,13 @@ export function CustomerForm( { customer, errors, onChange }: CustomerFormProps 
 
 				<Field
 					label={ t( 'Phone' ) }
-					htmlFor="fbm-customer-phone"
+					htmlFor="mpfbs-customer-phone"
 					required={ cfg.requirePhone }
 					error={ errors.customer_phone }
 					hint={ t( 'Used only if we need to reach you about this crossing.' ) }
 				>
 					<Input
-						id="fbm-customer-phone"
+						id="mpfbs-customer-phone"
 						type="tel"
 						value={ customer.phone }
 						autoComplete="tel"
@@ -345,27 +345,27 @@ export function CustomerForm( { customer, errors, onChange }: CustomerFormProps 
 			</div>
 
 			{ cfg.requireTerms ? (
-				<div className={ `fbmb-consent${ errors.accepted_terms ? ' is-invalid' : '' }` }>
-					<label className="fbmb-consent__label" htmlFor="fbm-customer-terms">
+				<div className={ `mpfbsb-consent${ errors.accepted_terms ? ' is-invalid' : '' }` }>
+					<label className="mpfbsb-consent__label" htmlFor="mpfbs-customer-terms">
 						<input
-							id="fbm-customer-terms"
+							id="mpfbs-customer-terms"
 							type="checkbox"
-							className="fbmb-consent__box"
+							className="mpfbsb-consent__box"
 							checked={ customer.acceptedTerms }
-							aria-describedby={ errors.accepted_terms ? 'fbm-customer-terms-error' : undefined }
+							aria-describedby={ errors.accepted_terms ? 'mpfbs-customer-terms-error' : undefined }
 							onChange={ ( event ) =>
 								onChange( 'acceptedTerms', ( event.target as HTMLInputElement ).checked )
 							}
 						/>
 						<span>
 							{ `${ t( 'I agree to the' ) } ` }
-							<a href={ cfg.termsUrl } target="_blank" rel="noreferrer" className="fbmb-link">
+							<a href={ cfg.termsUrl } target="_blank" rel="noreferrer" className="mpfbsb-link">
 								{ t( 'terms and conditions' ) }
 							</a>
 							{ cfg.cancellationPolicyUrl !== '' ? (
 								<>
 									{ ` ${ t( 'and the' ) } ` }
-									<a href={ cfg.cancellationPolicyUrl } target="_blank" rel="noreferrer" className="fbmb-link">
+									<a href={ cfg.cancellationPolicyUrl } target="_blank" rel="noreferrer" className="mpfbsb-link">
 										{ t( 'cancellation policy' ) }
 									</a>
 								</>
@@ -373,7 +373,7 @@ export function CustomerForm( { customer, errors, onChange }: CustomerFormProps 
 						</span>
 					</label>
 					{ errors.accepted_terms ? (
-						<p className="fbmb-field__error" id="fbm-customer-terms-error" role="alert">
+						<p className="mpfbsb-field__error" id="mpfbs-customer-terms-error" role="alert">
 							{ errors.accepted_terms }
 						</p>
 					) : null }

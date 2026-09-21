@@ -7,7 +7,7 @@
 
 declare( strict_types=1 );
 
-namespace FBM\Support\Schema;
+namespace MPFBS\Support\Schema;
 
 use WP_Error;
 
@@ -66,15 +66,15 @@ final class EntitySchema {
 		/**
 		 * Filters the field definitions of a MagePeople Ferry Booking System entity.
 		 *
-		 * This is how Pro and third parties add persisted properties without
-		 * touching the Free entity classes.
+		 * This is how extensions add persisted properties without touching
+		 * the entity classes.
 		 *
 		 * @since 1.0.0
 		 *
 		 * @param array<string, array<string, mixed>> $definitions Field definitions.
 		 * @param string                              $key         Entity key.
 		 */
-		$definitions = (array) apply_filters( 'fbm_entity_fields', $definitions, $key );
+		$definitions = (array) apply_filters( 'mpfbs_entity_fields', $definitions, $key );
 
 		foreach ( $definitions as $name => $definition ) {
 			if ( ! is_string( $name ) || ! is_array( $definition ) ) {
@@ -222,13 +222,13 @@ final class EntitySchema {
 			$result = $field->validate( $value );
 
 			if ( is_wp_error( $result ) ) {
-				$errors->add( 'fbm_invalid_field', $result->get_error_message(), array( 'field' => $name ) );
+				$errors->add( 'mpfbs_invalid_field', $result->get_error_message(), array( 'field' => $name ) );
 			}
 		}
 
 		if ( $errors->has_errors() ) {
 			return new WP_Error(
-				'fbm_validation_failed',
+				'mpfbs_validation_failed',
 				$errors->get_error_message(),
 				array(
 					'status' => 422,
@@ -240,8 +240,8 @@ final class EntitySchema {
 		/**
 		 * Filters the result of validating an entity.
 		 *
-		 * Lets Pro add cross-field rules — a return sailing that departs before
-		 * its outbound leg, for instance — without editing Free validators.
+		 * Lets extensions add cross-field rules — a return sailing that departs
+		 * before its outbound leg, for instance — without editing validators.
 		 *
 		 * @since 1.0.0
 		 *
@@ -250,7 +250,7 @@ final class EntitySchema {
 		 * @param string               $key        Entity key.
 		 * @param bool                 $partial    Whether this is a partial update.
 		 */
-		return apply_filters( 'fbm_validate_entity', true, $attributes, $this->key, $partial );
+		return apply_filters( 'mpfbs_validate_entity', true, $attributes, $this->key, $partial );
 	}
 
 	/**
@@ -329,7 +329,7 @@ final class EntitySchema {
 
 		return array(
 			'$schema'    => 'http://json-schema.org/draft-04/schema#',
-			'title'      => 'fbm_' . $this->key,
+			'title'      => 'mpfbs_' . $this->key,
 			'type'       => 'object',
 			'required'   => $required,
 			'properties' => $properties,

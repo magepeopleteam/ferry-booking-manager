@@ -6,7 +6,7 @@
  * user-facing string in the plugin's .pot file, but it also means a typo on
  * either side silently falls back to English instead of failing loudly.
  *
- * This compares every fbmText()/fbmFormat() literal in the TypeScript sources
+ * This compares every mpfbsText()/mpfbsFormat() literal in the TypeScript sources
  * against the keys the PHP dictionary publishes, and fails the build on a
  * mismatch.
  */
@@ -43,10 +43,10 @@ async function sources( dir ) {
 }
 
 /**
- * Extracts every string literal passed to fbmText/fbmFormat.
+ * Extracts every string literal passed to mpfbsText/mpfbsFormat.
  *
  * The first argument is scanned as a whole rather than matched as a single
- * literal, so conditional calls such as fbmText( flag ? 'A' : 'B' ) contribute
+ * literal, so conditional calls such as mpfbsText( flag ? 'A' : 'B' ) contribute
  * both branches.
  *
  * @param {string} code Source text.
@@ -54,7 +54,7 @@ async function sources( dir ) {
  */
 function literals( code ) {
 	const found = [];
-	const call = /fbm(?:Text|Format)\(/g;
+	const call = /mpfbs(?:Text|Format)\(/g;
 	let match;
 
 	while ( ( match = call.exec( code ) ) !== null ) {
@@ -74,7 +74,7 @@ function literals( code ) {
 		}
 
 		// Only the first argument carries translatable text; later arguments of
-		// fbmFormat() are substituted values.
+		// mpfbsFormat() are substituted values.
 		const argument = firstArgument( code.slice( match.index + match[ 0 ].length, index - 1 ) );
 		const literal = /'((?:[^'\\]|\\.)*)'/g;
 		let inner;
@@ -134,10 +134,10 @@ function unescape( value ) {
 }
 
 /**
- * Harvests the config-declared strings that reach fbmText() indirectly.
+ * Harvests the config-declared strings that reach mpfbsText() indirectly.
  *
  * Resource screens are driven by declarations, so their labels arrive at
- * fbmText() as variables. These keys are translated the same way and must be in
+ * mpfbsText() as variables. These keys are translated the same way and must be in
  * the dictionary too.
  *
  * @param {string} code Source of the resource configuration module.
@@ -192,7 +192,7 @@ while ( ( keyMatch = keyPattern.exec( php ) ) !== null ) {
 	dictionary.add( keyMatch[ 1 ].replace( /\\'/g, "'" ).replace( /\\\\/g, '\\' ) );
 }
 
-// Route labels come from the route registry, not from an fbmText() literal.
+// Route labels come from the route registry, not from an mpfbsText() literal.
 const routeLabels = /label:\s*'([^']+)'/g;
 const routesFile = await readFile( path.join( sourceDir, 'lib', 'routes.ts' ), 'utf8' );
 let labelMatch;
@@ -201,7 +201,7 @@ while ( ( labelMatch = routeLabels.exec( routesFile ) ) !== null ) {
 	used.add( labelMatch[ 1 ] );
 }
 
-// Resource screens are declaration-driven; their labels reach fbmText() as
+// Resource screens are declaration-driven; their labels reach mpfbsText() as
 // variables, so they are harvested from the declarations themselves.
 const resourcesFile = await readFile( path.join( sourceDir, 'config', 'resources.tsx' ), 'utf8' );
 configLiterals( resourcesFile ).forEach( ( value ) => used.add( value ) );
@@ -213,15 +213,15 @@ const missing = [ ...used ].filter( ( value ) => ! dictionary.has( value ) ).sor
 const unused = [ ...dictionary ].filter( ( value ) => ! used.has( value ) ).sort();
 
 if ( unused.length > 0 ) {
-	console.log( `[fbm] ${ unused.length } dictionary entries are not referenced by the interface:` );
+	console.log( `[mpfbs] ${ unused.length } dictionary entries are not referenced by the interface:` );
 	unused.forEach( ( value ) => console.log( `      · ${ value }` ) );
 }
 
 if ( missing.length > 0 ) {
-	console.error( `\n[fbm] ${ missing.length } interface strings are missing from the PHP dictionary:` );
+	console.error( `\n[mpfbs] ${ missing.length } interface strings are missing from the PHP dictionary:` );
 	missing.forEach( ( value ) => console.error( `      · ${ value }` ) );
-	console.error( '\nAdd them to FBM\\Core\\Assets::translations() so they reach translators.\n' );
+	console.error( '\nAdd them to MPFBS\\Core\\Assets::translations() so they reach translators.\n' );
 	process.exit( 1 );
 }
 
-console.log( `[fbm] Translation dictionary is complete: ${ used.size } strings.` );
+console.log( `[mpfbs] Translation dictionary is complete: ${ used.size } strings.` );

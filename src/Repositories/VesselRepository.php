@@ -7,12 +7,12 @@
 
 declare( strict_types=1 );
 
-namespace FBM\Repositories;
+namespace MPFBS\Repositories;
 
-use FBM\Models\Entity;
-use FBM\Models\Route;
-use FBM\Models\Sailing;
-use FBM\Models\Vessel;
+use MPFBS\Models\Entity;
+use MPFBS\Models\Route;
+use MPFBS\Models\Sailing;
+use MPFBS\Models\Vessel;
 use WP_Error;
 
 defined( 'ABSPATH' ) || exit;
@@ -43,11 +43,11 @@ final class VesselRepository extends AbstractRepository {
 	 * @return WP_Error|null
 	 */
 	protected function deletion_blocker( Entity $entity ): ?WP_Error {
-		$sailings = $this->count_references( Sailing::POST_TYPE, '_fbm_vessel_id', $entity->id );
+		$sailings = $this->count_references( Sailing::POST_TYPE, '_mpfbs_vessel_id', $entity->id );
 
 		if ( $sailings > 0 ) {
 			return new WP_Error(
-				'fbm_vessel_in_use',
+				'mpfbs_vessel_in_use',
 				sprintf(
 					/* translators: %d: number of sailings. */
 					_n(
@@ -62,11 +62,11 @@ final class VesselRepository extends AbstractRepository {
 			);
 		}
 
-		$routes = $this->count_references( Route::POST_TYPE, '_fbm_default_vessel', $entity->id );
+		$routes = $this->count_references( Route::POST_TYPE, '_mpfbs_default_vessel', $entity->id );
 
 		if ( $routes > 0 ) {
 			return new WP_Error(
-				'fbm_vessel_in_use',
+				'mpfbs_vessel_in_use',
 				sprintf(
 					/* translators: %d: number of routes. */
 					_n(

@@ -6,15 +6,13 @@
  * reasons: a settings screen that hand-writes its own controls needs a matching
  * sanitiser written by hand on the server, and the two lists drift — a renamed
  * key, a default written twice, and the screen quietly stops describing what
- * the plugin actually does. And a described screen can be extended by the Pro
- * plugin, which adds PDF, QR and webhook settings to a dashboard bundle that
- * was compiled before Pro was installed.
+ * the plugin actually does. And a described screen can be extended through
+ * the `mpfbs_settings_panels` filter without rebuilding the dashboard bundle.
  */
 
 import { useCallback, useEffect, useMemo, useState, type JSX } from 'react';
 
 import { FieldConfigPanel } from '../components/FieldConfigPanel';
-import { TransferPanel, WebhooksPanel } from './IntegrationsScreen';
 import {
 	ColorField,
 	NumberField,
@@ -25,10 +23,10 @@ import {
 } from '../components/Fields';
 import { PageHeader } from '../components/PageHeader';
 import { SaveBar } from '../components/SaveBar';
-import { useFbmToast } from '../components/Toast';
-import { fbmRequest, FbmApiError } from '../lib/api';
-import { fbmText } from '../lib/i18n';
-import { fbmNavigate } from '../lib/router';
+import { useMpfbsToast } from '../components/Toast';
+import { mpfbsRequest, MpfbsApiError } from '../lib/api';
+import { mpfbsText } from '../lib/i18n';
+import { mpfbsNavigate } from '../lib/router';
 
 interface FieldDescriptor {
 	key: string;
@@ -112,7 +110,7 @@ interface SettingsPayload {
  * Buckets the described tabs into their navigation groups.
  *
  * Groups appear in the order the server first mentions them, so a tab added by
- * Pro or a third party lands under its heading without the dashboard holding a
+ * a third party lands under its heading without the dashboard holding a
  * list of group names of its own.
  */
 function groupTabs( panels: TabDescriptor[] ): TabGroup[] {
@@ -138,7 +136,7 @@ function groupTabs( panels: TabDescriptor[] ): TabGroup[] {
  * Renders the settings destination.
  */
 export function SettingsScreen( { tab }: { tab: string } ): JSX.Element {
-	const toast = useFbmToast();
+	const toast = useMpfbsToast();
 	const [ payload, setPayload ] = useState< SettingsPayload | null >( null );
 	const [ failed, setFailed ] = useState( '' );
 	const [ saving, setSaving ] = useState( false );
@@ -147,7 +145,7 @@ export function SettingsScreen( { tab }: { tab: string } ): JSX.Element {
 	useEffect( () => {
 		let cancelled = false;
 
-		fbmRequest< SettingsPayload >( 'settings' )
+		mpfbsRequest< SettingsPayload >( 'settings' )
 			.then( ( response ) => {
 				if ( ! cancelled ) {
 					setPayload( response.data );
@@ -156,7 +154,7 @@ export function SettingsScreen( { tab }: { tab: string } ): JSX.Element {
 			} )
 			.catch( ( caught: unknown ) => {
 				if ( ! cancelled ) {
-					setFailed( caught instanceof FbmApiError ? caught.message : fbmText( 'Settings could not be loaded.' ) );
+					setFailed( caught instanceof MpfbsApiError ? caught.message : mpfbsText( 'Settings could not be loaded.' ) );
 				}
 			} );
 
@@ -244,7 +242,7 @@ export function SettingsScreen( { tab }: { tab: string } ): JSX.Element {
 			// server clamps numbers into range and drops what it does not
 			// recognise, and the operator should end up looking at what was
 			// actually saved.
-			const response = await fbmRequest< SettingsPayload >( 'settings', {
+			const response = await mpfbsRequest< SettingsPayload >( 'settings', {
 				method: 'PUT',
 				body: {
 					settings: payload.settings,
@@ -255,10 +253,10 @@ export function SettingsScreen( { tab }: { tab: string } ): JSX.Element {
 			} );
 
 			setPayload( response.data );
-			toast.notify( fbmText( 'Settings saved.' ), 'success' );
+			toast.notify( mpfbsText( 'Settings saved.' ), 'success' );
 			setDirty( false );
 		} catch ( caught: unknown ) {
-			toast.notify( caught instanceof FbmApiError ? caught.message : fbmText( 'Something went wrong.' ), 'error' );
+			toast.notify( caught instanceof MpfbsApiError ? caught.message : mpfbsText( 'Something went wrong.' ), 'error' );
 		} finally {
 			setSaving( false );
 		}
@@ -267,9 +265,9 @@ export function SettingsScreen( { tab }: { tab: string } ): JSX.Element {
 	if ( failed !== '' ) {
 		return (
 			<>
-				<PageHeader title={ fbmText( 'Settings' ) } />
-				<div className="fbm-panel">
-					<p className="fbm-empty__body">{ failed }</p>
+				<PageHeader title={ mpfbsText( 'Settings' ) } />
+				<div className="mpfbs-panel">
+					<p className="mpfbs-empty__body">{ failed }</p>
 				</div>
 			</>
 		);
@@ -278,12 +276,12 @@ export function SettingsScreen( { tab }: { tab: string } ): JSX.Element {
 	if ( ! payload || ! current ) {
 		return (
 			<>
-				<PageHeader title={ fbmText( 'Settings' ) } />
-				<div className="fbm-panel">
-					<div className="fbm-settings" aria-hidden="true">
-						<span className="fbm-skeleton fbm-skeleton--text" />
-						<span className="fbm-skeleton fbm-skeleton--text" />
-						<span className="fbm-skeleton fbm-skeleton--text" />
+				<PageHeader title={ mpfbsText( 'Settings' ) } />
+				<div className="mpfbs-panel">
+					<div className="mpfbs-settings" aria-hidden="true">
+						<span className="mpfbs-skeleton mpfbs-skeleton--text" />
+						<span className="mpfbs-skeleton mpfbs-skeleton--text" />
+						<span className="mpfbs-skeleton mpfbs-skeleton--text" />
 					</div>
 				</div>
 			</>
@@ -293,19 +291,19 @@ export function SettingsScreen( { tab }: { tab: string } ): JSX.Element {
 	return (
 		<>
 			<PageHeader
-				title={ fbmText( 'Settings' ) }
-				description={ fbmText( 'How the ferry operation behaves, sells and communicates.' ) }
+				title={ mpfbsText( 'Settings' ) }
+				description={ mpfbsText( 'How the ferry operation behaves, sells and communicates.' ) }
 			/>
 
-			<div className="fbm-settings__layout">
+			<div className="mpfbs-settings__layout">
 				<SettingsNav groups={ groups } active={ active } />
 
 				<div
-					className="fbm-settings__panels"
+					className="mpfbs-settings__panels"
 					role="region"
-					aria-labelledby={ `fbm-settings-link-${ active }` }
+					aria-labelledby={ `mpfbs-settings-link-${ active }` }
 				>
-					{ current.description !== '' ? <p className="fbm-settings__lede">{ current.description }</p> : null }
+					{ current.description !== '' ? <p className="mpfbs-settings__lede">{ current.description }</p> : null }
 
 					{ current.sections.map( ( section, index ) => (
 						<Section
@@ -328,7 +326,7 @@ export function SettingsScreen( { tab }: { tab: string } ): JSX.Element {
 /**
  * Renders the settings navigation column.
  *
- * A column rather than a strip: there are fifteen tabs before Pro adds any, and
+ * A column rather than a strip: there are a dozen tabs or more, and
  * a strip that wide either scrolls sideways or truncates, both of which hide
  * settings. Grouped headings also say what a tab is for before it is opened.
  * These are links, not buttons, because each one is a real address — the hash
@@ -336,18 +334,18 @@ export function SettingsScreen( { tab }: { tab: string } ): JSX.Element {
  */
 function SettingsNav( { groups, active }: { groups: TabGroup[]; active: string } ): JSX.Element {
 	return (
-		<nav className="fbm-settings__nav" aria-label={ fbmText( 'Settings' ) }>
+		<nav className="mpfbs-settings__nav" aria-label={ mpfbsText( 'Settings' ) }>
 			{ groups.map( ( group ) => (
-				<div className="fbm-settings__navgroup" key={ group.key }>
-					<h2 className="fbm-settings__navtitle" id={ `fbm-settings-group-${ group.key }` }>
+				<div className="mpfbs-settings__navgroup" key={ group.key }>
+					<h2 className="mpfbs-settings__navtitle" id={ `mpfbs-settings-group-${ group.key }` }>
 						{ group.label }
 					</h2>
-					<ul className="fbm-settings__navlist" aria-labelledby={ `fbm-settings-group-${ group.key }` }>
+					<ul className="mpfbs-settings__navlist" aria-labelledby={ `mpfbs-settings-group-${ group.key }` }>
 						{ group.tabs.map( ( panel ) => (
 							<li key={ panel.id }>
 								<a
-									id={ `fbm-settings-link-${ panel.id }` }
-									className={ `fbm-settings__navlink${ panel.id === active ? ' is-active' : '' }` }
+									id={ `mpfbs-settings-link-${ panel.id }` }
+									className={ `mpfbs-settings__navlink${ panel.id === active ? ' is-active' : '' }` }
 									href={ `#${ panel.id === 'general' ? '/settings' : `/settings/${ panel.id }` }` }
 									aria-current={ panel.id === active ? 'page' : undefined }
 								>
@@ -384,21 +382,13 @@ function Section( { section, payload, onChange, onToggleGateway, onToggleCapabil
 		return <FieldConfigPanel group="vehicle" title={ section.title } description={ section.description } />;
 	}
 
-	if ( section.custom === 'webhooks' ) {
-		return <WebhooksPanel />;
-	}
-
-	if ( section.custom === 'transfer' ) {
-		return <TransferPanel />;
-	}
-
 	return (
-		<div className="fbm-panel">
-			<div className="fbm-panel__header">
+		<div className="mpfbs-panel">
+			<div className="mpfbs-panel__header">
 				<div>
-					<h2 className="fbm-panel__title">{ section.title }</h2>
+					<h2 className="mpfbs-panel__title">{ section.title }</h2>
 					{ section.description !== '' ? (
-						<p className="fbm-panel__description">{ section.description }</p>
+						<p className="mpfbs-panel__description">{ section.description }</p>
 					) : null }
 				</div>
 			</div>
@@ -411,11 +401,11 @@ function Section( { section, payload, onChange, onToggleGateway, onToggleCapabil
 			{ /* A signpost, not a second copy of the controls. The setting has
 			     one home, and this says where it is. */ }
 			{ section.elsewhere && section.elsewhere.path !== '' ? (
-				<div className="fbm-settings__elsewhere">
+				<div className="mpfbs-settings__elsewhere">
 					<button
 						type="button"
-						className="fbm-button fbm-button--secondary"
-						onClick={ () => fbmNavigate( section.elsewhere?.path ?? '' ) }
+						className="mpfbs-button mpfbs-button--secondary"
+						onClick={ () => mpfbsNavigate( section.elsewhere?.path ?? '' ) }
 					>
 						{ section.elsewhere.label }
 					</button>
@@ -423,7 +413,7 @@ function Section( { section, payload, onChange, onToggleGateway, onToggleCapabil
 			) : null }
 
 			{ section.fields.length > 0 ? (
-				<div className="fbm-settings">
+				<div className="mpfbs-settings">
 					{ section.fields.map( ( field ) => (
 						<Control
 							key={ field.key }
@@ -452,7 +442,7 @@ interface ControlProps {
 function Control( { field, store, values, onChange }: ControlProps ): JSX.Element {
 	const raw = values[ field.key ];
 	const change = ( value: unknown ) => onChange( store, field.key, value );
-	const wrapper = field.wide ? 'fbm-settings__wide' : undefined;
+	const wrapper = field.wide ? 'mpfbs-settings__wide' : undefined;
 
 	if ( field.type === 'switch' ) {
 		return (
@@ -533,11 +523,11 @@ function Gateways( { gateways, onToggle }: { gateways: Record< string, GatewaySt
 	const entries = Object.entries( gateways );
 
 	if ( entries.length === 0 ) {
-		return <p className="fbm-field__hint">{ fbmText( 'No payment methods are available.' ) }</p>;
+		return <p className="mpfbs-field__hint">{ mpfbsText( 'No payment methods are available.' ) }</p>;
 	}
 
 	return (
-		<div className="fbm-settings">
+		<div className="mpfbs-settings">
 			{ entries.map( ( [ id, gateway ] ) => (
 				<SwitchField
 					key={ id }
@@ -556,24 +546,24 @@ function Gateways( { gateways, onToggle }: { gateways: Record< string, GatewaySt
  */
 function Pages( { pages }: { pages: ManagedPage[] } ): JSX.Element {
 	if ( pages.length === 0 ) {
-		return <p className="fbm-field__hint">{ fbmText( 'No managed pages found.' ) }</p>;
+		return <p className="mpfbs-field__hint">{ mpfbsText( 'No managed pages found.' ) }</p>;
 	}
 
 	return (
-		<ul className="fbm-pagelist">
+		<ul className="mpfbs-pagelist">
 			{ pages.map( ( page ) => (
-				<li className="fbm-pagelist__row" key={ page.key }>
-					<span className="fbm-pagelist__title">{ page.title }</span>
+				<li className="mpfbs-pagelist__row" key={ page.key }>
+					<span className="mpfbs-pagelist__title">{ page.title }</span>
 					{ page.exists && page.url !== '' ? (
-						<a href={ page.url } target="_blank" rel="noreferrer" className="fbm-link">
-							{ fbmText( 'View' ) }
+						<a href={ page.url } target="_blank" rel="noreferrer" className="mpfbs-link">
+							{ mpfbsText( 'View' ) }
 						</a>
 					) : (
-						<span className="fbm-pagelist__missing">{ fbmText( 'Missing' ) }</span>
+						<span className="mpfbs-pagelist__missing">{ mpfbsText( 'Missing' ) }</span>
 					) }
 					{ page.exists && page.edit_url !== '' ? (
-						<a href={ page.edit_url } className="fbm-link">
-							{ fbmText( 'Edit' ) }
+						<a href={ page.edit_url } className="mpfbs-link">
+							{ mpfbsText( 'Edit' ) }
 						</a>
 					) : null }
 				</li>
@@ -586,7 +576,7 @@ function Pages( { pages }: { pages: ManagedPage[] } ): JSX.Element {
  * Sends a test message so an operator can prove delivery works.
  */
 function TestEmail(): JSX.Element {
-	const toast = useFbmToast();
+	const toast = useMpfbsToast();
 	const [ to, setTo ] = useState( '' );
 	const [ sending, setSending ] = useState( false );
 
@@ -594,34 +584,34 @@ function TestEmail(): JSX.Element {
 		setSending( true );
 
 		try {
-			const response = await fbmRequest< { to: string } >( 'settings/test-email', {
+			const response = await mpfbsRequest< { to: string } >( 'settings/test-email', {
 				method: 'POST',
 				body: { to },
 			} );
 			toast.notify(
-				`${ fbmText( 'Test message sent to' ) } ${ response.data.to }`,
+				`${ mpfbsText( 'Test message sent to' ) } ${ response.data.to }`,
 				'success'
 			);
 		} catch ( caught: unknown ) {
-			toast.notify( caught instanceof FbmApiError ? caught.message : fbmText( 'Something went wrong.' ), 'error' );
+			toast.notify( caught instanceof MpfbsApiError ? caught.message : mpfbsText( 'Something went wrong.' ), 'error' );
 		} finally {
 			setSending( false );
 		}
 	}, [ to, toast ] );
 
 	return (
-		<div className="fbm-settings">
+		<div className="mpfbs-settings">
 			<TextField
-				label={ fbmText( 'Send a test message to' ) }
+				label={ mpfbsText( 'Send a test message to' ) }
 				name="test_email_to"
 				type="email"
 				value={ to }
-				placeholder={ fbmText( 'Leave empty to use the admin address' ) }
+				placeholder={ mpfbsText( 'Leave empty to use the admin address' ) }
 				onChange={ setTo }
 			/>
-			<div className="fbm-settings__wide">
-				<button type="button" className="fbm-button" onClick={ send } disabled={ sending }>
-					{ sending ? fbmText( 'Sending…' ) : fbmText( 'Send test message' ) }
+			<div className="mpfbs-settings__wide">
+				<button type="button" className="mpfbs-button" onClick={ send } disabled={ sending }>
+					{ sending ? mpfbsText( 'Sending…' ) : mpfbsText( 'Send test message' ) }
 				</button>
 			</div>
 		</div>
@@ -633,22 +623,22 @@ function TestEmail(): JSX.Element {
  */
 function RolesMatrix( { matrix, onToggle }: { matrix: RoleMatrix; onToggle: ( role: string, capability: string, granted: boolean ) => void } ): JSX.Element {
 	if ( matrix.roles.length === 0 ) {
-		return <p className="fbm-field__hint">{ fbmText( 'No ferry roles are installed.' ) }</p>;
+		return <p className="mpfbs-field__hint">{ mpfbsText( 'No ferry roles are installed.' ) }</p>;
 	}
 
 	return (
-		<div className="fbm-matrix__scroll">
-			<table className="fbm-matrix">
+		<div className="mpfbs-matrix__scroll">
+			<table className="mpfbs-matrix">
 				<thead>
 					<tr>
-						<th scope="col">{ fbmText( 'Permission' ) }</th>
+						<th scope="col">{ mpfbsText( 'Permission' ) }</th>
 						{ matrix.roles.map( ( role ) => (
 							<th scope="col" key={ role.slug }>
-								<span className="fbm-matrix__role">{ role.label }</span>
-								<span className="fbm-matrix__count">
+								<span className="mpfbs-matrix__role">{ role.label }</span>
+								<span className="mpfbs-matrix__count">
 									{ role.users === 1
-										? `1 ${ fbmText( 'person' ) }`
-										: `${ role.users } ${ fbmText( 'people' ) }` }
+										? `1 ${ mpfbsText( 'person' ) }`
+										: `${ role.users } ${ mpfbsText( 'people' ) }` }
 								</span>
 							</th>
 						) ) }
@@ -663,7 +653,7 @@ function RolesMatrix( { matrix, onToggle }: { matrix: RoleMatrix; onToggle: ( ro
 
 								return (
 									<td key={ `${ role.slug }-${ capability.key }` }>
-										<label className="fbm-matrix__cell">
+										<label className="mpfbs-matrix__cell">
 											<input
 												type="checkbox"
 												checked={ granted }
@@ -671,7 +661,7 @@ function RolesMatrix( { matrix, onToggle }: { matrix: RoleMatrix; onToggle: ( ro
 													onToggle( role.slug, capability.key, event.currentTarget.checked )
 												}
 											/>
-											<span className="fbm-visually-hidden">
+											<span className="mpfbs-visually-hidden">
 												{ `${ capability.label } — ${ role.label }` }
 											</span>
 										</label>

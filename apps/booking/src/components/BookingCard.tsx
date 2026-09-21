@@ -47,42 +47,42 @@ export function BookingCard( { booking, detailed = false }: BookingCardProps ): 
 	const cfg = config();
 
 	return (
-		<article className="fbmb-record">
-			<header className="fbmb-record__head">
+		<article className="mpfbsb-record">
+			<header className="mpfbsb-record__head">
 				<div>
-					<p className="fbmb-record__reference">{ booking.reference }</p>
-					<p className="fbmb-record__name">{ booking.customer_name }</p>
+					<p className="mpfbsb-record__reference">{ booking.reference }</p>
+					<p className="mpfbsb-record__name">{ booking.customer_name }</p>
 				</div>
-				<div className="fbmb-record__badges">
+				<div className="mpfbsb-record__badges">
 					<Badge tone={ tone( booking.status ) }>{ booking.status_label }</Badge>
 					{ booking.balance > 0 ? <Badge tone="warning">{ booking.payment_label }</Badge> : null }
 				</div>
 			</header>
 
-			<ol className="fbmb-record__legs">
+			<ol className="mpfbsb-record__legs">
 				{ booking.legs.map( ( leg, index ) => (
-					<li className="fbmb-record__leg" key={ `${ booking.reference }-${ index }` }>
-						<span className="fbmb-record__leg-label">{ leg.label }</span>
-						<span className="fbmb-record__route">
+					<li className="mpfbsb-record__leg" key={ `${ booking.reference }-${ index }` }>
+						<span className="mpfbsb-record__leg-label">{ leg.label }</span>
+						<span className="mpfbsb-record__route">
 							{ leg.origin !== '' && leg.destination !== ''
 								? tf( '%1$s to %2$s', leg.origin, leg.destination )
 								: leg.route }
 						</span>
-						<span className="fbmb-record__when">
+						<span className="mpfbsb-record__when">
 							{ `${ formatDate( leg.departure, true ) } · ${ time( leg.departure ) }` }
 							{ leg.arrival !== '' ? ` – ${ time( leg.arrival ) }` : '' }
 						</span>
-						{ leg.vessel !== '' ? <span className="fbmb-record__vessel">{ leg.vessel }</span> : null }
+						{ leg.vessel !== '' ? <span className="mpfbsb-record__vessel">{ leg.vessel }</span> : null }
 					</li>
 				) ) }
 				{ booking.legs.length === 0 ? (
-					<li className="fbmb-record__leg">
-						<span className="fbmb-record__when">{ t( 'Crossing details are no longer available.' ) }</span>
+					<li className="mpfbsb-record__leg">
+						<span className="mpfbsb-record__when">{ t( 'Crossing details are no longer available.' ) }</span>
 					</li>
 				) : null }
 			</ol>
 
-			<dl className="fbmb-record__facts">
+			<dl className="mpfbsb-record__facts">
 				<div>
 					<dt>{ t( 'Passengers' ) }</dt>
 					<dd>{ booking.passenger_count }</dd>
@@ -104,16 +104,6 @@ export function BookingCard( { booking, detailed = false }: BookingCardProps ): 
 					</div>
 				) : null }
 			</dl>
-
-			{ booking.tickets && booking.tickets.length > 0 ? (
-				<p className="fbmb-record__actions">
-					{ booking.tickets.map( ( ticket ) => (
-						<a className="fbmb-button fbmb-button--secondary" href={ ticket.url } key={ ticket.url }>
-							{ ticket.label }
-						</a>
-					) ) }
-				</p>
-			) : null }
 		</article>
 	);
 }

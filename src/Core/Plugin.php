@@ -7,10 +7,10 @@
 
 declare( strict_types=1 );
 
-namespace FBM\Core;
+namespace MPFBS\Core;
 
-use FBM\Contracts\ContainerInterface;
-use FBM\Contracts\ServiceProviderInterface;
+use MPFBS\Contracts\ContainerInterface;
+use MPFBS\Contracts\ServiceProviderInterface;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -71,7 +71,7 @@ final class Plugin {
 	}
 
 	/**
-	 * Exposes the container so Pro and third parties can resolve Free services.
+	 * Exposes the container so third-party extensions can resolve plugin services.
 	 *
 	 * @return ContainerInterface
 	 */
@@ -114,17 +114,17 @@ final class Plugin {
 		}
 
 		/**
-		 * Fires once the Free plugin container is fully booted.
+		 * Fires once the plugin container is fully booted.
 		 *
-		 * This is the supported entry point for MagePeople Ferry Booking System Pro and for
-		 * third-party integrations that need to resolve or decorate Free services.
+		 * This is the supported entry point for integrations that need to
+		 * resolve or decorate plugin services.
 		 *
 		 * @since 1.0.0
 		 *
 		 * @param ContainerInterface $container Plugin service container.
 		 * @param Plugin             $plugin    Plugin kernel.
 		 */
-		do_action( 'fbm_booted', $this->container, $this );
+		do_action( 'mpfbs_booted', $this->container, $this );
 	}
 
 	/**
@@ -134,25 +134,25 @@ final class Plugin {
 	 */
 	private function provider_classes(): array {
 		$providers = array(
-			\FBM\Providers\CoreServiceProvider::class,
-			\FBM\Providers\SecurityServiceProvider::class,
-			\FBM\Providers\RestServiceProvider::class,
-			\FBM\Providers\DomainServiceProvider::class,
-			\FBM\Providers\AdminServiceProvider::class,
-			\FBM\Providers\FrontendServiceProvider::class,
+			\MPFBS\Providers\CoreServiceProvider::class,
+			\MPFBS\Providers\SecurityServiceProvider::class,
+			\MPFBS\Providers\RestServiceProvider::class,
+			\MPFBS\Providers\DomainServiceProvider::class,
+			\MPFBS\Providers\AdminServiceProvider::class,
+			\MPFBS\Providers\FrontendServiceProvider::class,
 		);
 
 		/**
-		 * Filters the service providers loaded by the Free plugin.
+		 * Filters the service providers loaded by the plugin.
 		 *
-		 * Pro registers its own providers through this filter rather than by
-		 * duplicating or replacing Free services.
+		 * Extensions register their own providers through this filter rather
+		 * than by duplicating or replacing plugin services.
 		 *
 		 * @since 1.0.0
 		 *
 		 * @param string[] $providers Fully qualified provider class names, in load order.
 		 */
-		$providers = apply_filters( 'fbm_service_providers', $providers );
+		$providers = apply_filters( 'mpfbs_service_providers', $providers );
 
 		return array_values( array_filter( (array) $providers, 'is_string' ) );
 	}

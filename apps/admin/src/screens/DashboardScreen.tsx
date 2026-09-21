@@ -17,12 +17,12 @@ import { Icon, type IconName } from '../components/Icon';
 import { PageHeader } from '../components/PageHeader';
 import { StatCard } from '../components/StatCard';
 import { EmptyState, ErrorState } from '../components/States';
-import { fbmRequest, FbmApiError } from '../lib/api';
-import { fbmConfig } from '../lib/config';
-import { useFbmHealth } from '../lib/health';
-import { fbmFormat, fbmText } from '../lib/i18n';
-import { fbmFormatMoney } from '../lib/money';
-import { fbmNavigate } from '../lib/router';
+import { mpfbsRequest, MpfbsApiError } from '../lib/api';
+import { mpfbsConfig } from '../lib/config';
+import { useMpfbsHealth } from '../lib/health';
+import { mpfbsFormat, mpfbsText } from '../lib/i18n';
+import { mpfbsFormatMoney } from '../lib/money';
+import { mpfbsNavigate } from '../lib/router';
 
 interface Metric {
 	label: string;
@@ -30,7 +30,6 @@ interface Metric {
 	hint: string;
 	money?: boolean;
 	tone?: string;
-	pro?: boolean;
 }
 
 interface Departure {
@@ -70,14 +69,12 @@ const ICONS: Record< string, IconName > = {
 	passengers: 'users',
 	vehicles: 'car',
 	revenue: 'tag',
-	checked_in: 'check',
-	boarded: 'scan',
 	pending: 'card',
 	cancelled: 'close',
 	refunds: 'alert',
 };
 
-const ORDER = [ 'sailings', 'passengers', 'vehicles', 'revenue', 'pending', 'checked_in', 'boarded', 'cancelled', 'refunds' ];
+const ORDER = [ 'sailings', 'passengers', 'vehicles', 'revenue', 'pending', 'cancelled', 'refunds' ];
 
 /**
  * Renders the dashboard.
@@ -91,10 +88,10 @@ export function DashboardScreen(): JSX.Element {
 		setError( '' );
 
 		try {
-			const response = await fbmRequest< Snapshot >( 'dashboard' );
+			const response = await mpfbsRequest< Snapshot >( 'dashboard' );
 			setSnapshot( response.data );
 		} catch ( caught: unknown ) {
-			setError( caught instanceof FbmApiError ? caught.message : fbmText( 'Something went wrong.' ) );
+			setError( caught instanceof MpfbsApiError ? caught.message : mpfbsText( 'Something went wrong.' ) );
 		} finally {
 			setLoading( false );
 		}
@@ -107,56 +104,39 @@ export function DashboardScreen(): JSX.Element {
 	if ( error !== '' ) {
 		return (
 			<>
-				<PageHeader title={ fbmText( 'Dashboard' ) } />
+				<PageHeader title={ mpfbsText( 'Dashboard' ) } />
 				<ErrorState message={ error } onRetry={ load } />
 			</>
 		);
 	}
 
-	const proActive = fbmConfig().proActive;
-
 	return (
 		<>
 			<PageHeader
-				title={ fbmText( 'Today' ) }
+				title={ mpfbsText( 'Today' ) }
 				description={
 					snapshot
-						? fbmFormat( 'Operating day %s', snapshot.date )
-						: fbmText( 'Your sailings, passengers and takings for today.' )
+						? mpfbsFormat( 'Operating day %s', snapshot.date )
+						: mpfbsText( 'Your sailings, passengers and takings for today.' )
 				}
 			/>
 
-			<div className="fbm-stat-grid">
+			<div className="mpfbs-stat-grid">
 				{ ORDER.map( ( key ) => {
 					const metric = snapshot?.metrics[ key ];
-
-					// Check-in and boarding are counted at a Pro check-in desk.
-					// Showing them as a hard zero would read as "nobody turned
-					// up" rather than "we are not measuring this".
-					if ( metric?.pro && ! proActive ) {
-						return (
-							<StatCard
-								key={ key }
-								label={ fbmText( metric.label ) }
-								value="—"
-								hint={ fbmText( 'Needs MagePeople Ferry Booking System Pro' ) }
-								icon={ ICONS[ key ] }
-							/>
-						);
-					}
 
 					return (
 						<StatCard
 							key={ key }
-							label={ metric ? fbmText( metric.label ) : '' }
+							label={ metric ? mpfbsText( metric.label ) : '' }
 							value={
 								metric
 									? metric.money
-										? fbmFormatMoney( Number( metric.value ) )
+										? mpfbsFormatMoney( Number( metric.value ) )
 										: Number( metric.value ).toLocaleString()
 									: undefined
 							}
-							hint={ metric?.hint ? fbmText( metric.hint ) : undefined }
+							hint={ metric?.hint ? mpfbsText( metric.hint ) : undefined }
 							icon={ ICONS[ key ] }
 							loading={ loading }
 							tone={ metric?.tone === 'warning' ? 'warning' : 'default' }
@@ -166,21 +146,21 @@ export function DashboardScreen(): JSX.Element {
 			</div>
 
 			{ snapshot?.capped ? (
-				<div className="fbm-alert fbm-alert--info" role="status">
-					{ fbmText( 'Today is busier than these totals can add up exactly. The figures are a floor, not a total.' ) }
+				<div className="mpfbs-alert mpfbs-alert--info" role="status">
+					{ mpfbsText( 'Today is busier than these totals can add up exactly. The figures are a floor, not a total.' ) }
 				</div>
 			) : null }
 
-			<div className="fbm-dash">
-				<section className="fbm-panel">
-					<div className="fbm-panel__header">
+			<div className="mpfbs-dash">
+				<section className="mpfbs-panel">
+					<div className="mpfbs-panel__header">
 						<div>
-							<h2 className="fbm-panel__title">{ fbmText( 'Today’s departures' ) }</h2>
-							<p className="fbm-panel__description">{ fbmText( 'How full each crossing is, right now.' ) }</p>
+							<h2 className="mpfbs-panel__title">{ mpfbsText( 'Today’s departures' ) }</h2>
+							<p className="mpfbs-panel__description">{ mpfbsText( 'How full each crossing is, right now.' ) }</p>
 						</div>
-						<div className="fbm-panel__actions">
-							<button type="button" className="fbm-button fbm-button--secondary" onClick={ () => fbmNavigate( '/sailings' ) }>
-								{ fbmText( 'All sailings' ) }
+						<div className="mpfbs-panel__actions">
+							<button type="button" className="mpfbs-button mpfbs-button--secondary" onClick={ () => mpfbsNavigate( '/sailings' ) }>
+								{ mpfbsText( 'All sailings' ) }
 							</button>
 						</div>
 					</div>
@@ -188,47 +168,47 @@ export function DashboardScreen(): JSX.Element {
 					{ ! loading && snapshot && snapshot.departures.length === 0 ? (
 						<EmptyState
 							icon="route"
-							title={ fbmText( 'Nothing sails today.' ) }
-							description={ fbmText( 'Schedule a departure and it will appear here.' ) }
+							title={ mpfbsText( 'Nothing sails today.' ) }
+							description={ mpfbsText( 'Schedule a departure and it will appear here.' ) }
 						/>
 					) : (
-						<ul className="fbm-departures">
+						<ul className="mpfbs-departures">
 							{ ( snapshot?.departures ?? [] ).map( ( row ) => (
-								<li className="fbm-departure" key={ row.id }>
-									<span className="fbm-departure__time">{ row.time }</span>
+								<li className="mpfbs-departure" key={ row.id }>
+									<span className="mpfbs-departure__time">{ row.time }</span>
 
-									<span className="fbm-departure__detail">
-										<span className="fbm-departure__route">{ row.route }</span>
-										<span className="fbm-departure__vessel">
+									<span className="mpfbs-departure__detail">
+										<span className="mpfbs-departure__route">{ row.route }</span>
+										<span className="mpfbs-departure__vessel">
 											{ row.vessel }
 											{ row.vehicles > 0
-												? ` · ${ fbmFormat( '%s vehicles', String( row.vehicles ) ) }`
+												? ` · ${ mpfbsFormat( '%s vehicles', String( row.vehicles ) ) }`
 												: '' }
 										</span>
 									</span>
 
-									<span className="fbm-departure__load">
+									<span className="mpfbs-departure__load">
 										{ row.load < 0 ? (
-											<span className="fbm-muted">{ fbmFormat( '%s booked', String( row.booked ) ) }</span>
+											<span className="mpfbs-muted">{ mpfbsFormat( '%s booked', String( row.booked ) ) }</span>
 										) : (
 											<>
-												<span className="fbm-departure__figures">
-													{ fbmFormat( '%1$s of %2$s', String( row.booked ), String( row.capacity ) ) }
+												<span className="mpfbs-departure__figures">
+													{ mpfbsFormat( '%1$s of %2$s', String( row.booked ), String( row.capacity ) ) }
 												</span>
 												<span
-													className={ `fbm-meter fbm-meter--${ row.load >= 90 ? 'full' : row.load >= 60 ? 'busy' : 'quiet' }` }
+													className={ `mpfbs-meter mpfbs-meter--${ row.load >= 90 ? 'full' : row.load >= 60 ? 'busy' : 'quiet' }` }
 													role="img"
-													aria-label={ fbmFormat( '%s%% full', String( row.load ) ) }
+													aria-label={ mpfbsFormat( '%s%% full', String( row.load ) ) }
 												>
-													<span className="fbm-meter__fill" style={ { inlineSize: `${ Math.min( 100, row.load ) }%` } } />
+													<span className="mpfbs-meter__fill" style={ { inlineSize: `${ Math.min( 100, row.load ) }%` } } />
 												</span>
 											</>
 										) }
 									</span>
 
 									{ row.status !== 'scheduled' ? (
-										<span className={ `fbm-pill fbm-pill--${ row.status === 'cancelled' ? 'danger' : 'warning' }` }>
-											{ fbmText( statusLabel( row.status ) ) }
+										<span className={ `mpfbs-pill mpfbs-pill--${ row.status === 'cancelled' ? 'danger' : 'warning' }` }>
+											{ mpfbsText( statusLabel( row.status ) ) }
 										</span>
 									) : (
 										<span />
@@ -239,33 +219,33 @@ export function DashboardScreen(): JSX.Element {
 					) }
 				</section>
 
-				<section className="fbm-panel">
-					<div className="fbm-panel__header">
+				<section className="mpfbs-panel">
+					<div className="mpfbs-panel__header">
 						<div>
-							<h2 className="fbm-panel__title">{ fbmText( 'Latest bookings' ) }</h2>
+							<h2 className="mpfbs-panel__title">{ mpfbsText( 'Latest bookings' ) }</h2>
 						</div>
-						<div className="fbm-panel__actions">
-							<button type="button" className="fbm-button fbm-button--secondary" onClick={ () => fbmNavigate( '/bookings' ) }>
-								{ fbmText( 'All bookings' ) }
+						<div className="mpfbs-panel__actions">
+							<button type="button" className="mpfbs-button mpfbs-button--secondary" onClick={ () => mpfbsNavigate( '/bookings' ) }>
+								{ mpfbsText( 'All bookings' ) }
 							</button>
 						</div>
 					</div>
 
 					{ ! loading && snapshot && snapshot.recent.length === 0 ? (
-						<EmptyState icon="ticket" title={ fbmText( 'No bookings yet.' ) } />
+						<EmptyState icon="ticket" title={ mpfbsText( 'No bookings yet.' ) } />
 					) : (
-						<ul className="fbm-recent">
+						<ul className="mpfbs-recent">
 							{ ( snapshot?.recent ?? [] ).map( ( row ) => (
-								<li className="fbm-recent__row" key={ row.id }>
-									<span className="fbm-recent__main">
-										<code className="fbm-code">{ row.reference }</code>
-										<span className="fbm-recent__customer">{ row.customer || '—' }</span>
-										<span className="fbm-recent__departure">{ row.departure || '—' }</span>
+								<li className="mpfbs-recent__row" key={ row.id }>
+									<span className="mpfbs-recent__main">
+										<code className="mpfbs-code">{ row.reference }</code>
+										<span className="mpfbs-recent__customer">{ row.customer || '—' }</span>
+										<span className="mpfbs-recent__departure">{ row.departure || '—' }</span>
 									</span>
-									<span className="fbm-recent__meta">
-										<span className="fbm-recent__total">{ fbmFormatMoney( row.total ) }</span>
-										<span className={ `fbm-pill fbm-pill--${ paymentTone( row.payment ) }` }>
-											{ fbmText( statusLabel( row.payment ) ) }
+									<span className="mpfbs-recent__meta">
+										<span className="mpfbs-recent__total">{ mpfbsFormatMoney( row.total ) }</span>
+										<span className={ `mpfbs-pill mpfbs-pill--${ paymentTone( row.payment ) }` }>
+											{ mpfbsText( statusLabel( row.payment ) ) }
 										</span>
 									</span>
 								</li>
@@ -318,30 +298,29 @@ function paymentTone( payment: string ): string {
  * Environment details, kept small and last.
  */
 function SystemStrip(): JSX.Element {
-	const { health } = useFbmHealth();
-	const config = fbmConfig();
+	const { health } = useMpfbsHealth();
+	const config = mpfbsConfig();
 
 	const items = [
-		{ label: fbmText( 'Plugin' ), value: config.version },
-		{ label: fbmText( 'WordPress' ), value: health?.wp ?? '—' },
-		{ label: fbmText( 'PHP' ), value: health?.php ?? '—' },
-		{ label: fbmText( 'Timezone' ), value: config.timezone },
+		{ label: mpfbsText( 'Plugin' ), value: config.version },
+		{ label: mpfbsText( 'WordPress' ), value: health?.wp ?? '—' },
+		{ label: mpfbsText( 'PHP' ), value: health?.php ?? '—' },
+		{ label: mpfbsText( 'Timezone' ), value: config.timezone },
 		{
-			label: fbmText( 'WooCommerce' ),
-			value: config.woocommerce ? fbmText( 'Active' ) : fbmText( 'Not installed' ),
+			label: mpfbsText( 'WooCommerce' ),
+			value: config.woocommerce ? mpfbsText( 'Active' ) : mpfbsText( 'Not installed' ),
 		},
-		{ label: fbmText( 'Pro' ), value: config.proActive ? fbmText( 'Active' ) : fbmText( 'Not active' ) },
 	];
 
 	return (
-		<details className="fbm-system">
-			<summary className="fbm-system__summary">
+		<details className="mpfbs-system">
+			<summary className="mpfbs-system__summary">
 				<Icon name="settings" size={ 14 } />
-				<span>{ fbmText( 'System information' ) }</span>
+				<span>{ mpfbsText( 'System information' ) }</span>
 			</summary>
-			<dl className="fbm-system__grid">
+			<dl className="mpfbs-system__grid">
 				{ items.map( ( item ) => (
-					<div className="fbm-system__item" key={ item.label }>
+					<div className="mpfbs-system__item" key={ item.label }>
 						<dt>{ item.label }</dt>
 						<dd>{ item.value }</dd>
 					</div>

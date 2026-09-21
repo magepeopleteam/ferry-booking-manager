@@ -17,7 +17,7 @@ const nextConfig = {
 	reactStrictMode: true,
 	trailingSlash: false,
 	poweredByHeader: false,
-	generateBuildId: async () => 'fbm',
+	generateBuildId: async () => 'mpfbs',
 	images: {
 		unoptimized: true,
 	},

@@ -7,21 +7,21 @@
 
 declare( strict_types=1 );
 
-namespace FBM\Search;
+namespace MPFBS\Search;
 
-use FBM\Availability\Availability;
-use FBM\Availability\AvailabilityService;
-use FBM\Cache\CacheManager;
-use FBM\Models\Port;
-use FBM\Models\Route;
-use FBM\Models\Sailing;
-use FBM\Models\Vessel;
-use FBM\Pricing\PricingService;
-use FBM\Repositories\PortRepository;
-use FBM\Repositories\RouteRepository;
-use FBM\Repositories\SailingRepository;
-use FBM\Repositories\VesselRepository;
-use FBM\Support\Time;
+use MPFBS\Availability\Availability;
+use MPFBS\Availability\AvailabilityService;
+use MPFBS\Cache\CacheManager;
+use MPFBS\Models\Port;
+use MPFBS\Models\Route;
+use MPFBS\Models\Sailing;
+use MPFBS\Models\Vessel;
+use MPFBS\Pricing\PricingService;
+use MPFBS\Repositories\PortRepository;
+use MPFBS\Repositories\RouteRepository;
+use MPFBS\Repositories\SailingRepository;
+use MPFBS\Repositories\VesselRepository;
+use MPFBS\Support\Time;
 use WP_Error;
 
 defined( 'ABSPATH' ) || exit;
@@ -150,7 +150,7 @@ final class SearchService {
 
 		if ( $origin < 1 || $destination < 1 ) {
 			return new WP_Error(
-				'fbm_missing_ports',
+				'mpfbs_missing_ports',
 				__( 'Choose where you are travelling from and to.', 'magepeople-ferry-booking-system' ),
 				array( 'status' => 400 )
 			);
@@ -158,7 +158,7 @@ final class SearchService {
 
 		if ( $origin === $destination ) {
 			return new WP_Error(
-				'fbm_same_port',
+				'mpfbs_same_port',
 				__( 'The departure and arrival ports have to be different.', 'magepeople-ferry-booking-system' ),
 				array( 'status' => 400 )
 			);
@@ -166,7 +166,7 @@ final class SearchService {
 
 		if ( '' === $date ) {
 			return new WP_Error(
-				'fbm_missing_date',
+				'mpfbs_missing_date',
 				__( 'Choose a departure date.', 'magepeople-ferry-booking-system' ),
 				array( 'status' => 400 )
 			);
@@ -174,7 +174,7 @@ final class SearchService {
 
 		if ( '' !== $return_date && $return_date < $date ) {
 			return new WP_Error(
-				'fbm_return_before_departure',
+				'mpfbs_return_before_departure',
 				__( 'The return date cannot be before the departure date.', 'magepeople-ferry-booking-system' ),
 				array( 'status' => 400 )
 			);
@@ -334,7 +334,7 @@ final class SearchService {
 
 		if ( ( strtotime( $to ) - strtotime( $from ) ) > self::MAX_RANGE_DAYS * DAY_IN_SECONDS ) {
 			return new WP_Error(
-				'fbm_range_too_wide',
+				'mpfbs_range_too_wide',
 				__( 'That is too wide a date range to search.', 'magepeople-ferry-booking-system' ),
 				array( 'status' => 400 )
 			);

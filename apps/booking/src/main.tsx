@@ -21,7 +21,7 @@ interface MountConfig {
  * Reads a mount point's configuration.
  */
 function readConfig( element: HTMLElement ): MountConfig | null {
-	const raw = element.getAttribute( 'data-fbm-config' );
+	const raw = element.getAttribute( 'data-mpfbs-config' );
 
 	if ( ! raw ) {
 		return null;
@@ -47,10 +47,10 @@ function readConfig( element: HTMLElement ): MountConfig | null {
  * Mounts every component on the page.
  */
 function boot(): void {
-	const mounts = document.querySelectorAll< HTMLElement >( '[data-fbm-component]' );
+	const mounts = document.querySelectorAll< HTMLElement >( '[data-mpfbs-component]' );
 
 	mounts.forEach( ( element ) => {
-		if ( element.dataset.fbmMounted === '1' ) {
+		if ( element.dataset.mpfbsMounted === '1' ) {
 			return;
 		}
 
@@ -60,7 +60,7 @@ function boot(): void {
 			return;
 		}
 
-		element.dataset.fbmMounted = '1';
+		element.dataset.mpfbsMounted = '1';
 		element.innerHTML = '';
 
 		render( <App component={ config.component } attributes={ config.attributes } />, element );

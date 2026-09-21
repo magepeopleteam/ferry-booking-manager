@@ -7,9 +7,9 @@
 
 declare( strict_types=1 );
 
-namespace FBM\Admin;
+namespace MPFBS\Admin;
 
-use FBM\Contracts\LoggerInterface;
+use MPFBS\Contracts\LoggerInterface;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -17,7 +17,7 @@ defined( 'ABSPATH' ) || exit;
  * Serves the pre-built Next.js dashboard from the plugin's own assets.
  *
  * The Next.js application is exported at build time (`next build` with
- * `output: 'export'`) and post-processed into `assets/admin/app/fbm-app.json`,
+ * `output: 'export'`) and post-processed into `assets/admin/app/mpfbs-app.json`,
  * which lists the emitted stylesheets and script chunks plus the pre-rendered
  * shell markup. WordPress enqueues those files itself, so no Node process and no
  * runtime bundler is ever required on the customer's host.
@@ -36,7 +36,7 @@ final class AppRenderer {
 	/**
 	 * Manifest filename produced by the build script.
 	 */
-	private const MANIFEST = 'fbm-app.json';
+	private const MANIFEST = 'mpfbs-app.json';
 
 	/**
 	 * Root element id the exported application hydrates into.
@@ -85,7 +85,7 @@ final class AppRenderer {
 	 * @return string
 	 */
 	public function asset_prefix(): string {
-		return untrailingslashit( FBM_URL . self::APP_DIR );
+		return untrailingslashit( MPFBS_URL . self::APP_DIR );
 	}
 
 	/**
@@ -168,7 +168,7 @@ final class AppRenderer {
 	private function urls( string $key ): array {
 		$manifest = $this->manifest();
 		$paths    = isset( $manifest[ $key ] ) && is_array( $manifest[ $key ] ) ? $manifest[ $key ] : array();
-		$base     = trailingslashit( FBM_URL . self::APP_DIR );
+		$base     = trailingslashit( MPFBS_URL . self::APP_DIR );
 		$urls     = array();
 
 		foreach ( $paths as $path ) {
@@ -197,7 +197,7 @@ final class AppRenderer {
 			return $this->manifest;
 		}
 
-		$file = FBM_PATH . self::APP_DIR . self::MANIFEST;
+		$file = MPFBS_PATH . self::APP_DIR . self::MANIFEST;
 
 		if ( ! is_readable( $file ) ) {
 			$this->manifest = array();

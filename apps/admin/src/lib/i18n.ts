@@ -6,13 +6,13 @@
  * WPML, Polylang and TranslatePress without a second catalogue.
  */
 
-import { fbmConfig } from './config';
+import { mpfbsConfig } from './config';
 
 /**
  * Translates a source string.
  */
-export function fbmText( source: string ): string {
-	const dictionary = fbmConfig().i18n;
+export function mpfbsText( source: string ): string {
+	const dictionary = mpfbsConfig().i18n;
 
 	return dictionary[ source ] ?? source;
 }
@@ -29,10 +29,10 @@ export function fbmText( source: string ): string {
  * strings are shared with the PHP catalogue, so a string that has to render a
  * literal "%" is written the way a translator already expects.
  */
-export function fbmFormat( source: string, ...args: Array< string | number > ): string {
+export function mpfbsFormat( source: string, ...args: Array< string | number > ): string {
 	let sequential = 0;
 
-	return fbmText( source ).replace( /%%|%(?:(\d+)\$)?s/g, ( match, position?: string ) => {
+	return mpfbsText( source ).replace( /%%|%(?:(\d+)\$)?s/g, ( match, position?: string ) => {
 		if ( match === '%%' ) {
 			return '%';
 		}

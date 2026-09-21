@@ -9,7 +9,6 @@
 
 import { useCallback, useEffect, useMemo, useState, type JSX } from 'react';
 
-import { ChangeBookingPanel } from '../components/ChangeBookingPanel';
 import { ConfirmDialog } from '../components/ConfirmDialog';
 import { DataTable, type Column } from '../components/DataTable';
 import { Drawer } from '../components/Drawer';
@@ -18,15 +17,13 @@ import { FilterBar } from '../components/FilterBar';
 import { PageHeader } from '../components/PageHeader';
 import { Pagination } from '../components/Pagination';
 import { EmptyState, ErrorState, LoadingState } from '../components/States';
-import { RefundPanel } from '../components/RefundPanel';
-import { Tabs } from '../components/Tabs';
-import { useFbmToast } from '../components/Toast';
-import { fbmRequest, fbmRestUrl, FbmApiError } from '../lib/api';
-import { fbmCan, fbmConfig } from '../lib/config';
-import { fbmFormat, fbmText } from '../lib/i18n';
-import { fbmFormatMoney } from '../lib/money';
-import { fbmNavigate } from '../lib/router';
-import { useFbmCollection } from '../lib/useCollection';
+import { useMpfbsToast } from '../components/Toast';
+import { mpfbsRequest, mpfbsRestUrl, MpfbsApiError } from '../lib/api';
+import { mpfbsCan, mpfbsConfig } from '../lib/config';
+import { mpfbsFormat, mpfbsText } from '../lib/i18n';
+import { mpfbsFormatMoney } from '../lib/money';
+import { mpfbsNavigate } from '../lib/router';
+import { useMpfbsCollection } from '../lib/useCollection';
 
 interface BookingRow {
 	id: number;
@@ -114,9 +111,9 @@ function statusPill( status: string, payment: string ): JSX.Element {
 	const paymentTone = payment === 'paid' ? 'positive' : payment === 'unpaid' ? 'warning' : 'muted';
 
 	return (
-		<span className="fbm-stack">
-			<span className={ `fbm-pill fbm-pill--${ bookingTone }` }>{ fbmText( label( status ) ) }</span>
-			<span className={ `fbm-pill fbm-pill--${ paymentTone }` }>{ fbmText( label( payment ) ) }</span>
+		<span className="mpfbs-stack">
+			<span className={ `mpfbs-pill mpfbs-pill--${ bookingTone }` }>{ mpfbsText( label( status ) ) }</span>
+			<span className={ `mpfbs-pill mpfbs-pill--${ paymentTone }` }>{ mpfbsText( label( payment ) ) }</span>
 		</span>
 	);
 }
@@ -145,7 +142,7 @@ function label( slug: string ): string {
  * Labels a booking type.
  */
 function journeyLabel( type: string ): string {
-	return type === RETURN_TYPE ? fbmText( 'Return' ) : fbmText( 'One way' );
+	return type === RETURN_TYPE ? mpfbsText( 'Return' ) : mpfbsText( 'One way' );
 }
 
 const RETURN_TYPE = 'return';
@@ -154,8 +151,8 @@ const RETURN_TYPE = 'return';
  * Renders the bookings list.
  */
 export function BookingsScreen(): JSX.Element {
-	const toast = useFbmToast();
-	const collection = useFbmCollection< BookingRow >( 'bookings', {
+	const toast = useMpfbsToast();
+	const collection = useMpfbsCollection< BookingRow >( 'bookings', {
 		orderby: 'created',
 		order: 'desc',
 	} );
@@ -168,31 +165,31 @@ export function BookingsScreen(): JSX.Element {
 			[
 				{
 					key: 'number',
-					label: fbmText( 'Reference' ),
+					label: mpfbsText( 'Reference' ),
 					width: '150px',
-					render: ( item: BookingRow ) => <code className="fbm-code">{ item.number }</code>,
+					render: ( item: BookingRow ) => <code className="mpfbs-code">{ item.number }</code>,
 				},
 				{
 					key: 'name',
-					label: fbmText( 'Customer' ),
+					label: mpfbsText( 'Customer' ),
 					render: ( item: BookingRow ) => (
-						<div className="fbm-cell-primary">
-							<span className="fbm-cell-primary__title">{ item.customer_name || '—' }</span>
-							<span className="fbm-cell-primary__meta">{ item.customer_email }</span>
+						<div className="mpfbs-cell-primary">
+							<span className="mpfbs-cell-primary__title">{ item.customer_name || '—' }</span>
+							<span className="mpfbs-cell-primary__meta">{ item.customer_email }</span>
 						</div>
 					),
 				},
 				{
 					key: 'journey',
-					label: fbmText( 'Journey' ),
+					label: mpfbsText( 'Journey' ),
 					render: ( item: BookingRow ) => (
-						<div className="fbm-cell-primary">
-							<span className="fbm-cell-primary__title">
+						<div className="mpfbs-cell-primary">
+							<span className="mpfbs-cell-primary__title">
 								{ item.origin && item.destination
 									? `${ item.origin } → ${ item.destination }`
 									: item.route_name || '—' }
 							</span>
-							<span className="fbm-cell-primary__meta">
+							<span className="mpfbs-cell-primary__meta">
 								{ journeyLabel( String( item.booking_type ?? '' ) ) }
 							</span>
 						</div>
@@ -200,13 +197,13 @@ export function BookingsScreen(): JSX.Element {
 				},
 				{
 					key: 'departure',
-					label: fbmText( 'Departure' ),
+					label: mpfbsText( 'Departure' ),
 					width: '170px',
 					render: ( item: BookingRow ) => <span>{ item.departure || '—' }</span>,
 				},
 				{
 					key: 'passenger_count',
-					label: fbmText( 'Party' ),
+					label: mpfbsText( 'Party' ),
 					width: '110px',
 					align: 'end',
 					render: ( item: BookingRow ) => (
@@ -218,15 +215,15 @@ export function BookingsScreen(): JSX.Element {
 				},
 				{
 					key: 'total',
-					label: fbmText( 'Total' ),
+					label: mpfbsText( 'Total' ),
 					sortBy: 'total',
 					width: '130px',
 					align: 'end',
-					render: ( item: BookingRow ) => <span>{ fbmFormatMoney( Number( item.total ?? 0 ) ) }</span>,
+					render: ( item: BookingRow ) => <span>{ mpfbsFormatMoney( Number( item.total ?? 0 ) ) }</span>,
 				},
 				{
 					key: 'status',
-					label: fbmText( 'Status' ),
+					label: mpfbsText( 'Status' ),
 					width: '160px',
 					render: ( item: BookingRow ) => statusPill( String( item.booking_status ?? '' ), String( item.payment_status ?? '' ) ),
 				},
@@ -242,24 +239,24 @@ export function BookingsScreen(): JSX.Element {
 		setCancelBusy( true );
 
 		try {
-			await fbmRequest( `bookings/${ cancelling.id }`, { method: 'DELETE' } );
-			toast.notify( fbmText( 'Booking cancelled.' ), 'success' );
+			await mpfbsRequest( `bookings/${ cancelling.id }`, { method: 'DELETE' } );
+			toast.notify( mpfbsText( 'Booking cancelled.' ), 'success' );
 			setSelected( null );
 			setCancelling( null );
 			collection.reload();
 		} catch ( caught: unknown ) {
-			toast.notify( caught instanceof FbmApiError ? caught.message : fbmText( 'Something went wrong.' ), 'error' );
+			toast.notify( caught instanceof MpfbsApiError ? caught.message : mpfbsText( 'Something went wrong.' ), 'error' );
 		} finally {
 			setCancelBusy( false );
 		}
 	}, [ cancelling, collection, toast ] );
 
-	const canCreate = fbmCan( 'fbm_create_booking' );
+	const canCreate = mpfbsCan( 'mpfbs_create_booking' );
 
-	const exportUrl = fbmRestUrl( 'bookings/export', {
+	const exportUrl = mpfbsRestUrl( 'bookings/export', {
 		search: collection.query.search,
 		status: collection.query.status,
-		_wpnonce: fbmConfig().restNonce,
+		_wpnonce: mpfbsConfig().restNonce,
 	} );
 
 	const canCancel = ( item: BookingRow ): boolean => {
@@ -271,7 +268,7 @@ export function BookingsScreen(): JSX.Element {
 	if ( collection.error ) {
 		return (
 			<>
-				<PageHeader title={ fbmText( 'Bookings' ) } />
+				<PageHeader title={ mpfbsText( 'Bookings' ) } />
 				<ErrorState message={ collection.error.message } code={ collection.error.code } onRetry={ collection.reload } />
 			</>
 		);
@@ -280,8 +277,8 @@ export function BookingsScreen(): JSX.Element {
 	return (
 		<>
 			<PageHeader
-				title={ fbmText( 'Bookings' ) }
-				description={ fbmText( 'Every crossing sold, and what still needs to happen before departure.' ) }
+				title={ mpfbsText( 'Bookings' ) }
+				description={ mpfbsText( 'Every crossing sold, and what still needs to happen before departure.' ) }
 				actions={
 					<>
 						{ /*
@@ -290,17 +287,17 @@ export function BookingsScreen(): JSX.Element {
 						 * somebody just built, and it is almost always the one
 						 * they want in a spreadsheet.
 						 */ }
-						<a className="fbm-button" href={ exportUrl }>
-							{ fbmText( 'Export CSV' ) }
+						<a className="mpfbs-button" href={ exportUrl }>
+							{ mpfbsText( 'Export CSV' ) }
 						</a>
 
 						{ canCreate ? (
 							<button
 								type="button"
-								className="fbm-button fbm-button--primary"
-								onClick={ () => fbmNavigate( '/bookings/new' ) }
+								className="mpfbs-button mpfbs-button--primary"
+								onClick={ () => mpfbsNavigate( '/bookings/new' ) }
 							>
-								{ fbmText( 'New booking' ) }
+								{ mpfbsText( 'New booking' ) }
 							</button>
 						) : null }
 					</>
@@ -310,13 +307,13 @@ export function BookingsScreen(): JSX.Element {
 			<FilterBar
 				search={ collection.query.search }
 				onSearch={ collection.setSearch }
-				searchPlaceholder={ fbmText( 'Search by reference, customer or email' ) }
+				searchPlaceholder={ mpfbsText( 'Search by reference, customer or email' ) }
 				statusOptions={ STATUS_OPTIONS }
 				status={ collection.query.status }
 				onStatus={ ( value ) => collection.setQuery( { status: value } ) }
 			/>
 
-			<div className="fbm-panel">
+			<div className="mpfbs-panel">
 				{ collection.loading ? (
 					<LoadingState rows={ 6 } />
 				) : (
@@ -334,11 +331,11 @@ export function BookingsScreen(): JSX.Element {
 							emptyState={
 								<EmptyState
 									icon="ticket"
-									title={ fbmText( 'No bookings yet.' ) }
+									title={ mpfbsText( 'No bookings yet.' ) }
 									description={
 										collection.query.search !== '' || collection.query.status !== ''
-											? fbmText( 'Try a different search or filter.' )
-											: fbmText( 'Bookings made on the website, at the counter or through agents appear here.' )
+											? mpfbsText( 'Try a different search or filter.' )
+											: mpfbsText( 'Bookings made on the website or by staff appear here.' )
 									}
 								/>
 							}
@@ -362,7 +359,7 @@ export function BookingsScreen(): JSX.Element {
 						row={ selected }
 						onCancel={ () => setCancelling( selected ) }
 						canCancel={ canCancel( selected ) }
-						canEdit={ fbmCan( 'fbm_modify_booking' ) }
+						canEdit={ mpfbsCan( 'mpfbs_modify_booking' ) }
 						onSaved={ ( updated ) => {
 							setSelected( updated );
 							collection.reload();
@@ -373,13 +370,13 @@ export function BookingsScreen(): JSX.Element {
 
 			<ConfirmDialog
 				open={ cancelling !== null }
-				title={ fbmText( 'Cancel booking?' ) }
+				title={ mpfbsText( 'Cancel booking?' ) }
 				message={
 					cancelling
-						? fbmFormat( 'Cancel booking %s? Its capacity returns to the sailing and the customer is notified.', cancelling.number )
+						? mpfbsFormat( 'Cancel booking %s? Its capacity returns to the sailing and the customer is notified.', cancelling.number )
 						: ''
 				}
-				confirmLabel={ fbmText( 'Cancel booking' ) }
+				confirmLabel={ mpfbsText( 'Cancel booking' ) }
 				tone="danger"
 				busy={ cancelBusy }
 				onConfirm={ cancel }
@@ -451,9 +448,7 @@ function editableFrom( row: BookingRow ): EditableBooking {
  * Renders one booking as an editable record.
  */
 function BookingDetails( { row, onCancel, canCancel, canEdit, onSaved }: BookingDetailsProps ): JSX.Element {
-	const toast = useFbmToast();
-	const config = fbmConfig();
-	const [ view, setView ] = useState( 'details' );
+	const toast = useMpfbsToast();
 	const [ values, setValues ] = useState< EditableBooking >( () => editableFrom( row ) );
 	const [ errors, setErrors ] = useState< Record< string, string > >( {} );
 	const [ formError, setFormError ] = useState( '' );
@@ -468,7 +463,6 @@ function BookingDetails( { row, onCancel, canCancel, canEdit, onSaved }: Booking
 		setValues( editableFrom( row ) );
 		setErrors( {} );
 		setFormError( '' );
-		setView( 'details' );
 	}, [ row ] );
 
 	/*
@@ -482,7 +476,7 @@ function BookingDetails( { row, onCancel, canCancel, canEdit, onSaved }: Booking
 
 		setRecord( null );
 
-		fbmRequest< BookingRecord >( `bookings/${ row.id }` )
+		mpfbsRequest< BookingRecord >( `bookings/${ row.id }` )
 			.then( ( response ) => {
 				if ( ! cancelled ) {
 					setRecord( response.data );
@@ -524,16 +518,16 @@ function BookingDetails( { row, onCancel, canCancel, canEdit, onSaved }: Booking
 		setFormError( '' );
 
 		try {
-			const response = await fbmRequest< BookingRow >( `bookings/${ row.id }`, { method: 'PUT', body: values } );
-			toast.notify( fbmFormat( 'Booking %s updated.', row.number ), 'success' );
+			const response = await mpfbsRequest< BookingRow >( `bookings/${ row.id }`, { method: 'PUT', body: values } );
+			toast.notify( mpfbsFormat( 'Booking %s updated.', row.number ), 'success' );
 			setRefreshed( ( count ) => count + 1 );
 			onSaved( response.data );
 		} catch ( caught: unknown ) {
-			if ( caught instanceof FbmApiError ) {
+			if ( caught instanceof MpfbsApiError ) {
 				setErrors( caught.details.fields && typeof caught.details.fields === 'object' ? ( caught.details.fields as Record< string, string > ) : {} );
 				setFormError( caught.message );
 			} else {
-				setFormError( fbmText( 'Something went wrong.' ) );
+				setFormError( mpfbsText( 'Something went wrong.' ) );
 			}
 		} finally {
 			setSaving( false );
@@ -541,24 +535,24 @@ function BookingDetails( { row, onCancel, canCancel, canEdit, onSaved }: Booking
 	}, [ onSaved, row.id, row.number, toast, values ] );
 
 	const summary = [
-		{ label: fbmText( 'Departure' ), value: row.departure || '—' },
-		{ label: fbmText( 'Journey' ), value: journeyLabel( String( row.booking_type ?? '' ) ) },
+		{ label: mpfbsText( 'Departure' ), value: row.departure || '—' },
+		{ label: mpfbsText( 'Journey' ), value: journeyLabel( String( row.booking_type ?? '' ) ) },
 		{
-			label: fbmText( 'Party' ),
-			value: fbmFormat(
+			label: mpfbsText( 'Party' ),
+			value: mpfbsFormat(
 				'%1$s passengers, %2$s vehicles',
 				String( Number( row.passenger_count ?? 0 ) ),
 				String( Number( row.vehicle_count ?? 0 ) )
 			),
 		},
-		{ label: fbmText( 'Created' ), value: row.created ? new Date( row.created + 'Z' ).toLocaleString() : '—' },
+		{ label: mpfbsText( 'Created' ), value: row.created ? new Date( row.created + 'Z' ).toLocaleString() : '—' },
 	];
 
 	const money = [
-		{ label: fbmText( 'Subtotal' ), value: fbmFormatMoney( Number( row.subtotal ?? 0 ) ) },
-		{ label: fbmText( 'Discount' ), value: fbmFormatMoney( -Number( row.discount ?? 0 ) ) },
-		{ label: fbmText( 'Tax' ), value: fbmFormatMoney( Number( row.tax ?? 0 ) ) },
-		{ label: fbmText( 'Fees' ), value: fbmFormatMoney( Number( row.fees ?? 0 ) ) },
+		{ label: mpfbsText( 'Subtotal' ), value: mpfbsFormatMoney( Number( row.subtotal ?? 0 ) ) },
+		{ label: mpfbsText( 'Discount' ), value: mpfbsFormatMoney( -Number( row.discount ?? 0 ) ) },
+		{ label: mpfbsText( 'Tax' ), value: mpfbsFormatMoney( Number( row.tax ?? 0 ) ) },
+		{ label: mpfbsText( 'Fees' ), value: mpfbsFormatMoney( Number( row.fees ?? 0 ) ) },
 	];
 
 	// What is still owed is the number staff are usually looking for, and it is
@@ -566,78 +560,43 @@ function BookingDetails( { row, onCancel, canCancel, canEdit, onSaved }: Booking
 	// anything refunded, worked out by the server so both halves agree.
 	const balance = Number( row.balance ?? Number( row.total ?? 0 ) - Number( row.paid ?? 0 ) );
 
-	const canRefund = config.proActive && fbmCan( 'fbm_issue_refund' );
-	const canAmend = config.proActive && canEdit && canCancel;
-
-	/*
-	 * The amendment panel counts a party rather than naming it, so the stored
-	 * traveller rows are folded back down to type and quantity — the same shape
-	 * the pricing engine takes.
-	 */
-	const counts = useMemo(
-		() => ( {
-			passengers: tally( record?.passengers ?? [] ),
-			vehicles: tally( record?.vehicles ?? [] ),
-		} ),
-		[ record ]
-	);
-
-	// Refund and History only exist with Pro installed, so a Free dashboard
-	// shows the details form with no tab strip above it at all.
-	const views = [ { id: 'details', label: 'Details' } ];
-
-	// Amending a booking re-prices it and re-checks the crossing, which is Pro's
-	// modification engine. Without Pro the drawer offers the corrections that do
-	// not touch money, and nothing that would pretend to.
-	if ( canAmend ) {
-		views.push( { id: 'change', label: 'Change' } );
-	}
-
-	if ( canRefund ) {
-		views.push( { id: 'refund', label: 'Refund' } );
-	}
-
-	if ( config.proActive ) {
-		views.push( { id: 'history', label: 'History' } );
-	}
-
 	return (
-		<div className="fbm-drawer__body">
+		<div className="mpfbs-drawer__body">
 			{ formError ? (
-				<div className="fbm-alert fbm-alert--error" role="alert">
+				<div className="mpfbs-alert mpfbs-alert--error" role="alert">
 					{ formError }
 				</div>
 			) : null }
 
-			<div className="fbm-record">
-				<div className="fbm-record__head">
+			<div className="mpfbs-record">
+				<div className="mpfbs-record__head">
 					<div>
-						<p className="fbm-record__ref">{ row.number }</p>
-						<p className="fbm-record__meta">{ row.departure || '—' }</p>
+						<p className="mpfbs-record__ref">{ row.number }</p>
+						<p className="mpfbs-record__meta">{ row.departure || '—' }</p>
 					</div>
-					<p className="fbm-record__total">{ fbmFormatMoney( Number( row.total ?? 0 ) ) }</p>
+					<p className="mpfbs-record__total">{ mpfbsFormatMoney( Number( row.total ?? 0 ) ) }</p>
 				</div>
 
-				<dl className="fbm-record__grid">
+				<dl className="mpfbs-record__grid">
 					{ summary.map( ( item ) => (
-						<div className="fbm-record__row" key={ item.label }>
-							<dt className="fbm-record__label">{ item.label }</dt>
-							<dd className="fbm-record__value">{ item.value }</dd>
+						<div className="mpfbs-record__row" key={ item.label }>
+							<dt className="mpfbs-record__label">{ item.label }</dt>
+							<dd className="mpfbs-record__value">{ item.value }</dd>
 						</div>
 					) ) }
 				</dl>
 			</div>
 
 			{ record && record.legs.length > 0 ? (
-				<section className="fbm-record__section">
-					<h3 className="fbm-subheading">{ fbmText( 'Journey' ) }</h3>
-					<ol className="fbm-legs">
+				<section className="mpfbs-record__section">
+					<h3 className="mpfbs-subheading">{ mpfbsText( 'Journey' ) }</h3>
+					<ol className="mpfbs-legs">
 						{ record.legs.map( ( leg, index ) => (
-							<li className="fbm-legs__item" key={ index }>
-								<span className="fbm-legs__label">{ leg.label }</span>
-								<span className="fbm-legs__ports">{ `${ leg.origin } → ${ leg.destination }` }</span>
-								<span className="fbm-legs__meta">
-									{ [ fbmDate( leg.departure ), fbmClock( leg.departure ), leg.arrival ? `– ${ fbmClock( leg.arrival ) }` : '', leg.vessel ]
+							<li className="mpfbs-legs__item" key={ index }>
+								<span className="mpfbs-legs__label">{ leg.label }</span>
+								<span className="mpfbs-legs__ports">{ `${ leg.origin } → ${ leg.destination }` }</span>
+								<span className="mpfbs-legs__meta">
+									{ [ mpfbsDate( leg.departure ), mpfbsClock( leg.departure ), leg.arrival ? `– ${ mpfbsClock( leg.arrival ) }` : '', leg.vessel ]
 										.filter( Boolean )
 										.join( ' · ' ) }
 								</span>
@@ -650,46 +609,19 @@ function BookingDetails( { row, onCancel, canCancel, canEdit, onSaved }: Booking
 			{ record ? (
 				<>
 					<TravellerList
-						title={ fbmText( 'Passengers' ) }
+						title={ mpfbsText( 'Passengers' ) }
 						travellers={ record.passengers }
-						empty={ fbmText( 'No passenger details were captured for this booking.' ) }
+						empty={ mpfbsText( 'No passenger details were captured for this booking.' ) }
 					/>
 
 					{ record.vehicles.length > 0 ? (
-						<TravellerList title={ fbmText( 'Vehicles' ) } travellers={ record.vehicles } empty="" />
+						<TravellerList title={ mpfbsText( 'Vehicles' ) } travellers={ record.vehicles } empty="" />
 					) : null }
 				</>
 			) : null }
 
-			{ views.length > 1 ? (
-				<Tabs label="Booking" active={ view } onSelect={ setView } tabs={ views } />
-			) : null }
-
-			{ view === 'change' ? (
-				record ? (
-					<ChangeBookingPanel
-						bookingId={ Number( row.id ) }
-						passengers={ counts.passengers }
-						vehicles={ counts.vehicles }
-						onApplied={ () => {
-							setRefreshed( ( count ) => count + 1 );
-							onSaved( row );
-						} }
-					/>
-				) : (
-					<LoadingState rows={ 3 } />
-				)
-			) : null }
-
-			{ view === 'refund' ? (
-				<RefundPanel bookingId={ Number( row.id ) } onIssued={ () => onSaved( row ) } />
-			) : null }
-
-			{ view === 'history' ? <BookingHistory bookingId={ Number( row.id ) } /> : null }
-
 			<form
-				hidden={ view !== 'details' }
-				className="fbm-form"
+				className="mpfbs-form"
 				onSubmit={ ( event ) => {
 					event.preventDefault();
 
@@ -698,10 +630,10 @@ function BookingDetails( { row, onCancel, canCancel, canEdit, onSaved }: Booking
 					}
 				} }
 			>
-				<h3 className="fbm-subheading">{ fbmText( 'Customer' ) }</h3>
+				<h3 className="mpfbs-subheading">{ mpfbsText( 'Customer' ) }</h3>
 
 				<TextField
-					label={ fbmText( 'Full name' ) }
+					label={ mpfbsText( 'Full name' ) }
 					name="customer_name"
 					value={ values.customer_name }
 					onChange={ ( value ) => set( 'customer_name', value ) }
@@ -711,7 +643,7 @@ function BookingDetails( { row, onCancel, canCancel, canEdit, onSaved }: Booking
 				/>
 
 				<TextField
-					label={ fbmText( 'Email' ) }
+					label={ mpfbsText( 'Email' ) }
 					name="customer_email"
 					type="email"
 					value={ values.customer_email }
@@ -722,7 +654,7 @@ function BookingDetails( { row, onCancel, canCancel, canEdit, onSaved }: Booking
 				/>
 
 				<TextField
-					label={ fbmText( 'Phone' ) }
+					label={ mpfbsText( 'Phone' ) }
 					name="customer_phone"
 					type="tel"
 					value={ values.customer_phone }
@@ -731,31 +663,31 @@ function BookingDetails( { row, onCancel, canCancel, canEdit, onSaved }: Booking
 					disabled={ ! canEdit }
 				/>
 
-				<h3 className="fbm-subheading">{ fbmText( 'Status' ) }</h3>
+				<h3 className="mpfbs-subheading">{ mpfbsText( 'Status' ) }</h3>
 
 				<SelectField
-					label={ fbmText( 'Booking status' ) }
+					label={ mpfbsText( 'Booking status' ) }
 					name="booking_status"
 					value={ values.booking_status }
-					options={ BOOKING_STATUSES.map( ( option ) => ( { value: option.value, label: fbmText( option.label ) } ) ) }
+					options={ BOOKING_STATUSES.map( ( option ) => ( { value: option.value, label: mpfbsText( option.label ) } ) ) }
 					onChange={ ( value ) => set( 'booking_status', value ) }
 					error={ errors.booking_status }
 					disabled={ ! canEdit }
-					hint={ fbmText( 'Reinstating a cancelled booking is checked against the sailing’s remaining capacity.' ) }
+					hint={ mpfbsText( 'Reinstating a cancelled booking is checked against the sailing’s remaining capacity.' ) }
 				/>
 
 				<SelectField
-					label={ fbmText( 'Payment status' ) }
+					label={ mpfbsText( 'Payment status' ) }
 					name="payment_status"
 					value={ values.payment_status }
-					options={ PAYMENT_STATUSES.map( ( option ) => ( { value: option.value, label: fbmText( option.label ) } ) ) }
+					options={ PAYMENT_STATUSES.map( ( option ) => ( { value: option.value, label: mpfbsText( option.label ) } ) ) }
 					onChange={ ( value ) => set( 'payment_status', value ) }
 					error={ errors.payment_status }
 					disabled={ ! canEdit }
 				/>
 
 				<TextField
-					label={ fbmText( 'Payment method' ) }
+					label={ mpfbsText( 'Payment method' ) }
 					name="payment_method"
 					value={ values.payment_method }
 					onChange={ ( value ) => set( 'payment_method', value ) }
@@ -763,178 +695,60 @@ function BookingDetails( { row, onCancel, canCancel, canEdit, onSaved }: Booking
 					disabled={ ! canEdit }
 				/>
 
-				<h3 className="fbm-subheading">{ fbmText( 'Price' ) }</h3>
+				<h3 className="mpfbs-subheading">{ mpfbsText( 'Price' ) }</h3>
 
-				<dl className="fbm-record__grid">
+				<dl className="mpfbs-record__grid">
 					{ money.map( ( item ) => (
-						<div className="fbm-record__row" key={ item.label }>
-							<dt className="fbm-record__label">{ item.label }</dt>
-							<dd className="fbm-record__value">{ item.value }</dd>
+						<div className="mpfbs-record__row" key={ item.label }>
+							<dt className="mpfbs-record__label">{ item.label }</dt>
+							<dd className="mpfbs-record__value">{ item.value }</dd>
 						</div>
 					) ) }
-					<div className="fbm-record__row is-total">
-						<dt className="fbm-record__label">{ fbmText( 'Total' ) }</dt>
-						<dd className="fbm-record__value">{ fbmFormatMoney( Number( row.total ?? 0 ) ) }</dd>
+					<div className="mpfbs-record__row is-total">
+						<dt className="mpfbs-record__label">{ mpfbsText( 'Total' ) }</dt>
+						<dd className="mpfbs-record__value">{ mpfbsFormatMoney( Number( row.total ?? 0 ) ) }</dd>
 					</div>
-					<div className="fbm-record__row">
-						<dt className="fbm-record__label">{ fbmText( 'Paid' ) }</dt>
-						<dd className="fbm-record__value">{ fbmFormatMoney( Number( row.paid ?? 0 ) ) }</dd>
+					<div className="mpfbs-record__row">
+						<dt className="mpfbs-record__label">{ mpfbsText( 'Paid' ) }</dt>
+						<dd className="mpfbs-record__value">{ mpfbsFormatMoney( Number( row.paid ?? 0 ) ) }</dd>
 					</div>
-					<div className={ `fbm-record__row${ balance > 0 ? ' is-due' : '' }` }>
-						<dt className="fbm-record__label">
-							{ balance < 0 ? fbmText( 'Refund due' ) : fbmText( 'Balance due' ) }
+					<div className={ `mpfbs-record__row${ balance > 0 ? ' is-due' : '' }` }>
+						<dt className="mpfbs-record__label">
+							{ balance < 0 ? mpfbsText( 'Refund due' ) : mpfbsText( 'Balance due' ) }
 						</dt>
-						<dd className="fbm-record__value">{ fbmFormatMoney( Math.abs( balance ) ) }</dd>
+						<dd className="mpfbs-record__value">{ mpfbsFormatMoney( Math.abs( balance ) ) }</dd>
 					</div>
 				</dl>
 
-				<h3 className="fbm-subheading">{ fbmText( 'Internal notes' ) }</h3>
+				<h3 className="mpfbs-subheading">{ mpfbsText( 'Internal notes' ) }</h3>
 
 				<TextAreaField
-					label={ fbmText( 'Notes' ) }
+					label={ mpfbsText( 'Notes' ) }
 					name="internal_notes"
 					value={ values.internal_notes }
 					onChange={ ( value ) => set( 'internal_notes', value ) }
 					rows={ 3 }
-					hint={ fbmText( 'Staff only. Never shown to the customer.' ) }
+					hint={ mpfbsText( 'Staff only. Never shown to the customer.' ) }
 				/>
 			</form>
 
-			<div className="fbm-drawer__footer" hidden={ view !== 'details' }>
+			<div className="mpfbs-drawer__footer">
 				{ canCancel ? (
-					<button type="button" className="fbm-button fbm-button--danger" onClick={ onCancel } disabled={ saving }>
-						{ fbmText( 'Cancel booking' ) }
+					<button type="button" className="mpfbs-button mpfbs-button--danger" onClick={ onCancel } disabled={ saving }>
+						{ mpfbsText( 'Cancel booking' ) }
 					</button>
 				) : (
 					<span />
 				) }
 
 				{ canEdit ? (
-					<button type="button" className="fbm-button fbm-button--primary" onClick={ save } disabled={ saving || ! dirty }>
-						{ saving ? fbmText( 'Saving…' ) : fbmText( 'Save changes' ) }
+					<button type="button" className="mpfbs-button mpfbs-button--primary" onClick={ save } disabled={ saving || ! dirty }>
+						{ saving ? mpfbsText( 'Saving…' ) : mpfbsText( 'Save changes' ) }
 					</button>
 				) : null }
 			</div>
 		</div>
 	);
-}
-
-/**
- * What has happened to a booking since it was made.
- *
- * Changes and refunds are shown on one timeline rather than two lists, because
- * the question being asked is always "what happened to this booking", and the
- * answer usually involves both.
- */
-function BookingHistory( { bookingId }: { bookingId: number } ): JSX.Element {
-	const [ entries, setEntries ] = useState< Array< Record< string, unknown > > | null >( null );
-
-	useEffect( () => {
-		let cancelled = false;
-
-		fbmRequest< { changes: Array< Record< string, unknown > >; refunds: Array< Record< string, unknown > > } >(
-			`bookings/${ bookingId }/history`
-		)
-			.then( ( response ) => {
-				if ( cancelled ) {
-					return;
-				}
-
-				const changes: Array< Record< string, unknown > > = ( response.data.changes ?? [] ).map(
-					( row ) => ( { ...row, kind: 'change' } )
-				);
-				const refunds: Array< Record< string, unknown > > = ( response.data.refunds ?? [] ).map(
-					( row ) => ( { ...row, kind: 'refund' } )
-				);
-
-				setEntries(
-					[ ...changes, ...refunds ].sort( ( a, b ) => Number( b.at ?? 0 ) - Number( a.at ?? 0 ) )
-				);
-			} )
-			.catch( () => {
-				if ( ! cancelled ) {
-					setEntries( [] );
-				}
-			} );
-
-		return () => {
-			cancelled = true;
-		};
-	}, [ bookingId ] );
-
-	if ( entries === null ) {
-		return <LoadingState rows={ 2 } />;
-	}
-
-	if ( entries.length === 0 ) {
-		return (
-			<p className="fbm-history__empty">
-				{ fbmText( 'Nothing has changed on this booking since it was made.' ) }
-			</p>
-		);
-	}
-
-	return (
-		<ol className="fbm-timeline">
-			{ entries.map( ( entry, index ) => (
-				<li className={ `fbm-timeline__item is-${ String( entry.kind ) }` } key={ index }>
-					<p className="fbm-timeline__what">
-						{ entry.kind === 'refund'
-							? `${ fbmText( 'Refunded' ) } ${ fbmFormatMoney( Number( entry.amount ?? 0 ) ) }`
-							: fbmFormat(
-									'Total changed from %1$s to %2$s',
-									fbmFormatMoney( Number( entry.previous ?? 0 ) ),
-									fbmFormatMoney( Number( entry.new ?? 0 ) )
-							  ) }
-					</p>
-
-					{ /*
-					 * What actually changed, not only what it came to. Entries
-					 * written before this was recorded simply have nothing to
-					 * show here, which is why every line is guarded rather than
-					 * rendered blank.
-					 */ }
-					<TimelineChange entry={ entry } />
-
-					{ String( entry.reason ?? '' ) !== '' ? (
-						<p className="fbm-timeline__why">{ String( entry.reason ) }</p>
-					) : null }
-					{ entry.kind === 'refund' && Number( entry.penalty ?? 0 ) > 0 ? (
-						<p className="fbm-timeline__why">
-							{ `${ String( entry.label ?? fbmText( 'Penalty' ) ) }: ${ fbmFormatMoney(
-								Number( entry.penalty )
-							) }` }
-						</p>
-					) : null }
-					<p className="fbm-timeline__when">
-						{ [
-							fbmDateTime( Number( entry.at ?? 0 ) ),
-							String( entry.by_name ?? '' ) !== ''
-								? fbmFormat( 'by %s', String( entry.by_name ) )
-								: '',
-						]
-							.filter( Boolean )
-							.join( ' · ' ) }
-					</p>
-				</li>
-			) ) }
-		</ol>
-	);
-}
-
-/**
- * Formats a stored UTC timestamp for the timeline.
- */
-function fbmDateTime( timestamp: number ): string {
-	if ( timestamp < 1 ) {
-		return '';
-	}
-
-	try {
-		return new Date( timestamp * 1000 ).toLocaleString();
-	} catch {
-		return '';
-	}
 }
 
 /**
@@ -955,29 +769,29 @@ function TravellerList( {
 } ): JSX.Element | null {
 	if ( travellers.length === 0 ) {
 		return empty === '' ? null : (
-			<section className="fbm-record__section">
-				<h3 className="fbm-subheading">{ title }</h3>
-				<p className="fbm-record__empty">{ empty }</p>
+			<section className="mpfbs-record__section">
+				<h3 className="mpfbs-subheading">{ title }</h3>
+				<p className="mpfbs-record__empty">{ empty }</p>
 			</section>
 		);
 	}
 
 	return (
-		<section className="fbm-record__section">
-			<h3 className="fbm-subheading">{ title }</h3>
-			<ol className="fbm-travellers">
+		<section className="mpfbs-record__section">
+			<h3 className="mpfbs-subheading">{ title }</h3>
+			<ol className="mpfbs-travellers">
 				{ travellers.map( ( traveller, index ) => (
-					<li className="fbm-travellers__item" key={ index }>
-						<p className="fbm-travellers__head">
-							<span className="fbm-travellers__index">{ index + 1 }</span>
-							<span className="fbm-travellers__type">{ traveller.type_name || fbmText( 'Unknown type' ) }</span>
+					<li className="mpfbs-travellers__item" key={ index }>
+						<p className="mpfbs-travellers__head">
+							<span className="mpfbs-travellers__index">{ index + 1 }</span>
+							<span className="mpfbs-travellers__type">{ traveller.type_name || mpfbsText( 'Unknown type' ) }</span>
 						</p>
 						{ traveller.details.length === 0 ? (
-							<p className="fbm-travellers__none">{ fbmText( 'No details were captured.' ) }</p>
+							<p className="mpfbs-travellers__none">{ mpfbsText( 'No details were captured.' ) }</p>
 						) : (
-							<dl className="fbm-travellers__details">
+							<dl className="mpfbs-travellers__details">
 								{ traveller.details.map( ( detail ) => (
-									<div className="fbm-travellers__detail" key={ detail.key }>
+									<div className="mpfbs-travellers__detail" key={ detail.key }>
 										<dt>{ detail.label }</dt>
 										<dd>{ detail.value }</dd>
 									</div>
@@ -994,8 +808,8 @@ function TravellerList( {
 /**
  * Formats a stored "Y-m-d H:i:s" sailing time as a date.
  */
-function fbmDate( value: string ): string {
-	const date = fbmParse( value );
+function mpfbsDate( value: string ): string {
+	const date = mpfbsParse( value );
 
 	return date === null ? value : date.toLocaleDateString();
 }
@@ -1003,8 +817,8 @@ function fbmDate( value: string ): string {
 /**
  * Formats a stored "Y-m-d H:i:s" sailing time as a clock time.
  */
-function fbmClock( value: string ): string {
-	const date = fbmParse( value );
+function mpfbsClock( value: string ): string {
+	const date = mpfbsParse( value );
 
 	return date === null ? '' : date.toLocaleTimeString( undefined, { hour: 'numeric', minute: '2-digit' } );
 }
@@ -1017,7 +831,7 @@ function fbmClock( value: string ): string {
  * would take the bare string as UTC and move every departure by the site's
  * offset.
  */
-function fbmParse( value: string ): Date | null {
+function mpfbsParse( value: string ): Date | null {
 	const parts = /^(\d{4})-(\d{2})-(\d{2})[ T](\d{2}):(\d{2})/.exec( value );
 
 	if ( parts === null ) {
@@ -1030,65 +844,5 @@ function fbmParse( value: string ): Date | null {
 		Number( parts[ 3 ] ),
 		Number( parts[ 4 ] ),
 		Number( parts[ 5 ] )
-	);
-}
-
-/**
- * Counts travellers by type.
- */
-function tally( travellers: BookingTraveller[] ): Record< number, number > {
-	const counts: Record< number, number > = {};
-
-	travellers.forEach( ( traveller ) => {
-		counts[ traveller.type_id ] = ( counts[ traveller.type_id ] ?? 0 ) + 1;
-	} );
-
-	return counts;
-}
-
-/**
- * Prints the detail of one change: the party, the crossing and the money owed.
- *
- * Everything is optional. A refund entry has none of it, and so does a change
- * recorded before any of this was kept, so each line only appears when there is
- * something true to say.
- */
-function TimelineChange( { entry }: { entry: Record< string, unknown > } ): JSX.Element | null {
-	const party = ( entry.party ?? {} ) as { from?: string; to?: string };
-	const crossing = ( entry.crossing ?? {} ) as { from?: string; to?: string };
-	const rows: string[] = [];
-
-	if ( party.from && party.to && party.from !== party.to ) {
-		rows.push( fbmFormat( 'Party: %1$s → %2$s', party.from, party.to ) );
-	}
-
-	if ( entry.moved === true && crossing.from && crossing.to ) {
-		rows.push( fbmFormat( 'Moved: %1$s → %2$s', crossing.from, crossing.to ) );
-	}
-
-	const balance = Number( entry.balance ?? 0 );
-
-	if ( entry.kind === 'change' && balance !== 0 ) {
-		rows.push(
-			balance > 0
-				? fbmFormat( 'Left to pay: %s', fbmFormatMoney( balance ) )
-				: fbmFormat( 'Refund owed: %s', fbmFormatMoney( -balance ) )
-		);
-	}
-
-	if ( entry.kind === 'change' && entry.notified !== undefined ) {
-		rows.push( entry.notified === true ? fbmText( 'The customer was told.' ) : fbmText( 'The customer was not told.' ) );
-	}
-
-	if ( rows.length === 0 ) {
-		return null;
-	}
-
-	return (
-		<ul className="fbm-timeline__detail">
-			{ rows.map( ( row, index ) => (
-				<li key={ index }>{ row }</li>
-			) ) }
-		</ul>
 	);
 }

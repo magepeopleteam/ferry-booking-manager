@@ -7,7 +7,7 @@
 
 declare( strict_types=1 );
 
-namespace FBM\Security;
+namespace MPFBS\Security;
 
 use WP_Error;
 
@@ -57,7 +57,7 @@ final class Permissions {
 		 * @param string       $capability Capability slug.
 		 * @param array<mixed> $args       Object arguments.
 		 */
-		return (bool) apply_filters( 'fbm_current_user_can', $allowed, $capability, $args );
+		return (bool) apply_filters( 'mpfbs_current_user_can', $allowed, $capability, $args );
 	}
 
 	/**
@@ -82,7 +82,7 @@ final class Permissions {
 	public function authorize( string $capability, ...$args ) {
 		if ( ! is_user_logged_in() ) {
 			return new WP_Error(
-				'fbm_not_authenticated',
+				'mpfbs_not_authenticated',
 				__( 'You must be signed in to perform this action.', 'magepeople-ferry-booking-system' ),
 				array( 'status' => 401 )
 			);
@@ -90,7 +90,7 @@ final class Permissions {
 
 		if ( ! $this->current_user_can( $capability, ...$args ) ) {
 			return new WP_Error(
-				'fbm_forbidden',
+				'mpfbs_forbidden',
 				__( 'You do not have permission to perform this action.', 'magepeople-ferry-booking-system' ),
 				array( 'status' => 403 )
 			);
@@ -100,39 +100,38 @@ final class Permissions {
 	}
 
 	/**
-	 * Returns a REST permission callback for a publicly readable endpoint.
+	 * Applies the public-API switch and rate limit to a public request.
 	 *
 	 * Schedules, capacity and fares are public information on any ferry
-	 * website: a customer has to see them before they have an account. The
-	 * callback still exists rather than being `__return_true`, so that a site
-	 * can close the public API with one filter, and so throttling has a home.
+	 * website, and a guest has to be able to book without an account, so those
+	 * endpoints register `__return_true` as their permission callback. Their
+	 * handlers call this first, so that a site can still close the public API
+	 * with one filter and every public endpoint is throttled per visitor.
 	 *
 	 * @param string $bucket Rate-limit bucket name.
 	 * @param int    $limit  Requests allowed per minute.
-	 * @return callable(): (true|WP_Error)
+	 * @return true|WP_Error
 	 */
-	public function rest_public_callback( string $bucket, int $limit = 60 ): callable {
-		return function () use ( $bucket, $limit ) {
-			/**
-			 * Filters whether the public booking API is reachable.
-			 *
-			 * @since 1.0.0
-			 *
-			 * @param bool   $allowed Whether anonymous access is permitted.
-			 * @param string $bucket  Endpoint bucket.
-			 */
-			$allowed = (bool) apply_filters( 'fbm_allow_public_api', true, $bucket );
+	public function public_access( string $bucket, int $limit = 60 ) {
+		/**
+		 * Filters whether the public booking API is reachable.
+		 *
+		 * @since 1.0.0
+		 *
+		 * @param bool   $allowed Whether anonymous access is permitted.
+		 * @param string $bucket  Endpoint bucket.
+		 */
+		$allowed = (bool) apply_filters( 'mpfbs_allow_public_api', true, $bucket );
 
-			if ( ! $allowed && ! is_user_logged_in() ) {
-				return new WP_Error(
-					'fbm_public_api_disabled',
-					__( 'Online booking is not available.', 'magepeople-ferry-booking-system' ),
-					array( 'status' => 403 )
-				);
-			}
+		if ( ! $allowed && ! is_user_logged_in() ) {
+			return new WP_Error(
+				'mpfbs_public_api_disabled',
+				__( 'Online booking is not available.', 'magepeople-ferry-booking-system' ),
+				array( 'status' => 403 )
+			);
+		}
 
-			return $this->limiter->check( $bucket, $limit );
-		};
+		return $this->limiter->check( $bucket, $limit );
 	}
 
 	/**

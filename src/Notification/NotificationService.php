@@ -7,24 +7,24 @@
 
 declare( strict_types=1 );
 
-namespace FBM\Notification;
+namespace MPFBS\Notification;
 
-use FBM\Models\Booking;
-use FBM\Repositories\RouteRepository;
-use FBM\Repositories\SailingRepository;
-use FBM\Repositories\VesselRepository;
-use FBM\Settings\Settings;
-use FBM\Support\Time;
+use MPFBS\Models\Booking;
+use MPFBS\Repositories\RouteRepository;
+use MPFBS\Repositories\SailingRepository;
+use MPFBS\Repositories\VesselRepository;
+use MPFBS\Settings\Settings;
+use MPFBS\Support\Time;
 
 defined( 'ABSPATH' ) || exit;
 
 /**
- * Sends the Free plugin's basic booking emails.
+ * Sends the plugin's booking emails.
  *
  * Every message is composed from one template with a small set of variables, so
  * the confirmation, the cancellation and the admin notice cannot drift apart in
- * what they say about a booking. Pro replaces this service's templates with its
- * email builder; the send points here are the stable contract it plugs into.
+ * what they say about a booking. The send points here are a stable contract
+ * that extensions can hook into.
  */
 final class NotificationService {
 
@@ -293,7 +293,7 @@ final class NotificationService {
 		 * @param Booking $booking Booking entity.
 		 * @param array<string, string> $context Heading and lede.
 		 */
-		return (string) apply_filters( 'fbm_email_body', implode( "\n", $lines ), $booking, $context );
+		return (string) apply_filters( 'mpfbs_email_body', implode( "\n", $lines ), $booking, $context );
 	}
 
 	/**
@@ -326,13 +326,13 @@ final class NotificationService {
 
 			$line = $label . ': ';
 
-			$line .= $route instanceof \FBM\Models\Route ? $route->name : $sailing->name;
+			$line .= $route instanceof \MPFBS\Models\Route ? $route->name : $sailing->name;
 
 			if ( '' !== $when ) {
 				$line .= ' — ' . $when;
 			}
 
-			if ( $vessel instanceof \FBM\Models\Vessel ) {
+			if ( $vessel instanceof \MPFBS\Models\Vessel ) {
 				$line .= ' — ' . $vessel->name;
 			}
 
@@ -404,7 +404,7 @@ final class NotificationService {
 		 * @param Booking                                                                                                             $booking Booking entity.
 		 */
 		$message = (array) apply_filters(
-			'fbm_email_message',
+			'mpfbs_email_message',
 			array(
 				'to'       => $to,
 				'subject'  => $subject,
@@ -440,7 +440,7 @@ final class NotificationService {
 		 * @param string  $body    Body.
 		 * @param Booking $booking Booking entity.
 		 */
-		do_action( 'fbm_email_sent', $sent, $to, $subject, $body, $booking );
+		do_action( 'mpfbs_email_sent', $sent, $to, $subject, $body, $booking );
 	}
 
 	/**

@@ -7,13 +7,13 @@
 
 declare( strict_types=1 );
 
-namespace FBM\Core;
+namespace MPFBS\Core;
 
-use FBM\Models\PassengerType;
-use FBM\Models\VehicleType;
-use FBM\Repositories\PassengerTypeRepository;
-use FBM\Repositories\VehicleTypeRepository;
-use FBM\Support\Options;
+use MPFBS\Models\PassengerType;
+use MPFBS\Models\VehicleType;
+use MPFBS\Repositories\PassengerTypeRepository;
+use MPFBS\Repositories\VehicleTypeRepository;
+use MPFBS\Support\Options;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -92,7 +92,7 @@ final class Seeder {
 		 *
 		 * @since 1.0.0
 		 */
-		do_action( 'fbm_defaults_seeded' );
+		do_action( 'mpfbs_defaults_seeded' );
 	}
 
 	/**
@@ -160,7 +160,7 @@ final class Seeder {
 		 *
 		 * @param array<int, array<string, mixed>> $defaults Seed definitions.
 		 */
-		return (array) apply_filters( 'fbm_passenger_type_defaults', $defaults );
+		return (array) apply_filters( 'mpfbs_passenger_type_defaults', $defaults );
 	}
 
 	/**
@@ -277,7 +277,7 @@ final class Seeder {
 		 *
 		 * @param array<int, array<string, mixed>> $defaults Seed definitions.
 		 */
-		return (array) apply_filters( 'fbm_vehicle_type_defaults', $defaults );
+		return (array) apply_filters( 'mpfbs_vehicle_type_defaults', $defaults );
 	}
 
 	/**
@@ -289,7 +289,7 @@ final class Seeder {
 		foreach ( self::passenger_type_defaults() as $seed ) {
 			$code = isset( $seed['code'] ) ? (string) $seed['code'] : '';
 
-			if ( '' === $code || $this->passenger_types->find_conflicting_id( '_fbm_pt_code', $code ) > 0 ) {
+			if ( '' === $code || $this->passenger_types->find_conflicting_id( '_mpfbs_pt_code', $code ) > 0 ) {
 				continue;
 			}
 
@@ -326,7 +326,7 @@ final class Seeder {
 		foreach ( self::vehicle_type_defaults() as $seed ) {
 			$code = isset( $seed['code'] ) ? (string) $seed['code'] : '';
 
-			if ( '' === $code || $this->vehicle_types->find_conflicting_id( '_fbm_vt_code', $code ) > 0 ) {
+			if ( '' === $code || $this->vehicle_types->find_conflicting_id( '_mpfbs_vt_code', $code ) > 0 ) {
 				continue;
 			}
 

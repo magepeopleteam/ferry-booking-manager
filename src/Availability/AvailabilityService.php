@@ -7,16 +7,16 @@
 
 declare( strict_types=1 );
 
-namespace FBM\Availability;
+namespace MPFBS\Availability;
 
-use FBM\Cache\CacheManager;
-use FBM\Models\Booking;
-use FBM\Models\Sailing;
-use FBM\Models\Vessel;
-use FBM\Repositories\BookingRepository;
-use FBM\Repositories\SailingRepository;
-use FBM\Repositories\VesselRepository;
-use FBM\Settings\Settings;
+use MPFBS\Cache\CacheManager;
+use MPFBS\Models\Booking;
+use MPFBS\Models\Sailing;
+use MPFBS\Models\Vessel;
+use MPFBS\Repositories\BookingRepository;
+use MPFBS\Repositories\SailingRepository;
+use MPFBS\Repositories\VesselRepository;
+use MPFBS\Settings\Settings;
 use WP_Error;
 
 defined( 'ABSPATH' ) || exit;
@@ -25,8 +25,7 @@ defined( 'ABSPATH' ) || exit;
  * The single authority on what is left to sell.
  *
  * Every path that needs to know whether something can be booked — the search
- * results, the booking wizard, the counter form, the importer, Pro's check-in
- * app — asks this class. Nothing recomputes availability its own way, because
+ * results, the booking wizard and the staff booking form — asks this class. Nothing recomputes availability its own way, because
  * two implementations of "how full is this sailing" is how a ferry ends up with
  * more passengers than lifejackets.
  *
@@ -111,7 +110,7 @@ final class AvailabilityService {
 
 		if ( ! $sailing instanceof Sailing ) {
 			return new WP_Error(
-				'fbm_sailing_not_found',
+				'mpfbs_sailing_not_found',
 				__( 'That sailing could not be found.', 'magepeople-ferry-booking-system' ),
 				array( 'status' => 404 )
 			);
@@ -196,7 +195,7 @@ final class AvailabilityService {
 	public function check( Availability $availability, array $request ) {
 		if ( ! $availability->bookable ) {
 			return new WP_Error(
-				'fbm_sailing_not_bookable',
+				'mpfbs_sailing_not_bookable',
 				$this->reason_message( $availability->reason ),
 				array(
 					'status' => 409,
@@ -213,7 +212,7 @@ final class AvailabilityService {
 			}
 
 			return new WP_Error(
-				'fbm_insufficient_capacity',
+				'mpfbs_insufficient_capacity',
 				$this->shortfall_message( $measure, $availability->remaining( $measure ) ),
 				array(
 					'status'    => 409,
@@ -256,13 +255,13 @@ final class AvailabilityService {
 		/**
 		 * Filters the inventory measures the availability engine tracks.
 		 *
-		 * Pro adds cabins here rather than forking the engine.
+		 * Extensions add inventory here rather than forking the engine.
 		 *
 		 * @since 1.0.0
 		 *
 		 * @param string[] $measures Measure names.
 		 */
-		return array_values( array_unique( (array) apply_filters( 'fbm_availability_measures', $measures ) ) );
+		return array_values( array_unique( (array) apply_filters( 'mpfbs_availability_measures', $measures ) ) );
 	}
 
 	/**
@@ -304,7 +303,7 @@ final class AvailabilityService {
 		 * @param Sailing      $sailing      Sailing entity.
 		 * @param int          $now          UTC timestamp.
 		 */
-		return apply_filters( 'fbm_availability', $availability, $sailing, $now );
+		return apply_filters( 'mpfbs_availability', $availability, $sailing, $now );
 	}
 
 	/**
@@ -358,7 +357,7 @@ final class AvailabilityService {
 		 * @param Sailing                  $sailing  Sailing entity.
 		 * @param Vessel|null              $vessel   Vessel entity, when it still exists.
 		 */
-		return (array) apply_filters( 'fbm_sailing_capacity', $capacity, $sailing, $vessel instanceof Vessel ? $vessel : null );
+		return (array) apply_filters( 'mpfbs_sailing_capacity', $capacity, $sailing, $vessel instanceof Vessel ? $vessel : null );
 	}
 
 	/**
@@ -478,7 +477,7 @@ final class AvailabilityService {
 		 * @param Booking                  $booking    Booking entity.
 		 * @param int                      $sailing_id Sailing being counted.
 		 */
-		return (array) apply_filters( 'fbm_booking_usage', $usage, $booking, $sailing_id );
+		return (array) apply_filters( 'mpfbs_booking_usage', $usage, $booking, $sailing_id );
 	}
 
 	/**
@@ -501,7 +500,7 @@ final class AvailabilityService {
 
 		$open = (string) $sailing->get( 'booking_open' );
 
-		if ( '' !== $open && $now < \FBM\Support\Time::local_to_timestamp( $open ) ) {
+		if ( '' !== $open && $now < \MPFBS\Support\Time::local_to_timestamp( $open ) ) {
 			return 'not_open_yet';
 		}
 
@@ -532,7 +531,7 @@ final class AvailabilityService {
 		}
 
 		if ( '' !== $close ) {
-			return $now > \FBM\Support\Time::local_to_timestamp( $close ) ? 'booking_closed' : '';
+			return $now > \MPFBS\Support\Time::local_to_timestamp( $close ) ? 'booking_closed' : '';
 		}
 
 		return ( $departure > 0 && $now > $departure ) ? 'departed' : '';

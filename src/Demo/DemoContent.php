@@ -7,20 +7,20 @@
 
 declare( strict_types=1 );
 
-namespace FBM\Demo;
+namespace MPFBS\Demo;
 
-use FBM\Models\Port;
-use FBM\Models\Route;
-use FBM\Models\Sailing;
-use FBM\Models\Vessel;
-use FBM\Repositories\PassengerTypeRepository;
-use FBM\Repositories\PortRepository;
-use FBM\Repositories\RouteRepository;
-use FBM\Repositories\SailingRepository;
-use FBM\Repositories\VehicleTypeRepository;
-use FBM\Repositories\VesselRepository;
-use FBM\Settings\Settings;
-use FBM\Support\Options;
+use MPFBS\Models\Port;
+use MPFBS\Models\Route;
+use MPFBS\Models\Sailing;
+use MPFBS\Models\Vessel;
+use MPFBS\Repositories\PassengerTypeRepository;
+use MPFBS\Repositories\PortRepository;
+use MPFBS\Repositories\RouteRepository;
+use MPFBS\Repositories\SailingRepository;
+use MPFBS\Repositories\VehicleTypeRepository;
+use MPFBS\Repositories\VesselRepository;
+use MPFBS\Settings\Settings;
+use MPFBS\Support\Options;
 use WP_Error;
 use WP_Query;
 
@@ -37,7 +37,7 @@ defined( 'ABSPATH' ) || exit;
  *
  * Two rules make it safe to offer on a live site:
  *
- * 1. Every record carries `_fbm_demo`, so removing the demo removes exactly what
+ * 1. Every record carries `_mpfbs_demo`, so removing the demo removes exactly what
  *    the demo created and never touches an operator's own data.
  * 2. Records are matched by their code, so importing twice updates rather than
  *    duplicates.
@@ -51,7 +51,7 @@ final class DemoContent {
 	/**
 	 * Marks a record as belonging to the demo.
 	 */
-	public const FLAG_META = '_fbm_demo';
+	public const FLAG_META = '_mpfbs_demo';
 
 	/**
 	 * Option recording that the operator does not want to be asked again.
@@ -215,7 +215,7 @@ final class DemoContent {
 	public function run_step( int $index ) {
 		if ( $index < 0 || $index >= $this->steps() ) {
 			return new WP_Error(
-				'fbm_demo_step',
+				'mpfbs_demo_step',
 				__( 'That import step does not exist.', 'magepeople-ferry-booking-system' ),
 				array( 'status' => 400 )
 			);
@@ -236,7 +236,7 @@ final class DemoContent {
 
 			// A working operation leaves nothing to set up, so the first-run
 			// steps that would otherwise lock the dashboard are skipped.
-			\FBM\Setup\SetupStatus::mark_complete();
+			\MPFBS\Setup\SetupStatus::mark_complete();
 		}
 
 		return array(
@@ -329,12 +329,12 @@ final class DemoContent {
 	 */
 	private function import_places(): string {
 		foreach ( self::ports() as $port ) {
-			$id = $this->ports->find_conflicting_id( '_fbm_port_code', $port['code'] );
+			$id = $this->ports->find_conflicting_id( '_mpfbs_port_code', $port['code'] );
 			$this->remember( $this->ports->save( $port['fields'], $id, $port['name'] ) );
 		}
 
 		foreach ( self::vessels() as $vessel ) {
-			$id = $this->vessels->find_conflicting_id( '_fbm_vessel_code', $vessel['code'] );
+			$id = $this->vessels->find_conflicting_id( '_mpfbs_vessel_code', $vessel['code'] );
 			$this->remember( $this->vessels->save( $vessel['fields'], $id, $vessel['name'] ) );
 		}
 
@@ -357,8 +357,8 @@ final class DemoContent {
 			$vehicle_codes   = array_merge( $vehicle_codes, array_keys( $route['vehicle_prices'] ) );
 		}
 
-		$passenger_types = $this->type_ids( $this->passenger_types, '_fbm_pt_code', $passenger_codes );
-		$vehicle_types   = $this->type_ids( $this->vehicle_types, '_fbm_vt_code', $vehicle_codes );
+		$passenger_types = $this->type_ids( $this->passenger_types, '_mpfbs_pt_code', $passenger_codes );
+		$vehicle_types   = $this->type_ids( $this->vehicle_types, '_mpfbs_vt_code', $vehicle_codes );
 
 		foreach ( self::routes() as $route ) {
 			$origin      = $this->port_id( $route['origin'] );
@@ -383,7 +383,7 @@ final class DemoContent {
 				'vehicle_prices'   => $this->price_map( $route['vehicle_prices'], $vehicle_types ),
 			);
 
-			$id = $this->routes->find_conflicting_id( '_fbm_route_code', $route['code'] );
+			$id = $this->routes->find_conflicting_id( '_mpfbs_route_code', $route['code'] );
 			$this->remember( $this->routes->save( $fields, $id, $route['name'] ) );
 		}
 
@@ -462,11 +462,11 @@ final class DemoContent {
 				'meta_query'     => array( // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query -- Two indexed keys; the alternative is duplicating the schedule on every import.
 					'relation' => 'AND',
 					array(
-						'key'   => '_fbm_route_id',
+						'key'   => '_mpfbs_route_id',
 						'value' => $route_id,
 					),
 					array(
-						'key'   => '_fbm_departure_datetime',
+						'key'   => '_mpfbs_departure_datetime',
 						'value' => $departure,
 					),
 				),
@@ -554,7 +554,7 @@ final class DemoContent {
 	 * @return int
 	 */
 	private function port_id( string $code ): int {
-		return $this->ports->find_conflicting_id( '_fbm_port_code', $code );
+		return $this->ports->find_conflicting_id( '_mpfbs_port_code', $code );
 	}
 
 	/**
@@ -564,7 +564,7 @@ final class DemoContent {
 	 * @return int
 	 */
 	private function vessel_id( string $code ): int {
-		return $this->vessels->find_conflicting_id( '_fbm_vessel_code', $code );
+		return $this->vessels->find_conflicting_id( '_mpfbs_vessel_code', $code );
 	}
 
 	/**
@@ -574,7 +574,7 @@ final class DemoContent {
 	 * @return int
 	 */
 	private function route_id( string $code ): int {
-		return $this->routes->find_conflicting_id( '_fbm_route_code', $code );
+		return $this->routes->find_conflicting_id( '_mpfbs_route_code', $code );
 	}
 
 	/**

@@ -7,9 +7,9 @@
 
 import { useCallback, useEffect, useState } from 'react';
 
-import { fbmRequest, FbmApiError } from './api';
+import { mpfbsRequest, MpfbsApiError } from './api';
 
-export interface FbmHealth {
+export interface MpfbsHealth {
 	status: string;
 	version: string;
 	php: string;
@@ -18,18 +18,17 @@ export interface FbmHealth {
 	locale: string;
 	is_rtl: boolean;
 	woocommerce: boolean;
-	pro_active: boolean;
 	capabilities: Record< string, boolean >;
 	server_time: string;
 }
 
-let inflight: Promise< FbmHealth > | null = null;
-let cached: FbmHealth | null = null;
+let inflight: Promise< MpfbsHealth > | null = null;
+let cached: MpfbsHealth | null = null;
 
 /**
  * Fetches the health resource, reusing an in-flight or completed request.
  */
-export function fbmFetchHealth( force = false ): Promise< FbmHealth > {
+export function mpfbsFetchHealth( force = false ): Promise< MpfbsHealth > {
 	if ( force ) {
 		inflight = null;
 		cached = null;
@@ -40,7 +39,7 @@ export function fbmFetchHealth( force = false ): Promise< FbmHealth > {
 	}
 
 	if ( ! inflight ) {
-		inflight = fbmRequest< FbmHealth >( 'health' )
+		inflight = mpfbsRequest< MpfbsHealth >( 'health' )
 			.then( ( result ) => {
 				cached = result.data;
 
@@ -57,8 +56,8 @@ export function fbmFetchHealth( force = false ): Promise< FbmHealth > {
 }
 
 export interface UseHealthResult {
-	health: FbmHealth | null;
-	error: FbmApiError | null;
+	health: MpfbsHealth | null;
+	error: MpfbsApiError | null;
 	loading: boolean;
 	reload: () => void;
 }
@@ -66,9 +65,9 @@ export interface UseHealthResult {
 /**
  * Subscribes a component to the health resource.
  */
-export function useFbmHealth(): UseHealthResult {
-	const [ health, setHealth ] = useState< FbmHealth | null >( cached );
-	const [ error, setError ] = useState< FbmApiError | null >( null );
+export function useMpfbsHealth(): UseHealthResult {
+	const [ health, setHealth ] = useState< MpfbsHealth | null >( cached );
+	const [ error, setError ] = useState< MpfbsApiError | null >( null );
 	const [ loading, setLoading ] = useState( cached === null );
 	const [ nonce, setNonce ] = useState( 0 );
 
@@ -78,7 +77,7 @@ export function useFbmHealth(): UseHealthResult {
 		setLoading( true );
 		setError( null );
 
-		fbmFetchHealth( nonce > 0 )
+		mpfbsFetchHealth( nonce > 0 )
 			.then( ( result ) => {
 				if ( ! active ) {
 					return;
@@ -93,9 +92,9 @@ export function useFbmHealth(): UseHealthResult {
 				}
 
 				setError(
-					caught instanceof FbmApiError
+					caught instanceof MpfbsApiError
 						? caught
-						: new FbmApiError( 'fbm_error', String( caught ), 0 )
+						: new MpfbsApiError( 'mpfbs_error', String( caught ), 0 )
 				);
 				setLoading( false );
 			} );

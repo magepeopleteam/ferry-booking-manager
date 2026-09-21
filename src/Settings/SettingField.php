@@ -7,7 +7,7 @@
 
 declare( strict_types=1 );
 
-namespace FBM\Settings;
+namespace MPFBS\Settings;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -21,7 +21,7 @@ defined( 'ABSPATH' ) || exit;
  * field once and deriving the default, the sanitiser, the REST schema and the
  * rendered control from that declaration removes the opportunity.
  *
- * It also means the Pro plugin can add a whole settings tab without the Free
+ * It also means an extension can add a whole settings tab without the
  * dashboard bundle being rebuilt, because the screen renders whatever
  * description it is given rather than a layout compiled into JavaScript.
  */

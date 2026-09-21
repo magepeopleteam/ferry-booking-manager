@@ -7,25 +7,25 @@
 
 declare( strict_types=1 );
 
-namespace FBM\REST\Controllers;
+namespace MPFBS\REST\Controllers;
 
-use FBM\Booking\FieldConfig;
-use FBM\Frontend\Pages;
-use FBM\Payment\PaymentGatewayRegistry;
-use FBM\Pricing\PricingSettings;
-use FBM\REST\AbstractController;
-use FBM\Security\Capabilities;
-use FBM\Security\Permissions;
-use FBM\Security\RoleSettings;
-use FBM\Settings\Settings;
-use FBM\Settings\SettingsPanels;
+use MPFBS\Booking\FieldConfig;
+use MPFBS\Frontend\Pages;
+use MPFBS\Payment\PaymentGatewayRegistry;
+use MPFBS\Pricing\PricingSettings;
+use MPFBS\REST\AbstractController;
+use MPFBS\Security\Capabilities;
+use MPFBS\Security\Permissions;
+use MPFBS\Security\RoleSettings;
+use MPFBS\Settings\Settings;
+use MPFBS\Settings\SettingsPanels;
 use WP_REST_Request;
 use WP_REST_Response;
 
 defined( 'ABSPATH' ) || exit;
 
 /**
- * Reads and stores the Free plugin's settings.
+ * Reads and stores the plugin's settings.
  *
  * One endpoint backs the whole Settings screen. The dashboard reads the full
  * resolved set once and writes it back as one object, which keeps the screen
@@ -118,8 +118,8 @@ final class SettingsController extends AbstractController {
 			array(
 				array(
 					'methods'             => 'GET',
-					'callback'            => array( $this, 'get_payment_methods' ),
-					'permission_callback' => $this->permissions->rest_public_callback( 'payment-methods', 60 ),
+					'callback'            => $this->public_handler( 'payment-methods', 60, array( $this, 'get_payment_methods' ) ),
+					'permission_callback' => '__return_true',
 				),
 			)
 		);
@@ -187,7 +187,7 @@ final class SettingsController extends AbstractController {
 
 		if ( ! is_email( $to ) ) {
 			return $this->fail(
-				'fbm_invalid_email',
+				'mpfbs_invalid_email',
 				__( 'That is not a valid email address.', 'magepeople-ferry-booking-system' ),
 				400,
 				array( 'fields' => array( 'to' => __( 'Enter a valid email address.', 'magepeople-ferry-booking-system' ) ) )
@@ -228,7 +228,7 @@ final class SettingsController extends AbstractController {
 
 		if ( ! $sent ) {
 			return $this->fail(
-				'fbm_mail_failed',
+				'mpfbs_mail_failed',
 				__( 'WordPress could not send the message. Check your SMTP settings or mail plugin.', 'magepeople-ferry-booking-system' ),
 				500
 			);
@@ -281,13 +281,13 @@ final class SettingsController extends AbstractController {
 		}
 
 		/**
-		 * Fires after the Free settings have been saved.
+		 * Fires after the settings have been saved.
 		 *
 		 * @since 1.0.0
 		 *
 		 * @param array<string, mixed> $payload Submitted payload.
 		 */
-		do_action( 'fbm_settings_saved', $payload );
+		do_action( 'mpfbs_settings_saved', $payload );
 
 		// The stored state is returned rather than a bare acknowledgement: the
 		// store clamps numbers into range and drops what it does not recognise,

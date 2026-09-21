@@ -7,10 +7,10 @@
 
 declare( strict_types=1 );
 
-namespace FBM\Admin;
+namespace MPFBS\Admin;
 
-use FBM\Core\Assets;
-use FBM\Security\Capabilities;
+use MPFBS\Core\Assets;
+use MPFBS\Security\Capabilities;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -26,7 +26,7 @@ final class Menu {
 	/**
 	 * Admin page slug.
 	 */
-	public const PAGE_SLUG = 'fbm-dashboard';
+	public const PAGE_SLUG = 'mpfbs-dashboard';
 
 	/**
 	 * Application renderer.
@@ -122,7 +122,7 @@ final class Menu {
 		$screen = function_exists( 'get_current_screen' ) ? get_current_screen() : null;
 
 		if ( null !== $screen && '' !== $this->hook_suffix && $screen->id === $this->hook_suffix ) {
-			$classes .= ' fbm-admin-screen';
+			$classes .= ' mpfbs-admin-screen';
 		}
 
 		return (string) $classes;
@@ -142,7 +142,7 @@ final class Menu {
 			);
 		}
 
-		echo '<div class="wrap fbm-admin-wrap">';
+		echo '<div class="wrap mpfbs-admin-wrap">';
 		echo '<h1 class="screen-reader-text">' . esc_html__( 'Ferry Manager', 'magepeople-ferry-booking-system' ) . '</h1>';
 
 		$this->renderer->render();

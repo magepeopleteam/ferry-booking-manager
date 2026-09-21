@@ -7,7 +7,7 @@
 
 declare( strict_types=1 );
 
-namespace FBM\Availability;
+namespace MPFBS\Availability;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -186,13 +186,13 @@ final class Availability {
 		/**
 		 * Filters a serialised availability snapshot.
 		 *
-		 * Pro adds cabin and deck-space measures here.
+		 * Extensions add measures of their own here, such as deck space.
 		 *
 		 * @since 1.0.0
 		 *
 		 * @param array<string, mixed> $payload      Serialised snapshot.
 		 * @param Availability         $availability Snapshot instance.
 		 */
-		return (array) apply_filters( 'fbm_serialize_availability', $payload, $this );
+		return (array) apply_filters( 'mpfbs_serialize_availability', $payload, $this );
 	}
 }

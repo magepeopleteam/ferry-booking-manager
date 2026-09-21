@@ -7,17 +7,17 @@
 
 declare( strict_types=1 );
 
-namespace FBM\Payment;
+namespace MPFBS\Payment;
 
-use FBM\Support\Options;
+use MPFBS\Support\Options;
 
 defined( 'ABSPATH' ) || exit;
 
 /**
  * Holds every gateway the booking flow may offer.
  *
- * The Free plugin registers its four offline gateways here; Pro and third
- * parties add theirs through the `fbm_payment_gateways` filter. The registry
+ * The plugin registers its four offline gateways here; third parties add
+ * theirs through the `mpfbs_payment_gateways` filter. The registry
  * also owns the availability switches an operator toggles in Settings, so a
  * disabled gateway is invisible everywhere — the checkout, the counter and
  * the REST API all ask this class.
@@ -65,14 +65,14 @@ final class PaymentGatewayRegistry {
 		/**
 		 * Filters the payment gateways available to bookings.
 		 *
-		 * Pro registers Stripe, PayPal, Mollie and regional gateways here,
+		 * Extensions register online gateways here,
 		 * each implementing {@see PaymentGatewayInterface}.
 		 *
 		 * @since 1.0.0
 		 *
 		 * @param PaymentGatewayInterface[] $gateways Gateways in offer order.
 		 */
-		$gateways = (array) apply_filters( 'fbm_payment_gateways', $gateways );
+		$gateways = (array) apply_filters( 'mpfbs_payment_gateways', $gateways );
 
 		foreach ( $gateways as $gateway ) {
 			if ( $gateway instanceof PaymentGatewayInterface ) {

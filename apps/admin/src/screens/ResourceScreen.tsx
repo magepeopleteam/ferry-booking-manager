@@ -28,12 +28,12 @@ import {
 import { PageHeader } from '../components/PageHeader';
 import { Pagination } from '../components/Pagination';
 import { EmptyState, ErrorState } from '../components/States';
-import { useFbmToast } from '../components/Toast';
-import { fbmRequest, FbmApiError } from '../lib/api';
-import { fbmFormat, fbmText } from '../lib/i18n';
-import { fbmMoneyStep, fbmToMajor, fbmToMinor } from '../lib/money';
-import { fbmInvalidateReferences, useFbmReferences } from '../lib/references';
-import { useFbmCollection } from '../lib/useCollection';
+import { useMpfbsToast } from '../components/Toast';
+import { mpfbsRequest, MpfbsApiError } from '../lib/api';
+import { mpfbsFormat, mpfbsText } from '../lib/i18n';
+import { mpfbsMoneyStep, mpfbsToMajor, mpfbsToMinor } from '../lib/money';
+import { mpfbsInvalidateReferences, useMpfbsReferences } from '../lib/references';
+import { useMpfbsCollection } from '../lib/useCollection';
 import type { ResourceConfig, ResourceField, ResourceRecord } from '../config/resources';
 
 export interface ResourceScreenProps {
@@ -44,9 +44,9 @@ export interface ResourceScreenProps {
  * Renders a complete CRUD screen for one resource.
  */
 export function ResourceScreen( { config }: ResourceScreenProps ): JSX.Element {
-	const collection = useFbmCollection< ResourceRecord >( config.endpoint, config.initialQuery );
-	const { references } = useFbmReferences();
-	const toast = useFbmToast();
+	const collection = useMpfbsCollection< ResourceRecord >( config.endpoint, config.initialQuery );
+	const { references } = useMpfbsReferences();
+	const toast = useMpfbsToast();
 
 	const [ editing, setEditing ] = useState< ResourceRecord | null >( null );
 	const [ drawerOpen, setDrawerOpen ] = useState( false );
@@ -75,7 +75,7 @@ export function ResourceScreen( { config }: ResourceScreenProps ): JSX.Element {
 		window.requestAnimationFrame( () => {
 			const first = Object.keys( fields )[ 0 ];
 			const control = first
-				? document.querySelector< HTMLElement >( `[data-fbm-field="${ first }"] input, [data-fbm-field="${ first }"] select, [data-fbm-field="${ first }"] textarea` )
+				? document.querySelector< HTMLElement >( `[data-mpfbs-field="${ first }"] input, [data-mpfbs-field="${ first }"] select, [data-mpfbs-field="${ first }"] textarea` )
 				: null;
 
 			( control ?? alertRef.current )?.focus();
@@ -102,7 +102,7 @@ export function ResourceScreen( { config }: ResourceScreenProps ): JSX.Element {
 
 				// Prices are stored and transmitted in minor units; the form
 				// works in the major units an operator actually types.
-				next[ field.name ] = field.money ? fbmToMajor( Number( stored ) ) : stored;
+				next[ field.name ] = field.money ? mpfbsToMajor( Number( stored ) ) : stored;
 			} );
 
 			setEditing( record );
@@ -202,7 +202,7 @@ export function ResourceScreen( { config }: ResourceScreenProps ): JSX.Element {
 			const missing: Record< string, string > = {};
 
 			if ( group.step?.includesName && config.showNameField && String( values.name ?? '' ).trim() === '' ) {
-				missing.name = fbmText( 'This cannot be empty.' );
+				missing.name = mpfbsText( 'This cannot be empty.' );
 			}
 
 			group.fields.forEach( ( field ) => {
@@ -211,7 +211,7 @@ export function ResourceScreen( { config }: ResourceScreenProps ): JSX.Element {
 				}
 
 				if ( String( values[ field.name ] ?? '' ).trim() === '' ) {
-					missing[ field.name ] = fbmText( 'This cannot be empty.' );
+					missing[ field.name ] = mpfbsText( 'This cannot be empty.' );
 				}
 			} );
 
@@ -259,10 +259,10 @@ export function ResourceScreen( { config }: ResourceScreenProps ): JSX.Element {
 				const typed = routeFares[ route.id ];
 
 				try {
-					const current = await fbmRequest< { vehicle_prices?: Record< string, unknown > } >( `routes/${ route.id }` );
+					const current = await mpfbsRequest< { vehicle_prices?: Record< string, unknown > } >( `routes/${ route.id }` );
 					const table: Record< string, unknown > = { ...( current.data.vehicle_prices ?? {} ) };
 					const before = table[ String( typeId ) ];
-					const after = typed === undefined || typed === '' ? undefined : fbmToMinor( Number( typed ) );
+					const after = typed === undefined || typed === '' ? undefined : mpfbsToMinor( Number( typed ) );
 
 					if ( String( before ?? '' ) === String( after ?? '' ) ) {
 						continue;
@@ -274,7 +274,7 @@ export function ResourceScreen( { config }: ResourceScreenProps ): JSX.Element {
 						table[ String( typeId ) ] = after;
 					}
 
-					await fbmRequest( `routes/${ route.id }`, { method: 'PUT', body: { vehicle_prices: table } } );
+					await mpfbsRequest( `routes/${ route.id }`, { method: 'PUT', body: { vehicle_prices: table } } );
 				} catch {
 					failed.push( route.name );
 				}
@@ -305,12 +305,12 @@ export function ResourceScreen( { config }: ResourceScreenProps ): JSX.Element {
 
 		config.fields.forEach( ( field ) => {
 			if ( field.money ) {
-				body[ field.name ] = fbmToMinor( Number( values[ field.name ] ?? 0 ) );
+				body[ field.name ] = mpfbsToMinor( Number( values[ field.name ] ?? 0 ) );
 			}
 		} );
 
 		try {
-			const response = await fbmRequest< ResourceRecord >(
+			const response = await mpfbsRequest< ResourceRecord >(
 				editing ? `${ config.endpoint }/${ editing.id }` : config.endpoint,
 				{ method: editing ? 'PUT' : 'POST', body }
 			);
@@ -321,14 +321,14 @@ export function ResourceScreen( { config }: ResourceScreenProps ): JSX.Element {
 
 			if ( failed.length > 0 ) {
 				toast.notify(
-					fbmFormat( 'Saved, but the fare could not be set on: %s. Set it on the Pricing screen.', failed.join( ', ' ) ),
+					mpfbsFormat( 'Saved, but the fare could not be set on: %s. Set it on the Pricing screen.', failed.join( ', ' ) ),
 					'error'
 				);
 			} else {
 				toast.notify(
 					editing
-						? fbmFormat( '%s updated.', fbmText( config.singularLabel ) )
-						: fbmFormat( '%s created.', fbmText( config.singularLabel ) ),
+						? mpfbsFormat( '%s updated.', mpfbsText( config.singularLabel ) )
+						: mpfbsFormat( '%s created.', mpfbsText( config.singularLabel ) ),
 					'success'
 				);
 			}
@@ -337,10 +337,10 @@ export function ResourceScreen( { config }: ResourceScreenProps ): JSX.Element {
 			collection.reload();
 
 			if ( config.invalidatesReferences ) {
-				fbmInvalidateReferences();
+				mpfbsInvalidateReferences();
 			}
 		} catch ( caught: unknown ) {
-			if ( caught instanceof FbmApiError ) {
+			if ( caught instanceof MpfbsApiError ) {
 				const fields =
 					caught.details.fields && typeof caught.details.fields === 'object'
 						? ( caught.details.fields as Record< string, string > )
@@ -361,7 +361,7 @@ export function ResourceScreen( { config }: ResourceScreenProps ): JSX.Element {
 
 				focusFirstProblem( fields );
 			} else {
-				setFormError( fbmText( 'Something went wrong.' ) );
+				setFormError( mpfbsText( 'Something went wrong.' ) );
 				focusFirstProblem( {} );
 			}
 		} finally {
@@ -390,16 +390,16 @@ export function ResourceScreen( { config }: ResourceScreenProps ): JSX.Element {
 		setDeleteBusy( true );
 
 		try {
-			await fbmRequest( `${ config.endpoint }/${ deleting.id }`, { method: 'DELETE' } );
-			toast.notify( fbmFormat( '%s deleted.', fbmText( config.singularLabel ) ), 'success' );
+			await mpfbsRequest( `${ config.endpoint }/${ deleting.id }`, { method: 'DELETE' } );
+			toast.notify( mpfbsFormat( '%s deleted.', mpfbsText( config.singularLabel ) ), 'success' );
 			setDeleting( null );
 			collection.reload();
 
 			if ( config.invalidatesReferences ) {
-				fbmInvalidateReferences();
+				mpfbsInvalidateReferences();
 			}
 		} catch ( caught: unknown ) {
-			toast.notify( caught instanceof FbmApiError ? caught.message : fbmText( 'Something went wrong.' ), 'error' );
+			toast.notify( caught instanceof MpfbsApiError ? caught.message : mpfbsText( 'Something went wrong.' ), 'error' );
 			setDeleting( null );
 		} finally {
 			setDeleteBusy( false );
@@ -413,7 +413,7 @@ export function ResourceScreen( { config }: ResourceScreenProps ): JSX.Element {
 	if ( collection.error ) {
 		return (
 			<>
-				<PageHeader title={ fbmText( config.label ) } />
+				<PageHeader title={ mpfbsText( config.label ) } />
 				<ErrorState message={ collection.error.message } code={ collection.error.code } onRetry={ collection.reload } />
 			</>
 		);
@@ -425,20 +425,20 @@ export function ResourceScreen( { config }: ResourceScreenProps ): JSX.Element {
 	return (
 		<>
 			<PageHeader
-				title={ fbmText( config.label ) }
-				description={ fbmText( config.description ) }
+				title={ mpfbsText( config.label ) }
+				description={ mpfbsText( config.description ) }
 				actions={
-					<button type="button" className="fbm-button fbm-button--primary" onClick={ openCreate }>
-						{ fbmFormat( 'Add %s', fbmText( config.singularLabel ) ) }
+					<button type="button" className="mpfbs-button mpfbs-button--primary" onClick={ openCreate }>
+						{ mpfbsFormat( 'Add %s', mpfbsText( config.singularLabel ) ) }
 					</button>
 				}
 			/>
 
-			<div className="fbm-panel">
+			<div className="mpfbs-panel">
 				<FilterBar
 					search={ collection.query.search }
 					onSearch={ collection.setSearch }
-					searchPlaceholder={ fbmText( config.searchPlaceholder ) }
+					searchPlaceholder={ mpfbsText( config.searchPlaceholder ) }
 					statusOptions={ config.statusOptions }
 					status={ collection.query.status }
 					onStatus={ ( value ) => collection.setQuery( { status: value } ) }
@@ -457,12 +457,12 @@ export function ResourceScreen( { config }: ResourceScreenProps ): JSX.Element {
 					actions={ [
 						{
 							key: 'edit',
-							label: fbmText( 'Edit' ),
+							label: mpfbsText( 'Edit' ),
 							onSelect: openEdit,
 						},
 						{
 							key: 'delete',
-							label: fbmText( 'Delete' ),
+							label: mpfbsText( 'Delete' ),
 							tone: 'danger',
 							onSelect: ( item ) => setDeleting( item ),
 						},
@@ -472,14 +472,14 @@ export function ResourceScreen( { config }: ResourceScreenProps ): JSX.Element {
 							icon={ config.icon }
 							title={
 								filtered
-									? fbmText( 'No matching records.' )
-									: fbmFormat( 'No %s yet.', fbmText( config.label ).toLowerCase() )
+									? mpfbsText( 'No matching records.' )
+									: mpfbsFormat( 'No %s yet.', mpfbsText( config.label ).toLowerCase() )
 							}
-							description={ filtered ? fbmText( 'Try a different search or filter.' ) : fbmText( config.emptyHint ) }
+							description={ filtered ? mpfbsText( 'Try a different search or filter.' ) : mpfbsText( config.emptyHint ) }
 							action={
 								filtered ? null : (
-									<button type="button" className="fbm-button fbm-button--primary" onClick={ openCreate }>
-										{ fbmFormat( 'Add %s', fbmText( config.singularLabel ) ) }
+									<button type="button" className="mpfbs-button mpfbs-button--primary" onClick={ openCreate }>
+										{ mpfbsFormat( 'Add %s', mpfbsText( config.singularLabel ) ) }
 									</button>
 								)
 							}
@@ -501,10 +501,10 @@ export function ResourceScreen( { config }: ResourceScreenProps ): JSX.Element {
 				open={ drawerOpen }
 				title={
 					editing
-						? fbmFormat( 'Edit %s', fbmText( config.singularLabel ) )
-						: fbmFormat( 'Add %s', fbmText( config.singularLabel ) )
+						? mpfbsFormat( 'Edit %s', mpfbsText( config.singularLabel ) )
+						: mpfbsFormat( 'Add %s', mpfbsText( config.singularLabel ) )
 				}
-				description={ editing ? editing.name : fbmText( config.description ) }
+				description={ editing ? editing.name : mpfbsText( config.description ) }
 				onClose={ closeDrawer }
 				width={ config.drawerWidth }
 				footer={
@@ -512,42 +512,42 @@ export function ResourceScreen( { config }: ResourceScreenProps ): JSX.Element {
 						{ stepped && step > 0 ? (
 							<button
 								type="button"
-								className="fbm-button fbm-button--secondary"
+								className="mpfbs-button mpfbs-button--secondary"
 								onClick={ () => goToStep( step - 1 ) }
 								disabled={ saving }
 							>
-								{ fbmText( 'Back' ) }
+								{ mpfbsText( 'Back' ) }
 							</button>
 						) : (
-							<button type="button" className="fbm-button fbm-button--secondary" onClick={ closeDrawer } disabled={ saving }>
-								{ fbmText( 'Cancel' ) }
+							<button type="button" className="mpfbs-button mpfbs-button--secondary" onClick={ closeDrawer } disabled={ saving }>
+								{ mpfbsText( 'Cancel' ) }
 							</button>
 						) }
 
-						<div className="fbm-drawer__footer-end">
+						<div className="mpfbs-drawer__footer-end">
 							{ /*
 							 * Save sits beside Next from the first step when the
 							 * record already exists: an operator correcting a
 							 * code should not be walked to the end to commit it.
 							 */ }
 							{ stepped && ! lastStep && editing ? (
-								<button type="button" className="fbm-button" onClick={ save } disabled={ saving }>
-									{ saving ? fbmText( 'Saving…' ) : fbmText( 'Save' ) }
+								<button type="button" className="mpfbs-button" onClick={ save } disabled={ saving }>
+									{ saving ? mpfbsText( 'Saving…' ) : mpfbsText( 'Save' ) }
 								</button>
 							) : null }
 
 							{ stepped && ! lastStep ? (
 								<button
 									type="button"
-									className="fbm-button fbm-button--primary"
+									className="mpfbs-button mpfbs-button--primary"
 									onClick={ () => goToStep( step + 1 ) }
 									disabled={ saving }
 								>
-									{ fbmText( 'Next' ) }
+									{ mpfbsText( 'Next' ) }
 								</button>
 							) : (
-								<button type="button" className="fbm-button fbm-button--primary" onClick={ save } disabled={ saving }>
-									{ saving ? fbmText( 'Saving…' ) : fbmText( 'Save' ) }
+								<button type="button" className="mpfbs-button mpfbs-button--primary" onClick={ save } disabled={ saving }>
+									{ saving ? mpfbsText( 'Saving…' ) : mpfbsText( 'Save' ) }
 								</button>
 							) }
 						</div>
@@ -555,14 +555,14 @@ export function ResourceScreen( { config }: ResourceScreenProps ): JSX.Element {
 				}
 			>
 				<form
-					className="fbm-form"
+					className="mpfbs-form"
 					onSubmit={ ( event ) => {
 						event.preventDefault();
 						void save();
 					} }
 				>
 					{ formError ? (
-						<div className="fbm-alert fbm-alert--error" role="alert" ref={ alertRef } tabIndex={ -1 }>
+						<div className="mpfbs-alert mpfbs-alert--error" role="alert" ref={ alertRef } tabIndex={ -1 }>
 							{ formError }
 						</div>
 					) : null }
@@ -582,12 +582,12 @@ export function ResourceScreen( { config }: ResourceScreenProps ): JSX.Element {
 					) : null }
 
 					{ current?.step?.description ? (
-						<p className="fbm-form__note">{ fbmText( current.step.description ) }</p>
+						<p className="mpfbs-form__note">{ mpfbsText( current.step.description ) }</p>
 					) : null }
 
 					{ config.showNameField && ( ! stepped || current?.step?.includesName ) ? (
 						<TextField
-							label={ fbmText( config.nameLabel ) }
+							label={ mpfbsText( config.nameLabel ) }
 							name="name"
 							value={ String( values.name ?? '' ) }
 							onChange={ ( value ) => setValue( 'name', value ) }
@@ -605,9 +605,9 @@ export function ResourceScreen( { config }: ResourceScreenProps ): JSX.Element {
 						const common = {
 							key: field.name,
 							name: field.name,
-							label: fbmText( field.label ),
+							label: mpfbsText( field.label ),
 							error,
-							hint: field.hint ? fbmText( field.hint ) : undefined,
+							hint: field.hint ? mpfbsText( field.hint ) : undefined,
 						};
 
 						switch ( field.type ) {
@@ -619,7 +619,7 @@ export function ResourceScreen( { config }: ResourceScreenProps ): JSX.Element {
 										onChange={ ( value ) => setValue( field.name, value ) }
 										min={ field.min }
 										max={ field.max }
-										step={ field.money ? fbmMoneyStep() : field.step }
+										step={ field.money ? mpfbsMoneyStep() : field.step }
 										suffix={ field.suffix }
 										required={ field.required }
 									/>
@@ -642,7 +642,7 @@ export function ResourceScreen( { config }: ResourceScreenProps ): JSX.Element {
 										value={ String( values[ field.name ] ?? '' ) }
 										options={ field.options ? field.options( references ) : [] }
 										onChange={ ( value ) => setValue( field.name, field.numeric ? Number( value ) : value ) }
-										placeholder={ field.placeholder ? fbmText( field.placeholder ) : undefined }
+										placeholder={ field.placeholder ? mpfbsText( field.placeholder ) : undefined }
 										required={ field.required }
 									/>
 								);
@@ -651,10 +651,10 @@ export function ResourceScreen( { config }: ResourceScreenProps ): JSX.Element {
 								return (
 									<SwitchField
 										key={ field.name }
-										label={ fbmText( field.label ) }
+										label={ mpfbsText( field.label ) }
 										checked={ Boolean( values[ field.name ] ) }
 										onChange={ ( checked ) => setValue( field.name, checked ) }
-										hint={ field.hint ? fbmText( field.hint ) : undefined }
+										hint={ field.hint ? mpfbsText( field.hint ) : undefined }
 									/>
 								);
 
@@ -662,11 +662,11 @@ export function ResourceScreen( { config }: ResourceScreenProps ): JSX.Element {
 								return (
 									<TagsField
 										key={ field.name }
-										label={ fbmText( field.label ) }
+										label={ mpfbsText( field.label ) }
 										values={ ( values[ field.name ] as string[] ) ?? [] }
 										onChange={ ( next ) => setValue( field.name, next ) }
-										placeholder={ field.placeholder ? fbmText( field.placeholder ) : undefined }
-										hint={ field.hint ? fbmText( field.hint ) : undefined }
+										placeholder={ field.placeholder ? mpfbsText( field.placeholder ) : undefined }
+										hint={ field.hint ? mpfbsText( field.hint ) : undefined }
 									/>
 								);
 
@@ -674,11 +674,11 @@ export function ResourceScreen( { config }: ResourceScreenProps ): JSX.Element {
 								return (
 									<MultiSelectField
 										key={ field.name }
-										label={ fbmText( field.label ) }
+										label={ mpfbsText( field.label ) }
 										values={ ( values[ field.name ] as number[] ) ?? [] }
 										options={ field.options ? field.options( references ) : [] }
 										onChange={ ( next ) => setValue( field.name, next ) }
-										hint={ field.hint ? fbmText( field.hint ) : undefined }
+										hint={ field.hint ? mpfbsText( field.hint ) : undefined }
 									/>
 								);
 
@@ -709,9 +709,9 @@ export function ResourceScreen( { config }: ResourceScreenProps ): JSX.Element {
 
 			<ConfirmDialog
 				open={ deleting !== null }
-				title={ fbmFormat( 'Delete %s?', fbmText( config.singularLabel ) ) }
-				message={ fbmFormat( '“%s” will be moved to the trash. This cannot be undone from here.', deleting?.name ?? '' ) }
-				confirmLabel={ fbmText( 'Delete' ) }
+				title={ mpfbsFormat( 'Delete %s?', mpfbsText( config.singularLabel ) ) }
+				message={ mpfbsFormat( '“%s” will be moved to the trash. This cannot be undone from here.', deleting?.name ?? '' ) }
+				confirmLabel={ mpfbsText( 'Delete' ) }
 				busy={ deleteBusy }
 				onConfirm={ confirmDelete }
 				onCancel={ () => setDeleting( null ) }

@@ -7,14 +7,14 @@
 
 declare( strict_types=1 );
 
-namespace FBM\Availability;
+namespace MPFBS\Availability;
 
-use FBM\Contracts\LoggerInterface;
-use FBM\Models\Booking;
-use FBM\Models\Sailing;
-use FBM\Repositories\BookingRepository;
-use FBM\Repositories\SailingRepository;
-use FBM\Settings\Settings;
+use MPFBS\Contracts\LoggerInterface;
+use MPFBS\Models\Booking;
+use MPFBS\Models\Sailing;
+use MPFBS\Repositories\BookingRepository;
+use MPFBS\Repositories\SailingRepository;
+use MPFBS\Settings\Settings;
 use WP_Error;
 
 defined( 'ABSPATH' ) || exit;
@@ -50,12 +50,12 @@ final class HoldManager {
 	/**
 	 * Cron hook that releases lapsed holds.
 	 */
-	public const CLEANUP_HOOK = 'fbm_release_expired_holds';
+	public const CLEANUP_HOOK = 'mpfbs_release_expired_holds';
 
 	/**
 	 * Custom cron schedule the cleanup runs on.
 	 */
-	public const CLEANUP_SCHEDULE = 'fbm_five_minutes';
+	public const CLEANUP_SCHEDULE = 'mpfbs_five_minutes';
 
 	/**
 	 * Maximum holds released in a single cleanup pass.
@@ -185,7 +185,7 @@ final class HoldManager {
 		 *
 		 * @param int $minutes Hold duration in minutes.
 		 */
-		$minutes = (int) apply_filters( 'fbm_hold_minutes', $minutes );
+		$minutes = (int) apply_filters( 'mpfbs_hold_minutes', $minutes );
 
 		return max( 1, min( 240, $minutes ) );
 	}
@@ -217,7 +217,7 @@ final class HoldManager {
 
 		if ( ! $sailing instanceof Sailing ) {
 			return new WP_Error(
-				'fbm_sailing_not_found',
+				'mpfbs_sailing_not_found',
 				__( 'That sailing could not be found.', 'magepeople-ferry-booking-system' ),
 				array( 'status' => 404 )
 			);
@@ -257,7 +257,7 @@ final class HoldManager {
 		 * @param Booking $booking Held booking.
 		 * @param Sailing $sailing Sailing the hold is on.
 		 */
-		do_action( 'fbm_hold_created', $booking, $sailing );
+		do_action( 'mpfbs_hold_created', $booking, $sailing );
 
 		return $booking;
 	}
@@ -272,7 +272,7 @@ final class HoldManager {
 	public function extend( Booking $booking, ?int $minutes = null ) {
 		if ( Booking::STATUS_ON_HOLD !== $booking->get( 'booking_status' ) ) {
 			return new WP_Error(
-				'fbm_not_on_hold',
+				'mpfbs_not_on_hold',
 				__( 'That booking is not being held.', 'magepeople-ferry-booking-system' ),
 				array( 'status' => 409 )
 			);
@@ -296,7 +296,7 @@ final class HoldManager {
 	public function confirm( Booking $booking, string $status = Booking::STATUS_CONFIRMED ) {
 		if ( ! in_array( $status, Booking::CONSUMING_STATUSES, true ) ) {
 			return new WP_Error(
-				'fbm_invalid_status',
+				'mpfbs_invalid_status',
 				__( 'A booking cannot be confirmed into that status.', 'magepeople-ferry-booking-system' ),
 				array( 'status' => 400 )
 			);
@@ -323,7 +323,7 @@ final class HoldManager {
 
 				if ( is_wp_error( $recheck ) ) {
 					return new WP_Error(
-						'fbm_hold_expired',
+						'mpfbs_hold_expired',
 						__( 'This booking was held for too long and the space has since been taken. Please start again.', 'magepeople-ferry-booking-system' ),
 						array(
 							'status' => 409,
@@ -352,7 +352,7 @@ final class HoldManager {
 			 *
 			 * @param Booking $confirmed Confirmed booking.
 			 */
-			do_action( 'fbm_hold_confirmed', $confirmed );
+			do_action( 'mpfbs_hold_confirmed', $confirmed );
 		}
 
 		return $confirmed;
@@ -395,7 +395,7 @@ final class HoldManager {
 			 * @param Booking $released Released booking.
 			 * @param string  $reason   Release reason.
 			 */
-			do_action( 'fbm_hold_released', $released, $reason );
+			do_action( 'mpfbs_hold_released', $released, $reason );
 		}
 
 		return $released;
@@ -419,18 +419,18 @@ final class HoldManager {
 				'meta_query'     => array(
 					'relation' => 'AND',
 					array(
-						'key'     => '_fbm_booking_status',
+						'key'     => '_mpfbs_booking_status',
 						'value'   => Booking::STATUS_ON_HOLD,
 						'compare' => '=',
 					),
 					array(
-						'key'     => '_fbm_hold_expires_ts',
+						'key'     => '_mpfbs_hold_expires_ts',
 						'value'   => $now,
 						'compare' => '<',
 						'type'    => 'NUMERIC',
 					),
 					array(
-						'key'     => '_fbm_hold_expires_ts',
+						'key'     => '_mpfbs_hold_expires_ts',
 						'value'   => 0,
 						'compare' => '>',
 						'type'    => 'NUMERIC',
@@ -468,7 +468,7 @@ final class HoldManager {
 				// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query -- Single indexed key lookup.
 				'meta_query'     => array(
 					array(
-						'key'     => '_fbm_idempotency_key',
+						'key'     => '_mpfbs_idempotency_key',
 						'value'   => $key,
 						'compare' => '=',
 					),
@@ -561,7 +561,7 @@ final class HoldManager {
 
 		if ( ! $settled ) {
 			return new WP_Error(
-				'fbm_capacity_busy',
+				'mpfbs_capacity_busy',
 				__( 'This sailing is being booked by several people at once. Please try again in a moment.', 'magepeople-ferry-booking-system' ),
 				array( 'status' => 409 )
 			);
@@ -602,7 +602,7 @@ final class HoldManager {
 				);
 
 				return new WP_Error(
-					'fbm_capacity_taken',
+					'mpfbs_capacity_taken',
 					__( 'Someone else booked that space while you were checking out. Please choose again.', 'magepeople-ferry-booking-system' ),
 					array(
 						'status'  => 409,

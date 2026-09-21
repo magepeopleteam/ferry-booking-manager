@@ -7,10 +7,10 @@
 
 declare( strict_types=1 );
 
-namespace FBM\REST\Controllers;
+namespace MPFBS\REST\Controllers;
 
-use FBM\Models\PassengerType;
-use FBM\REST\EntityController;
+use MPFBS\Models\PassengerType;
+use MPFBS\REST\EntityController;
 use WP_Error;
 
 defined( 'ABSPATH' ) || exit;
@@ -75,7 +75,7 @@ final class PassengerTypeController extends EntityController {
 
 		if ( array() !== $fields ) {
 			return new WP_Error(
-				'fbm_validation_failed',
+				'mpfbs_validation_failed',
 				__( 'Please correct the highlighted fields.', 'magepeople-ferry-booking-system' ),
 				array(
 					'status' => 400,

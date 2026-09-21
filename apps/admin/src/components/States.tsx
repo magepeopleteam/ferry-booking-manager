@@ -8,7 +8,7 @@
 import type { JSX, ReactNode } from 'react';
 
 import { Icon, type IconName } from './Icon';
-import { fbmText } from '../lib/i18n';
+import { mpfbsText } from '../lib/i18n';
 
 export interface SkeletonProps {
 	width?: string;
@@ -23,7 +23,7 @@ export interface SkeletonProps {
 export function Skeleton( { width = '100%', height = '14px', radius = '6px', className }: SkeletonProps ): JSX.Element {
 	return (
 		<span
-			className={ className ? `fbm-skeleton ${ className }` : 'fbm-skeleton' }
+			className={ className ? `mpfbs-skeleton ${ className }` : 'mpfbs-skeleton' }
 			style={ { width, height, borderRadius: radius } }
 			aria-hidden="true"
 		/>
@@ -40,10 +40,10 @@ export interface LoadingStateProps {
  */
 export function LoadingState( { label, rows = 3 }: LoadingStateProps ): JSX.Element {
 	return (
-		<div className="fbm-state fbm-state--loading" role="status" aria-live="polite" aria-busy="true">
-			<span className="fbm-screen-reader-text">{ label ?? fbmText( 'Loading' ) }</span>
+		<div className="mpfbs-state mpfbs-state--loading" role="status" aria-live="polite" aria-busy="true">
+			<span className="mpfbs-screen-reader-text">{ label ?? mpfbsText( 'Loading' ) }</span>
 			{ Array.from( { length: rows } ).map( ( _, index ) => (
-				<div className="fbm-skeleton-row" key={ index }>
+				<div className="mpfbs-skeleton-row" key={ index }>
 					<Skeleton height="18px" width={ index === 0 ? '38%' : '100%' } />
 					<Skeleton height="12px" width={ index === 0 ? '62%' : '78%' } />
 				</div>
@@ -64,13 +64,13 @@ export interface EmptyStateProps {
  */
 export function EmptyState( { icon = 'ship', title, description, action }: EmptyStateProps ): JSX.Element {
 	return (
-		<div className="fbm-state fbm-state--empty">
-			<span className="fbm-state__icon">
+		<div className="mpfbs-state mpfbs-state--empty">
+			<span className="mpfbs-state__icon">
 				<Icon name={ icon } size={ 28 } />
 			</span>
-			<h2 className="fbm-state__title">{ title }</h2>
-			{ description ? <p className="fbm-state__text">{ description }</p> : null }
-			{ action ? <div className="fbm-state__action">{ action }</div> : null }
+			<h2 className="mpfbs-state__title">{ title }</h2>
+			{ description ? <p className="mpfbs-state__text">{ description }</p> : null }
+			{ action ? <div className="mpfbs-state__action">{ action }</div> : null }
 		</div>
 	);
 }
@@ -87,17 +87,17 @@ export interface ErrorStateProps {
  */
 export function ErrorState( { title, message, code, onRetry }: ErrorStateProps ): JSX.Element {
 	return (
-		<div className="fbm-state fbm-state--error" role="alert">
-			<span className="fbm-state__icon fbm-state__icon--danger">
+		<div className="mpfbs-state mpfbs-state--error" role="alert">
+			<span className="mpfbs-state__icon mpfbs-state__icon--danger">
 				<Icon name="alert" size={ 28 } />
 			</span>
-			<h2 className="fbm-state__title">{ title ?? fbmText( 'Something went wrong.' ) }</h2>
-			<p className="fbm-state__text">{ message }</p>
-			{ code ? <p className="fbm-state__code">{ code }</p> : null }
+			<h2 className="mpfbs-state__title">{ title ?? mpfbsText( 'Something went wrong.' ) }</h2>
+			<p className="mpfbs-state__text">{ message }</p>
+			{ code ? <p className="mpfbs-state__code">{ code }</p> : null }
 			{ onRetry ? (
-				<div className="fbm-state__action">
-					<button type="button" className="fbm-button fbm-button--secondary" onClick={ onRetry }>
-						{ fbmText( 'Retry' ) }
+				<div className="mpfbs-state__action">
+					<button type="button" className="mpfbs-button mpfbs-button--secondary" onClick={ onRetry }>
+						{ mpfbsText( 'Retry' ) }
 					</button>
 				</div>
 			) : null }

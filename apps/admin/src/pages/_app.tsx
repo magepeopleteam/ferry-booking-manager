@@ -5,11 +5,11 @@
 import type { AppProps } from 'next/app';
 import type { JSX } from 'react';
 
-import '../styles/fbm-admin.css';
+import '../styles/mpfbs-admin.css';
 
 /**
  * Renders the active page.
  */
-export default function FbmAdminApp( { Component, pageProps }: AppProps ): JSX.Element {
+export default function MpfbsAdminApp( { Component, pageProps }: AppProps ): JSX.Element {
 	return <Component { ...pageProps } />;
 }

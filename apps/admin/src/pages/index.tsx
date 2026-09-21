@@ -13,7 +13,7 @@ import { AdminShell } from '../components/AdminShell';
 /**
  * Renders the dashboard entry point.
  */
-export default function FbmDashboardPage(): JSX.Element {
+export default function MpfbsDashboardPage(): JSX.Element {
 	return (
 		<>
 			<Head>

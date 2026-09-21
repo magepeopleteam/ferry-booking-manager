@@ -7,44 +7,44 @@
 
 declare( strict_types=1 );
 
-namespace FBM\Providers;
+namespace MPFBS\Providers;
 
-use FBM\Availability\AvailabilityService;
-use FBM\Availability\HoldManager;
-use FBM\Cache\CacheManager;
-use FBM\Contracts\ContainerInterface;
-use FBM\Contracts\LoggerInterface;
-use FBM\Core\PostTypes;
-use FBM\Core\Seeder;
-use FBM\Dashboard\MetricsService;
-use FBM\Demo\DemoContent;
-use FBM\Core\ServiceProvider;
-use FBM\Repositories\BookingRepository;
-use FBM\Repositories\PassengerTypeRepository;
-use FBM\Repositories\PortRepository;
-use FBM\Repositories\RouteRepository;
-use FBM\Repositories\SailingRepository;
-use FBM\Repositories\VehicleTypeRepository;
-use FBM\Repositories\VesselRepository;
-use FBM\REST\Controllers\AvailabilityController;
-use FBM\REST\Controllers\DashboardController;
-use FBM\REST\Controllers\DemoController;
-use FBM\REST\Controllers\FieldConfigController;
-use FBM\REST\Controllers\PassengerTypeController;
-use FBM\Frontend\Pages;
-use FBM\Pricing\PricingService;
-use FBM\REST\Controllers\PortController;
-use FBM\REST\Controllers\PricingController;
-use FBM\REST\Controllers\ReferenceController;
-use FBM\REST\Controllers\RouteController;
-use FBM\REST\Controllers\SailingController;
-use FBM\REST\Controllers\SetupController;
-use FBM\REST\Controllers\VehicleTypeController;
-use FBM\REST\Controllers\VesselController;
-use FBM\REST\RestServer;
-use FBM\Sailing\ScheduleGenerator;
-use FBM\Security\Permissions;
-use FBM\Setup\SetupStatus;
+use MPFBS\Availability\AvailabilityService;
+use MPFBS\Availability\HoldManager;
+use MPFBS\Cache\CacheManager;
+use MPFBS\Contracts\ContainerInterface;
+use MPFBS\Contracts\LoggerInterface;
+use MPFBS\Core\PostTypes;
+use MPFBS\Core\Seeder;
+use MPFBS\Dashboard\MetricsService;
+use MPFBS\Demo\DemoContent;
+use MPFBS\Core\ServiceProvider;
+use MPFBS\Repositories\BookingRepository;
+use MPFBS\Repositories\PassengerTypeRepository;
+use MPFBS\Repositories\PortRepository;
+use MPFBS\Repositories\RouteRepository;
+use MPFBS\Repositories\SailingRepository;
+use MPFBS\Repositories\VehicleTypeRepository;
+use MPFBS\Repositories\VesselRepository;
+use MPFBS\REST\Controllers\AvailabilityController;
+use MPFBS\REST\Controllers\DashboardController;
+use MPFBS\REST\Controllers\DemoController;
+use MPFBS\REST\Controllers\FieldConfigController;
+use MPFBS\REST\Controllers\PassengerTypeController;
+use MPFBS\Frontend\Pages;
+use MPFBS\Pricing\PricingService;
+use MPFBS\REST\Controllers\PortController;
+use MPFBS\REST\Controllers\PricingController;
+use MPFBS\REST\Controllers\ReferenceController;
+use MPFBS\REST\Controllers\RouteController;
+use MPFBS\REST\Controllers\SailingController;
+use MPFBS\REST\Controllers\SetupController;
+use MPFBS\REST\Controllers\VehicleTypeController;
+use MPFBS\REST\Controllers\VesselController;
+use MPFBS\REST\RestServer;
+use MPFBS\Sailing\ScheduleGenerator;
+use MPFBS\Security\Permissions;
+use MPFBS\Setup\SetupStatus;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -294,21 +294,21 @@ final class DomainServiceProvider extends ServiceProvider {
 		$availability = $container->get( AvailabilityService::class );
 
 		add_action(
-			'fbm_booking_saved',
+			'mpfbs_booking_saved',
 			static function ( $booking ) use ( $availability ): void {
 				$availability->invalidate( (int) $booking->get( 'sailing_id' ) );
 			}
 		);
 
 		add_action(
-			'fbm_booking_deleted',
+			'mpfbs_booking_deleted',
 			static function () use ( $availability ): void {
 				$availability->invalidate();
 			}
 		);
 
 		add_action(
-			'fbm_sailing_saved',
+			'mpfbs_sailing_saved',
 			static function ( $sailing ) use ( $availability ): void {
 				$availability->invalidate( (int) $sailing->id );
 			}

@@ -7,12 +7,12 @@
 
 declare( strict_types=1 );
 
-namespace FBM\Repositories;
+namespace MPFBS\Repositories;
 
-use FBM\Models\Booking;
-use FBM\Models\Entity;
-use FBM\Models\Sailing;
-use FBM\Support\Time;
+use MPFBS\Models\Booking;
+use MPFBS\Models\Entity;
+use MPFBS\Models\Sailing;
+use MPFBS\Support\Time;
 use WP_Error;
 
 defined( 'ABSPATH' ) || exit;
@@ -43,11 +43,11 @@ final class SailingRepository extends AbstractRepository {
 	 * @return WP_Error|null
 	 */
 	protected function deletion_blocker( Entity $entity ): ?WP_Error {
-		$bookings = $this->count_references( Booking::POST_TYPE, '_fbm_sailing_id', $entity->id );
+		$bookings = $this->count_references( Booking::POST_TYPE, '_mpfbs_sailing_id', $entity->id );
 
 		if ( $bookings > 0 ) {
 			return new WP_Error(
-				'fbm_sailing_has_bookings',
+				'mpfbs_sailing_has_bookings',
 				sprintf(
 					/* translators: %d: number of bookings. */
 					_n(
@@ -75,8 +75,8 @@ final class SailingRepository extends AbstractRepository {
 		$meta_query = parent::build_meta_query( $args );
 
 		foreach ( array(
-			'route_id'  => '_fbm_route_id',
-			'vessel_id' => '_fbm_vessel_id',
+			'route_id'  => '_mpfbs_route_id',
+			'vessel_id' => '_mpfbs_vessel_id',
 		) as $arg => $meta_key ) {
 			if ( ! empty( $args[ $arg ] ) ) {
 				$meta_query[] = array(
@@ -92,7 +92,7 @@ final class SailingRepository extends AbstractRepository {
 
 		if ( '' !== $from ) {
 			$meta_query[] = array(
-				'key'     => '_fbm_departure_ts',
+				'key'     => '_mpfbs_departure_ts',
 				'value'   => Time::local_to_timestamp( $from ),
 				'compare' => '>=',
 				'type'    => 'NUMERIC',
@@ -101,7 +101,7 @@ final class SailingRepository extends AbstractRepository {
 
 		if ( '' !== $to ) {
 			$meta_query[] = array(
-				'key'     => '_fbm_departure_ts',
+				'key'     => '_mpfbs_departure_ts',
 				'value'   => Time::local_to_timestamp( $to ),
 				'compare' => '<=',
 				'type'    => 'NUMERIC',
@@ -110,7 +110,7 @@ final class SailingRepository extends AbstractRepository {
 
 		if ( ! empty( $args['date'] ) ) {
 			$meta_query[] = array(
-				'key'     => '_fbm_departure_date',
+				'key'     => '_mpfbs_departure_date',
 				'value'   => sanitize_text_field( (string) $args['date'] ),
 				'compare' => '=',
 			);
@@ -118,7 +118,7 @@ final class SailingRepository extends AbstractRepository {
 
 		if ( ! empty( $args['statuses'] ) && is_array( $args['statuses'] ) ) {
 			$meta_query[] = array(
-				'key'     => '_fbm_status',
+				'key'     => '_mpfbs_status',
 				'value'   => array_map( 'sanitize_key', $args['statuses'] ),
 				'compare' => 'IN',
 			);
@@ -200,23 +200,23 @@ final class SailingRepository extends AbstractRepository {
 				'meta_query'     => array(
 					'relation' => 'AND',
 					array(
-						'key'     => '_fbm_vessel_id',
+						'key'     => '_mpfbs_vessel_id',
 						'value'   => $vessel_id,
 						'compare' => '=',
 					),
 					array(
-						'key'     => '_fbm_status',
+						'key'     => '_mpfbs_status',
 						'value'   => array( Sailing::STATUS_CANCELLED ),
 						'compare' => 'NOT IN',
 					),
 					array(
-						'key'     => '_fbm_departure_ts',
+						'key'     => '_mpfbs_departure_ts',
 						'value'   => $end,
 						'compare' => '<',
 						'type'    => 'NUMERIC',
 					),
 					array(
-						'key'     => '_fbm_arrival_ts',
+						'key'     => '_mpfbs_arrival_ts',
 						'value'   => $start,
 						'compare' => '>',
 						'type'    => 'NUMERIC',

@@ -9,11 +9,11 @@
 import { useId, type JSX, type ReactNode } from 'react';
 import { Listbox } from './Listbox';
 
-import { fbmText } from '../lib/i18n';
+import { mpfbsText } from '../lib/i18n';
 
 export interface FieldShellProps {
 	label: string;
-	/** Field name, exposed as data-fbm-field so validation can move focus here. */
+	/** Field name, exposed as data-mpfbs-field so validation can move focus here. */
 	name?: string;
 	error?: string;
 	hint?: string;
@@ -31,11 +31,11 @@ export function FieldShell( { label, name, error, hint, required, children }: Fi
 	const describedBy = [ error ? errorId : null, hint ? hintId : null ].filter( Boolean ).join( ' ' ) || undefined;
 
 	return (
-		<div className={ `fbm-field${ error ? ' fbm-field--invalid' : '' }` } data-fbm-field={ name }>
-			<label className="fbm-field__label" htmlFor={ id }>
+		<div className={ `mpfbs-field${ error ? ' mpfbs-field--invalid' : '' }` } data-mpfbs-field={ name }>
+			<label className="mpfbs-field__label" htmlFor={ id }>
 				{ label }
 				{ required ? (
-					<span className="fbm-field__required" aria-hidden="true">
+					<span className="mpfbs-field__required" aria-hidden="true">
 						*
 					</span>
 				) : null }
@@ -44,12 +44,12 @@ export function FieldShell( { label, name, error, hint, required, children }: Fi
 			{ children( { id, describedBy, invalid: Boolean( error ) } ) }
 
 			{ hint ? (
-				<p className="fbm-field__hint" id={ hintId }>
+				<p className="mpfbs-field__hint" id={ hintId }>
 					{ hint }
 				</p>
 			) : null }
 			{ error ? (
-				<p className="fbm-field__error" id={ errorId }>
+				<p className="mpfbs-field__error" id={ errorId }>
 					{ error }
 				</p>
 			) : null }
@@ -80,7 +80,7 @@ export function TextField( { label, name, value, onChange, type = 'text', placeh
 				<input
 					id={ id }
 					name={ name }
-					className="fbm-input"
+					className="mpfbs-input"
 					type={ type }
 					value={ value }
 					placeholder={ placeholder }
@@ -115,11 +115,11 @@ export function NumberField( { label, name, value, onChange, min, max, step = 1,
 	return (
 		<FieldShell label={ label } name={ name } error={ error } hint={ hint } required={ required }>
 			{ ( { id, describedBy, invalid } ) => (
-				<span className="fbm-input-group">
+				<span className="mpfbs-input-group">
 					<input
 						id={ id }
 						name={ name }
-						className="fbm-input"
+						className="mpfbs-input"
 						type="number"
 						value={ Number.isFinite( value ) ? value : '' }
 						min={ min }
@@ -129,7 +129,7 @@ export function NumberField( { label, name, value, onChange, min, max, step = 1,
 						aria-invalid={ invalid || undefined }
 						onChange={ ( event ) => onChange( event.target.value === '' ? 0 : Number( event.target.value ) ) }
 					/>
-					{ suffix ? <span className="fbm-input-group__suffix">{ suffix }</span> : null }
+					{ suffix ? <span className="mpfbs-input-group__suffix">{ suffix }</span> : null }
 				</span>
 			) }
 		</FieldShell>
@@ -156,7 +156,7 @@ export function TextAreaField( { label, name, value, onChange, rows = 3, error, 
 				<textarea
 					id={ id }
 					name={ name }
-					className="fbm-input fbm-input--textarea"
+					className="mpfbs-input mpfbs-input--textarea"
 					rows={ rows }
 					value={ value }
 					aria-describedby={ describedBy }
@@ -232,19 +232,19 @@ export function ColorField( { label, name, value, onChange, hint }: ColorFieldPr
 	return (
 		<FieldShell label={ label } name={ name } hint={ hint }>
 			{ ( { id, describedBy } ) => (
-				<span className="fbm-colorfield">
+				<span className="mpfbs-colorfield">
 					<input
 						id={ id }
 						name={ name }
 						type="color"
-						className="fbm-colorfield__swatch"
+						className="mpfbs-colorfield__swatch"
 						value={ safe }
 						aria-describedby={ describedBy }
 						onChange={ ( event ) => onChange( event.currentTarget.value ) }
 					/>
 					<input
 						type="text"
-						className="fbm-input fbm-colorfield__hex"
+						className="mpfbs-input mpfbs-colorfield__hex"
 						value={ value }
 						spellCheck={ false }
 						aria-label={ `${ label } (hex)` }
@@ -271,23 +271,23 @@ export function SwitchField( { label, checked, onChange, hint }: SwitchFieldProp
 	const hintId = `${ id }-hint`;
 
 	return (
-		<div className="fbm-field fbm-field--switch">
-			<label className="fbm-switch" htmlFor={ id }>
+		<div className="mpfbs-field mpfbs-field--switch">
+			<label className="mpfbs-switch" htmlFor={ id }>
 				<input
 					id={ id }
 					type="checkbox"
-					className="fbm-switch__input"
+					className="mpfbs-switch__input"
 					checked={ checked }
 					aria-describedby={ hint ? hintId : undefined }
 					onChange={ ( event ) => onChange( event.target.checked ) }
 				/>
-				<span className="fbm-switch__track" aria-hidden="true">
-					<span className="fbm-switch__thumb" />
+				<span className="mpfbs-switch__track" aria-hidden="true">
+					<span className="mpfbs-switch__thumb" />
 				</span>
-				<span className="fbm-switch__label">{ label }</span>
+				<span className="mpfbs-switch__label">{ label }</span>
 			</label>
 			{ hint ? (
-				<p className="fbm-field__hint" id={ hintId }>
+				<p className="mpfbs-field__hint" id={ hintId }>
 					{ hint }
 				</p>
 			) : null }
@@ -318,21 +318,21 @@ export function TagsField( { label, values, onChange, placeholder, hint }: TagsF
 	};
 
 	return (
-		<div className="fbm-field">
-			<label className="fbm-field__label" htmlFor={ id }>
+		<div className="mpfbs-field">
+			<label className="mpfbs-field__label" htmlFor={ id }>
 				{ label }
 			</label>
 
 			{ values.length > 0 ? (
-				<ul className="fbm-tags">
+				<ul className="mpfbs-tags">
 					{ values.map( ( value ) => (
-						<li className="fbm-tag" key={ value }>
+						<li className="mpfbs-tag" key={ value }>
 							{ value }
 							<button
 								type="button"
-								className="fbm-tag__remove"
+								className="mpfbs-tag__remove"
 								onClick={ () => onChange( values.filter( ( item ) => item !== value ) ) }
-								aria-label={ `${ fbmText( 'Remove' ) } ${ value }` }
+								aria-label={ `${ mpfbsText( 'Remove' ) } ${ value }` }
 							>
 								×
 							</button>
@@ -343,7 +343,7 @@ export function TagsField( { label, values, onChange, placeholder, hint }: TagsF
 
 			<input
 				id={ id }
-				className="fbm-input"
+				className="mpfbs-input"
 				type="text"
 				placeholder={ placeholder }
 				onKeyDown={ ( event ) => {
@@ -358,7 +358,7 @@ export function TagsField( { label, values, onChange, placeholder, hint }: TagsF
 					event.currentTarget.value = '';
 				} }
 			/>
-			{ hint ? <p className="fbm-field__hint">{ hint }</p> : null }
+			{ hint ? <p className="mpfbs-field__hint">{ hint }</p> : null }
 		</div>
 	);
 }
@@ -380,25 +380,25 @@ export function MultiSelectField( { label, values, options, onChange, hint }: Mu
 	const available = options.filter( ( option ) => ! values.includes( Number( option.value ) ) );
 
 	return (
-		<div className="fbm-field">
-			<label className="fbm-field__label" htmlFor={ id }>
+		<div className="mpfbs-field">
+			<label className="mpfbs-field__label" htmlFor={ id }>
 				{ label }
 			</label>
 
 			{ values.length > 0 ? (
-				<ol className="fbm-tags">
+				<ol className="mpfbs-tags">
 					{ values.map( ( value, index ) => {
 						const option = options.find( ( item ) => Number( item.value ) === value );
 
 						return (
-							<li className="fbm-tag" key={ value }>
-								<span className="fbm-tag__index">{ index + 1 }</span>
+							<li className="mpfbs-tag" key={ value }>
+								<span className="mpfbs-tag__index">{ index + 1 }</span>
 								{ option?.label ?? String( value ) }
 								<button
 									type="button"
-									className="fbm-tag__remove"
+									className="mpfbs-tag__remove"
 									onClick={ () => onChange( values.filter( ( item ) => item !== value ) ) }
-									aria-label={ `${ fbmText( 'Remove' ) } ${ option?.label ?? value }` }
+									aria-label={ `${ mpfbsText( 'Remove' ) } ${ option?.label ?? value }` }
 								>
 									×
 								</button>
@@ -412,7 +412,7 @@ export function MultiSelectField( { label, values, options, onChange, hint }: Mu
 				id={ id }
 				value=""
 				options={ available }
-				placeholder={ fbmText( 'Add…' ) }
+				placeholder={ mpfbsText( 'Add…' ) }
 				onChange={ ( picked ) => {
 					const value = Number( picked );
 
@@ -421,7 +421,7 @@ export function MultiSelectField( { label, values, options, onChange, hint }: Mu
 					}
 				} }
 			/>
-			{ hint ? <p className="fbm-field__hint">{ hint }</p> : null }
+			{ hint ? <p className="mpfbs-field__hint">{ hint }</p> : null }
 		</div>
 	);
 }
@@ -447,30 +447,30 @@ export function WeekdayField( { label, values, onChange, startOfWeek = 1, error,
 	const order = Array.from( { length: 7 }, ( _, index ) => ( index + startOfWeek ) % 7 );
 
 	return (
-		<fieldset className={ `fbm-field fbm-fieldset${ error ? ' fbm-field--invalid' : '' }` } data-fbm-field="weekdays">
-			<legend className="fbm-field__label">{ label }</legend>
-			<div className="fbm-weekdays">
+		<fieldset className={ `mpfbs-field mpfbs-fieldset${ error ? ' mpfbs-field--invalid' : '' }` } data-mpfbs-field="weekdays">
+			<legend className="mpfbs-field__label">{ label }</legend>
+			<div className="mpfbs-weekdays">
 				{ order.map( ( day ) => {
 					const checked = values.includes( day );
 
 					return (
-						<label className={ `fbm-weekday${ checked ? ' is-on' : '' }` } key={ day }>
+						<label className={ `mpfbs-weekday${ checked ? ' is-on' : '' }` } key={ day }>
 							<input
 								type="checkbox"
-								className="fbm-weekday__input"
+								className="mpfbs-weekday__input"
 								checked={ checked }
 								onChange={ () =>
 									onChange( checked ? values.filter( ( value ) => value !== day ) : [ ...values, day ] )
 								}
 							/>
-							<span aria-hidden="true">{ fbmText( WEEKDAY_LABELS[ day ] as string ).slice( 0, 2 ) }</span>
-							<span className="fbm-screen-reader-text">{ fbmText( WEEKDAY_LABELS[ day ] as string ) }</span>
+							<span aria-hidden="true">{ mpfbsText( WEEKDAY_LABELS[ day ] as string ).slice( 0, 2 ) }</span>
+							<span className="mpfbs-screen-reader-text">{ mpfbsText( WEEKDAY_LABELS[ day ] as string ) }</span>
 						</label>
 					);
 				} ) }
 			</div>
-			{ hint ? <p className="fbm-field__hint">{ hint }</p> : null }
-			{ error ? <p className="fbm-field__error">{ error }</p> : null }
+			{ hint ? <p className="mpfbs-field__hint">{ hint }</p> : null }
+			{ error ? <p className="mpfbs-field__error">{ error }</p> : null }
 		</fieldset>
 	);
 }
@@ -494,21 +494,21 @@ export function TimeListField( { label, values, onChange, error, hint }: TimeLis
 	const sorted = [ ...values ].sort();
 
 	return (
-		<div className={ `fbm-field${ error ? ' fbm-field--invalid' : '' }` } data-fbm-field="times">
-			<label className="fbm-field__label" htmlFor={ id }>
+		<div className={ `mpfbs-field${ error ? ' mpfbs-field--invalid' : '' }` } data-mpfbs-field="times">
+			<label className="mpfbs-field__label" htmlFor={ id }>
 				{ label }
 			</label>
 
 			{ sorted.length > 0 ? (
-				<ul className="fbm-tags">
+				<ul className="mpfbs-tags">
 					{ sorted.map( ( time ) => (
-						<li className="fbm-tag" key={ time }>
+						<li className="mpfbs-tag" key={ time }>
 							{ time }
 							<button
 								type="button"
-								className="fbm-tag__remove"
+								className="mpfbs-tag__remove"
 								onClick={ () => onChange( values.filter( ( value ) => value !== time ) ) }
-								aria-label={ `${ fbmText( 'Remove' ) } ${ time }` }
+								aria-label={ `${ mpfbsText( 'Remove' ) } ${ time }` }
 							>
 								×
 							</button>
@@ -519,7 +519,7 @@ export function TimeListField( { label, values, onChange, error, hint }: TimeLis
 
 			<input
 				id={ id }
-				className="fbm-input"
+				className="mpfbs-input"
 				type="time"
 				onChange={ ( event ) => {
 					const value = event.target.value;
@@ -531,8 +531,8 @@ export function TimeListField( { label, values, onChange, error, hint }: TimeLis
 					event.target.value = '';
 				} }
 			/>
-			{ hint ? <p className="fbm-field__hint">{ hint }</p> : null }
-			{ error ? <p className="fbm-field__error">{ error }</p> : null }
+			{ hint ? <p className="mpfbs-field__hint">{ hint }</p> : null }
+			{ error ? <p className="mpfbs-field__error">{ error }</p> : null }
 		</div>
 	);
 }

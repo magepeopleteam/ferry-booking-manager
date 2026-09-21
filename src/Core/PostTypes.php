@@ -7,18 +7,18 @@
 
 declare( strict_types=1 );
 
-namespace FBM\Core;
+namespace MPFBS\Core;
 
-use FBM\Models\Booking;
-use FBM\Models\Entity;
-use FBM\Models\PassengerType;
-use FBM\Models\Port;
-use FBM\Models\Route;
-use FBM\Models\Sailing;
-use FBM\Models\VehicleType;
-use FBM\Models\Vessel;
-use FBM\Security\Permissions;
-use FBM\Support\Options;
+use MPFBS\Models\Booking;
+use MPFBS\Models\Entity;
+use MPFBS\Models\PassengerType;
+use MPFBS\Models\Port;
+use MPFBS\Models\Route;
+use MPFBS\Models\Sailing;
+use MPFBS\Models\VehicleType;
+use MPFBS\Models\Vessel;
+use MPFBS\Security\Permissions;
+use MPFBS\Support\Options;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -75,7 +75,7 @@ final class PostTypes {
 		 *
 		 * @param array<int, class-string<Entity>> $entities Entity class names.
 		 */
-		return (array) apply_filters( 'fbm_entities', $entities );
+		return (array) apply_filters( 'mpfbs_entities', $entities );
 	}
 
 	/**
@@ -118,7 +118,7 @@ final class PostTypes {
 		 *
 		 * @since 1.0.0
 		 */
-		do_action( 'fbm_post_types_registered' );
+		do_action( 'mpfbs_post_types_registered' );
 	}
 
 	/**
@@ -176,7 +176,7 @@ final class PostTypes {
 		 * @param array<string, mixed> $args      Registration arguments.
 		 * @param string               $post_type Post type key.
 		 */
-		$args = (array) apply_filters( 'fbm_post_type_args', $args, $post_type );
+		$args = (array) apply_filters( 'mpfbs_post_type_args', $args, $post_type );
 
 		register_post_type( $post_type, $args );
 	}

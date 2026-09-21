@@ -7,9 +7,9 @@
 
 declare( strict_types=1 );
 
-namespace FBM\Core;
+namespace MPFBS\Core;
 
-use FBM\Contracts\ContainerInterface;
+use MPFBS\Contracts\ContainerInterface;
 use InvalidArgumentException;
 
 defined( 'ABSPATH' ) || exit;

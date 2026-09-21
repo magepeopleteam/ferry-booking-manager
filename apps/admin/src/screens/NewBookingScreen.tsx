@@ -17,11 +17,11 @@ import { NumberField, SelectField, TextAreaField, TextField } from '../component
 import { FormSteps } from '../components/FormSteps';
 import { PageHeader } from '../components/PageHeader';
 import { QuantityGrid } from '../components/QuantityGrid';
-import { useFbmToast } from '../components/Toast';
-import { fbmRequest, FbmApiError } from '../lib/api';
-import { fbmFormat, fbmText } from '../lib/i18n';
-import { fbmFormatMoney } from '../lib/money';
-import { fbmNavigate } from '../lib/router';
+import { useMpfbsToast } from '../components/Toast';
+import { mpfbsRequest, MpfbsApiError } from '../lib/api';
+import { mpfbsFormat, mpfbsText } from '../lib/i18n';
+import { mpfbsFormatMoney } from '../lib/money';
+import { mpfbsNavigate } from '../lib/router';
 
 interface PortOption {
 	id: number;
@@ -148,7 +148,7 @@ const PAYMENT_STATUSES = [
  * Renders the staff booking form.
  */
 export function NewBookingScreen(): JSX.Element {
-	const toast = useFbmToast();
+	const toast = useMpfbsToast();
 
 	const [ options, setOptions ] = useState< BookingOptions | null >( null );
 	const [ methods, setMethods ] = useState< Array< { id: string; label: string } > >( [] );
@@ -193,7 +193,7 @@ export function NewBookingScreen(): JSX.Element {
 	useEffect( () => {
 		let cancelled = false;
 
-		fbmRequest< BookingOptions >( 'booking-options' )
+		mpfbsRequest< BookingOptions >( 'booking-options' )
 			.then( ( response ) => {
 				if ( cancelled ) {
 					return;
@@ -204,7 +204,7 @@ export function NewBookingScreen(): JSX.Element {
 			} )
 			.catch( () => undefined );
 
-		fbmRequest< { methods: Array< { id: string; label: string } >; default: string } >( 'payment-methods' )
+		mpfbsRequest< { methods: Array< { id: string; label: string } >; default: string } >( 'payment-methods' )
 			.then( ( response ) => {
 				if ( cancelled ) {
 					return;
@@ -240,7 +240,7 @@ export function NewBookingScreen(): JSX.Element {
 		let cancelled = false;
 		// Typing a name should not fire a request per keystroke.
 		const timer = window.setTimeout( () => {
-			fbmRequest< { customers: Customer[] } >( 'customers', { query: { search: customerSearch.trim() } } )
+			mpfbsRequest< { customers: Customer[] } >( 'customers', { query: { search: customerSearch.trim() } } )
 				.then( ( response ) => {
 					if ( ! cancelled ) {
 						setMatches( response.data.customers ?? [] );
@@ -285,7 +285,7 @@ export function NewBookingScreen(): JSX.Element {
 
 		let cancelled = false;
 
-		fbmRequest< RouteFares >( 'fares', { query: { origin, destination } } )
+		mpfbsRequest< RouteFares >( 'fares', { query: { origin, destination } } )
 			.then( ( response ) => {
 				if ( ! cancelled ) {
 					setFares( response.data.routed ? response.data : null );
@@ -314,7 +314,7 @@ export function NewBookingScreen(): JSX.Element {
 		setQuoting( true );
 		setQuoteError( '' );
 
-		fbmRequest< Quote >( 'quote', {
+		mpfbsRequest< Quote >( 'quote', {
 			method: 'POST',
 			body: { sailing_id: sailingId, passengers: counts.passengers, vehicles: counts.vehicles },
 		} )
@@ -345,7 +345,7 @@ export function NewBookingScreen(): JSX.Element {
 				 * in the per-field messages ("This crossing does not carry
 				 * vehicles."), so those are what gets shown.
 				 */
-				if ( caught instanceof FbmApiError ) {
+				if ( caught instanceof MpfbsApiError ) {
 					const fields =
 						caught.details.fields && typeof caught.details.fields === 'object'
 							? Object.values( caught.details.fields as Record< string, string > ).filter( Boolean )
@@ -353,7 +353,7 @@ export function NewBookingScreen(): JSX.Element {
 
 					setQuoteError( fields.length > 0 ? fields.join( ' ' ) : caught.message );
 				} else {
-					setQuoteError( fbmText( 'The fare could not be worked out.' ) );
+					setQuoteError( mpfbsText( 'The fare could not be worked out.' ) );
 				}
 			} )
 			.finally( () => {
@@ -381,7 +381,7 @@ export function NewBookingScreen(): JSX.Element {
 
 	const search = useCallback( async () => {
 		if ( origin === 0 || destination === 0 || date === '' ) {
-			toast.notify( fbmText( 'Choose both ports and a date first.' ), 'error' );
+			toast.notify( mpfbsText( 'Choose both ports and a date first.' ), 'error' );
 			return;
 		}
 
@@ -390,13 +390,13 @@ export function NewBookingScreen(): JSX.Element {
 		setSailingId( 0 );
 
 		try {
-			const response = await fbmRequest< { outbound: SailingRow[] } >(
+			const response = await mpfbsRequest< { outbound: SailingRow[] } >(
 				'search',
 				{ query: { origin, destination, date } }
 			);
 			setResults( response.data.outbound ?? [] );
 		} catch ( caught: unknown ) {
-			toast.notify( caught instanceof FbmApiError ? caught.message : fbmText( 'Something went wrong.' ), 'error' );
+			toast.notify( caught instanceof MpfbsApiError ? caught.message : mpfbsText( 'Something went wrong.' ), 'error' );
 		} finally {
 			setSearching( false );
 		}
@@ -427,14 +427,14 @@ export function NewBookingScreen(): JSX.Element {
 		setErrors( {} );
 
 		if ( sailingId === 0 ) {
-			toast.notify( fbmText( 'Choose a sailing first.' ), 'error' );
+			toast.notify( mpfbsText( 'Choose a sailing first.' ), 'error' );
 			return;
 		}
 
 		setSaving( true );
 
 		try {
-			const response = await fbmRequest< { reference: string; id: number } >( 'bookings/staff', {
+			const response = await mpfbsRequest< { reference: string; id: number } >( 'bookings/staff', {
 				method: 'POST',
 				body: {
 					sailing_id: sailingId,
@@ -458,10 +458,10 @@ export function NewBookingScreen(): JSX.Element {
 				},
 			} );
 
-			toast.notify( fbmFormat( 'Booking %s created.', response.data.reference ), 'success' );
-			fbmNavigate( '/bookings' );
+			toast.notify( mpfbsFormat( 'Booking %s created.', response.data.reference ), 'success' );
+			mpfbsNavigate( '/bookings' );
 		} catch ( caught: unknown ) {
-			if ( caught instanceof FbmApiError ) {
+			if ( caught instanceof MpfbsApiError ) {
 				const named =
 					caught.details.fields && typeof caught.details.fields === 'object'
 						? ( caught.details.fields as Record< string, string > )
@@ -485,7 +485,7 @@ export function NewBookingScreen(): JSX.Element {
 
 				toast.notify( caught.message, 'error' );
 			} else {
-				toast.notify( fbmText( 'Something went wrong.' ), 'error' );
+				toast.notify( mpfbsText( 'Something went wrong.' ), 'error' );
 			}
 		} finally {
 			setSaving( false );
@@ -531,15 +531,15 @@ export function NewBookingScreen(): JSX.Element {
 	const blocker = useCallback(
 		( index: number ): string => {
 			if ( index === 0 && sailingId === 0 ) {
-				return fbmText( 'Pick the sailing they are travelling on.' );
+				return mpfbsText( 'Pick the sailing they are travelling on.' );
 			}
 
 			if ( index === 1 && seats === 0 && units === 0 ) {
-				return fbmText( 'Add at least one passenger or vehicle.' );
+				return mpfbsText( 'Add at least one passenger or vehicle.' );
 			}
 
 			if ( index === 2 && ( customer.name.trim() === '' || customer.email.trim() === '' ) ) {
-				return fbmText( 'A booking needs a name and an email to send the confirmation to.' );
+				return mpfbsText( 'A booking needs a name and an email to send the confirmation to.' );
 			}
 
 			return '';
@@ -599,11 +599,11 @@ export function NewBookingScreen(): JSX.Element {
 	if ( ! options ) {
 		return (
 			<>
-				<PageHeader title={ fbmText( 'New booking' ) } />
-				<div className="fbm-panel">
-					<div className="fbm-settings" aria-hidden="true">
-						<span className="fbm-skeleton fbm-skeleton--text" />
-						<span className="fbm-skeleton fbm-skeleton--text" />
+				<PageHeader title={ mpfbsText( 'New booking' ) } />
+				<div className="mpfbs-panel">
+					<div className="mpfbs-settings" aria-hidden="true">
+						<span className="mpfbs-skeleton mpfbs-skeleton--text" />
+						<span className="mpfbs-skeleton mpfbs-skeleton--text" />
 					</div>
 				</div>
 			</>
@@ -613,18 +613,18 @@ export function NewBookingScreen(): JSX.Element {
 	return (
 		<>
 			<PageHeader
-				title={ fbmText( 'New booking' ) }
-				description={ fbmText( 'Take a booking at the desk or over the phone.' ) }
+				title={ mpfbsText( 'New booking' ) }
+				description={ mpfbsText( 'Take a booking at the desk or over the phone.' ) }
 				actions={
-					<button type="button" className="fbm-button" onClick={ () => fbmNavigate( '/bookings' ) }>
-						{ fbmText( 'Back to bookings' ) }
+					<button type="button" className="mpfbs-button" onClick={ () => mpfbsNavigate( '/bookings' ) }>
+						{ mpfbsText( 'Back to bookings' ) }
 					</button>
 				}
 			/>
 
-			<div className="fbm-booking-form fbm-booking-form--stepped">
-				<div className="fbm-booking-form__main">
-					<section className="fbm-panel fbm-wizard">
+			<div className="mpfbs-booking-form mpfbs-booking-form--stepped">
+				<div className="mpfbs-booking-form__main">
+					<section className="mpfbs-panel mpfbs-wizard">
 						<FormSteps
 							steps={ STEPS }
 							current={ step }
@@ -640,23 +640,23 @@ export function NewBookingScreen(): JSX.Element {
 						  * ignore the errors on this form.
 						  */ }
 						{ stepError !== '' && blocker( step ) !== '' ? (
-							<div className="fbm-alert fbm-alert--error" role="alert">
+							<div className="mpfbs-alert mpfbs-alert--error" role="alert">
 								{ blocker( step ) }
 							</div>
 						) : null }
 
 						{ step === 0 ? (
 							<>
-								<p className="fbm-wizard__note">
-									{ fbmText( 'Where they are going and when. Pick the departure they are actually travelling on — the fare and the deck space both come from it.' ) }
+								<p className="mpfbs-wizard__note">
+									{ mpfbsText( 'Where they are going and when. Pick the departure they are actually travelling on — the fare and the deck space both come from it.' ) }
 								</p>
-						<div className="fbm-settings">
+						<div className="mpfbs-settings">
 							<SelectField
-								label={ fbmText( 'From' ) }
+								label={ mpfbsText( 'From' ) }
 								name="origin"
 								value={ String( origin ) }
 								options={ [
-									{ value: '0', label: fbmText( 'Choose a port' ) },
+									{ value: '0', label: mpfbsText( 'Choose a port' ) },
 									...options.ports.map( ( port ) => ( { value: String( port.id ), label: port.name } ) ),
 								] }
 								onChange={ ( value ) => {
@@ -665,11 +665,11 @@ export function NewBookingScreen(): JSX.Element {
 								} }
 							/>
 							<SelectField
-								label={ fbmText( 'To' ) }
+								label={ mpfbsText( 'To' ) }
 								name="destination"
 								value={ String( destination ) }
 								options={ [
-									{ value: '0', label: fbmText( 'Choose a port' ) },
+									{ value: '0', label: mpfbsText( 'Choose a port' ) },
 									...reachable
 										.filter( ( port ) => port.id !== origin )
 										.map( ( port ) => ( { value: String( port.id ), label: port.name } ) ),
@@ -677,49 +677,49 @@ export function NewBookingScreen(): JSX.Element {
 								onChange={ ( value ) => setDestination( Number( value ) ) }
 							/>
 							<TextField
-								label={ fbmText( 'Date' ) }
+								label={ mpfbsText( 'Date' ) }
 								name="date"
 								type="date"
 								value={ date }
 								onChange={ setDate }
 							/>
-							<div className="fbm-settings__wide">
+							<div className="mpfbs-settings__wide">
 								<button
 									type="button"
-									className="fbm-button fbm-button--primary"
+									className="mpfbs-button mpfbs-button--primary"
 									onClick={ search }
 									disabled={ searching }
 								>
-									{ searching ? fbmText( 'Searching…' ) : fbmText( 'Find sailings' ) }
+									{ searching ? mpfbsText( 'Searching…' ) : mpfbsText( 'Find sailings' ) }
 								</button>
 							</div>
 						</div>
 
 						{ results !== null ? (
-							<ul className="fbm-sailinglist">
+							<ul className="mpfbs-sailinglist">
 								{ results.length === 0 ? (
-									<li className="fbm-sailinglist__empty">{ fbmText( 'No sailings on that date.' ) }</li>
+									<li className="mpfbs-sailinglist__empty">{ mpfbsText( 'No sailings on that date.' ) }</li>
 								) : null }
 								{ results.map( ( row ) => {
 									const full = row.availability.sold_out;
 
 									return (
 										<li key={ row.sailing_id }>
-											<label className={ `fbm-sailinglist__row${ sailingId === row.sailing_id ? ' is-selected' : '' }` }>
+											<label className={ `mpfbs-sailinglist__row${ sailingId === row.sailing_id ? ' is-selected' : '' }` }>
 												<input
 													type="radio"
-													name="fbm-sailing"
+													name="mpfbs-sailing"
 													checked={ sailingId === row.sailing_id }
 													disabled={ full }
 													onChange={ () => setSailingId( row.sailing_id ) }
 												/>
-												<span className="fbm-sailinglist__time">{ row.departure.slice( 11, 16 ) }</span>
-												<span className="fbm-sailinglist__route">{ row.route_name }</span>
-												<span className="fbm-sailinglist__vessel">{ row.vessel.name }</span>
-												<span className="fbm-sailinglist__seats">
+												<span className="mpfbs-sailinglist__time">{ row.departure.slice( 11, 16 ) }</span>
+												<span className="mpfbs-sailinglist__route">{ row.route_name }</span>
+												<span className="mpfbs-sailinglist__vessel">{ row.vessel.name }</span>
+												<span className="mpfbs-sailinglist__seats">
 													{ full
-														? fbmText( 'Sold out' )
-														: fbmFormat(
+														? mpfbsText( 'Sold out' )
+														: mpfbsFormat(
 															'%s seats left',
 															String( row.availability.passengers.remaining )
 														) }
@@ -735,44 +735,44 @@ export function NewBookingScreen(): JSX.Element {
 
 						{ step === 1 ? (
 							<>
-								<p className="fbm-wizard__note">
-									{ fbmText( 'How many of each, then a name for every one of them. A manifest is a named list, so the details below are what makes it one.' ) }
+								<p className="mpfbs-wizard__note">
+									{ mpfbsText( 'How many of each, then a name for every one of them.' ) }
 								</p>
 
-								<div className="fbm-qty-groups">
+								<div className="mpfbs-qty-groups">
 									<QuantityGrid
-										title={ fbmText( 'Passengers' ) }
+										title={ mpfbsText( 'Passengers' ) }
 										types={ options.passenger_types }
 										values={ passengers }
 										onChange={ setPassengers }
 										fares={ fares?.passengers }
 									/>
 									<QuantityGrid
-										title={ fbmText( 'Vehicles' ) }
+										title={ mpfbsText( 'Vehicles' ) }
 										types={ options.vehicle_types }
 										values={ vehicles }
 										onChange={ setVehicles }
-										empty={ fbmText( 'No vehicle types are set up.' ) }
+										empty={ mpfbsText( 'No vehicle types are set up.' ) }
 										fares={ fares && fares.vehicles_allowed ? fares.vehicles : undefined }
 									/>
 								</div>
 
 								{ travellers.length > 0 || vehicleDetails.length > 0 ? (
 									<>
-										<div className="fbm-wizard__subhead">
-											<h3 className="fbm-subheading">{ fbmText( 'Traveller details' ) }</h3>
+										<div className="mpfbs-wizard__subhead">
+											<h3 className="mpfbs-subheading">{ mpfbsText( 'Traveller details' ) }</h3>
 								{ canCopyLead ? (
-									<button type="button" className="fbm-button" onClick={ copyLead }>
-										{ fbmText( 'Use the customer name' ) }
+									<button type="button" className="mpfbs-button" onClick={ copyLead }>
+										{ mpfbsText( 'Use the customer name' ) }
 									</button>
 								) : null }
 										</div>
 							{ travellers.map( ( member, index ) => (
-								<div className="fbm-party-row" key={ `t-${ index }` }>
-									<p className="fbm-party-row__title">
-										{ fbmFormat( '%1$s %2$s', member.type_name, String( index + 1 ) ) }
+								<div className="mpfbs-party-row" key={ `t-${ index }` }>
+									<p className="mpfbs-party-row__title">
+										{ mpfbsFormat( '%1$s %2$s', member.type_name, String( index + 1 ) ) }
 									</p>
-									<div className="fbm-settings">
+									<div className="mpfbs-settings">
 										{ options.fields.passenger.map( ( field ) => (
 											<TextField
 												key={ field.key }
@@ -798,11 +798,11 @@ export function NewBookingScreen(): JSX.Element {
 							) ) }
 
 							{ vehicleDetails.map( ( member, index ) => (
-								<div className="fbm-party-row" key={ `v-${ index }` }>
-									<p className="fbm-party-row__title">
-										{ fbmFormat( '%1$s %2$s', member.type_name, String( index + 1 ) ) }
+								<div className="mpfbs-party-row" key={ `v-${ index }` }>
+									<p className="mpfbs-party-row__title">
+										{ mpfbsFormat( '%1$s %2$s', member.type_name, String( index + 1 ) ) }
 									</p>
-									<div className="fbm-settings">
+									<div className="mpfbs-settings">
 										{ options.fields.vehicle.map( ( field ) => (
 											<TextField
 												key={ field.key }
@@ -833,33 +833,33 @@ export function NewBookingScreen(): JSX.Element {
 
 						{ step === 2 ? (
 							<>
-								<p className="fbm-wizard__note">
-									{ fbmText( 'Search for a returning customer, or type the details of a new one. The confirmation goes to this address.' ) }
+								<p className="mpfbs-wizard__note">
+									{ mpfbsText( 'Search for a returning customer, or type the details of a new one. The confirmation goes to this address.' ) }
 								</p>
-						<div className="fbm-settings">
+						<div className="mpfbs-settings">
 							<TextField
-								label={ fbmText( 'Search customers' ) }
+								label={ mpfbsText( 'Search customers' ) }
 								name="customer_search"
 								value={ customerSearch }
-								placeholder={ fbmText( 'Name or email' ) }
+								placeholder={ mpfbsText( 'Name or email' ) }
 								onChange={ setCustomerSearch }
 							/>
 
 							{ matches.length > 0 ? (
-								<ul className="fbm-matchlist fbm-settings__wide">
+								<ul className="mpfbs-matchlist mpfbs-settings__wide">
 									{ matches.map( ( match ) => (
 										<li key={ match.id }>
 											<button
 												type="button"
-												className="fbm-matchlist__row"
+												className="mpfbs-matchlist__row"
 												onClick={ () => {
 													setCustomer( match );
 													setMatches( [] );
 													setCustomerSearch( '' );
 												} }
 											>
-												<span className="fbm-matchlist__name">{ match.name }</span>
-												<span className="fbm-matchlist__email">{ match.email }</span>
+												<span className="mpfbs-matchlist__name">{ match.name }</span>
+												<span className="mpfbs-matchlist__email">{ match.email }</span>
 											</button>
 										</li>
 									) ) }
@@ -867,14 +867,14 @@ export function NewBookingScreen(): JSX.Element {
 							) : null }
 
 							<TextField
-								label={ fbmText( 'Full name' ) }
+								label={ mpfbsText( 'Full name' ) }
 								name="customer_name"
 								value={ customer.name }
 								error={ errors.customer_name }
 								onChange={ ( value ) => setCustomer( { ...customer, name: value } ) }
 							/>
 							<TextField
-								label={ fbmText( 'Email' ) }
+								label={ mpfbsText( 'Email' ) }
 								name="customer_email"
 								type="email"
 								value={ customer.email }
@@ -882,7 +882,7 @@ export function NewBookingScreen(): JSX.Element {
 								onChange={ ( value ) => setCustomer( { ...customer, email: value } ) }
 							/>
 							<TextField
-								label={ fbmText( 'Phone' ) }
+								label={ mpfbsText( 'Phone' ) }
 								name="customer_phone"
 								type="tel"
 								value={ customer.phone }
@@ -895,70 +895,70 @@ export function NewBookingScreen(): JSX.Element {
 
 						{ step === 3 ? (
 							<>
-								<p className="fbm-wizard__note">
-									{ fbmText( 'How it was paid for, and anything staff need to record against it.' ) }
+								<p className="mpfbs-wizard__note">
+									{ mpfbsText( 'How it was paid for, and anything staff need to record against it.' ) }
 								</p>
-						<div className="fbm-settings">
+						<div className="mpfbs-settings">
 							<SelectField
-								label={ fbmText( 'Payment method' ) }
+								label={ mpfbsText( 'Payment method' ) }
 								name="payment_method"
 								value={ method }
 								options={ methods.map( ( entry ) => ( { value: entry.id, label: entry.label } ) ) }
 								onChange={ setMethod }
 							/>
 							<SelectField
-								label={ fbmText( 'Booking status' ) }
+								label={ mpfbsText( 'Booking status' ) }
 								name="booking_status"
 								value={ bookingStatus }
 								options={ BOOKING_STATUSES.map( ( entry ) => ( {
 									value: entry.value,
-									label: fbmText( entry.label ),
+									label: mpfbsText( entry.label ),
 								} ) ) }
 								onChange={ setBookingStatus }
 							/>
 							<SelectField
-								label={ fbmText( 'Payment status' ) }
+								label={ mpfbsText( 'Payment status' ) }
 								name="payment_status"
 								value={ paymentStatus }
 								options={ PAYMENT_STATUSES.map( ( entry ) => ( {
 									value: entry.value,
-									label: fbmText( entry.label ),
+									label: mpfbsText( entry.label ),
 								} ) ) }
 								onChange={ setPaymentStatus }
 							/>
 							{ paymentStatus === 'partially_paid' ? (
 								<NumberField
-									label={ fbmText( 'Amount taken' ) }
+									label={ mpfbsText( 'Amount taken' ) }
 									name="amount_paid"
 									value={ amountPaid }
 									min={ 0 }
 									step={ 0.01 }
-									hint={ fbmText( 'What the customer has handed over so far.' ) }
+									hint={ mpfbsText( 'What the customer has handed over so far.' ) }
 									onChange={ setAmountPaid }
 								/>
 							) : null }
 							<NumberField
-								label={ fbmText( 'Discount' ) }
+								label={ mpfbsText( 'Discount' ) }
 								name="manual_discount"
 								value={ discount }
 								min={ 0 }
 								step={ 0.01 }
 								error={ errors.manual_discount }
-								hint={ fbmText( 'Taken off the fare. Recorded against your account.' ) }
+								hint={ mpfbsText( 'Taken off the fare. Recorded against your account.' ) }
 								onChange={ setDiscount }
 							/>
 							<TextField
-								label={ fbmText( 'Reason for the discount' ) }
+								label={ mpfbsText( 'Reason for the discount' ) }
 								name="discount_reason"
 								value={ discountReason }
 								onChange={ setDiscountReason }
 							/>
-							<div className="fbm-settings__wide">
+							<div className="mpfbs-settings__wide">
 								<TextAreaField
-									label={ fbmText( 'Internal note' ) }
+									label={ mpfbsText( 'Internal note' ) }
 									name="internal_notes"
 									value={ notes }
-									hint={ fbmText( 'Staff only. The customer never sees this.' ) }
+									hint={ mpfbsText( 'Staff only. The customer never sees this.' ) }
 									onChange={ setNotes }
 								/>
 							</div>
@@ -966,30 +966,30 @@ export function NewBookingScreen(): JSX.Element {
 							</>
 						) : null }
 
-						<div className="fbm-wizard__footer">
+						<div className="mpfbs-wizard__footer">
 							{ step > 0 ? (
-								<button type="button" className="fbm-button fbm-button--secondary" onClick={ () => goToStep( step - 1 ) } disabled={ saving }>
-									{ fbmText( 'Back' ) }
+								<button type="button" className="mpfbs-button mpfbs-button--secondary" onClick={ () => goToStep( step - 1 ) } disabled={ saving }>
+									{ mpfbsText( 'Back' ) }
 								</button>
 							) : (
-								<button type="button" className="fbm-button fbm-button--secondary" onClick={ () => fbmNavigate( '/bookings' ) } disabled={ saving }>
-									{ fbmText( 'Cancel' ) }
+								<button type="button" className="mpfbs-button mpfbs-button--secondary" onClick={ () => mpfbsNavigate( '/bookings' ) } disabled={ saving }>
+									{ mpfbsText( 'Cancel' ) }
 								</button>
 							) }
 
-							<div className="fbm-wizard__footer-end">
+							<div className="mpfbs-wizard__footer-end">
 								{ step < STEPS.length - 1 ? (
-									<button type="button" className="fbm-button fbm-button--primary" onClick={ () => goToStep( step + 1 ) } disabled={ saving }>
-										{ fbmText( 'Next' ) }
+									<button type="button" className="mpfbs-button mpfbs-button--primary" onClick={ () => goToStep( step + 1 ) } disabled={ saving }>
+										{ mpfbsText( 'Next' ) }
 									</button>
 								) : (
 									<button
 										type="button"
-										className="fbm-button fbm-button--primary"
+										className="mpfbs-button mpfbs-button--primary"
 										onClick={ confirm }
 										disabled={ ! ready || saving }
 									>
-										{ saving ? fbmText( 'Creating…' ) : fbmText( 'Create booking' ) }
+										{ saving ? mpfbsText( 'Creating…' ) : mpfbsText( 'Create booking' ) }
 									</button>
 								) }
 							</div>
@@ -997,51 +997,51 @@ export function NewBookingScreen(): JSX.Element {
 					</section>
 				</div>
 
-				<aside className="fbm-booking-form__side">
-					<div className="fbm-panel fbm-quote">
-						<div className="fbm-panel__header">
-							<h2 className="fbm-panel__title">{ fbmText( 'Price' ) }</h2>
-							{ quote ? <p className="fbm-quote__headline">{ fbmFormatMoney( quote.total ) }</p> : null }
+				<aside className="mpfbs-booking-form__side">
+					<div className="mpfbs-panel mpfbs-quote">
+						<div className="mpfbs-panel__header">
+							<h2 className="mpfbs-panel__title">{ mpfbsText( 'Price' ) }</h2>
+							{ quote ? <p className="mpfbs-quote__headline">{ mpfbsFormatMoney( quote.total ) }</p> : null }
 						</div>
 
 						{ quote ? (
 							<>
-								<ul className="fbm-quote__lines">
+								<ul className="mpfbs-quote__lines">
 									{ quote.lines.map( ( line, index ) => (
 										<li key={ `${ line.label }-${ index }` }>
 											<span>
 												{ line.label }
 												{ line.quantity > 1 ? ` × ${ line.quantity }` : '' }
 											</span>
-											<span>{ fbmFormatMoney( line.amount ) }</span>
+											<span>{ mpfbsFormatMoney( line.amount ) }</span>
 										</li>
 									) ) }
 								</ul>
-								<p className="fbm-quote__total">
-									<span>{ fbmText( 'Total' ) }</span>
-									<span>{ fbmFormatMoney( quote.total ) }</span>
+								<p className="mpfbs-quote__total">
+									<span>{ mpfbsText( 'Total' ) }</span>
+									<span>{ mpfbsFormatMoney( quote.total ) }</span>
 								</p>
 								{ discount > 0 ? (
-									<p className="fbm-quote__note">
-										{ fbmFormat( 'Less %s discount at confirmation.', fbmFormatMoney( Math.round( discount * 100 ) ) ) }
+									<p className="mpfbs-quote__note">
+										{ mpfbsFormat( 'Less %s discount at confirmation.', mpfbsFormatMoney( Math.round( discount * 100 ) ) ) }
 									</p>
 								) : null }
 							</>
 						) : quoting ? (
-							<p className="fbm-quote__empty">{ fbmText( 'Working out the fare…' ) }</p>
+							<p className="mpfbs-quote__empty">{ mpfbsText( 'Working out the fare…' ) }</p>
 						) : quoteError !== '' ? (
-							<div className="fbm-alert fbm-alert--error" role="alert">
+							<div className="mpfbs-alert mpfbs-alert--error" role="alert">
 								{ quoteError }
 							</div>
 						) : (
-							<p className="fbm-quote__empty">
-								{ fbmText( 'Choose a sailing and who is travelling to see the fare.' ) }
+							<p className="mpfbs-quote__empty">
+								{ mpfbsText( 'Choose a sailing and who is travelling to see the fare.' ) }
 							</p>
 						) }
 
 						{ ! ready ? (
-							<p className="fbm-quote__note">
-								{ fbmText( 'Pick a sailing, add at least one traveller, and give a name and email.' ) }
+							<p className="mpfbs-quote__note">
+								{ mpfbsText( 'Pick a sailing, add at least one traveller, and give a name and email.' ) }
 							</p>
 						) : null }
 					</div>

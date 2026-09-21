@@ -7,11 +7,11 @@
 
 declare( strict_types=1 );
 
-namespace FBM\Repositories;
+namespace MPFBS\Repositories;
 
-use FBM\Models\Booking;
-use FBM\Models\Entity;
-use FBM\Models\VehicleType;
+use MPFBS\Models\Booking;
+use MPFBS\Models\Entity;
+use MPFBS\Models\VehicleType;
 use WP_Error;
 
 defined( 'ABSPATH' ) || exit;
@@ -23,7 +23,7 @@ final class VehicleTypeRepository extends AbstractRepository {
 	/**
 	 * Meta key bookings use to index the vehicle types they contain.
 	 */
-	public const BOOKING_INDEX = '_fbm_booking_vehicle_type';
+	public const BOOKING_INDEX = '_mpfbs_booking_vehicle_type';
 
 	/**
 	 * Returns the entity class this repository manages.
@@ -88,7 +88,7 @@ final class VehicleTypeRepository extends AbstractRepository {
 
 		if ( $references > 0 ) {
 			return new WP_Error(
-				'fbm_vehicle_type_in_use',
+				'mpfbs_vehicle_type_in_use',
 				sprintf(
 					/* translators: %d: number of bookings. */
 					_n(

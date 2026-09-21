@@ -15,9 +15,9 @@
 import { useCallback, useEffect, useRef, useState, type JSX } from 'react';
 
 import { Icon } from './Icon';
-import { fbmRequest, FbmApiError } from '../lib/api';
-import { fbmCan } from '../lib/config';
-import { fbmText } from '../lib/i18n';
+import { mpfbsRequest, MpfbsApiError } from '../lib/api';
+import { mpfbsCan } from '../lib/config';
+import { mpfbsText } from '../lib/i18n';
 
 interface DemoStatus {
 	title: string;
@@ -50,13 +50,13 @@ export function DemoImportDialog(): JSX.Element | null {
 	const dialogRef = useRef< HTMLDivElement >( null );
 
 	useEffect( () => {
-		if ( ! fbmCan( 'fbm_manage_settings' ) ) {
+		if ( ! mpfbsCan( 'mpfbs_manage_settings' ) ) {
 			return;
 		}
 
 		let cancelled = false;
 
-		fbmRequest< DemoStatus >( 'demo' )
+		mpfbsRequest< DemoStatus >( 'demo' )
 			.then( ( response ) => {
 				if ( cancelled ) {
 					return;
@@ -85,7 +85,7 @@ export function DemoImportDialog(): JSX.Element | null {
 		setOpen( false );
 
 		try {
-			await fbmRequest( 'demo/dismiss', { method: 'POST' } );
+			await mpfbsRequest( 'demo/dismiss', { method: 'POST' } );
 		} catch {
 			/* Dismissal is a preference, not a transaction. */
 		}
@@ -105,7 +105,7 @@ export function DemoImportDialog(): JSX.Element | null {
 				// created, and a parallel burst would race to build the same
 				// routes twice.
 				// eslint-disable-next-line no-await-in-loop
-				const response = await fbmRequest< StepResult >( 'demo', {
+				const response = await mpfbsRequest< StepResult >( 'demo', {
 					method: 'POST',
 					body: { step },
 				} );
@@ -114,7 +114,7 @@ export function DemoImportDialog(): JSX.Element | null {
 				setDone( step + 1 );
 			}
 
-			const refreshed = await fbmRequest< DemoStatus >( 'demo' );
+			const refreshed = await mpfbsRequest< DemoStatus >( 'demo' );
 			setStatus( refreshed.data );
 			setOpen( false );
 
@@ -124,7 +124,7 @@ export function DemoImportDialog(): JSX.Element | null {
 			window.location.reload();
 		} catch ( caught: unknown ) {
 			setFailed(
-				caught instanceof FbmApiError ? caught.message : fbmText( 'The demo could not be installed.' )
+				caught instanceof MpfbsApiError ? caught.message : mpfbsText( 'The demo could not be installed.' )
 			);
 			setBusy( false );
 		}
@@ -137,33 +137,33 @@ export function DemoImportDialog(): JSX.Element | null {
 	const percent = status.steps > 0 ? Math.round( ( done / status.steps ) * 100 ) : 0;
 
 	return (
-		<div className="fbm-demo__backdrop" role="presentation">
+		<div className="mpfbs-demo__backdrop" role="presentation">
 			<div
-				className="fbm-demo"
+				className="mpfbs-demo"
 				role="dialog"
 				aria-modal="true"
-				aria-labelledby="fbm-demo-title"
-				aria-describedby="fbm-demo-description"
+				aria-labelledby="mpfbs-demo-title"
+				aria-describedby="mpfbs-demo-description"
 				tabIndex={ -1 }
 				ref={ dialogRef }
 			>
-				<div className="fbm-demo__head">
-					<span className="fbm-demo__mark" aria-hidden="true">
+				<div className="mpfbs-demo__head">
+					<span className="mpfbs-demo__mark" aria-hidden="true">
 						<Icon name="ship" size={ 22 } />
 					</span>
 					<div>
-						<h2 className="fbm-demo__title" id="fbm-demo-title">
-							{ fbmText( 'Start with a working ferry operation' ) }
+						<h2 className="mpfbs-demo__title" id="mpfbs-demo-title">
+							{ mpfbsText( 'Start with a working ferry operation' ) }
 						</h2>
-						<p className="fbm-demo__lede" id="fbm-demo-description">
+						<p className="mpfbs-demo__lede" id="mpfbs-demo-description">
 							{ status.description }
 						</p>
 					</div>
 				</div>
 
-				<p className="fbm-demo__name">{ status.title }</p>
+				<p className="mpfbs-demo__name">{ status.title }</p>
 
-				<ul className="fbm-demo__list">
+				<ul className="mpfbs-demo__list">
 					{ status.includes.map( ( item ) => (
 						<li key={ item }>
 							<Icon name="check" size={ 15 } />
@@ -173,39 +173,39 @@ export function DemoImportDialog(): JSX.Element | null {
 				</ul>
 
 				{ busy ? (
-					<div className="fbm-demo__progress" role="status" aria-live="polite">
-						<div className="fbm-demo__bar">
-							<span className="fbm-demo__fill" style={ { inlineSize: `${ percent }%` } } />
+					<div className="mpfbs-demo__progress" role="status" aria-live="polite">
+						<div className="mpfbs-demo__bar">
+							<span className="mpfbs-demo__fill" style={ { inlineSize: `${ percent }%` } } />
 						</div>
-						<p className="fbm-demo__step">
-							<span>{ label !== '' ? label : fbmText( 'Starting…' ) }</span>
+						<p className="mpfbs-demo__step">
+							<span>{ label !== '' ? label : mpfbsText( 'Starting…' ) }</span>
 							{ /* Numbers need no translation, and a two-placeholder
 							     sentence would only give translators a harder
 							     string to get right. */ }
-							<span className="fbm-demo__count">{ `${ done } / ${ status.steps }` }</span>
+							<span className="mpfbs-demo__count">{ `${ done } / ${ status.steps }` }</span>
 						</p>
 					</div>
 				) : null }
 
-				{ failed !== '' ? <p className="fbm-demo__error">{ failed }</p> : null }
+				{ failed !== '' ? <p className="mpfbs-demo__error">{ failed }</p> : null }
 
-				<p className="fbm-demo__note">
-					{ fbmText(
+				<p className="mpfbs-demo__note">
+					{ mpfbsText(
 						'Everything it adds is marked as demo content and can be removed again from Settings → Advanced, without touching anything you have created yourself.'
 					) }
 				</p>
 
-				<div className="fbm-demo__actions">
-					<button type="button" className="fbm-button" onClick={ close } disabled={ busy }>
-						{ fbmText( 'Start from scratch' ) }
+				<div className="mpfbs-demo__actions">
+					<button type="button" className="mpfbs-button" onClick={ close } disabled={ busy }>
+						{ mpfbsText( 'Start from scratch' ) }
 					</button>
 					<button
 						type="button"
-						className="fbm-button fbm-button--primary"
+						className="mpfbs-button mpfbs-button--primary"
 						onClick={ install }
 						disabled={ busy }
 					>
-						{ busy ? fbmText( 'Installing…' ) : fbmText( 'Install the demo' ) }
+						{ busy ? mpfbsText( 'Installing…' ) : mpfbsText( 'Install the demo' ) }
 					</button>
 				</div>
 			</div>

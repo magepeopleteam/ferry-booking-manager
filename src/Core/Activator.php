@@ -7,10 +7,10 @@
 
 declare( strict_types=1 );
 
-namespace FBM\Core;
+namespace MPFBS\Core;
 
-use FBM\Security\Roles;
-use FBM\Support\Options;
+use MPFBS\Security\Roles;
+use MPFBS\Support\Options;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -25,7 +25,7 @@ final class Activator {
 	/**
 	 * Cron hook running daily housekeeping.
 	 */
-	public const MAINTENANCE_HOOK = 'fbm_daily_maintenance';
+	public const MAINTENANCE_HOOK = 'mpfbs_daily_maintenance';
 
 	/**
 	 * Performs activation work.
@@ -39,7 +39,7 @@ final class Activator {
 			Options::set( 'installed_at', gmdate( 'c' ) );
 		}
 
-		Options::set( 'version', FBM_VERSION, true );
+		Options::set( 'version', MPFBS_VERSION, true );
 		Options::set( 'needs_rewrite_flush', 1 );
 
 		if ( ! wp_next_scheduled( self::MAINTENANCE_HOOK ) ) {
@@ -51,6 +51,6 @@ final class Activator {
 		 *
 		 * @since 1.0.0
 		 */
-		do_action( 'fbm_activated' );
+		do_action( 'mpfbs_activated' );
 	}
 }

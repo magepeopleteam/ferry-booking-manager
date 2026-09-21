@@ -7,18 +7,18 @@
 
 declare( strict_types=1 );
 
-namespace FBM\Providers;
+namespace MPFBS\Providers;
 
-use FBM\Contracts\ContainerInterface;
-use FBM\Core\ServiceProvider;
-use FBM\REST\Controllers\HealthController;
-use FBM\REST\RestServer;
-use FBM\Security\Permissions;
+use MPFBS\Contracts\ContainerInterface;
+use MPFBS\Core\ServiceProvider;
+use MPFBS\REST\Controllers\HealthController;
+use MPFBS\REST\RestServer;
+use MPFBS\Security\Permissions;
 
 defined( 'ABSPATH' ) || exit;
 
 /**
- * Registers the `fbm/v1` REST namespace and its controllers.
+ * Registers the `mpfbs/v1` REST namespace and its controllers.
  */
 final class RestServiceProvider extends ServiceProvider {
 	/**

@@ -8,7 +8,7 @@
  * formatted as UTC, which renders exactly the digits the operator typed.
  */
 
-import { fbmConfig } from './config';
+import { mpfbsConfig } from './config';
 
 interface DateParts {
 	year: number;
@@ -21,7 +21,7 @@ interface DateParts {
 /**
  * Parses "YYYY-MM-DD HH:MM:SS" without applying any timezone.
  */
-export function fbmParseLocal( value: string ): DateParts | null {
+export function mpfbsParseLocal( value: string ): DateParts | null {
 	const match = /^(\d{4})-(\d{2})-(\d{2})(?:[ T](\d{2}):(\d{2}))?/.exec( value ?? '' );
 
 	if ( ! match ) {
@@ -47,14 +47,14 @@ function toUtcDate( parts: DateParts ): Date {
 /**
  * Formats a stored local date/time for display.
  */
-export function fbmFormatDateTime( value: string, options: Intl.DateTimeFormatOptions = {} ): string {
-	const parts = fbmParseLocal( value );
+export function mpfbsFormatDateTime( value: string, options: Intl.DateTimeFormatOptions = {} ): string {
+	const parts = mpfbsParseLocal( value );
 
 	if ( ! parts ) {
 		return '';
 	}
 
-	return new Intl.DateTimeFormat( fbmConfig().locale, {
+	return new Intl.DateTimeFormat( mpfbsConfig().locale, {
 		dateStyle: 'medium',
 		timeStyle: 'short',
 		timeZone: 'UTC',
@@ -65,22 +65,22 @@ export function fbmFormatDateTime( value: string, options: Intl.DateTimeFormatOp
 /**
  * Formats only the date portion.
  */
-export function fbmFormatDate( value: string ): string {
-	return fbmFormatDateTime( value, { dateStyle: 'medium', timeStyle: undefined } );
+export function mpfbsFormatDate( value: string ): string {
+	return mpfbsFormatDateTime( value, { dateStyle: 'medium', timeStyle: undefined } );
 }
 
 /**
  * Formats only the time portion.
  */
-export function fbmFormatTime( value: string ): string {
-	return fbmFormatDateTime( value, { dateStyle: undefined, timeStyle: 'short' } );
+export function mpfbsFormatTime( value: string ): string {
+	return mpfbsFormatDateTime( value, { dateStyle: undefined, timeStyle: 'short' } );
 }
 
 /**
  * Converts a stored value to the format a datetime-local input expects.
  */
-export function fbmToInputValue( value: string ): string {
-	const parts = fbmParseLocal( value );
+export function mpfbsToInputValue( value: string ): string {
+	const parts = mpfbsParseLocal( value );
 
 	if ( ! parts ) {
 		return '';
@@ -94,7 +94,7 @@ export function fbmToInputValue( value: string ): string {
 /**
  * Converts a datetime-local input value back to the stored format.
  */
-export function fbmFromInputValue( value: string ): string {
+export function mpfbsFromInputValue( value: string ): string {
 	if ( ! value ) {
 		return '';
 	}
@@ -107,9 +107,9 @@ export function fbmFromInputValue( value: string ): string {
 /**
  * Returns today's date in the site timezone as "YYYY-MM-DD".
  */
-export function fbmToday(): string {
+export function mpfbsToday(): string {
 	return new Intl.DateTimeFormat( 'en-CA', {
-		timeZone: fbmConfig().timezone || 'UTC',
+		timeZone: mpfbsConfig().timezone || 'UTC',
 		year: 'numeric',
 		month: '2-digit',
 		day: '2-digit',
@@ -119,8 +119,8 @@ export function fbmToday(): string {
 /**
  * Adds days to a "YYYY-MM-DD" string.
  */
-export function fbmAddDays( date: string, days: number ): string {
-	const parts = fbmParseLocal( date );
+export function mpfbsAddDays( date: string, days: number ): string {
+	const parts = mpfbsParseLocal( date );
 
 	if ( ! parts ) {
 		return date;

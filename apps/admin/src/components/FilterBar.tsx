@@ -6,7 +6,7 @@ import type { JSX, ReactNode } from 'react';
 import { Listbox } from './Listbox';
 
 import { Icon } from './Icon';
-import { fbmText } from '../lib/i18n';
+import { mpfbsText } from '../lib/i18n';
 
 export interface FilterOption {
 	value: string;
@@ -38,26 +38,26 @@ export function FilterBar( {
 	actions,
 }: FilterBarProps ): JSX.Element {
 	return (
-		<div className="fbm-filter-bar">
-			<div className="fbm-filter-bar__search">
+		<div className="mpfbs-filter-bar">
+			<div className="mpfbs-filter-bar__search">
 				<Icon name="search" size={ 16 } />
 				<input
 					type="search"
-					className="fbm-input fbm-input--bare"
+					className="mpfbs-input mpfbs-input--bare"
 					value={ search }
-					placeholder={ searchPlaceholder ?? fbmText( 'Search' ) }
-					aria-label={ searchPlaceholder ?? fbmText( 'Search' ) }
+					placeholder={ searchPlaceholder ?? mpfbsText( 'Search' ) }
+					aria-label={ searchPlaceholder ?? mpfbsText( 'Search' ) }
 					onChange={ ( event ) => onSearch( event.target.value ) }
 				/>
 			</div>
 
 			{ statusOptions && onStatus ? (
-				<div className="fbm-filter-bar__filter">
+				<div className="mpfbs-filter-bar__filter">
 					<Listbox
 						value={ status }
 						options={ statusOptions }
-						placeholder={ fbmText( 'All statuses' ) }
-						ariaLabel={ fbmText( 'Status' ) }
+						placeholder={ mpfbsText( 'All statuses' ) }
+						ariaLabel={ mpfbsText( 'Status' ) }
 						onChange={ onStatus }
 					/>
 				</div>
@@ -65,7 +65,7 @@ export function FilterBar( {
 
 			{ filters }
 
-			{ actions ? <div className="fbm-filter-bar__actions">{ actions }</div> : null }
+			{ actions ? <div className="mpfbs-filter-bar__actions">{ actions }</div> : null }
 		</div>
 	);
 }

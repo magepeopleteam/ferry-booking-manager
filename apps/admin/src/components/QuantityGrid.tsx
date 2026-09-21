@@ -14,8 +14,8 @@
 import type { JSX } from 'react';
 
 import { Icon } from './Icon';
-import { fbmFormat, fbmText } from '../lib/i18n';
-import { fbmFormatMoney } from '../lib/money';
+import { mpfbsFormat, mpfbsText } from '../lib/i18n';
+import { mpfbsFormatMoney } from '../lib/money';
 
 export interface QuantityType {
 	id: number;
@@ -49,9 +49,9 @@ export interface QuantityGridProps {
 export function QuantityGrid( { title, types, values, onChange, empty, fares }: QuantityGridProps ): JSX.Element | null {
 	if ( types.length === 0 ) {
 		return empty === undefined ? null : (
-			<div className="fbm-qty">
-				<p className="fbm-qty__title">{ title }</p>
-				<p className="fbm-qty__empty">{ empty }</p>
+			<div className="mpfbs-qty">
+				<p className="mpfbs-qty__title">{ title }</p>
+				<p className="mpfbs-qty__empty">{ empty }</p>
 			</div>
 		);
 	}
@@ -67,46 +67,46 @@ export function QuantityGrid( { title, types, values, onChange, empty, fares }: 
 	};
 
 	return (
-		<div className="fbm-qty">
-			<p className="fbm-qty__title">
+		<div className="mpfbs-qty">
+			<p className="mpfbs-qty__title">
 				{ title }
-				{ total > 0 ? <span className="fbm-qty__count">{ total }</span> : null }
+				{ total > 0 ? <span className="mpfbs-qty__count">{ total }</span> : null }
 			</p>
 
-			<ul className="fbm-qty__list">
+			<ul className="mpfbs-qty__list">
 				{ types.map( ( type ) => {
 					const value = values[ type.id ] ?? 0;
 					const ceiling = type.max_per_booking;
 					const atTop = ceiling > 0 && value >= ceiling;
 
 					return (
-						<li className={ `fbm-qty__row${ value > 0 ? ' is-chosen' : '' }` } key={ type.id }>
-							<span className="fbm-qty__label">
-								<span className="fbm-qty__name">{ type.name }</span>
-								{ type.meta ? <span className="fbm-qty__meta">{ type.meta }</span> : null }
+						<li className={ `mpfbs-qty__row${ value > 0 ? ' is-chosen' : '' }` } key={ type.id }>
+							<span className="mpfbs-qty__label">
+								<span className="mpfbs-qty__name">{ type.name }</span>
+								{ type.meta ? <span className="mpfbs-qty__meta">{ type.meta }</span> : null }
 							</span>
 
 							<FareTag fare={ fares?.[ String( type.id ) ] } free={ !! type.is_free } />
 
-							<span className="fbm-qty__stepper">
+							<span className="mpfbs-qty__stepper">
 								<button
 									type="button"
-									className="fbm-qty__button"
+									className="mpfbs-qty__button"
 									onClick={ () => set( type.id, value - 1, ceiling ) }
 									disabled={ value <= 0 }
-									aria-label={ fbmFormat( 'One fewer %s', type.name ) }
+									aria-label={ mpfbsFormat( 'One fewer %s', type.name ) }
 								>
 									<Icon name="minus" size={ 14 } />
 								</button>
-								<output className="fbm-qty__value" aria-live="polite">
+								<output className="mpfbs-qty__value" aria-live="polite">
 									{ value }
 								</output>
 								<button
 									type="button"
-									className="fbm-qty__button"
+									className="mpfbs-qty__button"
 									onClick={ () => set( type.id, value + 1, ceiling ) }
 									disabled={ atTop }
-									aria-label={ fbmFormat( 'One more %s', type.name ) }
+									aria-label={ mpfbsFormat( 'One more %s', type.name ) }
 								>
 									<Icon name="plus" size={ 14 } />
 								</button>
@@ -116,7 +116,7 @@ export function QuantityGrid( { title, types, values, onChange, empty, fares }: 
 				} ) }
 			</ul>
 
-			{ total === 0 ? <p className="fbm-qty__empty">{ fbmText( 'Nobody added yet.' ) }</p> : null }
+			{ total === 0 ? <p className="mpfbs-qty__empty">{ mpfbsText( 'Nobody added yet.' ) }</p> : null }
 		</div>
 	);
 }
@@ -134,8 +134,8 @@ function FareTag( { fare, free }: { fare: number | undefined; free: boolean } ):
 	}
 
 	if ( fare === 0 ) {
-		return free ? <span className="fbm-qty__fare is-free">{ fbmText( 'Free' ) }</span> : null;
+		return free ? <span className="mpfbs-qty__fare is-free">{ mpfbsText( 'Free' ) }</span> : null;
 	}
 
-	return <span className="fbm-qty__fare">{ fbmFormatMoney( fare ) }</span>;
+	return <span className="mpfbs-qty__fare">{ mpfbsFormatMoney( fare ) }</span>;
 }

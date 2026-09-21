@@ -7,15 +7,15 @@
 
 declare( strict_types=1 );
 
-namespace FBM\Contracts;
+namespace MPFBS\Contracts;
 
 defined( 'ABSPATH' ) || exit;
 
 /**
  * Describes a unit of plugin functionality.
  *
- * Providers are the single extension point used by MagePeople Ferry Booking System Pro and
- * by third parties; they never contain business logic themselves.
+ * Providers are the single extension point used by the plugin and by third
+ * parties; they never contain business logic themselves.
  */
 interface ServiceProviderInterface {
 

@@ -7,7 +7,7 @@
 
 declare( strict_types=1 );
 
-namespace FBM\Frontend;
+namespace MPFBS\Frontend;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -24,7 +24,7 @@ final class Components {
 	/**
 	 * Block namespace.
 	 */
-	private const NAMESPACE = 'magepeople-ferry-booking-system';
+	public const NAMESPACE = 'magepeople-ferry-booking-system';
 
 	/**
 	 * Asset loader, which needs to know what a page contains.
@@ -60,7 +60,7 @@ final class Components {
 		$catalogue = array(
 			'booking'      => array(
 				'title'      => __( 'Ferry Booking', 'magepeople-ferry-booking-system' ),
-				'shortcode'  => 'fbm_booking',
+				'shortcode'  => 'mpfbs_booking',
 				'attributes' => array(
 					'origin'      => array(
 						'type'    => 'number',
@@ -78,7 +78,7 @@ final class Components {
 			),
 			'search'       => array(
 				'title'      => __( 'Ferry Search Form', 'magepeople-ferry-booking-system' ),
-				'shortcode'  => 'fbm_search',
+				'shortcode'  => 'mpfbs_search',
 				'attributes' => array(
 					'origin'      => array(
 						'type'    => 'number',
@@ -100,12 +100,12 @@ final class Components {
 			),
 			'confirmation' => array(
 				'title'      => __( 'Ferry Booking Confirmation', 'magepeople-ferry-booking-system' ),
-				'shortcode'  => 'fbm_confirmation',
+				'shortcode'  => 'mpfbs_confirmation',
 				'attributes' => array(),
 			),
 			'my-bookings'  => array(
 				'title'      => __( 'My Ferry Bookings', 'magepeople-ferry-booking-system' ),
-				'shortcode'  => 'fbm_my_bookings',
+				'shortcode'  => 'mpfbs_my_bookings',
 				'attributes' => array(
 					// A history is a table of crossings, not prose. It defaults
 					// to the theme's wide alignment for the same reason the
@@ -119,7 +119,7 @@ final class Components {
 			),
 			'lookup'       => array(
 				'title'      => __( 'Find a Ferry Booking', 'magepeople-ferry-booking-system' ),
-				'shortcode'  => 'fbm_lookup',
+				'shortcode'  => 'mpfbs_lookup',
 				'attributes' => array(),
 			),
 		);
@@ -131,7 +131,7 @@ final class Components {
 		 *
 		 * @param array<string, array<string, mixed>> $catalogue Component definitions.
 		 */
-		return (array) apply_filters( 'fbm_components', $catalogue );
+		return (array) apply_filters( 'mpfbs_components', $catalogue );
 	}
 
 	/**
@@ -195,7 +195,7 @@ final class Components {
 			'attributes' => $this->clean_attributes( $component, $attributes ),
 		);
 
-		$id = 'fbm-mount-' . $component . '-' . wp_unique_id();
+		$id = 'mpfbs-mount-' . $component . '-' . wp_unique_id();
 
 		/*
 		 * Most themes cap their content column at around 40rem, which is fine
@@ -222,7 +222,7 @@ final class Components {
 		}
 
 		return sprintf(
-			'<div class="fbm-frontend fbm-frontend--%1$s fbm-frontend--w-%5$s%6$s" id="%2$s" data-fbm-component="%1$s" data-fbm-config="%3$s">%4$s</div>',
+			'<div class="mpfbs-frontend mpfbs-frontend--%1$s mpfbs-frontend--w-%5$s%6$s" id="%2$s" data-mpfbs-component="%1$s" data-mpfbs-config="%3$s">%4$s</div>',
 			esc_attr( $component ),
 			esc_attr( $id ),
 			esc_attr( (string) wp_json_encode( $config ) ),
@@ -248,7 +248,7 @@ final class Components {
 			: __( 'Loading…', 'magepeople-ferry-booking-system' );
 
 		return sprintf(
-			'<div class="fbm-frontend__loading" role="status" aria-live="polite"><span class="fbm-frontend__spinner" aria-hidden="true"></span><span>%1$s</span></div><noscript><p class="fbm-frontend__noscript">%2$s</p></noscript>',
+			'<div class="mpfbs-frontend__loading" role="status" aria-live="polite"><span class="mpfbs-frontend__spinner" aria-hidden="true"></span><span>%1$s</span></div><noscript><p class="mpfbs-frontend__noscript">%2$s</p></noscript>',
 			esc_html( $message ),
 			esc_html__( 'Booking online needs JavaScript. Please enable it, or contact us to book by phone.', 'magepeople-ferry-booking-system' )
 		);

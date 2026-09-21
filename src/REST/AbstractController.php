@@ -7,9 +7,9 @@
 
 declare( strict_types=1 );
 
-namespace FBM\REST;
+namespace MPFBS\REST;
 
-use FBM\Security\Permissions;
+use MPFBS\Security\Permissions;
 use WP_Error;
 use WP_REST_Request;
 use WP_REST_Response;
@@ -17,7 +17,7 @@ use WP_REST_Response;
 defined( 'ABSPATH' ) || exit;
 
 /**
- * Shared behaviour for every `fbm/v1` controller.
+ * Shared behaviour for every `mpfbs/v1` controller.
  *
  * Controllers stay thin: they validate and sanitise input, delegate to a service
  * and serialise the result. Business rules never live here.
@@ -27,7 +27,7 @@ abstract class AbstractController {
 	/**
 	 * REST namespace shared by the whole plugin.
 	 */
-	public const NAMESPACE = 'fbm/v1';
+	public const NAMESPACE = 'mpfbs/v1';
 
 	/**
 	 * Allowed page sizes.
@@ -83,6 +83,30 @@ abstract class AbstractController {
 	 */
 	protected function can( string $capability ): callable {
 		return $this->permissions->rest_capability_callback( $capability );
+	}
+
+	/**
+	 * Wraps the handler of an intentionally public endpoint.
+	 *
+	 * Public endpoints register `__return_true` as their permission callback.
+	 * The handler still runs behind the public-API switch and the per-visitor
+	 * rate limit, which this wrapper applies before calling it.
+	 *
+	 * @param string   $bucket  Rate-limit bucket name.
+	 * @param int      $limit   Requests allowed per minute.
+	 * @param callable $handler Route handler receiving the request.
+	 * @return callable(WP_REST_Request): (WP_REST_Response|WP_Error)
+	 */
+	protected function public_handler( string $bucket, int $limit, callable $handler ): callable {
+		return function ( WP_REST_Request $request ) use ( $bucket, $limit, $handler ) {
+			$access = $this->permissions->public_access( $bucket, $limit );
+
+			if ( true !== $access ) {
+				return $access;
+			}
+
+			return $handler( $request );
+		};
 	}
 
 	/**

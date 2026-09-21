@@ -9,7 +9,7 @@
 import { useCallback, useEffect, useRef, type JSX, type ReactNode } from 'react';
 
 import { Icon } from './Icon';
-import { fbmText } from '../lib/i18n';
+import { mpfbsText } from '../lib/i18n';
 
 export interface DrawerProps {
 	open: boolean;
@@ -106,9 +106,9 @@ export function Drawer( { open, title, description, onClose, footer, children, w
 	}
 
 	return (
-		<div className="fbm-drawer" onMouseDown={ onClose }>
+		<div className="mpfbs-drawer" onMouseDown={ onClose }>
 			<div
-				className={ `fbm-drawer__panel fbm-drawer__panel--${ width }` }
+				className={ `mpfbs-drawer__panel mpfbs-drawer__panel--${ width }` }
 				role="dialog"
 				aria-modal="true"
 				aria-label={ title }
@@ -117,19 +117,19 @@ export function Drawer( { open, title, description, onClose, footer, children, w
 				onKeyDown={ onKeyDown }
 				onMouseDown={ ( event ) => event.stopPropagation() }
 			>
-				<header className="fbm-drawer__header">
+				<header className="mpfbs-drawer__header">
 					<div>
-						<h2 className="fbm-drawer__title">{ title }</h2>
-						{ description ? <p className="fbm-drawer__description">{ description }</p> : null }
+						<h2 className="mpfbs-drawer__title">{ title }</h2>
+						{ description ? <p className="mpfbs-drawer__description">{ description }</p> : null }
 					</div>
-					<button type="button" className="fbm-drawer__close" onClick={ onClose } aria-label={ fbmText( 'Close' ) }>
+					<button type="button" className="mpfbs-drawer__close" onClick={ onClose } aria-label={ mpfbsText( 'Close' ) }>
 						<Icon name="close" size={ 18 } />
 					</button>
 				</header>
 
-				<div className="fbm-drawer__body">{ children }</div>
+				<div className="mpfbs-drawer__body">{ children }</div>
 
-				{ footer ? <footer className="fbm-drawer__footer">{ footer }</footer> : null }
+				{ footer ? <footer className="mpfbs-drawer__footer">{ footer }</footer> : null }
 			</div>
 		</div>
 	);

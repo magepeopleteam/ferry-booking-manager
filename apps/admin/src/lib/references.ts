@@ -9,7 +9,7 @@
 
 import { useCallback, useEffect, useState } from 'react';
 
-import { fbmRequest } from './api';
+import { mpfbsRequest } from './api';
 
 export interface PortReference {
 	id: number;
@@ -77,7 +77,7 @@ export interface VehicleTypeReference {
 	status: string;
 }
 
-export interface FbmReferences {
+export interface MpfbsReferences {
 	ports: PortReference[];
 	vessels: VesselReference[];
 	routes: RouteReference[];
@@ -85,25 +85,25 @@ export interface FbmReferences {
 	vehicle_types: VehicleTypeReference[];
 }
 
-const EMPTY: FbmReferences = { ports: [], vessels: [], routes: [], passenger_types: [], vehicle_types: [] };
+const EMPTY: MpfbsReferences = { ports: [], vessels: [], routes: [], passenger_types: [], vehicle_types: [] };
 
-let cache: FbmReferences | null = null;
-let inflight: Promise< FbmReferences > | null = null;
-const listeners = new Set< ( value: FbmReferences ) => void >();
+let cache: MpfbsReferences | null = null;
+let inflight: Promise< MpfbsReferences > | null = null;
+const listeners = new Set< ( value: MpfbsReferences ) => void >();
 
 /**
  * Fetches the reference lists, reusing the cached copy when present.
  */
-export function fbmLoadReferences(): Promise< FbmReferences > {
+export function mpfbsLoadReferences(): Promise< MpfbsReferences > {
 	if ( cache ) {
 		return Promise.resolve( cache );
 	}
 
 	if ( ! inflight ) {
-		inflight = fbmRequest< FbmReferences >( 'references' )
+		inflight = mpfbsRequest< MpfbsReferences >( 'references' )
 			.then( ( result ) => {
 				cache = { ...EMPTY, ...result.data };
-				listeners.forEach( ( listener ) => listener( cache as FbmReferences ) );
+				listeners.forEach( ( listener ) => listener( cache as MpfbsReferences ) );
 
 				return cache;
 			} )
@@ -120,23 +120,23 @@ export function fbmLoadReferences(): Promise< FbmReferences > {
 /**
  * Drops the cached lists so the next read refetches them.
  */
-export function fbmInvalidateReferences(): void {
+export function mpfbsInvalidateReferences(): void {
 	cache = null;
 	inflight = null;
-	void fbmLoadReferences().catch( () => undefined );
+	void mpfbsLoadReferences().catch( () => undefined );
 }
 
 /**
  * Subscribes a component to the reference lists.
  */
-export function useFbmReferences(): { references: FbmReferences; loading: boolean; reload: () => void } {
-	const [ references, setReferences ] = useState< FbmReferences >( cache ?? EMPTY );
+export function useMpfbsReferences(): { references: MpfbsReferences; loading: boolean; reload: () => void } {
+	const [ references, setReferences ] = useState< MpfbsReferences >( cache ?? EMPTY );
 	const [ loading, setLoading ] = useState( cache === null );
 
 	useEffect( () => {
 		let active = true;
 
-		const listener = ( value: FbmReferences ): void => {
+		const listener = ( value: MpfbsReferences ): void => {
 			if ( active ) {
 				setReferences( value );
 			}
@@ -144,7 +144,7 @@ export function useFbmReferences(): { references: FbmReferences; loading: boolea
 
 		listeners.add( listener );
 
-		fbmLoadReferences()
+		mpfbsLoadReferences()
 			.then( ( value ) => {
 				if ( active ) {
 					setReferences( value );
@@ -165,7 +165,7 @@ export function useFbmReferences(): { references: FbmReferences; loading: boolea
 
 	const reload = useCallback( () => {
 		setLoading( true );
-		fbmInvalidateReferences();
+		mpfbsInvalidateReferences();
 	}, [] );
 
 	return { references, loading, reload };

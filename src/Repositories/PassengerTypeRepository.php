@@ -7,11 +7,11 @@
 
 declare( strict_types=1 );
 
-namespace FBM\Repositories;
+namespace MPFBS\Repositories;
 
-use FBM\Models\Booking;
-use FBM\Models\Entity;
-use FBM\Models\PassengerType;
+use MPFBS\Models\Booking;
+use MPFBS\Models\Entity;
+use MPFBS\Models\PassengerType;
 use WP_Error;
 
 defined( 'ABSPATH' ) || exit;
@@ -23,7 +23,7 @@ final class PassengerTypeRepository extends AbstractRepository {
 	/**
 	 * Meta key bookings use to index the passenger types they contain.
 	 */
-	public const BOOKING_INDEX = '_fbm_booking_passenger_type';
+	public const BOOKING_INDEX = '_mpfbs_booking_passenger_type';
 
 	/**
 	 * Returns the entity class this repository manages.
@@ -104,7 +104,7 @@ final class PassengerTypeRepository extends AbstractRepository {
 	 * Percentage fares resolve against "the" base type, so two types carrying
 	 * the flag would make every percentage fare depend on query order. The
 	 * newest write wins and the others are cleared here rather than in the
-	 * controller, so the invariant survives the importer and Pro as well.
+	 * controller, so the invariant holds for every caller.
 	 *
 	 * @param array<string, mixed> $attributes Sanitised attributes.
 	 * @param int                  $id         Existing id, or 0 to create.
@@ -168,7 +168,7 @@ final class PassengerTypeRepository extends AbstractRepository {
 
 		if ( $references > 0 ) {
 			return new WP_Error(
-				'fbm_passenger_type_in_use',
+				'mpfbs_passenger_type_in_use',
 				sprintf(
 					/* translators: %d: number of bookings. */
 					_n(

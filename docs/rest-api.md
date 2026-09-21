@@ -1,6 +1,6 @@
 # REST API
 
-Namespace: `/wp-json/fbm/v1/`
+Namespace: `/wp-json/mpfbs/v1/`
 
 Every endpoint has a permission callback, argument sanitisation, schema
 validation and a predictable response shape. Nothing is public: the current
@@ -17,7 +17,7 @@ Success:
 Failure:
 
 ```json
-{ "success": false, "code": "fbm_validation_failed", "message": "Port code is required.", "data": { "fields": { "code": "Port code is required." } } }
+{ "success": false, "code": "mpfbs_validation_failed", "message": "Port code is required.", "data": { "fields": { "code": "Port code is required." } } }
 ```
 
 `data.fields` maps a field name to the message the interface renders beside that
@@ -28,26 +28,26 @@ the same shape, so a client never has to handle two error formats.
 
 | Method | Route | Capability |
 | --- | --- | --- |
-| GET | `/health` | `fbm_access_dashboard` |
-| GET | `/references` | `fbm_access_dashboard` |
-| GET POST | `/ports` | `fbm_manage_ports` |
-| GET PUT PATCH DELETE | `/ports/{id}` | `fbm_manage_ports` |
-| GET POST | `/vessels` | `fbm_manage_vessels` |
-| GET PUT PATCH DELETE | `/vessels/{id}` | `fbm_manage_vessels` |
-| GET POST | `/routes` | `fbm_manage_routes` |
-| GET PUT PATCH DELETE | `/routes/{id}` | `fbm_manage_routes` |
-| GET POST | `/sailings` | `fbm_manage_sailings` |
-| GET PUT PATCH DELETE | `/sailings/{id}` | `fbm_manage_sailings` |
-| POST | `/sailings/schedule` | `fbm_manage_sailings` |
-| GET POST | `/passenger-types` | `fbm_manage_settings` |
-| GET PUT PATCH DELETE | `/passenger-types/{id}` | `fbm_manage_settings` |
-| GET POST | `/vehicle-types` | `fbm_manage_settings` |
-| GET PUT PATCH DELETE | `/vehicle-types/{id}` | `fbm_manage_settings` |
-| GET PUT PATCH POST | `/field-config/{passenger\|vehicle}` | `fbm_manage_settings` |
-| GET | `/availability/{sailing}` | `fbm_access_dashboard` |
-| GET | `/availability?sailings=1,2,3` | `fbm_access_dashboard` |
-| POST | `/quote` | `fbm_access_dashboard` |
-| GET PUT PATCH POST | `/pricing/settings` | `fbm_manage_pricing` |
+| GET | `/health` | `mpfbs_access_dashboard` |
+| GET | `/references` | `mpfbs_access_dashboard` |
+| GET POST | `/ports` | `mpfbs_manage_ports` |
+| GET PUT PATCH DELETE | `/ports/{id}` | `mpfbs_manage_ports` |
+| GET POST | `/vessels` | `mpfbs_manage_vessels` |
+| GET PUT PATCH DELETE | `/vessels/{id}` | `mpfbs_manage_vessels` |
+| GET POST | `/routes` | `mpfbs_manage_routes` |
+| GET PUT PATCH DELETE | `/routes/{id}` | `mpfbs_manage_routes` |
+| GET POST | `/sailings` | `mpfbs_manage_sailings` |
+| GET PUT PATCH DELETE | `/sailings/{id}` | `mpfbs_manage_sailings` |
+| POST | `/sailings/schedule` | `mpfbs_manage_sailings` |
+| GET POST | `/passenger-types` | `mpfbs_manage_settings` |
+| GET PUT PATCH DELETE | `/passenger-types/{id}` | `mpfbs_manage_settings` |
+| GET POST | `/vehicle-types` | `mpfbs_manage_settings` |
+| GET PUT PATCH DELETE | `/vehicle-types/{id}` | `mpfbs_manage_settings` |
+| GET PUT PATCH POST | `/field-config/{passenger\|vehicle}` | `mpfbs_manage_settings` |
+| GET | `/availability/{sailing}` | `mpfbs_access_dashboard` |
+| GET | `/availability?sailings=1,2,3` | `mpfbs_access_dashboard` |
+| POST | `/quote` | `mpfbs_access_dashboard` |
+| GET PUT PATCH POST | `/pricing/settings` | `mpfbs_manage_pricing` |
 
 ### Collection parameters
 
@@ -68,7 +68,7 @@ as integers, so a decimal is rejected rather than quietly reinterpreted: without
 that rule `12` and `12.5` would have to mean minor and major units respectively,
 and the same payload could price a fare two orders of magnitude apart.
 
-Callers that are not the dashboard — the importer, WP-CLI, a CSV column — may
+Callers that are not the dashboard — WP-CLI or another integration — may
 pass a string instead (`"12.50"`, `"12,50"`, `"1 250,00"`), which is parsed as a
 major-unit amount. Only strings get that treatment.
 
@@ -133,17 +133,17 @@ is written with the figure this endpoint returns.
 
 | Code | Meaning |
 | --- | --- |
-| `fbm_not_authenticated` | 401, no signed-in user |
-| `fbm_forbidden` | 403, capability missing |
-| `fbm_not_found` | 404 |
-| `fbm_validation_failed` | 422, see `data.fields` |
-| `fbm_duplicate_value` | 409, an identifier is already in use |
-| `fbm_vessel_conflict` | 409, the vessel is already sailing in that window |
-| `fbm_port_in_use`, `fbm_vessel_in_use`, `fbm_route_in_use`, `fbm_sailing_has_bookings` | 409, referential integrity |
-| `fbm_passenger_type_in_use`, `fbm_vehicle_type_in_use` | 409, a booking still references the type |
-| `fbm_sailing_not_bookable` | 409, see `data.reason`: cancelled, not_open_yet, booking_closed, departed |
-| `fbm_insufficient_capacity` | 409, see `data.measure`, `data.remaining` |
-| `fbm_capacity_taken` | 409, a concurrent booking took the space during checkout |
-| `fbm_capacity_busy` | 409, too many simultaneous bookings to decide safely; retry |
-| `fbm_hold_expired` | 409, the hold lapsed and the space has gone |
-| `fbm_empty_quote`, `fbm_party_too_large` | 400, the party makes no sense |
+| `mpfbs_not_authenticated` | 401, no signed-in user |
+| `mpfbs_forbidden` | 403, capability missing |
+| `mpfbs_not_found` | 404 |
+| `mpfbs_validation_failed` | 422, see `data.fields` |
+| `mpfbs_duplicate_value` | 409, an identifier is already in use |
+| `mpfbs_vessel_conflict` | 409, the vessel is already sailing in that window |
+| `mpfbs_port_in_use`, `mpfbs_vessel_in_use`, `mpfbs_route_in_use`, `mpfbs_sailing_has_bookings` | 409, referential integrity |
+| `mpfbs_passenger_type_in_use`, `mpfbs_vehicle_type_in_use` | 409, a booking still references the type |
+| `mpfbs_sailing_not_bookable` | 409, see `data.reason`: cancelled, not_open_yet, booking_closed, departed |
+| `mpfbs_insufficient_capacity` | 409, see `data.measure`, `data.remaining` |
+| `mpfbs_capacity_taken` | 409, a concurrent booking took the space during checkout |
+| `mpfbs_capacity_busy` | 409, too many simultaneous bookings to decide safely; retry |
+| `mpfbs_hold_expired` | 409, the hold lapsed and the space has gone |
+| `mpfbs_empty_quote`, `mpfbs_party_too_large` | 400, the party makes no sense |

@@ -111,7 +111,7 @@ export async function requestWithMeta< T >( path: string, options: RequestOption
 			throw error;
 		}
 
-		throw new ApiError( 'fbm_network_error', t( 'Something went wrong.' ), 0 );
+		throw new ApiError( 'mpfbs_network_error', t( 'Something went wrong.' ), 0 );
 	}
 
 	let payload: Envelope< T > | null = null;
@@ -123,12 +123,12 @@ export async function requestWithMeta< T >( path: string, options: RequestOption
 	}
 
 	if ( ! payload ) {
-		throw new ApiError( 'fbm_invalid_response', t( 'Something went wrong.' ), response.status );
+		throw new ApiError( 'mpfbs_invalid_response', t( 'Something went wrong.' ), response.status );
 	}
 
 	if ( payload.success === false ) {
 		throw new ApiError(
-			payload.code ?? 'fbm_error',
+			payload.code ?? 'mpfbs_error',
 			payload.message ?? t( 'Something went wrong.' ),
 			response.status,
 			( payload.data ?? {} ) as Record< string, unknown >
@@ -136,7 +136,7 @@ export async function requestWithMeta< T >( path: string, options: RequestOption
 	}
 
 	if ( ! response.ok ) {
-		throw new ApiError( 'fbm_error', t( 'Something went wrong.' ), response.status );
+		throw new ApiError( 'mpfbs_error', t( 'Something went wrong.' ), response.status );
 	}
 
 	return {

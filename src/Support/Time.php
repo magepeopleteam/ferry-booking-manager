@@ -7,7 +7,7 @@
 
 declare( strict_types=1 );
 
-namespace FBM\Support;
+namespace MPFBS\Support;
 
 use DateTimeImmutable;
 use DateTimeZone;
@@ -19,7 +19,7 @@ defined( 'ABSPATH' ) || exit;
  * Timezone-correct conversions between authored local times and UTC.
  *
  * Sailings are authored in the operator's local wall-clock time. Everything the
- * system compares or sorts by — capacity windows, reminders, manifests — works
+ * system compares or sorts by — capacity windows, booking windows, listings — works
  * in UTC. This class is the only place that bridges the two, so a journey that
  * crosses midnight or a site whose timezone is corrected later behaves the same
  * everywhere.

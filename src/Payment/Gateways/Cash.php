@@ -1,15 +1,15 @@
 <?php
 /**
- * Offline payment gateways shipped with the Free plugin.
+ * Offline payment gateways shipped with the plugin.
  *
  * @package FerryBookingManager
  */
 
 declare( strict_types=1 );
 
-namespace FBM\Payment\Gateways;
+namespace MPFBS\Payment\Gateways;
 
-use FBM\Payment\PaymentGatewayInterface;
+use MPFBS\Payment\PaymentGatewayInterface;
 
 defined( 'ABSPATH' ) || exit;
 

@@ -22,7 +22,7 @@
     "jsx": "react-jsx",
     "incremental": true,
     "paths": {
-      "@fbm/*": [
+      "@mpfbs/*": [
         "./src/*"
       ]
     },

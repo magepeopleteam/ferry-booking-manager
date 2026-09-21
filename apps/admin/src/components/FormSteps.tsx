@@ -13,7 +13,7 @@
 import type { JSX } from 'react';
 
 import { Icon } from './Icon';
-import { fbmFormat, fbmText } from '../lib/i18n';
+import { mpfbsFormat, mpfbsText } from '../lib/i18n';
 
 export interface FormStepsProps {
 	steps: Array< { id: string; title: string } >;
@@ -31,7 +31,7 @@ export interface FormStepsProps {
  */
 export function FormSteps( { steps, current, reachable, invalid, onSelect }: FormStepsProps ): JSX.Element {
 	return (
-		<ol className="fbm-steps" aria-label={ fbmText( 'Form steps' ) }>
+		<ol className="mpfbs-steps" aria-label={ mpfbsText( 'Form steps' ) }>
 			{ steps.map( ( step, index ) => {
 				const done = index < current;
 				const here = index === current;
@@ -41,7 +41,7 @@ export function FormSteps( { steps, current, reachable, invalid, onSelect }: For
 				return (
 					<li
 						className={ [
-							'fbm-steps__item',
+							'mpfbs-steps__item',
 							here ? 'is-current' : '',
 							done ? 'is-done' : '',
 							broken ? 'is-invalid' : '',
@@ -52,12 +52,12 @@ export function FormSteps( { steps, current, reachable, invalid, onSelect }: For
 					>
 						<button
 							type="button"
-							className="fbm-steps__button"
+							className="mpfbs-steps__button"
 							onClick={ () => onSelect( index ) }
 							disabled={ ! open }
 							aria-current={ here ? 'step' : undefined }
 						>
-							<span className="fbm-steps__marker" aria-hidden="true">
+							<span className="mpfbs-steps__marker" aria-hidden="true">
 								{ broken ? (
 									<Icon name="alert" />
 								) : done ? (
@@ -66,11 +66,11 @@ export function FormSteps( { steps, current, reachable, invalid, onSelect }: For
 									index + 1
 								) }
 							</span>
-							<span className="fbm-steps__label">
-								<span className="fbm-steps__count">
-									{ fbmFormat( 'Step %1$s of %2$s', String( index + 1 ), String( steps.length ) ) }
+							<span className="mpfbs-steps__label">
+								<span className="mpfbs-steps__count">
+									{ mpfbsFormat( 'Step %1$s of %2$s', String( index + 1 ), String( steps.length ) ) }
 								</span>
-								<span className="fbm-steps__title">{ fbmText( step.title ) }</span>
+								<span className="mpfbs-steps__title">{ mpfbsText( step.title ) }</span>
 							</span>
 						</button>
 					</li>

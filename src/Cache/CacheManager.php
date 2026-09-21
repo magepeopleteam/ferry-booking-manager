@@ -7,9 +7,9 @@
 
 declare( strict_types=1 );
 
-namespace FBM\Cache;
+namespace MPFBS\Cache;
 
-use FBM\Settings\Settings;
+use MPFBS\Settings\Settings;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -32,7 +32,7 @@ final class CacheManager {
 	/**
 	 * Object cache group used for the in-request/persistent object cache.
 	 */
-	private const OBJECT_GROUP = 'fbm';
+	private const OBJECT_GROUP = 'mpfbs';
 
 	/**
 	 * Per-request memo of group versions.
@@ -110,7 +110,7 @@ final class CacheManager {
 	public function remember( string $group, string $key, callable $callback, int $expiration = 300 ) {
 		$expiration = $this->lifetime( $group, $expiration );
 
-		$sentinel = '__fbm_miss__';
+		$sentinel = '__mpfbs_miss__';
 		$value    = $this->get( $group, $key, $sentinel );
 
 		if ( $sentinel !== $value ) {
@@ -146,7 +146,7 @@ final class CacheManager {
 	 */
 	public function flush_group( string $group ): void {
 		$group   = $this->normalise_group( $group );
-		$option  = 'fbm_cache_version_' . $group;
+		$option  = 'mpfbs_cache_version_' . $group;
 		$version = $this->version( $group ) + 1;
 
 		update_option( $option, $version, true );
@@ -160,7 +160,7 @@ final class CacheManager {
 		 * @param string $group   Cache group slug.
 		 * @param int    $version New group version.
 		 */
-		do_action( 'fbm_cache_group_flushed', $group, $version );
+		do_action( 'mpfbs_cache_group_flushed', $group, $version );
 	}
 
 	/**
@@ -195,7 +195,7 @@ final class CacheManager {
 		 *
 		 * @param string[] $groups Group slugs.
 		 */
-		return array_values( array_unique( (array) apply_filters( 'fbm_cache_groups', $groups ) ) );
+		return array_values( array_unique( (array) apply_filters( 'mpfbs_cache_groups', $groups ) ) );
 	}
 
 	/**
@@ -230,7 +230,7 @@ final class CacheManager {
 		 * @param int    $expiration Seconds, where 0 means do not cache.
 		 * @param string $group      Cache group.
 		 */
-		return (int) apply_filters( 'fbm_cache_lifetime', $expiration, $group );
+		return (int) apply_filters( 'mpfbs_cache_lifetime', $expiration, $group );
 	}
 
 	/**
@@ -244,10 +244,10 @@ final class CacheManager {
 	 */
 	private function name( string $group, string $key ): string {
 		$group = $this->normalise_group( $group );
-		$name  = sprintf( 'fbm_%s_%d_%s', $group, $this->version( $group ), $key );
+		$name  = sprintf( 'mpfbs_%s_%d_%s', $group, $this->version( $group ), $key );
 
 		if ( strlen( $name ) > 140 ) {
-			$name = sprintf( 'fbm_%s_%d_%s', $group, $this->version( $group ), md5( $key ) );
+			$name = sprintf( 'mpfbs_%s_%d_%s', $group, $this->version( $group ), md5( $key ) );
 		}
 
 		return $name;
@@ -264,7 +264,7 @@ final class CacheManager {
 			return $this->versions[ $group ];
 		}
 
-		$version = (int) get_option( 'fbm_cache_version_' . $group, 1 );
+		$version = (int) get_option( 'mpfbs_cache_version_' . $group, 1 );
 
 		if ( $version < 1 ) {
 			$version = 1;

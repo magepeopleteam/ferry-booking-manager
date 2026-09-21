@@ -9,15 +9,15 @@
 
 import type { JSX } from 'react';
 
-import { fbmText } from '../lib/i18n';
+import { mpfbsText } from '../lib/i18n';
 
-export interface FbmTab {
+export interface MpfbsTab {
 	id: string;
 	label: string;
 }
 
 export interface TabsProps {
-	tabs: FbmTab[];
+	tabs: MpfbsTab[];
 	active: string;
 	onSelect: ( id: string ) => void;
 	label: string;
@@ -28,19 +28,19 @@ export interface TabsProps {
  */
 export function Tabs( { tabs, active, onSelect, label }: TabsProps ): JSX.Element {
 	return (
-		<div className="fbm-tabs" role="tablist" aria-label={ fbmText( label ) }>
+		<div className="mpfbs-tabs" role="tablist" aria-label={ mpfbsText( label ) }>
 			{ tabs.map( ( tab ) => (
 				<button
 					key={ tab.id }
 					type="button"
 					role="tab"
-					id={ `fbm-tab-${ tab.id }` }
+					id={ `mpfbs-tab-${ tab.id }` }
 					aria-selected={ active === tab.id }
-					aria-controls={ `fbm-tabpanel-${ tab.id }` }
-					className={ `fbm-tabs__tab${ active === tab.id ? ' is-active' : '' }` }
+					aria-controls={ `mpfbs-tabpanel-${ tab.id }` }
+					className={ `mpfbs-tabs__tab${ active === tab.id ? ' is-active' : '' }` }
 					onClick={ () => onSelect( tab.id ) }
 				>
-					{ fbmText( tab.label ) }
+					{ mpfbsText( tab.label ) }
 				</button>
 			) ) }
 		</div>

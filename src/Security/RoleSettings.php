@@ -7,9 +7,9 @@
 
 declare( strict_types=1 );
 
-namespace FBM\Security;
+namespace MPFBS\Security;
 
-use FBM\Support\Options;
+use MPFBS\Support\Options;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -45,7 +45,7 @@ final class RoleSettings {
 	 * @return void
 	 */
 	public function hooks(): void {
-		add_filter( 'fbm_role_definitions', array( $this, 'apply' ) );
+		add_filter( 'mpfbs_role_definitions', array( $this, 'apply' ) );
 	}
 
 	/**

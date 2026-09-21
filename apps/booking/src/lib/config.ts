@@ -2,7 +2,7 @@
  * Runtime configuration printed by PHP before the bundle runs.
  */
 
-export interface FbmCurrency {
+export interface MpfbsCurrency {
 	code: string;
 	symbol: string;
 	position: 'left' | 'right' | 'left_space' | 'right_space';
@@ -11,7 +11,7 @@ export interface FbmCurrency {
 	thousandSeparator: string;
 }
 
-export interface FbmBookingConfig {
+export interface MpfbsBookingConfig {
 	restUrl: string;
 	restNonce: string;
 	homeUrl: string;
@@ -44,12 +44,12 @@ export interface FbmBookingConfig {
 
 declare global {
 	interface Window {
-		fbmBooking?: Partial< FbmBookingConfig >;
+		mpfbsBooking?: Partial< MpfbsBookingConfig >;
 	}
 }
 
-const FALLBACK: FbmBookingConfig = {
-	restUrl: '/wp-json/fbm/v1/',
+const FALLBACK: MpfbsBookingConfig = {
+	restUrl: '/wp-json/mpfbs/v1/',
 	restNonce: '',
 	homeUrl: '/',
 	locale: 'en-US',
@@ -80,20 +80,20 @@ const FALLBACK: FbmBookingConfig = {
 	measurementId: '',
 };
 
-let cached: FbmBookingConfig | null = null;
+let cached: MpfbsBookingConfig | null = null;
 
 /**
  * Returns the merged runtime configuration.
  */
-export function config(): FbmBookingConfig {
+export function config(): MpfbsBookingConfig {
 	if ( ! cached ) {
-		cached = { ...FALLBACK, ...( window.fbmBooking ?? {} ) } as FbmBookingConfig;
+		cached = { ...FALLBACK, ...( window.mpfbsBooking ?? {} ) } as MpfbsBookingConfig;
 	}
 
 	return cached;
 }
 
-let currency: FbmCurrency = {
+let currency: MpfbsCurrency = {
 	code: 'EUR',
 	symbol: '€',
 	position: 'left',
@@ -105,13 +105,13 @@ let currency: FbmCurrency = {
 /**
  * Stores the currency settings the options endpoint reported.
  */
-export function setCurrency( next: FbmCurrency ): void {
+export function setCurrency( next: MpfbsCurrency ): void {
 	currency = { ...currency, ...next };
 }
 
 /**
  * Returns the currency settings.
  */
-export function getCurrency(): FbmCurrency {
+export function getCurrency(): MpfbsCurrency {
 	return currency;
 }

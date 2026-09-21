@@ -7,14 +7,14 @@
 
 declare( strict_types=1 );
 
-namespace FBM\REST\Controllers;
+namespace MPFBS\REST\Controllers;
 
-use FBM\Availability\Availability;
-use FBM\Availability\AvailabilityService;
-use FBM\Repositories\SailingRepository;
-use FBM\REST\AbstractController;
-use FBM\REST\Response;
-use FBM\Security\Permissions;
+use MPFBS\Availability\Availability;
+use MPFBS\Availability\AvailabilityService;
+use MPFBS\Repositories\SailingRepository;
+use MPFBS\REST\AbstractController;
+use MPFBS\REST\Response;
+use MPFBS\Security\Permissions;
 use WP_REST_Request;
 use WP_REST_Response;
 
@@ -92,8 +92,8 @@ final class AvailabilityController extends AbstractController {
 				),
 				array(
 					'methods'             => 'GET',
-					'callback'            => array( $this, 'get_one' ),
-					'permission_callback' => $this->permissions->rest_public_callback( 'availability', 120 ),
+					'callback'            => $this->public_handler( 'availability', 120, array( $this, 'get_one' ) ),
+					'permission_callback' => '__return_true',
 					'args'                => $this->quote_args(),
 				),
 			)
@@ -105,8 +105,8 @@ final class AvailabilityController extends AbstractController {
 			array(
 				array(
 					'methods'             => 'GET',
-					'callback'            => array( $this, 'get_many' ),
-					'permission_callback' => $this->permissions->rest_public_callback( 'availability', 120 ),
+					'callback'            => $this->public_handler( 'availability', 120, array( $this, 'get_many' ) ),
+					'permission_callback' => '__return_true',
 					'args'                => array(
 						'sailings' => array(
 							'description'       => __( 'Comma-separated sailing ids.', 'magepeople-ferry-booking-system' ),
@@ -170,7 +170,7 @@ final class AvailabilityController extends AbstractController {
 
 		if ( array() === $ids ) {
 			return $this->fail(
-				'fbm_missing_sailings',
+				'mpfbs_missing_sailings',
 				__( 'List the sailing ids you want availability for.', 'magepeople-ferry-booking-system' ),
 				400
 			);
@@ -178,7 +178,7 @@ final class AvailabilityController extends AbstractController {
 
 		if ( count( $ids ) > self::MAX_BATCH ) {
 			return $this->fail(
-				'fbm_batch_too_large',
+				'mpfbs_batch_too_large',
 				sprintf(
 					/* translators: %d: maximum number of sailings per request. */
 					__( 'Ask about at most %d sailings at a time.', 'magepeople-ferry-booking-system' ),

@@ -16,14 +16,14 @@ import { useCallback, useState, type JSX } from 'react';
 import { CrossingSetup } from '../components/CrossingSetup';
 import { PageHeader } from '../components/PageHeader';
 import { Tabs } from '../components/Tabs';
-import { fbmCan } from '../lib/config';
-import { fbmFormat, fbmText } from '../lib/i18n';
-import { useFbmReferences } from '../lib/references';
-import { fbmNavigate } from '../lib/router';
+import { mpfbsCan } from '../lib/config';
+import { mpfbsFormat, mpfbsText } from '../lib/i18n';
+import { useMpfbsReferences } from '../lib/references';
+import { mpfbsNavigate } from '../lib/router';
 import { PricingScreen } from './PricingScreen';
 import { ResourceScreen } from './ResourceScreen';
 import { SailingsScreen } from './SailingsScreen';
-import { FBM_PORT_RESOURCE, FBM_ROUTE_RESOURCE, FBM_VESSEL_RESOURCE } from '../config/resources';
+import { MPFBS_PORT_RESOURCE, MPFBS_ROUTE_RESOURCE, MPFBS_VESSEL_RESOURCE } from '../config/resources';
 
 export interface SetupScreenProps {
 	/** Second path segment: which tab. */
@@ -33,28 +33,28 @@ export interface SetupScreenProps {
 }
 
 const TABS = [
-	{ id: 'start', label: 'Set up', capability: 'fbm_manage_sailings' },
-	{ id: 'ports', label: 'Ports', capability: 'fbm_manage_ports' },
-	{ id: 'vessels', label: 'Vessels', capability: 'fbm_manage_vessels' },
-	{ id: 'routes', label: 'Routes', capability: 'fbm_manage_routes' },
-	{ id: 'sailings', label: 'Sailings', capability: 'fbm_manage_sailings' },
-	{ id: 'pricing', label: 'Pricing', capability: 'fbm_manage_pricing' },
+	{ id: 'start', label: 'Set up', capability: 'mpfbs_manage_sailings' },
+	{ id: 'ports', label: 'Ports', capability: 'mpfbs_manage_ports' },
+	{ id: 'vessels', label: 'Vessels', capability: 'mpfbs_manage_vessels' },
+	{ id: 'routes', label: 'Routes', capability: 'mpfbs_manage_routes' },
+	{ id: 'sailings', label: 'Sailings', capability: 'mpfbs_manage_sailings' },
+	{ id: 'pricing', label: 'Pricing', capability: 'mpfbs_manage_pricing' },
 ];
 
 /**
  * Renders the fleet and schedule workspace.
  */
 export function SetupScreen( { tab, sub }: SetupScreenProps ): JSX.Element {
-	const { references, reload } = useFbmReferences();
+	const { references, reload } = useMpfbsReferences();
 	const [ wizardOpen, setWizardOpen ] = useState( false );
 
 	// A tab behind a capability the signed-in user does not hold is not drawn,
 	// the same rule the sidebar follows.
-	const allowed = TABS.filter( ( entry ) => fbmCan( entry.capability ) );
+	const allowed = TABS.filter( ( entry ) => mpfbsCan( entry.capability ) );
 	const active = allowed.some( ( entry ) => entry.id === tab ) ? tab : ( allowed[ 0 ]?.id ?? 'start' );
 
 	const select = useCallback( ( id: string ) => {
-		fbmNavigate( id === 'start' ? '/setup' : `/setup/${ id }` );
+		mpfbsNavigate( id === 'start' ? '/setup' : `/setup/${ id }` );
 	}, [] );
 
 	const counts = {
@@ -67,11 +67,11 @@ export function SetupScreen( { tab, sub }: SetupScreenProps ): JSX.Element {
 	return (
 		<>
 			<PageHeader
-				title={ fbmText( 'Fleet and schedule' ) }
-				description={ fbmText( 'Everything a crossing needs before it can be sold, in one place.' ) }
+				title={ mpfbsText( 'Fleet and schedule' ) }
+				description={ mpfbsText( 'Everything a crossing needs before it can be sold, in one place.' ) }
 				actions={
-					<button type="button" className="fbm-button fbm-button--primary" onClick={ () => setWizardOpen( true ) }>
-						{ fbmText( 'Set up a crossing' ) }
+					<button type="button" className="mpfbs-button mpfbs-button--primary" onClick={ () => setWizardOpen( true ) }>
+						{ mpfbsText( 'Set up a crossing' ) }
 					</button>
 				}
 			/>
@@ -83,49 +83,49 @@ export function SetupScreen( { tab, sub }: SetupScreenProps ): JSX.Element {
 				tabs={ allowed.map( ( entry ) => ( { id: entry.id, label: entry.label } ) ) }
 			/>
 
-			<div id={ `fbm-tabpanel-${ active }` } role="tabpanel" aria-labelledby={ `fbm-tab-${ active }` }>
+			<div id={ `mpfbs-tabpanel-${ active }` } role="tabpanel" aria-labelledby={ `mpfbs-tab-${ active }` }>
 				{ active === 'start' ? (
-					<div className="fbm-panel fbm-setup">
-						<h2 className="fbm-panel__title">
-							{ empty ? fbmText( 'Nothing is on sale yet' ) : fbmText( 'Add another crossing' ) }
+					<div className="mpfbs-panel mpfbs-setup">
+						<h2 className="mpfbs-panel__title">
+							{ empty ? mpfbsText( 'Nothing is on sale yet' ) : mpfbsText( 'Add another crossing' ) }
 						</h2>
-						<p className="fbm-panel__description">
+						<p className="mpfbs-panel__description">
 							{ empty
-								? fbmText(
+								? mpfbsText(
 										'A crossing needs five things, and it needs them in order: two ports, a vessel, a route joining them, a timetable, and a fare. Set them up together and the booking form has something to find.'
 								  )
-								: fbmText(
+								: mpfbsText(
 										'The wizard asks for the ports, the vessel, the route, the timetable and the fares once, then writes them together. The tabs above edit any of it afterwards.'
 								  ) }
 						</p>
 
-						<ol className="fbm-setup__list">
+						<ol className="mpfbs-setup__list">
 							<li className={ counts.ports > 0 ? 'is-done' : '' }>
 								{ counts.ports > 0
-									? fbmFormat( '%s ports', String( counts.ports ) )
-									: fbmText( 'No ports yet' ) }
+									? mpfbsFormat( '%s ports', String( counts.ports ) )
+									: mpfbsText( 'No ports yet' ) }
 							</li>
 							<li className={ counts.vessels > 0 ? 'is-done' : '' }>
 								{ counts.vessels > 0
-									? fbmFormat( '%s vessels', String( counts.vessels ) )
-									: fbmText( 'No vessels yet' ) }
+									? mpfbsFormat( '%s vessels', String( counts.vessels ) )
+									: mpfbsText( 'No vessels yet' ) }
 							</li>
 							<li className={ counts.routes > 0 ? 'is-done' : '' }>
 								{ counts.routes > 0
-									? fbmFormat( '%s routes', String( counts.routes ) )
-									: fbmText( 'No routes yet' ) }
+									? mpfbsFormat( '%s routes', String( counts.routes ) )
+									: mpfbsText( 'No routes yet' ) }
 							</li>
 						</ol>
 
-						<button type="button" className="fbm-button fbm-button--primary" onClick={ () => setWizardOpen( true ) }>
-							{ fbmText( 'Set up a crossing' ) }
+						<button type="button" className="mpfbs-button mpfbs-button--primary" onClick={ () => setWizardOpen( true ) }>
+							{ mpfbsText( 'Set up a crossing' ) }
 						</button>
 					</div>
 				) : null }
 
-				{ active === 'ports' ? <ResourceScreen key="setup-ports" config={ FBM_PORT_RESOURCE } /> : null }
-				{ active === 'vessels' ? <ResourceScreen key="setup-vessels" config={ FBM_VESSEL_RESOURCE } /> : null }
-				{ active === 'routes' ? <ResourceScreen key="setup-routes" config={ FBM_ROUTE_RESOURCE } /> : null }
+				{ active === 'ports' ? <ResourceScreen key="setup-ports" config={ MPFBS_PORT_RESOURCE } /> : null }
+				{ active === 'vessels' ? <ResourceScreen key="setup-vessels" config={ MPFBS_VESSEL_RESOURCE } /> : null }
+				{ active === 'routes' ? <ResourceScreen key="setup-routes" config={ MPFBS_ROUTE_RESOURCE } /> : null }
 				{ active === 'sailings' ? <SailingsScreen key="setup-sailings" /> : null }
 				{ active === 'pricing' ? <PricingScreen key="setup-pricing" tab={ sub } /> : null }
 			</div>

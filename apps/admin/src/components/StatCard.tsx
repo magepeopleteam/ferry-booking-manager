@@ -21,19 +21,19 @@ export interface StatCardProps {
  */
 export function StatCard( { label, value, hint, icon, loading = false, tone = 'default' }: StatCardProps ): JSX.Element {
 	return (
-		<div className={ `fbm-stat fbm-stat--${ tone }` }>
-			<div className="fbm-stat__head">
-				<span className="fbm-stat__label">{ label }</span>
+		<div className={ `mpfbs-stat mpfbs-stat--${ tone }` }>
+			<div className="mpfbs-stat__head">
+				<span className="mpfbs-stat__label">{ label }</span>
 				{ icon ? (
-					<span className="fbm-stat__icon">
+					<span className="mpfbs-stat__icon">
 						<Icon name={ icon } size={ 16 } />
 					</span>
 				) : null }
 			</div>
-			<div className="fbm-stat__value">
+			<div className="mpfbs-stat__value">
 				{ loading ? <Skeleton width="60%" height="24px" /> : ( value ?? '—' ) }
 			</div>
-			{ hint ? <p className="fbm-stat__hint">{ hint }</p> : null }
+			{ hint ? <p className="mpfbs-stat__hint">{ hint }</p> : null }
 		</div>
 	);
 }

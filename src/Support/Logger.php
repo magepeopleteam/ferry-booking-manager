@@ -7,9 +7,9 @@
 
 declare( strict_types=1 );
 
-namespace FBM\Support;
+namespace MPFBS\Support;
 
-use FBM\Contracts\LoggerInterface;
+use MPFBS\Contracts\LoggerInterface;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -22,12 +22,12 @@ final class Logger implements LoggerInterface {
 	/**
 	 * Option holding the per-site filename hash.
 	 */
-	private const HASH_OPTION = 'fbm_log_hash';
+	private const HASH_OPTION = 'mpfbs_log_hash';
 
 	/**
 	 * Option holding the configured minimum level.
 	 */
-	private const LEVEL_OPTION = 'fbm_log_level';
+	private const LEVEL_OPTION = 'mpfbs_log_level';
 
 	/**
 	 * Maximum size of a single log file before it is rotated, in bytes.
@@ -196,7 +196,7 @@ final class Logger implements LoggerInterface {
 
 		$removed = 0;
 		$cutoff  = time() - ( self::RETENTION_DAYS * DAY_IN_SECONDS );
-		$files   = glob( $directory . 'fbm-*.log' );
+		$files   = glob( $directory . 'mpfbs-*.log' );
 
 		foreach ( (array) $files as $file ) {
 			if ( is_file( $file ) && filemtime( $file ) < $cutoff ) {
@@ -221,7 +221,7 @@ final class Logger implements LoggerInterface {
 		$level = (string) get_option( self::LEVEL_OPTION, '' );
 
 		if ( '' === $level ) {
-			$debug_mode = ( defined( 'FBM_DEBUG' ) && FBM_DEBUG ) || ( defined( 'WP_DEBUG' ) && WP_DEBUG );
+			$debug_mode = ( defined( 'MPFBS_DEBUG' ) && MPFBS_DEBUG ) || ( defined( 'WP_DEBUG' ) && WP_DEBUG );
 			$level      = $debug_mode ? self::DEBUG : self::ERROR;
 		}
 
@@ -234,7 +234,7 @@ final class Logger implements LoggerInterface {
 		 *
 		 * @param string $level One of the LoggerInterface level constants, or "off".
 		 */
-		$level = (string) apply_filters( 'fbm_log_level', $level );
+		$level = (string) apply_filters( 'mpfbs_log_level', $level );
 
 		if ( 'off' === $level ) {
 			$this->threshold = PHP_INT_MAX;
@@ -265,7 +265,7 @@ final class Logger implements LoggerInterface {
 			return $this->directory;
 		}
 
-		$directory = trailingslashit( $uploads['basedir'] ) . 'fbm-logs/';
+		$directory = trailingslashit( $uploads['basedir'] ) . 'mpfbs-logs/';
 
 		if ( ! is_dir( $directory ) && ! wp_mkdir_p( $directory ) ) {
 			$this->directory = '';
@@ -315,7 +315,7 @@ final class Logger implements LoggerInterface {
 			update_option( self::HASH_OPTION, $hash, false );
 		}
 
-		return sprintf( 'fbm-%s-%s.log', gmdate( 'Y-m-d' ), $hash );
+		return sprintf( 'mpfbs-%s-%s.log', gmdate( 'Y-m-d' ), $hash );
 	}
 
 	/**

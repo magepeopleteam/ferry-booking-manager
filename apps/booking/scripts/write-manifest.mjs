@@ -17,7 +17,7 @@ const outDir = join( here, '..', '..', '..', 'assets', 'frontend' );
 const vitePath = join( outDir, '.vite', 'manifest.json' );
 
 if ( ! existsSync( vitePath ) ) {
-	console.error( '[fbm] Vite produced no manifest at ' + vitePath );
+	console.error( '[mpfbs] Vite produced no manifest at ' + vitePath );
 	process.exit( 1 );
 }
 
@@ -25,7 +25,7 @@ const manifest = JSON.parse( readFileSync( vitePath, 'utf8' ) );
 const entry = Object.values( manifest ).find( ( chunk ) => chunk.isEntry );
 
 if ( ! entry ) {
-	console.error( '[fbm] No entry chunk in the Vite manifest.' );
+	console.error( '[mpfbs] No entry chunk in the Vite manifest.' );
 	process.exit( 1 );
 }
 
@@ -40,7 +40,7 @@ if ( ! css ) {
 }
 
 if ( ! css ) {
-	console.error( '[fbm] The entry chunk has no stylesheet. Is the stylesheet imported from main.tsx?' );
+	console.error( '[mpfbs] The entry chunk has no stylesheet. Is the stylesheet imported from main.tsx?' );
 	process.exit( 1 );
 }
 
@@ -52,4 +52,4 @@ writeFileSync(
 
 rmSync( join( outDir, '.vite' ), { recursive: true, force: true } );
 
-console.log( `[fbm] Booking bundle ready: ${ entry.file } + ${ css }` );
+console.log( `[mpfbs] Booking bundle ready: ${ entry.file } + ${ css }` );

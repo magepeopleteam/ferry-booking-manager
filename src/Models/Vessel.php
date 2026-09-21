@@ -7,9 +7,9 @@
 
 declare( strict_types=1 );
 
-namespace FBM\Models;
+namespace MPFBS\Models;
 
-use FBM\Security\Capabilities;
+use MPFBS\Security\Capabilities;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -17,7 +17,7 @@ defined( 'ABSPATH' ) || exit;
  * A ferry, and the capacity it brings to any sailing it is assigned to.
  */
 final class Vessel extends Entity {
-	public const POST_TYPE = 'fbm_vessel';
+	public const POST_TYPE = 'mpfbs_vessel';
 
 	public const STATUS_ACTIVE = 'active';
 
@@ -73,7 +73,7 @@ final class Vessel extends Entity {
 		return array(
 			'code'               => array(
 				'type'        => 'string',
-				'meta'        => '_fbm_vessel_code',
+				'meta'        => '_mpfbs_vessel_code',
 				'unique'      => true,
 				'required'    => true,
 				'min'         => 2,
@@ -83,14 +83,14 @@ final class Vessel extends Entity {
 			),
 			'registration'       => array(
 				'type'        => 'string',
-				'meta'        => '_fbm_registration',
+				'meta'        => '_mpfbs_registration',
 				'max'         => 64,
 				'searchable'  => true,
 				'description' => __( 'Registration number', 'magepeople-ferry-booking-system' ),
 			),
 			'passenger_capacity' => array(
 				'type'        => 'int',
-				'meta'        => '_fbm_passenger_capacity',
+				'meta'        => '_mpfbs_passenger_capacity',
 				'required'    => true,
 				'min'         => 0,
 				'max'         => 100000,
@@ -98,51 +98,51 @@ final class Vessel extends Entity {
 			),
 			'vehicle_capacity'   => array(
 				'type'        => 'int',
-				'meta'        => '_fbm_vehicle_capacity',
+				'meta'        => '_mpfbs_vehicle_capacity',
 				'min'         => 0,
 				'max'         => 100000,
 				'description' => __( 'Vehicle capacity', 'magepeople-ferry-booking-system' ),
 			),
 			'deck_capacity'      => array(
 				'type'        => 'float',
-				'meta'        => '_fbm_deck_capacity',
+				'meta'        => '_mpfbs_deck_capacity',
 				'min'         => 0,
 				'max'         => 100000,
 				'description' => __( 'Vehicle deck capacity (lane metres)', 'magepeople-ferry-booking-system' ),
 			),
 			'crew_capacity'      => array(
 				'type'        => 'int',
-				'meta'        => '_fbm_crew_capacity',
+				'meta'        => '_mpfbs_crew_capacity',
 				'min'         => 0,
 				'max'         => 10000,
 				'description' => __( 'Crew capacity', 'magepeople-ferry-booking-system' ),
 			),
 			'speed_knots'        => array(
 				'type'        => 'float',
-				'meta'        => '_fbm_speed_knots',
+				'meta'        => '_mpfbs_speed_knots',
 				'min'         => 0,
 				'max'         => 200,
 				'description' => __( 'Service speed (knots)', 'magepeople-ferry-booking-system' ),
 			),
 			'facilities'         => array(
 				'type'        => 'string_list',
-				'meta'        => '_fbm_facilities',
+				'meta'        => '_mpfbs_facilities',
 				'description' => __( 'Facilities', 'magepeople-ferry-booking-system' ),
 			),
 			'images'             => array(
 				'type'        => 'id_list',
-				'meta'        => '_fbm_images',
+				'meta'        => '_mpfbs_images',
 				'description' => __( 'Gallery images', 'magepeople-ferry-booking-system' ),
 			),
 			'description'        => array(
 				'type'        => 'text',
-				'meta'        => '_fbm_description',
+				'meta'        => '_mpfbs_description',
 				'max'         => 2000,
 				'description' => __( 'Description', 'magepeople-ferry-booking-system' ),
 			),
 			'status'             => array(
 				'type'        => 'enum',
-				'meta'        => '_fbm_status',
+				'meta'        => '_mpfbs_status',
 				'enum'        => array( self::STATUS_ACTIVE, self::STATUS_MAINTENANCE, self::STATUS_INACTIVE ),
 				'default'     => self::STATUS_ACTIVE,
 				'description' => __( 'Status', 'magepeople-ferry-booking-system' ),

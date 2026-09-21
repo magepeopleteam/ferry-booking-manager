@@ -7,12 +7,12 @@
 
 declare( strict_types=1 );
 
-namespace FBM\REST\Controllers;
+namespace MPFBS\REST\Controllers;
 
-use FBM\REST\AbstractController;
-use FBM\Security\Capabilities;
-use FBM\Security\Permissions;
-use FBM\Setup\SetupStatus;
+use MPFBS\REST\AbstractController;
+use MPFBS\Security\Capabilities;
+use MPFBS\Security\Permissions;
+use MPFBS\Setup\SetupStatus;
 use WP_Error;
 use WP_REST_Request;
 use WP_REST_Response;

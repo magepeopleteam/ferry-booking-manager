@@ -28,7 +28,7 @@
 		<exclude name="Generic.Commenting.DocComment.MissingShort"/>
 
 		<!--
-			The `fbm` prefix is a product-wide requirement: it appears in post types,
+			The `mpfbs` prefix is a product-wide requirement: it appears in post types,
 			meta keys, options, capabilities, the REST namespace and the CSS and
 			JavaScript namespaces, and is already shipped. The sniff's four-character
 			minimum cannot be met without breaking every stored identifier.
@@ -52,8 +52,8 @@
 	<rule ref="WordPress.NamingConventions.PrefixAllGlobals">
 		<properties>
 			<property name="prefixes" type="array">
-				<element value="fbm"/>
-				<element value="FBM"/>
+				<element value="mpfbs"/>
+				<element value="MPFBS"/>
 			</property>
 		</properties>
 	</rule>

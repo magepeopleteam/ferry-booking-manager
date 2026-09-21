@@ -27,7 +27,7 @@ import { useCallback, useEffect, useId, useMemo, useRef, useState, type JSX } fr
 import { createPortal } from 'react-dom';
 
 import { Icon } from './Icon';
-import { fbmText } from '../lib/i18n';
+import { mpfbsText } from '../lib/i18n';
 
 export interface ListboxOption {
 	value: string | number;
@@ -315,12 +315,12 @@ export function Listbox( {
 	const label = selected >= 0 ? rows[ selected ]?.label ?? '' : placeholder ?? '';
 
 	return (
-		<div className={ `fbm-listbox${ open ? ' is-open' : '' }${ compact ? ' fbm-listbox--compact' : '' }` } ref={ rootRef }>
+		<div className={ `mpfbs-listbox${ open ? ' is-open' : '' }${ compact ? ' mpfbs-listbox--compact' : '' }` } ref={ rootRef }>
 			<button
 				type="button"
 				id={ id }
 				ref={ buttonRef }
-				className="fbm-input fbm-listbox__control"
+				className="mpfbs-input mpfbs-listbox__control"
 				disabled={ disabled }
 				role="combobox"
 				aria-haspopup="listbox"
@@ -328,14 +328,14 @@ export function Listbox( {
 				aria-controls={ listId }
 				aria-label={ ariaLabel }
 				// Kept addressable by field name now the element id is generated.
-				data-fbm-listbox={ name }
+				data-mpfbs-listbox={ name }
 				aria-describedby={ describedBy }
 				aria-invalid={ invalid || undefined }
 				aria-activedescendant={ open && active >= 0 ? `${ listId }-${ active }` : undefined }
 				onClick={ () => ( open ? setOpen( false ) : reveal() ) }
 				onKeyDown={ onKeyDown }
 			>
-				<span className={ `fbm-listbox__value${ selected > 0 || placeholder === undefined ? '' : ' is-placeholder' }` }>
+				<span className={ `mpfbs-listbox__value${ selected > 0 || placeholder === undefined ? '' : ' is-placeholder' }` }>
 					{ label }
 				</span>
 				<Icon name="chevron" size={ 14 } />
@@ -344,7 +344,7 @@ export function Listbox( {
 			{ open && anchor
 				? createPortal(
 						<div
-							className="fbm-listbox__panel"
+							className="mpfbs-listbox__panel"
 							id={ listId }
 							role="listbox"
 							ref={ listRef }
@@ -365,7 +365,7 @@ export function Listbox( {
 							aria-selected={ index === selected }
 							aria-disabled={ row.disabled ? true : undefined }
 							className={ [
-								'fbm-listbox__option',
+								'mpfbs-listbox__option',
 								index === active ? 'is-active' : '',
 								index === selected ? 'is-selected' : '',
 								row.disabled ? 'is-disabled' : '',
@@ -380,10 +380,10 @@ export function Listbox( {
 					) ) }
 
 							{ rows.length === 0 ? (
-								<p className="fbm-listbox__empty">{ fbmText( 'Nothing to choose from.' ) }</p>
+								<p className="mpfbs-listbox__empty">{ mpfbsText( 'Nothing to choose from.' ) }</p>
 							) : null }
 						</div>,
-						buttonRef.current?.closest( '.fbm-app' ) ?? document.body
+						buttonRef.current?.closest( '.mpfbs-app' ) ?? document.body
 				  )
 				: null }
 		</div>

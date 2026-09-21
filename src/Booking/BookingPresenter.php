@@ -7,18 +7,18 @@
 
 declare( strict_types=1 );
 
-namespace FBM\Booking;
+namespace MPFBS\Booking;
 
-use FBM\Models\Booking;
-use FBM\Models\Port;
-use FBM\Models\Route;
-use FBM\Models\Sailing;
-use FBM\Models\Vessel;
-use FBM\Repositories\PortRepository;
-use FBM\Repositories\RouteRepository;
-use FBM\Repositories\SailingRepository;
-use FBM\Repositories\VesselRepository;
-use FBM\Support\Time;
+use MPFBS\Models\Booking;
+use MPFBS\Models\Port;
+use MPFBS\Models\Route;
+use MPFBS\Models\Sailing;
+use MPFBS\Models\Vessel;
+use MPFBS\Repositories\PortRepository;
+use MPFBS\Repositories\RouteRepository;
+use MPFBS\Repositories\SailingRepository;
+use MPFBS\Repositories\VesselRepository;
+use MPFBS\Support\Time;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -131,21 +131,18 @@ final class BookingPresenter {
 			'booked_on'       => Time::timestamp_to_local( (int) get_post_time( 'U', true, $booking->id ) ),
 			'departure_ts'    => (int) $booking->get( 'departure_ts' ),
 			'upcoming'        => (int) $booking->get( 'departure_ts' ) >= time(),
-			'cancellable'     => $this->cancellable( $booking ),
 			'legs'            => $legs,
 		);
 
 		/**
 		 * Filters the customer-facing view of a booking.
 		 *
-		 * Pro attaches ticket and boarding-pass links here.
-		 *
 		 * @since 1.1.0
 		 *
 		 * @param array<string, mixed> $data    Customer-facing booking data.
 		 * @param Booking              $booking Booking entity.
 		 */
-		return (array) apply_filters( 'fbm_customer_booking', $data, $booking );
+		return (array) apply_filters( 'mpfbs_customer_booking', $data, $booking );
 	}
 
 	/**
@@ -310,22 +307,6 @@ final class BookingPresenter {
 		}
 
 		return $this->port_names[ $port_id ];
-	}
-
-	/**
-	 * Says whether the customer may still cancel this booking themselves.
-	 *
-	 * Free does not offer self-service cancellation, so this is always false
-	 * here. It is published so that the interface can be built once and Pro can
-	 * turn it on through the filter rather than the view being rewritten.
-	 *
-	 * @param Booking $booking Booking entity.
-	 * @return bool
-	 */
-	private function cancellable( Booking $booking ): bool {
-		unset( $booking );
-
-		return false;
 	}
 
 	/**

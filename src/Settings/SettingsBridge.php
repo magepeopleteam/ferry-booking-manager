@@ -7,9 +7,9 @@
 
 declare( strict_types=1 );
 
-namespace FBM\Settings;
+namespace MPFBS\Settings;
 
-use FBM\Models\Booking;
+use MPFBS\Models\Booking;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -30,10 +30,10 @@ final class SettingsBridge {
 	 * @return void
 	 */
 	public function hooks(): void {
-		add_filter( 'fbm_log_level', array( $this, 'log_level' ) );
-		add_filter( 'fbm_rate_limit', array( $this, 'rate_limit' ), 10, 2 );
-		add_filter( 'fbm_email_body', array( $this, 'email_footer' ), 10, 3 );
-		add_action( 'fbm_settings_saved', array( $this, 'mirror_uninstall_choice' ) );
+		add_filter( 'mpfbs_log_level', array( $this, 'log_level' ) );
+		add_filter( 'mpfbs_rate_limit', array( $this, 'rate_limit' ), 10, 2 );
+		add_filter( 'mpfbs_email_body', array( $this, 'email_footer' ), 10, 3 );
+		add_action( 'mpfbs_settings_saved', array( $this, 'mirror_uninstall_choice' ) );
 	}
 
 	/**
@@ -48,7 +48,7 @@ final class SettingsBridge {
 	 */
 	public function mirror_uninstall_choice(): void {
 		update_option(
-			'fbm_delete_data_on_uninstall',
+			'mpfbs_delete_data_on_uninstall',
 			! empty( Settings::all()['delete_data_on_uninstall'] ) ? '1' : '',
 			false
 		);

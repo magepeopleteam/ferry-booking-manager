@@ -11,9 +11,9 @@ import { useCallback, type JSX } from 'react';
 
 import { FieldConfigPanel } from '../components/FieldConfigPanel';
 import { Tabs } from '../components/Tabs';
-import { fbmNavigate } from '../lib/router';
+import { mpfbsNavigate } from '../lib/router';
 import { ResourceScreen } from './ResourceScreen';
-import { FBM_PASSENGER_TYPE_RESOURCE, FBM_VEHICLE_TYPE_RESOURCE } from '../config/resources';
+import { MPFBS_PASSENGER_TYPE_RESOURCE, MPFBS_VEHICLE_TYPE_RESOURCE } from '../config/resources';
 import type { ResourceConfig } from '../config/resources';
 
 export interface TypeConfigScreenProps {
@@ -44,7 +44,7 @@ export function TypeConfigScreen( {
 
 	const select = useCallback(
 		( id: string ) => {
-			fbmNavigate( id === 'types' ? `/${ base }` : `/${ base }/${ id }` );
+			mpfbsNavigate( id === 'types' ? `/${ base }` : `/${ base }/${ id }` );
 		},
 		[ base ]
 	);
@@ -61,7 +61,7 @@ export function TypeConfigScreen( {
 				] }
 			/>
 
-			<div id={ `fbm-tabpanel-${ active }` } role="tabpanel" aria-labelledby={ `fbm-tab-${ active }` }>
+			<div id={ `mpfbs-tabpanel-${ active }` } role="tabpanel" aria-labelledby={ `mpfbs-tab-${ active }` }>
 				{ active === 'types' ? (
 					<ResourceScreen key={ `${ base }-types` } config={ config } />
 				) : (
@@ -80,7 +80,7 @@ export function PassengersScreen( { tab }: { tab: string } ): JSX.Element {
 		<TypeConfigScreen
 			base="passengers"
 			tab={ tab }
-			config={ FBM_PASSENGER_TYPE_RESOURCE }
+			config={ MPFBS_PASSENGER_TYPE_RESOURCE }
 			group="passenger"
 			typesTabLabel="Passenger types"
 			fieldsTitle="Passenger details"
@@ -97,7 +97,7 @@ export function VehiclesScreen( { tab }: { tab: string } ): JSX.Element {
 		<TypeConfigScreen
 			base="vehicles"
 			tab={ tab }
-			config={ FBM_VEHICLE_TYPE_RESOURCE }
+			config={ MPFBS_VEHICLE_TYPE_RESOURCE }
 			group="vehicle"
 			typesTabLabel="Vehicle types"
 			fieldsTitle="Vehicle details"

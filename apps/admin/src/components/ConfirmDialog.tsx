@@ -8,7 +8,7 @@
 
 import { useEffect, useRef, type JSX } from 'react';
 
-import { fbmText } from '../lib/i18n';
+import { mpfbsText } from '../lib/i18n';
 
 export interface ConfirmDialogProps {
 	open: boolean;
@@ -47,9 +47,9 @@ export function ConfirmDialog( {
 	}
 
 	return (
-		<div className="fbm-modal" onMouseDown={ onCancel }>
+		<div className="mpfbs-modal" onMouseDown={ onCancel }>
 			<div
-				className="fbm-modal__dialog"
+				className="mpfbs-modal__dialog"
 				role="alertdialog"
 				aria-modal="true"
 				aria-label={ title }
@@ -61,16 +61,16 @@ export function ConfirmDialog( {
 					}
 				} }
 			>
-				<h2 className="fbm-modal__title">{ title }</h2>
-				<p className="fbm-modal__text">{ message }</p>
-				<div className="fbm-modal__actions">
-					<button type="button" className="fbm-button fbm-button--secondary" onClick={ onCancel } disabled={ busy }>
-						{ fbmText( 'Cancel' ) }
+				<h2 className="mpfbs-modal__title">{ title }</h2>
+				<p className="mpfbs-modal__text">{ message }</p>
+				<div className="mpfbs-modal__actions">
+					<button type="button" className="mpfbs-button mpfbs-button--secondary" onClick={ onCancel } disabled={ busy }>
+						{ mpfbsText( 'Cancel' ) }
 					</button>
 					<button
 						type="button"
 						ref={ confirmRef }
-						className={ `fbm-button ${ tone === 'danger' ? 'fbm-button--danger' : 'fbm-button--primary' }` }
+						className={ `mpfbs-button ${ tone === 'danger' ? 'mpfbs-button--danger' : 'mpfbs-button--primary' }` }
 						onClick={ onConfirm }
 						disabled={ busy }
 					>

@@ -7,11 +7,11 @@
 
 declare( strict_types=1 );
 
-namespace FBM\Repositories;
+namespace MPFBS\Repositories;
 
-use FBM\Models\Booking;
-use FBM\Models\Entity;
-use FBM\Support\Time;
+use MPFBS\Models\Booking;
+use MPFBS\Models\Entity;
+use MPFBS\Support\Time;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -24,7 +24,7 @@ final class BookingRepository extends AbstractRepository {
 	 * A return booking touches two sailings; indexing both means capacity for a
 	 * sailing can be counted with one equality query instead of two.
 	 */
-	public const SAILING_INDEX = '_fbm_booking_sailing';
+	public const SAILING_INDEX = '_mpfbs_booking_sailing';
 
 	/**
 	 * Meta key written last, marking a booking as fully persisted.
@@ -35,7 +35,7 @@ final class BookingRepository extends AbstractRepository {
 	 * to miss it and oversell the sailing. This marker is the last thing
 	 * written, so its presence means every other row is already there.
 	 */
-	public const COMPLETE_FLAG = '_fbm_write_complete';
+	public const COMPLETE_FLAG = '_mpfbs_write_complete';
 
 	/**
 	 * Seconds after which an unmarked booking is treated as abandoned.
@@ -83,13 +83,12 @@ final class BookingRepository extends AbstractRepository {
 		$meta_query = array();
 
 		$scalars = array(
-			'sailing_id'     => '_fbm_sailing_id',
-			'customer_id'    => '_fbm_customer_id',
-			'agent_id'       => '_fbm_agent_id',
-			'wc_order_id'    => '_fbm_wc_order_id',
-			'booking_status' => '_fbm_booking_status',
-			'payment_status' => '_fbm_payment_status',
-			'channel'        => '_fbm_channel',
+			'sailing_id'     => '_mpfbs_sailing_id',
+			'customer_id'    => '_mpfbs_customer_id',
+			'wc_order_id'    => '_mpfbs_wc_order_id',
+			'booking_status' => '_mpfbs_booking_status',
+			'payment_status' => '_mpfbs_payment_status',
+			'channel'        => '_mpfbs_channel',
 		);
 
 		foreach ( $scalars as $arg => $meta_key ) {
@@ -112,7 +111,7 @@ final class BookingRepository extends AbstractRepository {
 
 		if ( ! empty( $args['booking_statuses'] ) && is_array( $args['booking_statuses'] ) ) {
 			$meta_query[] = array(
-				'key'     => '_fbm_booking_status',
+				'key'     => '_mpfbs_booking_status',
 				'value'   => array_map( 'sanitize_key', $args['booking_statuses'] ),
 				'compare' => 'IN',
 			);
@@ -124,7 +123,7 @@ final class BookingRepository extends AbstractRepository {
 		) as $arg => $compare ) {
 			if ( ! empty( $args[ $arg ] ) ) {
 				$meta_query[] = array(
-					'key'     => '_fbm_departure_ts',
+					'key'     => '_mpfbs_departure_ts',
 					'value'   => Time::local_to_timestamp( (string) $args[ $arg ] ),
 					'compare' => $compare,
 					'type'    => 'NUMERIC',
@@ -179,7 +178,7 @@ final class BookingRepository extends AbstractRepository {
 						'compare' => '=',
 					),
 					array(
-						'key'     => '_fbm_booking_status',
+						'key'     => '_mpfbs_booking_status',
 						'value'   => Booking::CONSUMING_STATUSES,
 						'compare' => 'IN',
 					),
@@ -271,7 +270,7 @@ final class BookingRepository extends AbstractRepository {
 
 		if ( $user_id > 0 ) {
 			$clauses[] = array(
-				'key'     => '_fbm_customer_id',
+				'key'     => '_mpfbs_customer_id',
 				'value'   => $user_id,
 				'compare' => '=',
 			);
@@ -279,7 +278,7 @@ final class BookingRepository extends AbstractRepository {
 
 		if ( '' !== $email ) {
 			$clauses[] = array(
-				'key'     => '_fbm_customer_email',
+				'key'     => '_mpfbs_customer_email',
 				'value'   => $email,
 				'compare' => '=',
 			);
@@ -303,7 +302,7 @@ final class BookingRepository extends AbstractRepository {
 				'update_post_term_cache' => false,
 				'orderby'                => 'meta_value_num',
 				'order'                  => 'DESC',
-				'meta_key'               => '_fbm_departure_ts', // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key -- Ordering by departure needs the key, and the result set is one customer's own bookings.
+				'meta_key'               => '_mpfbs_departure_ts', // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key -- Ordering by departure needs the key, and the result set is one customer's own bookings.
 				'meta_query'             => $clauses, // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query -- Two dedicated scalar keys, bounded by the limit above.
 			)
 		);
@@ -340,7 +339,7 @@ final class BookingRepository extends AbstractRepository {
 				// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query -- Unique indexed reference lookup.
 				'meta_query'     => array(
 					array(
-						'key'     => '_fbm_booking_number',
+						'key'     => '_mpfbs_booking_number',
 						'value'   => $number,
 						'compare' => '=',
 					),

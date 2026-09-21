@@ -5,8 +5,8 @@
 import type { JSX } from 'react';
 
 import { Icon } from './Icon';
-import { fbmConfig } from '../lib/config';
-import { fbmText } from '../lib/i18n';
+import { mpfbsConfig } from '../lib/config';
+import { mpfbsText } from '../lib/i18n';
 
 export interface HeaderProps {
 	sidebarOpen: boolean;
@@ -25,50 +25,50 @@ export interface HeaderProps {
  * reachable by keyboard like any other.
  */
 export function Header( { sidebarOpen, onToggleSidebar, onOpenSearch, connected }: HeaderProps ): JSX.Element {
-	const config = fbmConfig();
+	const config = mpfbsConfig();
 
 	return (
-		<header className="fbm-header">
+		<header className="mpfbs-header">
 			<button
 				type="button"
-				className="fbm-header__toggle"
+				className="mpfbs-header__toggle"
 				onClick={ onToggleSidebar }
 				aria-expanded={ sidebarOpen }
-				aria-controls="fbm-sidebar"
-				aria-label={ fbmText( 'Toggle navigation' ) }
+				aria-controls="mpfbs-sidebar"
+				aria-label={ mpfbsText( 'Toggle navigation' ) }
 			>
 				<Icon name="menu" size={ 20 } />
 			</button>
 
-			<button type="button" className="fbm-header__search" onClick={ onOpenSearch }>
+			<button type="button" className="mpfbs-header__search" onClick={ onOpenSearch }>
 				<Icon name="search" size={ 16 } />
-				<span>{ fbmText( 'Search' ) }</span>
-				<kbd className="fbm-header__kbd">Ctrl K</kbd>
+				<span>{ mpfbsText( 'Search' ) }</span>
+				<kbd className="mpfbs-header__kbd">Ctrl K</kbd>
 			</button>
 
-			<div className="fbm-header__meta">
+			<div className="mpfbs-header__meta">
 				<span
-					className={ `fbm-status fbm-status--${ connected === null ? 'pending' : connected ? 'ok' : 'down' }` }
+					className={ `mpfbs-status mpfbs-status--${ connected === null ? 'pending' : connected ? 'ok' : 'down' }` }
 				>
-					<span className="fbm-status__dot" aria-hidden="true" />
+					<span className="mpfbs-status__dot" aria-hidden="true" />
 					{ connected === null
-						? fbmText( 'Loading' )
+						? mpfbsText( 'Loading' )
 						: connected
-							? fbmText( 'Connected' )
-							: fbmText( 'Disconnected' ) }
+							? mpfbsText( 'Connected' )
+							: mpfbsText( 'Disconnected' ) }
 				</span>
 
-				<span className="fbm-header__user">
+				<span className="mpfbs-header__user">
 					{ config.user.avatar ? (
 						// eslint-disable-next-line @next/next/no-img-element
-						<img className="fbm-header__avatar" src={ config.user.avatar } alt="" width={ 28 } height={ 28 } />
+						<img className="mpfbs-header__avatar" src={ config.user.avatar } alt="" width={ 28 } height={ 28 } />
 					) : null }
-					<span className="fbm-header__username">{ config.user.name }</span>
+					<span className="mpfbs-header__username">{ config.user.name }</span>
 				</span>
 
-				<a className="fbm-header__exit" href={ config.adminUrl } title={ fbmText( 'Back to WordPress' ) }>
+				<a className="mpfbs-header__exit" href={ config.adminUrl } title={ mpfbsText( 'Back to WordPress' ) }>
 					<Icon name="back" size={ 16 } />
-					<span className="fbm-header__exitlabel">{ fbmText( 'Back to WordPress' ) }</span>
+					<span className="mpfbs-header__exitlabel">{ mpfbsText( 'Back to WordPress' ) }</span>
 				</a>
 			</div>
 		</header>

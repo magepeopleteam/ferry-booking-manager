@@ -12,10 +12,10 @@ Repository           the only code that touches WordPress storage APIs
 WordPress            posts, post meta, options, transients, users
 ```
 
-`FBM\Core\Plugin` owns a small container and a list of service providers. A
-provider binds services in `register()` and attaches hooks in `boot()`. Pro adds
-its own providers through the `fbm_service_providers` filter; it never replaces
-or duplicates a Free service.
+`MPFBS\Core\Plugin` owns a small container and a list of service providers. A
+provider binds services in `register()` and attaches hooks in `boot()`. Extensions add
+their own providers through the `mpfbs_service_providers` filter; they never replace
+or duplicate a plugin service.
 
 ## Storage
 
@@ -26,7 +26,7 @@ WordPress already backs up, migrates and replicates:
 | --- | --- |
 | Vessels, ports, routes, sailings, bookings | Custom post types |
 | Their properties | Post meta, one dedicated scalar key per property |
-| Configuration | Options, all prefixed `fbm_` |
+| Configuration | Options, all prefixed `mpfbs_` |
 | Temporary holds and cached aggregates | Transients + object cache |
 
 ### Why one meta key per property
@@ -36,17 +36,17 @@ listing sorts, filters or reports on therefore gets its own scalar key, and
 list-valued relationships are additionally mirrored into repeated meta rows so
 they can be searched in reverse:
 
-- `_fbm_route_port` — every port a route calls at, one row each
-- `_fbm_booking_sailing` — every sailing a booking travels on
+- `_mpfbs_route_port` — every port a route calls at, one row each
+- `_mpfbs_booking_sailing` — every sailing a booking travels on
 
 ### Derived keys
 
 Authored values and the projections used for sorting are stored separately, and
 the projection is always recomputed from its source in `Entity::derive()`:
 
-- `_fbm_departure_datetime` — what the operator typed, site-local wall clock
-- `_fbm_departure_ts` — UTC timestamp, for numeric range queries
-- `_fbm_departure_date` — local date, for day grouping and the calendar
+- `_mpfbs_departure_datetime` — what the operator typed, site-local wall clock
+- `_mpfbs_departure_ts` — UTC timestamp, for numeric range queries
+- `_mpfbs_departure_date` — local date, for day grouping
 
 Sailing times are stored as local wall-clock values on purpose: an 08:00
 departure must stay 08:00 if the site timezone is later corrected.
@@ -58,10 +58,10 @@ build time (`output: 'export'`) and served by WordPress from `assets/admin/app/`
 Node is a build-time dependency only; nothing runs on the customer's host.
 
 `apps/admin/scripts/prepare-wp-build.mjs` post-processes the export into
-`fbm-app.json`: the stylesheets, the script chunks in document order, the
-pre-rendered shell markup, and the hydration payload. `FBM\Admin\AppRenderer`
+`mpfbs-app.json`: the stylesheets, the script chunks in document order, the
+pre-rendered shell markup, and the hydration payload. `MPFBS\Admin\AppRenderer`
 enqueues those with real URLs and prints the shell, and
-`FBM\Core\Assets` sets the bundler's chunk base path so lazily imported chunks
+`MPFBS\Core\Assets` sets the bundler's chunk base path so lazily imported chunks
 resolve against the plugin rather than the site root.
 
 ### Pages Router, not App Router
@@ -84,7 +84,7 @@ skeleton, which paints instantly and hydrates without a mismatch.
 
 ## Styling
 
-Every rule is scoped under `.fbm-app`. wp-admin styles elements directly
+Every rule is scoped under `.mpfbs-app`. wp-admin styles elements directly
 (`input[type="text"]`, specificity 0-1-1), which outranks a bare component class
 (0-1-0); scoping raises every component rule to 0-2-0 so the dashboard's controls
 are never restyled from underneath. All overlays — drawers, dialogs, the command
@@ -103,5 +103,5 @@ and fails it if the two sides disagree.
 Amounts are integers of minor units everywhere — storage, calculation and the
 API. Binary floating point cannot represent most decimal fractions exactly, and a
 fare assembled from a passenger price, a vehicle price and a percentage discount
-in floats eventually lands a cent out. `FBM\Support\Money` owns the conversions,
+in floats eventually lands a cent out. `MPFBS\Support\Money` owns the conversions,
 percentage rounding and remainder-preserving allocation.

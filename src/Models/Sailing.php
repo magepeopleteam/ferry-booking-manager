@@ -7,10 +7,10 @@
 
 declare( strict_types=1 );
 
-namespace FBM\Models;
+namespace MPFBS\Models;
 
-use FBM\Security\Capabilities;
-use FBM\Support\Time;
+use MPFBS\Security\Capabilities;
+use MPFBS\Support\Time;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -19,11 +19,11 @@ defined( 'ABSPATH' ) || exit;
  * Departure and arrival are authored and stored as site-local wall-clock times,
  * because an 08:00 sailing must stay an 08:00 sailing even if the site timezone
  * is later corrected. Sortable UTC timestamps and local dates are derived from
- * them on save and kept in dedicated scalar meta keys, so listings and calendar
+ * them on save and kept in dedicated scalar meta keys, so listings and date
  * queries never have to parse a serialised value.
  */
 final class Sailing extends Entity {
-	public const POST_TYPE = 'fbm_sailing';
+	public const POST_TYPE = 'mpfbs_sailing';
 
 	public const STATUS_SCHEDULED = 'scheduled';
 
@@ -83,88 +83,88 @@ final class Sailing extends Entity {
 		return array(
 			'route_id'                    => array(
 				'type'        => 'id',
-				'meta'        => '_fbm_route_id',
+				'meta'        => '_mpfbs_route_id',
 				'references'  => Route::POST_TYPE,
 				'required'    => true,
 				'description' => __( 'Route', 'magepeople-ferry-booking-system' ),
 			),
 			'vessel_id'                   => array(
 				'type'        => 'id',
-				'meta'        => '_fbm_vessel_id',
+				'meta'        => '_mpfbs_vessel_id',
 				'references'  => Vessel::POST_TYPE,
 				'required'    => true,
 				'description' => __( 'Vessel', 'magepeople-ferry-booking-system' ),
 			),
 			'departure_datetime'          => array(
 				'type'        => 'datetime',
-				'meta'        => '_fbm_departure_datetime',
+				'meta'        => '_mpfbs_departure_datetime',
 				'required'    => true,
 				'description' => __( 'Departure', 'magepeople-ferry-booking-system' ),
 			),
 			'arrival_datetime'            => array(
 				'type'        => 'datetime',
-				'meta'        => '_fbm_arrival_datetime',
+				'meta'        => '_mpfbs_arrival_datetime',
 				'description' => __( 'Arrival', 'magepeople-ferry-booking-system' ),
 			),
 			'departure_ts'                => array(
 				'type'        => 'int',
-				'meta'        => '_fbm_departure_ts',
+				'meta'        => '_mpfbs_departure_ts',
 				'readonly'    => true,
 				'description' => __( 'Departure timestamp (UTC)', 'magepeople-ferry-booking-system' ),
 			),
 			'arrival_ts'                  => array(
 				'type'        => 'int',
-				'meta'        => '_fbm_arrival_ts',
+				'meta'        => '_mpfbs_arrival_ts',
 				'readonly'    => true,
 				'description' => __( 'Arrival timestamp (UTC)', 'magepeople-ferry-booking-system' ),
 			),
 			'departure_date'              => array(
 				'type'        => 'date',
-				'meta'        => '_fbm_departure_date',
+				'meta'        => '_mpfbs_departure_date',
 				'readonly'    => true,
 				'description' => __( 'Departure date', 'magepeople-ferry-booking-system' ),
 			),
 			'booking_open'                => array(
 				'type'        => 'datetime',
-				'meta'        => '_fbm_booking_open',
+				'meta'        => '_mpfbs_booking_open',
 				'description' => __( 'Bookings open', 'magepeople-ferry-booking-system' ),
 			),
 			'booking_close'               => array(
 				'type'        => 'datetime',
-				'meta'        => '_fbm_booking_close',
+				'meta'        => '_mpfbs_booking_close',
 				'description' => __( 'Bookings close', 'magepeople-ferry-booking-system' ),
 			),
 			'passenger_capacity_override' => array(
 				'type'        => 'int',
-				'meta'        => '_fbm_passenger_capacity_override',
+				'meta'        => '_mpfbs_passenger_capacity_override',
 				'min'         => 0,
 				'max'         => 100000,
 				'description' => __( 'Passenger capacity override', 'magepeople-ferry-booking-system' ),
 			),
 			'vehicle_capacity_override'   => array(
 				'type'        => 'int',
-				'meta'        => '_fbm_vehicle_capacity_override',
+				'meta'        => '_mpfbs_vehicle_capacity_override',
 				'min'         => 0,
 				'max'         => 100000,
 				'description' => __( 'Vehicle capacity override', 'magepeople-ferry-booking-system' ),
 			),
 			'deck_capacity_override'      => array(
 				'type'        => 'float',
-				'meta'        => '_fbm_deck_capacity_override',
+				'meta'        => '_mpfbs_deck_capacity_override',
 				'min'         => 0,
 				'max'         => 100000,
 				'description' => __( 'Lane metre override', 'magepeople-ferry-booking-system' ),
 			),
 			'price_adjustment_type'       => array(
 				'type'        => 'enum',
-				'meta'        => '_fbm_price_adjustment_type',
+				'meta'        => '_mpfbs_price_adjustment_type',
 				'enum'        => array( 'none', 'percent', 'fixed' ),
 				'default'     => 'none',
 				'description' => __( 'Fare adjustment for this departure', 'magepeople-ferry-booking-system' ),
 			),
 			'price_adjustment'            => array(
 				'type'        => 'float',
-				'meta'        => '_fbm_price_adjustment',
+				'meta'        => '_mpfbs_price_adjustment',
 				'default'     => 0.0,
 				'min'         => -100000,
 				'max'         => 100000,
@@ -172,13 +172,13 @@ final class Sailing extends Entity {
 			),
 			'notes'                       => array(
 				'type'        => 'text',
-				'meta'        => '_fbm_notes',
+				'meta'        => '_mpfbs_notes',
 				'max'         => 2000,
 				'description' => __( 'Operational notes', 'magepeople-ferry-booking-system' ),
 			),
 			'status'                      => array(
 				'type'        => 'enum',
-				'meta'        => '_fbm_status',
+				'meta'        => '_mpfbs_status',
 				'enum'        => array(
 					self::STATUS_SCHEDULED,
 					self::STATUS_DELAYED,

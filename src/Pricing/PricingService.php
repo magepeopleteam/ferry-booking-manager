@@ -7,18 +7,18 @@
 
 declare( strict_types=1 );
 
-namespace FBM\Pricing;
+namespace MPFBS\Pricing;
 
-use FBM\Availability\Availability;
-use FBM\Models\PassengerType;
-use FBM\Models\Route;
-use FBM\Models\Sailing;
-use FBM\Models\VehicleType;
-use FBM\Repositories\PassengerTypeRepository;
-use FBM\Repositories\RouteRepository;
-use FBM\Repositories\SailingRepository;
-use FBM\Repositories\VehicleTypeRepository;
-use FBM\Support\Money;
+use MPFBS\Availability\Availability;
+use MPFBS\Models\PassengerType;
+use MPFBS\Models\Route;
+use MPFBS\Models\Sailing;
+use MPFBS\Models\VehicleType;
+use MPFBS\Repositories\PassengerTypeRepository;
+use MPFBS\Repositories\RouteRepository;
+use MPFBS\Repositories\SailingRepository;
+use MPFBS\Repositories\VehicleTypeRepository;
+use MPFBS\Support\Money;
 use WP_Error;
 
 defined( 'ABSPATH' ) || exit;
@@ -116,7 +116,7 @@ final class PricingService {
 
 		if ( ! $sailing instanceof Sailing ) {
 			return new WP_Error(
-				'fbm_sailing_not_found',
+				'mpfbs_sailing_not_found',
 				__( 'That sailing could not be found.', 'magepeople-ferry-booking-system' ),
 				array( 'status' => 404 )
 			);
@@ -127,7 +127,7 @@ final class PricingService {
 
 		if ( array() === $passengers && array() === $vehicles ) {
 			return new WP_Error(
-				'fbm_empty_quote',
+				'mpfbs_empty_quote',
 				__( 'Add at least one passenger or vehicle before asking for a price.', 'magepeople-ferry-booking-system' ),
 				array( 'status' => 400 )
 			);
@@ -147,7 +147,7 @@ final class PricingService {
 
 			if ( ! $return_sailing instanceof Sailing ) {
 				return new WP_Error(
-					'fbm_return_sailing_not_found',
+					'mpfbs_return_sailing_not_found',
 					__( 'That return sailing could not be found.', 'magepeople-ferry-booking-system' ),
 					array( 'status' => 404 )
 				);
@@ -176,7 +176,7 @@ final class PricingService {
 		/**
 		 * Filters a finished quote before it is returned.
 		 *
-		 * Pro's dynamic pricing rules and coupon engine attach here, after the
+		 * Extensions attach their own pricing adjustments here, after the
 		 * base fare is known and before anything is stored.
 		 *
 		 * @since 1.0.0
@@ -185,7 +185,7 @@ final class PricingService {
 		 * @param array<string, mixed> $request Original request.
 		 * @param Sailing              $sailing Outbound sailing.
 		 */
-		return apply_filters( 'fbm_quote', $quote, $request, $sailing );
+		return apply_filters( 'mpfbs_quote', $quote, $request, $sailing );
 	}
 
 	/**
@@ -659,7 +659,7 @@ final class PricingService {
 
 		if ( array_sum( $passengers ) + array_sum( $vehicles ) > self::MAX_UNITS ) {
 			return new WP_Error(
-				'fbm_party_too_large',
+				'mpfbs_party_too_large',
 				__( 'That is too large a party for one booking. Please split it.', 'magepeople-ferry-booking-system' ),
 				array( 'status' => 400 )
 			);
@@ -735,7 +735,7 @@ final class PricingService {
 
 		if ( array() !== $fields ) {
 			return new WP_Error(
-				'fbm_validation_failed',
+				'mpfbs_validation_failed',
 				__( 'Please correct the highlighted fields.', 'magepeople-ferry-booking-system' ),
 				array(
 					'status' => 400,
@@ -785,6 +785,6 @@ final class PricingService {
 		 *
 		 * @param string $currency ISO 4217 code.
 		 */
-		return (string) apply_filters( 'fbm_currency', $currency );
+		return (string) apply_filters( 'mpfbs_currency', $currency );
 	}
 }

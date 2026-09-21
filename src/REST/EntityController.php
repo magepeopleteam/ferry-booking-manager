@@ -7,11 +7,11 @@
 
 declare( strict_types=1 );
 
-namespace FBM\REST;
+namespace MPFBS\REST;
 
-use FBM\Models\Entity;
-use FBM\Repositories\AbstractRepository;
-use FBM\Security\Permissions;
+use MPFBS\Models\Entity;
+use MPFBS\Repositories\AbstractRepository;
+use MPFBS\Security\Permissions;
 use WP_Error;
 use WP_REST_Request;
 use WP_REST_Response;
@@ -290,10 +290,10 @@ abstract class EntityController extends AbstractController {
 	/**
 	 * Rejects values that would duplicate an identifier another record holds.
 	 *
-	 * Codes appear on tickets, manifests and boarding passes; two ports sharing
-	 * one is not a cosmetic problem, it is a passenger boarding the wrong vessel.
+	 * Codes appear on booking confirmations; two ports sharing one is not a
+	 * cosmetic problem, it is a passenger boarding the wrong vessel.
 	 *
-	 * @param \FBM\Support\Schema\EntitySchema $schema     Entity schema.
+	 * @param \MPFBS\Support\Schema\EntitySchema $schema     Entity schema.
 	 * @param array<string, mixed>             $attributes Sanitised attributes.
 	 * @param int                              $id         Record being updated, or 0.
 	 * @return true|WP_Error
@@ -333,7 +333,7 @@ abstract class EntityController extends AbstractController {
 				);
 
 			return new WP_Error(
-				'fbm_duplicate_value',
+				'mpfbs_duplicate_value',
 				$message,
 				array(
 					'status' => 409,
@@ -456,7 +456,7 @@ abstract class EntityController extends AbstractController {
 	 */
 	protected function not_found(): WP_REST_Response {
 		return $this->fail(
-			'fbm_not_found',
+			'mpfbs_not_found',
 			__( 'The record could not be found.', 'magepeople-ferry-booking-system' ),
 			404
 		);

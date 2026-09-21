@@ -7,20 +7,20 @@
 
 declare( strict_types=1 );
 
-namespace FBM\REST\Controllers;
+namespace MPFBS\REST\Controllers;
 
-use FBM\Models\Entity;
-use FBM\Models\Route;
-use FBM\Models\Sailing;
-use FBM\Models\Vessel;
-use FBM\Repositories\RouteRepository;
-use FBM\Repositories\SailingRepository;
-use FBM\Repositories\VesselRepository;
-use FBM\REST\EntityController;
-use FBM\REST\Response;
-use FBM\Sailing\ScheduleGenerator;
-use FBM\Security\Permissions;
-use FBM\Support\Time;
+use MPFBS\Models\Entity;
+use MPFBS\Models\Route;
+use MPFBS\Models\Sailing;
+use MPFBS\Models\Vessel;
+use MPFBS\Repositories\RouteRepository;
+use MPFBS\Repositories\SailingRepository;
+use MPFBS\Repositories\VesselRepository;
+use MPFBS\REST\EntityController;
+use MPFBS\REST\Response;
+use MPFBS\Sailing\ScheduleGenerator;
+use MPFBS\Security\Permissions;
+use MPFBS\Support\Time;
 use WP_Error;
 use WP_REST_Request;
 use WP_REST_Response;
@@ -167,7 +167,7 @@ final class SailingController extends EntityController {
 
 			if ( $arrives <= $departs ) {
 				return new WP_Error(
-					'fbm_invalid_sailing',
+					'mpfbs_invalid_sailing',
 					__( 'The arrival must be after the departure.', 'magepeople-ferry-booking-system' ),
 					array(
 						'status' => 422,
@@ -184,7 +184,7 @@ final class SailingController extends EntityController {
 
 		if ( '' !== $open && '' !== $close && Time::local_to_timestamp( $close ) <= Time::local_to_timestamp( $open ) ) {
 			return new WP_Error(
-				'fbm_invalid_sailing',
+				'mpfbs_invalid_sailing',
 				__( 'Bookings would close before they open.', 'magepeople-ferry-booking-system' ),
 				array(
 					'status' => 422,
@@ -203,7 +203,7 @@ final class SailingController extends EntityController {
 				$other = $this->sailing_repository()->find( (int) $conflicts[0] );
 
 				return new WP_Error(
-					'fbm_vessel_conflict',
+					'mpfbs_vessel_conflict',
 					sprintf(
 						/* translators: %s: the conflicting sailing's name. */
 						__( 'That vessel is already sailing at this time on “%s”. A vessel cannot be in two places at once.', 'magepeople-ferry-booking-system' ),

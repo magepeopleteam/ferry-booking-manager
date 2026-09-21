@@ -9,7 +9,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
-import { fbmRequest, FbmApiError, type FbmMeta } from './api';
+import { mpfbsRequest, MpfbsApiError, type MpfbsMeta } from './api';
 
 export interface CollectionQuery {
 	page: number;
@@ -23,11 +23,11 @@ export interface CollectionQuery {
 
 export interface UseCollectionResult< T > {
 	items: T[];
-	meta: FbmMeta;
+	meta: MpfbsMeta;
 	query: CollectionQuery;
 	loading: boolean;
 	refreshing: boolean;
-	error: FbmApiError | null;
+	error: MpfbsApiError | null;
 	setQuery: ( patch: Partial< CollectionQuery > ) => void;
 	setSearch: ( value: string ) => void;
 	setPage: ( page: number ) => void;
@@ -40,7 +40,7 @@ const SEARCH_DEBOUNCE_MS = 300;
 /**
  * Loads and manages one paginated resource collection.
  */
-export function useFbmCollection< T >(
+export function useMpfbsCollection< T >(
 	endpoint: string,
 	initial: Partial< CollectionQuery > = {}
 ): UseCollectionResult< T > {
@@ -55,8 +55,8 @@ export function useFbmCollection< T >(
 	} );
 	const [ searchDraft, setSearchDraft ] = useState( query.search );
 	const [ items, setItems ] = useState< T[] >( [] );
-	const [ meta, setMeta ] = useState< FbmMeta >( {} );
-	const [ error, setError ] = useState< FbmApiError | null >( null );
+	const [ meta, setMeta ] = useState< MpfbsMeta >( {} );
+	const [ error, setError ] = useState< MpfbsApiError | null >( null );
 	const [ loading, setLoading ] = useState( true );
 	const [ refreshing, setRefreshing ] = useState( false );
 	const [ nonce, setNonce ] = useState( 0 );
@@ -95,7 +95,7 @@ export function useFbmCollection< T >(
 
 		setError( null );
 
-		fbmRequest< T[] >( endpoint, { query, signal: controller.signal } )
+		mpfbsRequest< T[] >( endpoint, { query, signal: controller.signal } )
 			.then( ( result ) => {
 				setItems( Array.isArray( result.data ) ? result.data : [] );
 				setMeta( result.meta );
@@ -109,7 +109,7 @@ export function useFbmCollection< T >(
 				}
 
 				setError(
-					caught instanceof FbmApiError ? caught : new FbmApiError( 'fbm_error', String( caught ), 0 )
+					caught instanceof MpfbsApiError ? caught : new MpfbsApiError( 'mpfbs_error', String( caught ), 0 )
 				);
 				setLoading( false );
 				setRefreshing( false );

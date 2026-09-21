@@ -215,7 +215,7 @@ export interface IconProps {
 export function Icon( { name, label, size = 18, className }: IconProps ): JSX.Element {
 	return (
 		<svg
-			className={ className ? `fbm-icon ${ className }` : 'fbm-icon' }
+			className={ className ? `mpfbs-icon ${ className }` : 'mpfbs-icon' }
 			width={ size }
 			height={ size }
 			viewBox="0 0 24 24"

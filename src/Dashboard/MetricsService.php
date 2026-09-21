@@ -7,18 +7,18 @@
 
 declare( strict_types=1 );
 
-namespace FBM\Dashboard;
+namespace MPFBS\Dashboard;
 
-use FBM\Availability\Availability;
-use FBM\Availability\AvailabilityService;
-use FBM\Cache\CacheManager;
-use FBM\Models\Booking;
-use FBM\Models\Sailing;
-use FBM\Repositories\BookingRepository;
-use FBM\Repositories\RouteRepository;
-use FBM\Repositories\SailingRepository;
-use FBM\Repositories\VesselRepository;
-use FBM\Support\Time;
+use MPFBS\Availability\Availability;
+use MPFBS\Availability\AvailabilityService;
+use MPFBS\Cache\CacheManager;
+use MPFBS\Models\Booking;
+use MPFBS\Models\Sailing;
+use MPFBS\Repositories\BookingRepository;
+use MPFBS\Repositories\RouteRepository;
+use MPFBS\Repositories\SailingRepository;
+use MPFBS\Repositories\VesselRepository;
+use MPFBS\Support\Time;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -47,7 +47,7 @@ final class MetricsService {
 	/**
 	 * Largest number of bookings summed for one day.
 	 *
-	 * A day busier than this is a bigger operation than the Free plugin's
+	 * A day busier than this is a bigger operation than this
 	 * aggregation approach suits, and the figure is marked as capped rather
 	 * than quietly wrong.
 	 */
@@ -187,18 +187,6 @@ final class MetricsService {
 					'money' => true,
 					'hint'  => $this->count_hint( $sold['count'] ),
 				),
-				'checked_in' => array(
-					'label' => __( 'Checked in', 'magepeople-ferry-booking-system' ),
-					'value' => $travelling['checked_in'],
-					'hint'  => '',
-					'pro'   => true,
-				),
-				'boarded'    => array(
-					'label' => __( 'Boarded', 'magepeople-ferry-booking-system' ),
-					'value' => $travelling['boarded'],
-					'hint'  => '',
-					'pro'   => true,
-				),
 				'pending'    => array(
 					'label' => __( 'Awaiting payment', 'magepeople-ferry-booking-system' ),
 					'value' => $outstanding['amount'],
@@ -227,15 +215,14 @@ final class MetricsService {
 		/**
 		 * Filters the dashboard snapshot.
 		 *
-		 * Pro fills in the check-in and boarding figures here, which the Free
-		 * plugin reports as zero because it does not run a check-in desk.
+		 * Extensions may add metrics of their own here.
 		 *
 		 * @since 1.0.0
 		 *
 		 * @param array<string, mixed> $snapshot Dashboard snapshot.
 		 * @param string               $date     Operating day.
 		 */
-		return (array) apply_filters( 'fbm_dashboard_snapshot', $snapshot, $date );
+		return (array) apply_filters( 'mpfbs_dashboard_snapshot', $snapshot, $date );
 	}
 
 	/**
@@ -283,7 +270,7 @@ final class MetricsService {
 	 * Sums the people and vehicles travelling on a day.
 	 *
 	 * @param string $date Operating day, Y-m-d.
-	 * @return array{passengers: int, vehicles: int, checked_in: int, boarded: int, capped: bool}
+	 * @return array{passengers: int, vehicles: int, capped: bool}
 	 */
 	private function travelling( string $date ): array {
 		$ids = $this->bookings->ids(
@@ -293,13 +280,13 @@ final class MetricsService {
 				'meta_query'     => array(
 					'relation' => 'AND',
 					array(
-						'key'     => '_fbm_departure_ts',
+						'key'     => '_mpfbs_departure_ts',
 						'value'   => array( Time::local_to_timestamp( $date . ' 00:00:00' ), Time::local_to_timestamp( $date . ' 23:59:59' ) ),
 						'compare' => 'BETWEEN',
 						'type'    => 'NUMERIC',
 					),
 					array(
-						'key'     => '_fbm_booking_status',
+						'key'     => '_mpfbs_booking_status',
 						'value'   => Booking::CONSUMING_STATUSES,
 						'compare' => 'IN',
 					),
@@ -311,8 +298,6 @@ final class MetricsService {
 		$totals = array(
 			'passengers' => 0,
 			'vehicles'   => 0,
-			'checked_in' => 0,
-			'boarded'    => 0,
 			'capped'     => count( $ids ) >= self::MAX_BOOKINGS,
 		);
 
@@ -399,12 +384,12 @@ final class MetricsService {
 				'meta_query'     => array(
 					'relation' => 'AND',
 					array(
-						'key'     => '_fbm_booking_status',
+						'key'     => '_mpfbs_booking_status',
 						'value'   => array( Booking::STATUS_PENDING, Booking::STATUS_CONFIRMED, Booking::STATUS_ON_HOLD ),
 						'compare' => 'IN',
 					),
 					array(
-						'key'     => '_fbm_payment_status',
+						'key'     => '_mpfbs_payment_status',
 						'value'   => array( Booking::PAYMENT_UNPAID, Booking::PAYMENT_PARTIAL ),
 						'compare' => 'IN',
 					),

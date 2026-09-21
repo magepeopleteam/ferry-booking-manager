@@ -7,11 +7,11 @@
 
 declare( strict_types=1 );
 
-namespace FBM\Repositories;
+namespace MPFBS\Repositories;
 
-use FBM\Models\Entity;
-use FBM\Models\Route;
-use FBM\Models\Sailing;
+use MPFBS\Models\Entity;
+use MPFBS\Models\Route;
+use MPFBS\Models\Sailing;
 use WP_Error;
 
 defined( 'ABSPATH' ) || exit;
@@ -23,7 +23,7 @@ final class RouteRepository extends AbstractRepository {
 	/**
 	 * Repeated meta key listing every port a route calls at.
 	 */
-	public const PORT_INDEX = '_fbm_route_port';
+	public const PORT_INDEX = '_mpfbs_route_port';
 
 	/**
 	 * Returns the entity class this repository manages.
@@ -66,11 +66,11 @@ final class RouteRepository extends AbstractRepository {
 	 * @return WP_Error|null
 	 */
 	protected function deletion_blocker( Entity $entity ): ?WP_Error {
-		$sailings = $this->count_references( Sailing::POST_TYPE, '_fbm_route_id', $entity->id );
+		$sailings = $this->count_references( Sailing::POST_TYPE, '_mpfbs_route_id', $entity->id );
 
 		if ( $sailings > 0 ) {
 			return new WP_Error(
-				'fbm_route_in_use',
+				'mpfbs_route_in_use',
 				sprintf(
 					/* translators: %d: number of sailings. */
 					_n(
@@ -99,7 +99,7 @@ final class RouteRepository extends AbstractRepository {
 
 		if ( ! empty( $args['origin_port'] ) ) {
 			$meta_query[] = array(
-				'key'     => '_fbm_origin_port',
+				'key'     => '_mpfbs_origin_port',
 				'value'   => (int) $args['origin_port'],
 				'compare' => '=',
 			);
@@ -107,7 +107,7 @@ final class RouteRepository extends AbstractRepository {
 
 		if ( ! empty( $args['destination_port'] ) ) {
 			$meta_query[] = array(
-				'key'     => '_fbm_destination_port',
+				'key'     => '_mpfbs_destination_port',
 				'value'   => (int) $args['destination_port'],
 				'compare' => '=',
 			);

@@ -7,11 +7,11 @@
 
 declare( strict_types=1 );
 
-namespace FBM\Repositories;
+namespace MPFBS\Repositories;
 
-use FBM\Models\Entity;
-use FBM\Models\Port;
-use FBM\Models\Route;
+use MPFBS\Models\Entity;
+use MPFBS\Models\Port;
+use MPFBS\Models\Route;
 use WP_Error;
 
 defined( 'ABSPATH' ) || exit;
@@ -42,11 +42,11 @@ final class PortRepository extends AbstractRepository {
 	 * @return WP_Error|null
 	 */
 	protected function deletion_blocker( Entity $entity ): ?WP_Error {
-		$references = $this->count_references( Route::POST_TYPE, '_fbm_route_port', $entity->id );
+		$references = $this->count_references( Route::POST_TYPE, '_mpfbs_route_port', $entity->id );
 
 		if ( $references > 0 ) {
 			return new WP_Error(
-				'fbm_port_in_use',
+				'mpfbs_port_in_use',
 				sprintf(
 					/* translators: %d: number of routes. */
 					_n(

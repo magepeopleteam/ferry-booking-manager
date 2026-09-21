@@ -1,11 +1,11 @@
 /**
  * Runtime configuration handed to the dashboard by WordPress.
  *
- * The object is printed by `FBM\Core\Assets::admin_config()` before any
+ * The object is printed by `MPFBS\Core\Assets::admin_config()` before any
  * application chunk executes. Everything here is read-only.
  */
 
-export interface FbmCurrency {
+export interface MpfbsCurrency {
 	code: string;
 	symbol: string;
 	position: 'left' | 'right' | 'left_space' | 'right_space';
@@ -14,14 +14,14 @@ export interface FbmCurrency {
 	thousandSeparator: string;
 }
 
-export interface FbmUser {
+export interface MpfbsUser {
 	id: number;
 	name: string;
 	email: string;
 	avatar: string;
 }
 
-export interface FbmAdminConfig {
+export interface MpfbsAdminConfig {
 	version: string;
 	restUrl: string;
 	restNonce: string;
@@ -30,32 +30,31 @@ export interface FbmAdminConfig {
 	assetUrl: string;
 	homeUrl: string;
 	capabilities: Record< string, boolean >;
-	user: FbmUser;
+	user: MpfbsUser;
 	locale: string;
 	isRtl: boolean;
 	timezone: string;
 	dateFormat: string;
 	timeFormat: string;
 	startOfWeek: number;
-	currency: FbmCurrency;
+	currency: MpfbsCurrency;
 	woocommerce: boolean;
-	proActive: boolean;
 	i18n: Record< string, string >;
 }
 
 declare global {
 	interface Window {
-		fbmAdmin?: Partial< FbmAdminConfig >;
-		fbmAdminBootFailure?: ( message: string ) => void;
+		mpfbsAdmin?: Partial< MpfbsAdminConfig >;
+		mpfbsAdminBootFailure?: ( message: string ) => void;
 	}
 }
 
-const FALLBACK: FbmAdminConfig = {
+const FALLBACK: MpfbsAdminConfig = {
 	version: '0.0.0',
-	restUrl: '/wp-json/fbm/v1/',
+	restUrl: '/wp-json/mpfbs/v1/',
 	restNonce: '',
 	adminUrl: '/wp-admin/',
-	pageUrl: '/wp-admin/admin.php?page=fbm-dashboard',
+	pageUrl: '/wp-admin/admin.php?page=mpfbs-dashboard',
 	assetUrl: '',
 	homeUrl: '/',
 	capabilities: {},
@@ -75,27 +74,26 @@ const FALLBACK: FbmAdminConfig = {
 		thousandSeparator: ',',
 	},
 	woocommerce: false,
-	proActive: false,
 	i18n: {},
 };
 
-let cached: FbmAdminConfig | null = null;
+let cached: MpfbsAdminConfig | null = null;
 
 /**
  * Returns the merged runtime configuration.
  *
  * Safe to call during static export, where `window` does not exist.
  */
-export function fbmConfig(): FbmAdminConfig {
+export function mpfbsConfig(): MpfbsAdminConfig {
 	if ( cached ) {
 		return cached;
 	}
 
-	if ( typeof window === 'undefined' || ! window.fbmAdmin ) {
+	if ( typeof window === 'undefined' || ! window.mpfbsAdmin ) {
 		return FALLBACK;
 	}
 
-	cached = { ...FALLBACK, ...window.fbmAdmin } as FbmAdminConfig;
+	cached = { ...FALLBACK, ...window.mpfbsAdmin } as MpfbsAdminConfig;
 
 	return cached;
 }
@@ -103,6 +101,6 @@ export function fbmConfig(): FbmAdminConfig {
 /**
  * Determines whether the signed-in user holds a capability.
  */
-export function fbmCan( capability: string ): boolean {
-	return fbmConfig().capabilities[ capability ] === true;
+export function mpfbsCan( capability: string ): boolean {
+	return mpfbsConfig().capabilities[ capability ] === true;
 }

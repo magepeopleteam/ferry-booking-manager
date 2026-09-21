@@ -13,9 +13,9 @@ import type { Column } from '../components/DataTable';
 import type { FilterOption } from '../components/FilterBar';
 import type { SelectOption } from '../components/Fields';
 import type { IconName } from '../components/Icon';
-import { fbmFormat, fbmText } from '../lib/i18n';
-import { fbmFormatMoney } from '../lib/money';
-import type { FbmReferences } from '../lib/references';
+import { mpfbsFormat, mpfbsText } from '../lib/i18n';
+import { mpfbsFormatMoney } from '../lib/money';
+import type { MpfbsReferences } from '../lib/references';
 
 export interface ResourceRecord {
 	id: number;
@@ -40,7 +40,7 @@ export interface ResourceField {
 	money?: boolean;
 	/** Hides the field unless the rest of the form makes it meaningful. */
 	visibleWhen?: ( values: Record< string, unknown > ) => boolean;
-	options?: ( references: FbmReferences ) => SelectOption[];
+	options?: ( references: MpfbsReferences ) => SelectOption[];
 }
 
 /**
@@ -87,7 +87,7 @@ export interface ResourceConfig {
 	statusOptions: FilterOption[];
 	defaults: Record< string, unknown >;
 	fields: ResourceField[];
-	columns: ( references: FbmReferences ) => Array< Column< ResourceRecord > >;
+	columns: ( references: MpfbsReferences ) => Array< Column< ResourceRecord > >;
 }
 
 /**
@@ -104,7 +104,7 @@ function statusBadge( value: unknown ): JSX.Element {
 					? 'danger'
 					: 'muted';
 
-	return <span className={ `fbm-pill fbm-pill--${ tone }` }>{ fbmText( statusLabel( status ) ) }</span>;
+	return <span className={ `mpfbs-pill mpfbs-pill--${ tone }` }>{ mpfbsText( statusLabel( status ) ) }</span>;
 }
 
 /**
@@ -131,7 +131,7 @@ function statusLabel( status: string ): string {
 function codeCell( value: unknown ): JSX.Element {
 	const code = String( value ?? '' );
 
-	return code === '' ? <span className="fbm-muted">—</span> : <code className="fbm-code">{ code }</code>;
+	return code === '' ? <span className="mpfbs-muted">—</span> : <code className="mpfbs-code">{ code }</code>;
 }
 
 /**
@@ -149,7 +149,7 @@ const ACTIVE_STATUS: FilterOption[] = [
 	{ value: 'inactive', label: 'Inactive' },
 ];
 
-export const FBM_PORT_RESOURCE: ResourceConfig = {
+export const MPFBS_PORT_RESOURCE: ResourceConfig = {
 	endpoint: 'ports',
 	label: 'Ports',
 	singularLabel: 'Port',
@@ -177,7 +177,7 @@ export const FBM_PORT_RESOURCE: ResourceConfig = {
 		status: 'active',
 	},
 	fields: [
-		{ name: 'code', label: 'Port code', type: 'text', required: true, hint: 'Short identifier shown on tickets and manifests, for example NAP.' },
+		{ name: 'code', label: 'Port code', type: 'text', required: true, hint: 'Short identifier shown on booking confirmations, for example NAP.' },
 		{ name: 'city', label: 'City', type: 'text' },
 		{ name: 'country', label: 'Country code', type: 'text', placeholder: 'IT' },
 		{ name: 'address', label: 'Address', type: 'textarea', rows: 2 },
@@ -186,49 +186,49 @@ export const FBM_PORT_RESOURCE: ResourceConfig = {
 		{ name: 'checkin_minutes', label: 'Check-in closes', type: 'number', min: 0, max: 1440, suffix: 'min before departure' },
 		{ name: 'contact_phone', label: 'Contact phone', type: 'tel' },
 		{ name: 'contact_email', label: 'Contact email', type: 'email' },
-		{ name: 'checkin_instructions', label: 'Check-in instructions', type: 'textarea', rows: 3, hint: 'Shown to passengers on their ticket.' },
+		{ name: 'checkin_instructions', label: 'Check-in instructions', type: 'textarea', rows: 3, hint: 'Shown to passengers on their booking confirmation.' },
 		{ name: 'boarding_instructions', label: 'Boarding instructions', type: 'textarea', rows: 3 },
 		{
 			name: 'status',
 			label: 'Status',
 			type: 'select',
 			options: () => [
-				{ value: 'active', label: fbmText( 'Active' ) },
-				{ value: 'inactive', label: fbmText( 'Inactive' ) },
+				{ value: 'active', label: mpfbsText( 'Active' ) },
+				{ value: 'inactive', label: mpfbsText( 'Inactive' ) },
 			],
 		},
 	],
 	columns: () => [
 		{
 			key: 'name',
-			label: fbmText( 'Port' ),
+			label: mpfbsText( 'Port' ),
 			sortBy: 'title',
 			render: ( item ) => (
-				<div className="fbm-cell-primary">
-					<span className="fbm-cell-primary__title">{ item.name }</span>
-					{ item.city ? <span className="fbm-cell-primary__meta">{ String( item.city ) }</span> : null }
+				<div className="mpfbs-cell-primary">
+					<span className="mpfbs-cell-primary__title">{ item.name }</span>
+					{ item.city ? <span className="mpfbs-cell-primary__meta">{ String( item.city ) }</span> : null }
 				</div>
 			),
 		},
-		{ key: 'code', label: fbmText( 'Code' ), sortBy: 'code', width: '120px', render: ( item ) => codeCell( item.code ) },
+		{ key: 'code', label: mpfbsText( 'Code' ), sortBy: 'code', width: '120px', render: ( item ) => codeCell( item.code ) },
 		{
 			key: 'country',
-			label: fbmText( 'Country' ),
+			label: mpfbsText( 'Country' ),
 			width: '110px',
 			render: ( item ) => <span>{ String( item.country ?? '' ).toUpperCase() || '—' }</span>,
 		},
 		{
 			key: 'checkin',
-			label: fbmText( 'Check-in' ),
+			label: mpfbsText( 'Check-in' ),
 			width: '130px',
 			align: 'end',
-			render: ( item ) => <span>{ `${ Number( item.checkin_minutes ?? 0 ) } ${ fbmText( 'min' ) }` }</span>,
+			render: ( item ) => <span>{ `${ Number( item.checkin_minutes ?? 0 ) } ${ mpfbsText( 'min' ) }` }</span>,
 		},
-		{ key: 'status', label: fbmText( 'Status' ), width: '120px', render: ( item ) => statusBadge( item.status ) },
+		{ key: 'status', label: mpfbsText( 'Status' ), width: '120px', render: ( item ) => statusBadge( item.status ) },
 	],
 };
 
-export const FBM_VESSEL_RESOURCE: ResourceConfig = {
+export const MPFBS_VESSEL_RESOURCE: ResourceConfig = {
 	endpoint: 'vessels',
 	label: 'Vessels',
 	singularLabel: 'Vessel',
@@ -279,28 +279,28 @@ export const FBM_VESSEL_RESOURCE: ResourceConfig = {
 			label: 'Status',
 			type: 'select',
 			options: () => [
-				{ value: 'active', label: fbmText( 'Active' ) },
-				{ value: 'maintenance', label: fbmText( 'Maintenance' ) },
-				{ value: 'inactive', label: fbmText( 'Inactive' ) },
+				{ value: 'active', label: mpfbsText( 'Active' ) },
+				{ value: 'maintenance', label: mpfbsText( 'Maintenance' ) },
+				{ value: 'inactive', label: mpfbsText( 'Inactive' ) },
 			],
 		},
 	],
 	columns: () => [
 		{
 			key: 'name',
-			label: fbmText( 'Vessel' ),
+			label: mpfbsText( 'Vessel' ),
 			sortBy: 'title',
 			render: ( item ) => (
-				<div className="fbm-cell-primary">
-					<span className="fbm-cell-primary__title">{ item.name }</span>
-					{ item.registration ? <span className="fbm-cell-primary__meta">{ String( item.registration ) }</span> : null }
+				<div className="mpfbs-cell-primary">
+					<span className="mpfbs-cell-primary__title">{ item.name }</span>
+					{ item.registration ? <span className="mpfbs-cell-primary__meta">{ String( item.registration ) }</span> : null }
 				</div>
 			),
 		},
-		{ key: 'code', label: fbmText( 'Code' ), sortBy: 'code', width: '110px', render: ( item ) => codeCell( item.code ) },
+		{ key: 'code', label: mpfbsText( 'Code' ), sortBy: 'code', width: '110px', render: ( item ) => codeCell( item.code ) },
 		{
 			key: 'passenger_capacity',
-			label: fbmText( 'Passengers' ),
+			label: mpfbsText( 'Passengers' ),
 			sortBy: 'passenger_capacity',
 			width: '130px',
 			align: 'end',
@@ -308,7 +308,7 @@ export const FBM_VESSEL_RESOURCE: ResourceConfig = {
 		},
 		{
 			key: 'vehicle_capacity',
-			label: fbmText( 'Vehicles' ),
+			label: mpfbsText( 'Vehicles' ),
 			sortBy: 'vehicle_capacity',
 			width: '110px',
 			align: 'end',
@@ -316,17 +316,17 @@ export const FBM_VESSEL_RESOURCE: ResourceConfig = {
 		},
 		{
 			key: 'deck_capacity',
-			label: fbmText( 'Lane metres' ),
+			label: mpfbsText( 'Lane metres' ),
 			width: '120px',
 			align: 'end',
 			render: ( item ) =>
-				Number( item.deck_capacity ?? 0 ) > 0 ? <span>{ Number( item.deck_capacity ).toLocaleString() }</span> : <span className="fbm-muted">—</span>,
+				Number( item.deck_capacity ?? 0 ) > 0 ? <span>{ Number( item.deck_capacity ).toLocaleString() }</span> : <span className="mpfbs-muted">—</span>,
 		},
-		{ key: 'status', label: fbmText( 'Status' ), width: '130px', render: ( item ) => statusBadge( item.status ) },
+		{ key: 'status', label: mpfbsText( 'Status' ), width: '130px', render: ( item ) => statusBadge( item.status ) },
 	],
 };
 
-export const FBM_ROUTE_RESOURCE: ResourceConfig = {
+export const MPFBS_ROUTE_RESOURCE: ResourceConfig = {
 	endpoint: 'routes',
 	label: 'Routes',
 	singularLabel: 'Route',
@@ -396,29 +396,29 @@ export const FBM_ROUTE_RESOURCE: ResourceConfig = {
 			label: 'Status',
 			type: 'select',
 			options: () => [
-				{ value: 'active', label: fbmText( 'Active' ) },
-				{ value: 'inactive', label: fbmText( 'Inactive' ) },
+				{ value: 'active', label: mpfbsText( 'Active' ) },
+				{ value: 'inactive', label: mpfbsText( 'Inactive' ) },
 			],
 		},
 	],
 	columns: () => [
 		{
 			key: 'name',
-			label: fbmText( 'Route' ),
+			label: mpfbsText( 'Route' ),
 			sortBy: 'title',
 			render: ( item ) => (
-				<div className="fbm-cell-primary">
-					<span className="fbm-cell-primary__title">{ item.name }</span>
-					<span className="fbm-cell-primary__meta">
+				<div className="mpfbs-cell-primary">
+					<span className="mpfbs-cell-primary__title">{ item.name }</span>
+					<span className="mpfbs-cell-primary__meta">
 						{ String( item.origin_port_name ?? '' ) } → { String( item.destination_port_name ?? '' ) }
 					</span>
 				</div>
 			),
 		},
-		{ key: 'code', label: fbmText( 'Code' ), sortBy: 'code', width: '130px', render: ( item ) => codeCell( item.code ) },
+		{ key: 'code', label: mpfbsText( 'Code' ), sortBy: 'code', width: '130px', render: ( item ) => codeCell( item.code ) },
 		{
 			key: 'duration',
-			label: fbmText( 'Duration' ),
+			label: mpfbsText( 'Duration' ),
 			sortBy: 'duration',
 			width: '120px',
 			align: 'end',
@@ -426,23 +426,23 @@ export const FBM_ROUTE_RESOURCE: ResourceConfig = {
 		},
 		{
 			key: 'vessel',
-			label: fbmText( 'Default vessel' ),
+			label: mpfbsText( 'Default vessel' ),
 			width: '180px',
 			render: ( item ) =>
-				item.default_vessel_name ? <span>{ String( item.default_vessel_name ) }</span> : <span className="fbm-muted">—</span>,
+				item.default_vessel_name ? <span>{ String( item.default_vessel_name ) }</span> : <span className="mpfbs-muted">—</span>,
 		},
 		{
 			key: 'vehicles',
-			label: fbmText( 'Vehicles' ),
+			label: mpfbsText( 'Vehicles' ),
 			width: '110px',
 			render: ( item ) =>
 				item.allows_vehicles ? (
-					<span className="fbm-pill fbm-pill--muted">{ fbmText( 'Yes' ) }</span>
+					<span className="mpfbs-pill mpfbs-pill--muted">{ mpfbsText( 'Yes' ) }</span>
 				) : (
-					<span className="fbm-muted">{ fbmText( 'No' ) }</span>
+					<span className="mpfbs-muted">{ mpfbsText( 'No' ) }</span>
 				),
 		},
-		{ key: 'status', label: fbmText( 'Status' ), width: '120px', render: ( item ) => statusBadge( item.status ) },
+		{ key: 'status', label: mpfbsText( 'Status' ), width: '120px', render: ( item ) => statusBadge( item.status ) },
 	],
 };
 
@@ -492,18 +492,18 @@ function ageBand( min: unknown, max: unknown ): string {
 	const to = Number( max ?? -1 );
 
 	if ( from < 0 && to < 0 ) {
-		return fbmText( 'Any age' );
+		return mpfbsText( 'Any age' );
 	}
 
 	if ( from < 0 ) {
-		return fbmFormat( 'Under %s', String( to + 1 ) );
+		return mpfbsFormat( 'Under %s', String( to + 1 ) );
 	}
 
 	if ( to < 0 ) {
-		return fbmFormat( '%s and over', String( from ) );
+		return mpfbsFormat( '%s and over', String( from ) );
 	}
 
-	return fbmFormat( '%1$s to %2$s', String( from ), String( to ) );
+	return mpfbsFormat( '%1$s to %2$s', String( from ), String( to ) );
 }
 
 /**
@@ -513,17 +513,17 @@ function passengerFare( item: ResourceRecord ): JSX.Element {
 	const mode = String( item.price_mode ?? 'fixed' );
 
 	if ( mode === 'free' ) {
-		return <span className="fbm-pill fbm-pill--positive">{ fbmText( 'Free' ) }</span>;
+		return <span className="mpfbs-pill mpfbs-pill--positive">{ mpfbsText( 'Free' ) }</span>;
 	}
 
 	if ( mode === 'percent' ) {
-		return <span>{ fbmFormat( '%s%% of base', String( Number( item.price_percent ?? 0 ) ) ) }</span>;
+		return <span>{ mpfbsFormat( '%s%% of base', String( Number( item.price_percent ?? 0 ) ) ) }</span>;
 	}
 
-	return <span>{ fbmFormatMoney( Number( item.base_price ?? 0 ) ) }</span>;
+	return <span>{ mpfbsFormatMoney( Number( item.base_price ?? 0 ) ) }</span>;
 }
 
-export const FBM_PASSENGER_TYPE_RESOURCE: ResourceConfig = {
+export const MPFBS_PASSENGER_TYPE_RESOURCE: ResourceConfig = {
 	endpoint: 'passenger-types',
 	label: 'Passenger types',
 	singularLabel: 'Passenger type',
@@ -555,14 +555,14 @@ export const FBM_PASSENGER_TYPE_RESOURCE: ResourceConfig = {
 		status: 'active',
 	},
 	fields: [
-		{ name: 'code', label: 'Code', type: 'text', required: true, hint: 'Appears on manifests and tickets, for example ADULT.' },
+		{ name: 'code', label: 'Code', type: 'text', required: true, hint: 'Appears on booking confirmations, for example ADULT.' },
 		{ name: 'min_age', label: 'Minimum age', type: 'number', min: -1, max: 130, hint: 'Use -1 for no lower limit.' },
 		{ name: 'max_age', label: 'Maximum age', type: 'number', min: -1, max: 130, hint: 'Use -1 for no upper limit.' },
 		{ name: 'requires_dob', label: 'Ask for a date of birth', type: 'switch', hint: 'Turn on when the age band has to be proven at check-in.' },
 		{ name: 'requires_adult', label: 'Must travel with an adult', type: 'switch' },
 		{ name: 'occupies_seat', label: 'Occupies a passenger seat', type: 'switch', hint: 'Turn off for lap infants, who travel without consuming capacity.' },
 		{ name: 'is_base', label: 'This is the base fare', type: 'switch', hint: 'Percentage fares are worked out from this type. Only one type can hold it.' },
-		{ name: 'price_mode', label: 'Fare', type: 'select', options: () => PASSENGER_PRICE_MODES.map( ( option ) => ( { ...option, label: fbmText( option.label ) } ) ) },
+		{ name: 'price_mode', label: 'Fare', type: 'select', options: () => PASSENGER_PRICE_MODES.map( ( option ) => ( { ...option, label: mpfbsText( option.label ) } ) ) },
 		{
 			name: 'base_price',
 			label: 'Fare amount',
@@ -591,60 +591,60 @@ export const FBM_PASSENGER_TYPE_RESOURCE: ResourceConfig = {
 			label: 'Status',
 			type: 'select',
 			options: () => [
-				{ value: 'active', label: fbmText( 'Active' ) },
-				{ value: 'inactive', label: fbmText( 'Inactive' ) },
+				{ value: 'active', label: mpfbsText( 'Active' ) },
+				{ value: 'inactive', label: mpfbsText( 'Inactive' ) },
 			],
 		},
 	],
 	columns: () => [
 		{
 			key: 'name',
-			label: fbmText( 'Passenger type' ),
+			label: mpfbsText( 'Passenger type' ),
 			sortBy: 'title',
 			render: ( item ) => (
-				<div className="fbm-cell-primary">
-					<span className="fbm-cell-primary__title">
+				<div className="mpfbs-cell-primary">
+					<span className="mpfbs-cell-primary__title">
 						{ item.name }
-						{ item.is_base ? <span className="fbm-pill fbm-pill--muted">{ fbmText( 'Base' ) }</span> : null }
+						{ item.is_base ? <span className="mpfbs-pill mpfbs-pill--muted">{ mpfbsText( 'Base' ) }</span> : null }
 					</span>
-					<span className="fbm-cell-primary__meta">{ ageBand( item.min_age, item.max_age ) }</span>
+					<span className="mpfbs-cell-primary__meta">{ ageBand( item.min_age, item.max_age ) }</span>
 				</div>
 			),
 		},
-		{ key: 'code', label: fbmText( 'Code' ), sortBy: 'code', width: '130px', render: ( item ) => codeCell( item.code ) },
-		{ key: 'fare', label: fbmText( 'Fare' ), width: '160px', align: 'end', render: passengerFare },
+		{ key: 'code', label: mpfbsText( 'Code' ), sortBy: 'code', width: '130px', render: ( item ) => codeCell( item.code ) },
+		{ key: 'fare', label: mpfbsText( 'Fare' ), width: '160px', align: 'end', render: passengerFare },
 		{
 			key: 'occupies_seat',
-			label: fbmText( 'Seat' ),
+			label: mpfbsText( 'Seat' ),
 			width: '100px',
 			render: ( item ) =>
 				item.occupies_seat ? (
-					<span className="fbm-pill fbm-pill--muted">{ fbmText( 'Yes' ) }</span>
+					<span className="mpfbs-pill mpfbs-pill--muted">{ mpfbsText( 'Yes' ) }</span>
 				) : (
-					<span className="fbm-muted">{ fbmText( 'No' ) }</span>
+					<span className="mpfbs-muted">{ mpfbsText( 'No' ) }</span>
 				),
 		},
 		{
 			key: 'max_per_booking',
-			label: fbmText( 'Max' ),
+			label: mpfbsText( 'Max' ),
 			width: '90px',
 			align: 'end',
 			render: ( item ) =>
-				Number( item.max_per_booking ?? 0 ) > 0 ? <span>{ String( item.max_per_booking ) }</span> : <span className="fbm-muted">—</span>,
+				Number( item.max_per_booking ?? 0 ) > 0 ? <span>{ String( item.max_per_booking ) }</span> : <span className="mpfbs-muted">—</span>,
 		},
 		{
 			key: 'sort_order',
-			label: fbmText( 'Order' ),
+			label: mpfbsText( 'Order' ),
 			sortBy: 'sort_order',
 			width: '90px',
 			align: 'end',
-			render: ( item ) => <span className="fbm-muted">{ String( item.sort_order ?? 0 ) }</span>,
+			render: ( item ) => <span className="mpfbs-muted">{ String( item.sort_order ?? 0 ) }</span>,
 		},
-		{ key: 'status', label: fbmText( 'Status' ), width: '120px', render: ( item ) => statusBadge( item.status ) },
+		{ key: 'status', label: mpfbsText( 'Status' ), width: '120px', render: ( item ) => statusBadge( item.status ) },
 	],
 };
 
-export const FBM_VEHICLE_TYPE_RESOURCE: ResourceConfig = {
+export const MPFBS_VEHICLE_TYPE_RESOURCE: ResourceConfig = {
 	endpoint: 'vehicle-types',
 	label: 'Vehicle types',
 	singularLabel: 'Vehicle type',
@@ -715,12 +715,12 @@ export const FBM_VEHICLE_TYPE_RESOURCE: ResourceConfig = {
 		status: 'active',
 	},
 	fields: [
-		{ name: 'code', label: 'Code', type: 'text', required: true, hint: 'Appears on manifests and boarding lists, for example CAR.' },
+		{ name: 'code', label: 'Code', type: 'text', required: true, hint: 'Appears on booking confirmations, for example CAR.' },
 		{
 			name: 'category',
 			label: 'Category',
 			type: 'select',
-			options: () => VEHICLE_CATEGORIES.map( ( value ) => ( { value, label: fbmText( VEHICLE_CATEGORY_LABELS[ value ] ?? value ) } ) ),
+			options: () => VEHICLE_CATEGORIES.map( ( value ) => ( { value, label: mpfbsText( VEHICLE_CATEGORY_LABELS[ value ] ?? value ) } ) ),
 		},
 		{ name: 'length', label: 'Maximum length', type: 'number', min: 0, max: 100, step: 0.1, suffix: 'm' },
 		{ name: 'width', label: 'Maximum width', type: 'number', min: 0, max: 20, step: 0.1, suffix: 'm' },
@@ -773,58 +773,58 @@ export const FBM_VEHICLE_TYPE_RESOURCE: ResourceConfig = {
 			label: 'Status',
 			type: 'select',
 			options: () => [
-				{ value: 'active', label: fbmText( 'Active' ) },
-				{ value: 'inactive', label: fbmText( 'Inactive' ) },
+				{ value: 'active', label: mpfbsText( 'Active' ) },
+				{ value: 'inactive', label: mpfbsText( 'Inactive' ) },
 			],
 		},
 	],
 	columns: () => [
 		{
 			key: 'name',
-			label: fbmText( 'Vehicle type' ),
+			label: mpfbsText( 'Vehicle type' ),
 			sortBy: 'title',
 			render: ( item ) => (
-				<div className="fbm-cell-primary">
-					<span className="fbm-cell-primary__title">{ item.name }</span>
-					<span className="fbm-cell-primary__meta">
-						{ fbmText( VEHICLE_CATEGORY_LABELS[ String( item.category ?? '' ) ] ?? String( item.category ?? '' ) ) }
+				<div className="mpfbs-cell-primary">
+					<span className="mpfbs-cell-primary__title">{ item.name }</span>
+					<span className="mpfbs-cell-primary__meta">
+						{ mpfbsText( VEHICLE_CATEGORY_LABELS[ String( item.category ?? '' ) ] ?? String( item.category ?? '' ) ) }
 					</span>
 				</div>
 			),
 		},
-		{ key: 'code', label: fbmText( 'Code' ), sortBy: 'code', width: '140px', render: ( item ) => codeCell( item.code ) },
+		{ key: 'code', label: mpfbsText( 'Code' ), sortBy: 'code', width: '140px', render: ( item ) => codeCell( item.code ) },
 		{
 			key: 'lane_metres',
-			label: fbmText( 'Lane metres' ),
+			label: mpfbsText( 'Lane metres' ),
 			sortBy: 'lane_metres',
 			width: '130px',
 			align: 'end',
-			render: ( item ) => <span>{ fbmFormat( '%s m', String( Number( item.lane_metres ?? 0 ) ) ) }</span>,
+			render: ( item ) => <span>{ mpfbsFormat( '%s m', String( Number( item.lane_metres ?? 0 ) ) ) }</span>,
 		},
 		{
 			key: 'capacity_units',
-			label: fbmText( 'Slots' ),
+			label: mpfbsText( 'Slots' ),
 			width: '90px',
 			align: 'end',
 			render: ( item ) => <span>{ String( item.capacity_units ?? 0 ) }</span>,
 		},
 		{
 			key: 'base_price',
-			label: fbmText( 'Fare' ),
+			label: mpfbsText( 'Fare' ),
 			sortBy: 'base_price',
 			width: '140px',
 			align: 'end',
-			render: ( item ) => <span>{ fbmFormatMoney( Number( item.base_price ?? 0 ) ) }</span>,
+			render: ( item ) => <span>{ mpfbsFormatMoney( Number( item.base_price ?? 0 ) ) }</span>,
 		},
 		{
 			key: 'sort_order',
-			label: fbmText( 'Order' ),
+			label: mpfbsText( 'Order' ),
 			sortBy: 'sort_order',
 			width: '90px',
 			align: 'end',
-			render: ( item ) => <span className="fbm-muted">{ String( item.sort_order ?? 0 ) }</span>,
+			render: ( item ) => <span className="mpfbs-muted">{ String( item.sort_order ?? 0 ) }</span>,
 		},
-		{ key: 'status', label: fbmText( 'Status' ), width: '120px', render: ( item ) => statusBadge( item.status ) },
+		{ key: 'status', label: mpfbsText( 'Status' ), width: '120px', render: ( item ) => statusBadge( item.status ) },
 	],
 };
 
@@ -840,8 +840,8 @@ export function formatDuration( minutes: number ): string {
 	const rest = minutes % 60;
 
 	if ( hours === 0 ) {
-		return `${ rest }${ fbmText( 'm' ) }`;
+		return `${ rest }${ mpfbsText( 'm' ) }`;
 	}
 
-	return rest === 0 ? `${ hours }${ fbmText( 'h' ) }` : `${ hours }${ fbmText( 'h' ) } ${ rest }${ fbmText( 'm' ) }`;
+	return rest === 0 ? `${ hours }${ mpfbsText( 'h' ) }` : `${ hours }${ mpfbsText( 'h' ) } ${ rest }${ mpfbsText( 'm' ) }`;
 }

@@ -7,19 +7,19 @@
 
 declare( strict_types=1 );
 
-namespace FBM\Setup;
+namespace MPFBS\Setup;
 
-use FBM\Demo\DemoContent;
-use FBM\Frontend\Pages;
-use FBM\Models\Port;
-use FBM\Models\Route;
-use FBM\Models\Sailing;
-use FBM\Models\Vessel;
-use FBM\Pricing\PricingService;
-use FBM\Repositories\PassengerTypeRepository;
-use FBM\Settings\Settings;
-use FBM\Support\Money;
-use FBM\Support\Options;
+use MPFBS\Demo\DemoContent;
+use MPFBS\Frontend\Pages;
+use MPFBS\Models\Port;
+use MPFBS\Models\Route;
+use MPFBS\Models\Sailing;
+use MPFBS\Models\Vessel;
+use MPFBS\Pricing\PricingService;
+use MPFBS\Repositories\PassengerTypeRepository;
+use MPFBS\Settings\Settings;
+use MPFBS\Support\Money;
+use MPFBS\Support\Options;
 use WP_Error;
 
 defined( 'ABSPATH' ) || exit;
@@ -117,9 +117,8 @@ final class SetupStatus {
 	 * Decides, once, whether this install still has setup ahead of it.
 	 *
 	 * An install that already has a catalogue was set up before this existed,
-	 * and locking its operators out of their own bookings to walk them through
-	 * a wizard for work they did long ago would be the opposite of help. Only a
-	 * genuinely empty install starts locked.
+	 * so it is marked complete rather than shown a checklist for work done long
+	 * ago. Only a genuinely empty install starts with the checklist.
 	 *
 	 * @return void
 	 */
@@ -164,13 +163,13 @@ final class SetupStatus {
 				1,
 				array(
 					array(
-						'key'     => '_fbm_departure_ts',
+						'key'     => '_mpfbs_departure_ts',
 						'value'   => time(),
 						'compare' => '>',
 						'type'    => 'NUMERIC',
 					),
 					array(
-						'key'     => '_fbm_status',
+						'key'     => '_mpfbs_status',
 						'value'   => array( Sailing::STATUS_SCHEDULED, Sailing::STATUS_DELAYED ),
 						'compare' => 'IN',
 					),
@@ -191,7 +190,6 @@ final class SetupStatus {
 
 		$status = array(
 			'completed'   => $completed,
-			'locked'      => ! $completed,
 			'business'    => $business,
 			'crossing'    => $crossing,
 			'done'        => (int) $business + (int) ( $business && $crossing['ready'] ) + (int) $completed,
@@ -214,7 +212,7 @@ final class SetupStatus {
 		 *
 		 * @param array<string, mixed> $status Setup progress.
 		 */
-		return (array) apply_filters( 'fbm_setup_status', $status );
+		return (array) apply_filters( 'mpfbs_setup_status', $status );
 	}
 
 	/**
@@ -251,7 +249,7 @@ final class SetupStatus {
 
 		if ( array() !== $fields ) {
 			return new WP_Error(
-				'fbm_setup_business',
+				'mpfbs_setup_business',
 				__( 'Some details need another look.', 'magepeople-ferry-booking-system' ),
 				array(
 					'status' => 422,
@@ -283,7 +281,7 @@ final class SetupStatus {
 
 		if ( empty( $status['business'] ) ) {
 			return new WP_Error(
-				'fbm_setup_incomplete',
+				'mpfbs_setup_incomplete',
 				__( 'Confirm your business details first.', 'magepeople-ferry-booking-system' ),
 				array( 'status' => 422 )
 			);
@@ -291,7 +289,7 @@ final class SetupStatus {
 
 		if ( empty( $status['crossing']['ready'] ) ) {
 			return new WP_Error(
-				'fbm_setup_incomplete',
+				'mpfbs_setup_incomplete',
 				__( 'Finish your first crossing first: it needs two ports, a vessel, a route, a future sailing and a fare.', 'magepeople-ferry-booking-system' ),
 				array( 'status' => 422 )
 			);
@@ -310,7 +308,7 @@ final class SetupStatus {
 	private function active_clause(): array {
 		return array(
 			array(
-				'key'   => '_fbm_status',
+				'key'   => '_mpfbs_status',
 				'value' => 'active',
 			),
 		);
@@ -365,8 +363,8 @@ final class SetupStatus {
 		$base = $this->passenger_types->base_type();
 
 		foreach ( $routes as $route_id ) {
-			$origin      = (int) get_post_meta( (int) $route_id, '_fbm_origin_port', true );
-			$destination = (int) get_post_meta( (int) $route_id, '_fbm_destination_port', true );
+			$origin      = (int) get_post_meta( (int) $route_id, '_mpfbs_origin_port', true );
+			$destination = (int) get_post_meta( (int) $route_id, '_mpfbs_destination_port', true );
 
 			if ( $origin <= 0 || $destination <= 0 ) {
 				continue;

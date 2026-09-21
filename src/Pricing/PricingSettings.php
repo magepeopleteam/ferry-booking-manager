@@ -7,9 +7,9 @@
 
 declare( strict_types=1 );
 
-namespace FBM\Pricing;
+namespace MPFBS\Pricing;
 
-use FBM\Support\Options;
+use MPFBS\Support\Options;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -70,7 +70,7 @@ final class PricingSettings {
 		 *
 		 * @param array<string, mixed> $settings Resolved settings.
 		 */
-		return (array) apply_filters( 'fbm_pricing_settings', $settings );
+		return (array) apply_filters( 'mpfbs_pricing_settings', $settings );
 	}
 
 	/**

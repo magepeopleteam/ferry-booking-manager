@@ -8,7 +8,7 @@
  * exactly the figure an attacker would edit.
  */
 
-const KEY = 'fbm.booking.session.v1';
+const KEY = 'mpfbs.booking.session.v1';
 
 export interface SessionState {
 	origin: number;

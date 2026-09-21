@@ -32,7 +32,7 @@ const ROOT_OPEN = /<div id="__next"[^>]*>/;
  * @param {string} message Reason.
  */
 function fail( message ) {
-	console.error( `\n[fbm] ${ message }\n` );
+	console.error( `\n[mpfbs] ${ message }\n` );
 	process.exit( 1 );
 }
 
@@ -199,11 +199,11 @@ async function main() {
 		nextData: extractNextData( html ),
 	};
 
-	await writeFile( path.join( targetDir, 'fbm-app.json' ), `${ JSON.stringify( manifest, null, '\t' ) }\n`, 'utf8' );
+	await writeFile( path.join( targetDir, 'mpfbs-app.json' ), `${ JSON.stringify( manifest, null, '\t' ) }\n`, 'utf8' );
 	await writeFile( path.join( targetDir, 'index.html' ), '', 'utf8' );
 
 	console.log(
-		`[fbm] Dashboard bundle ready: ${ styles.length } stylesheet(s), ${ scripts.length } script(s) -> assets/admin/app/`
+		`[mpfbs] Dashboard bundle ready: ${ styles.length } stylesheet(s), ${ scripts.length } script(s) -> assets/admin/app/`
 	);
 }
 

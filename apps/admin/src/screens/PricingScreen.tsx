@@ -14,16 +14,13 @@ import { PageHeader } from '../components/PageHeader';
 import { SaveBar } from '../components/SaveBar';
 import { EmptyState } from '../components/States';
 import { Tabs } from '../components/Tabs';
-import { CabinsPanel } from './CabinsPanel';
-import { ExtrasPanel } from './ExtrasPanel';
-import { PricingRulesPanel } from './PricingRulesPanel';
-import { useFbmToast } from '../components/Toast';
-import { fbmRequest, FbmApiError } from '../lib/api';
-import { fbmConfig } from '../lib/config';
-import { fbmFormat, fbmText } from '../lib/i18n';
-import { fbmFormatMoney, fbmMoneyStep, fbmToMajor, fbmToMinor } from '../lib/money';
-import { fbmNavigate } from '../lib/router';
-import { fbmInvalidateReferences, useFbmReferences } from '../lib/references';
+import { useMpfbsToast } from '../components/Toast';
+import { mpfbsRequest, MpfbsApiError } from '../lib/api';
+import { mpfbsConfig } from '../lib/config';
+import { mpfbsFormat, mpfbsText } from '../lib/i18n';
+import { mpfbsFormatMoney, mpfbsMoneyStep, mpfbsToMajor, mpfbsToMinor } from '../lib/money';
+import { mpfbsNavigate } from '../lib/router';
+import { mpfbsInvalidateReferences, useMpfbsReferences } from '../lib/references';
 
 interface PricingSettings {
 	tax_enabled: boolean;
@@ -49,54 +46,36 @@ interface RouteFares {
 	vehicle_prices: FareTable;
 }
 
+const PANELS = [
+	{ id: 'fares', label: 'Fares' },
+	{ id: 'charges', label: 'Taxes and fees' },
+	{ id: 'discounts', label: 'Discounts' },
+];
+
 /**
  * Renders the pricing destination.
  */
 export function PricingScreen( { tab }: { tab: string } ): JSX.Element {
-	// Price rules, extras and cabins are Pro panels. Without Pro they have
-	// nothing to show, so the tabs are not offered rather than opened onto an
-	// advertisement.
-	const proActive = fbmConfig().proActive;
-	const panels = useMemo( () => {
-		// Labels stay in English here: Tabs translates what it is given.
-		const free = [
-			{ id: 'fares', label: 'Fares' },
-			{ id: 'charges', label: 'Taxes and fees' },
-			{ id: 'discounts', label: 'Discounts' },
-		];
-
-		if ( ! proActive ) {
-			return free;
-		}
-
-		return [
-			...free,
-			{ id: 'rules', label: 'Price rules' },
-			{ id: 'extras', label: 'Extras' },
-			{ id: 'cabins', label: 'Cabins' },
-		];
-	}, [ proActive ] );
+	// Labels stay in English here: Tabs translates what it is given.
+	const panels = PANELS;
 
 	const active = panels.some( ( panel ) => panel.id === tab ) ? tab : 'fares';
 
 	const select = useCallback( ( id: string ) => {
-		fbmNavigate( id === 'fares' ? '/pricing' : `/pricing/${ id }` );
+		mpfbsNavigate( id === 'fares' ? '/pricing' : `/pricing/${ id }` );
 	}, [] );
 
 	return (
 		<>
 			<PageHeader
-				title={ fbmText( 'Pricing' ) }
-				description={ fbmText( 'What a crossing costs, what is added on top, and what comes off.' ) }
+				title={ mpfbsText( 'Pricing' ) }
+				description={ mpfbsText( 'What a crossing costs, what is added on top, and what comes off.' ) }
 			/>
 
 			<Tabs label="Pricing" active={ active } onSelect={ select } tabs={ panels } />
 
-			<div id={ `fbm-tabpanel-${ active }` } role="tabpanel" aria-labelledby={ `fbm-tab-${ active }` }>
+			<div id={ `mpfbs-tabpanel-${ active }` } role="tabpanel" aria-labelledby={ `mpfbs-tab-${ active }` }>
 				{ active === 'fares' ? <FaresPanel /> : null }
-				{ active === 'rules' ? <PricingRulesPanel /> : null }
-				{ active === 'extras' ? <ExtrasPanel /> : null }
-				{ active === 'cabins' ? <CabinsPanel /> : null }
 				{ active === 'charges' || active === 'discounts' ? <SettingsPanel section={ active } /> : null }
 			</div>
 		</>
@@ -107,8 +86,8 @@ export function PricingScreen( { tab }: { tab: string } ): JSX.Element {
  * Per-route fare table for every passenger and vehicle type.
  */
 function FaresPanel(): JSX.Element {
-	const { references, loading: referencesLoading } = useFbmReferences();
-	const toast = useFbmToast();
+	const { references, loading: referencesLoading } = useMpfbsReferences();
+	const toast = useMpfbsToast();
 	const [ routeId, setRouteId ] = useState( 0 );
 	const [ route, setRoute ] = useState< RouteFares | null >( null );
 	const [ loading, setLoading ] = useState( false );
@@ -131,7 +110,7 @@ function FaresPanel(): JSX.Element {
 		let cancelled = false;
 		setLoading( true );
 
-		fbmRequest< RouteFares >( `routes/${ routeId }` )
+		mpfbsRequest< RouteFares >( `routes/${ routeId }` )
 			.then( ( response ) => {
 				if ( ! cancelled ) {
 					setRoute( response.data );
@@ -165,7 +144,7 @@ function FaresPanel(): JSX.Element {
 			if ( value === '' ) {
 				delete next[ String( typeId ) ];
 			} else {
-				next[ String( typeId ) ] = fbmToMinor( Number( value ) );
+				next[ String( typeId ) ] = mpfbsToMinor( Number( value ) );
 			}
 
 			return { ...current, [ table ]: next };
@@ -181,15 +160,15 @@ function FaresPanel(): JSX.Element {
 		setSaving( true );
 
 		try {
-			await fbmRequest( `routes/${ route.id }`, {
+			await mpfbsRequest( `routes/${ route.id }`, {
 				method: 'PUT',
 				body: { passenger_prices: route.passenger_prices, vehicle_prices: route.vehicle_prices },
 			} );
-			toast.notify( fbmText( 'Fares saved.' ), 'success' );
+			toast.notify( mpfbsText( 'Fares saved.' ), 'success' );
 			setDirty( false );
-			fbmInvalidateReferences();
+			mpfbsInvalidateReferences();
 		} catch ( caught: unknown ) {
-			toast.notify( caught instanceof FbmApiError ? caught.message : fbmText( 'Something went wrong.' ), 'error' );
+			toast.notify( caught instanceof MpfbsApiError ? caught.message : mpfbsText( 'Something went wrong.' ), 'error' );
 		} finally {
 			setSaving( false );
 		}
@@ -202,11 +181,11 @@ function FaresPanel(): JSX.Element {
 
 	if ( ! referencesLoading && routes.length === 0 ) {
 		return (
-			<div className="fbm-panel">
+			<div className="mpfbs-panel">
 				<EmptyState
 					icon="compass"
-					title={ fbmText( 'No routes yet.' ) }
-					description={ fbmText( 'Fares are set per route, so create a route first.' ) }
+					title={ mpfbsText( 'No routes yet.' ) }
+					description={ mpfbsText( 'Fares are set per route, so create a route first.' ) }
 				/>
 			</div>
 		);
@@ -214,21 +193,21 @@ function FaresPanel(): JSX.Element {
 
 	return (
 		<>
-		<div className="fbm-panel">
-			<div className="fbm-panel__header">
+		<div className="mpfbs-panel">
+			<div className="mpfbs-panel__header">
 				<div>
-					<h2 className="fbm-panel__title">{ fbmText( 'Fares by route' ) }</h2>
-					<p className="fbm-panel__description">
-						{ fbmText(
+					<h2 className="mpfbs-panel__title">{ mpfbsText( 'Fares by route' ) }</h2>
+					<p className="mpfbs-panel__description">
+						{ mpfbsText(
 							'A blank fare falls back to the type’s own price. Percentage passenger types are worked out from the base type’s fare on this route.'
 						) }
 					</p>
 				</div>
 			</div>
 
-			<div className="fbm-settings">
+			<div className="mpfbs-settings">
 				<SelectField
-					label={ fbmText( 'Route' ) }
+					label={ mpfbsText( 'Route' ) }
 					name="route"
 					value={ String( routeId ) }
 					options={ routeOptions }
@@ -237,10 +216,10 @@ function FaresPanel(): JSX.Element {
 			</div>
 
 			{ loading || ! route ? (
-				<div className="fbm-fieldgrid" aria-hidden="true">
+				<div className="mpfbs-fieldgrid" aria-hidden="true">
 					{ [ 0, 1, 2, 3 ].map( ( index ) => (
-						<div key={ index } className="fbm-fieldrow fbm-fieldrow--skeleton">
-							<span className="fbm-skeleton fbm-skeleton--text" />
+						<div key={ index } className="mpfbs-fieldrow mpfbs-fieldrow--skeleton">
+							<span className="mpfbs-skeleton mpfbs-skeleton--text" />
 						</div>
 					) ) }
 				</div>
@@ -253,10 +232,10 @@ function FaresPanel(): JSX.Element {
 							name: type.name,
 							hint:
 								type.price_mode === 'percent'
-									? fbmFormat( '%s%% of the base fare unless set here', String( type.price_percent ) )
+									? mpfbsFormat( '%s%% of the base fare unless set here', String( type.price_percent ) )
 									: type.price_mode === 'free'
-										? fbmText( 'Always free' )
-										: fbmFormat( 'Type default %s', fbmFormatMoney( type.base_price ) ),
+										? mpfbsText( 'Always free' )
+										: mpfbsFormat( 'Type default %s', mpfbsFormatMoney( type.base_price ) ),
 							disabled: type.price_mode === 'free',
 						} ) ) }
 						table={ route.passenger_prices }
@@ -268,7 +247,7 @@ function FaresPanel(): JSX.Element {
 						types={ references.vehicle_types.map( ( type ) => ( {
 							id: type.id,
 							name: type.name,
-							hint: fbmFormat( 'Type default %s', fbmFormatMoney( type.base_price ) ),
+							hint: mpfbsFormat( 'Type default %s', mpfbsFormatMoney( type.base_price ) ),
 							disabled: false,
 						} ) ) }
 						table={ route.vehicle_prices }
@@ -294,35 +273,35 @@ interface FareGroupProps {
  * One block of fare inputs.
  */
 function FareGroup( { title, types, table, onChange }: FareGroupProps ): JSX.Element {
-	const currency = fbmConfig().currency;
+	const currency = mpfbsConfig().currency;
 
 	return (
 		<>
-			<h3 className="fbm-subheading">{ fbmText( title ) }</h3>
-			<div className="fbm-fieldgrid">
+			<h3 className="mpfbs-subheading">{ mpfbsText( title ) }</h3>
+			<div className="mpfbs-fieldgrid">
 				{ types.map( ( type ) => {
 					const stored = table[ String( type.id ) ];
-					const value = stored === undefined || stored === '' ? '' : String( fbmToMajor( Number( stored ) ) );
+					const value = stored === undefined || stored === '' ? '' : String( mpfbsToMajor( Number( stored ) ) );
 
 					return (
-						<div className="fbm-fieldrow" key={ type.id }>
-							<div className="fbm-fieldrow__label">
-								<span className="fbm-fieldrow__name">{ type.name }</span>
-								<span className="fbm-fieldrow__hint">{ type.hint }</span>
+						<div className="mpfbs-fieldrow" key={ type.id }>
+							<div className="mpfbs-fieldrow__label">
+								<span className="mpfbs-fieldrow__name">{ type.name }</span>
+								<span className="mpfbs-fieldrow__hint">{ type.hint }</span>
 							</div>
-							<div className="fbm-fare">
-								<span className="fbm-fare__symbol" aria-hidden="true">
+							<div className="mpfbs-fare">
+								<span className="mpfbs-fare__symbol" aria-hidden="true">
 									{ currency.symbol }
 								</span>
 								<input
 									type="number"
-									className="fbm-input fbm-input--money"
+									className="mpfbs-input mpfbs-input--money"
 									min={ 0 }
-									step={ fbmMoneyStep() }
+									step={ mpfbsMoneyStep() }
 									value={ value }
 									disabled={ type.disabled }
-									placeholder={ fbmText( 'Default' ) }
-									aria-label={ fbmFormat( 'Fare for %s', type.name ) }
+									placeholder={ mpfbsText( 'Default' ) }
+									aria-label={ mpfbsFormat( 'Fare for %s', type.name ) }
 									onChange={ ( event ) => onChange( type.id, event.target.value ) }
 								/>
 							</div>
@@ -338,7 +317,7 @@ function FareGroup( { title, types, table, onChange }: FareGroupProps ): JSX.Ele
  * Tax, fee and discount settings.
  */
 function SettingsPanel( { section }: { section: 'charges' | 'discounts' } ): JSX.Element {
-	const toast = useFbmToast();
+	const toast = useMpfbsToast();
 	const [ settings, setSettings ] = useState< PricingSettings | null >( null );
 	const [ saving, setSaving ] = useState( false );
 	const [ dirty, setDirty ] = useState( false );
@@ -346,7 +325,7 @@ function SettingsPanel( { section }: { section: 'charges' | 'discounts' } ): JSX
 	useEffect( () => {
 		let cancelled = false;
 
-		fbmRequest< PricingSettings >( 'pricing/settings' )
+		mpfbsRequest< PricingSettings >( 'pricing/settings' )
 			.then( ( response ) => {
 				if ( ! cancelled ) {
 					setSettings( response.data );
@@ -373,12 +352,12 @@ function SettingsPanel( { section }: { section: 'charges' | 'discounts' } ): JSX
 		setSaving( true );
 
 		try {
-			const response = await fbmRequest< PricingSettings >( 'pricing/settings', { method: 'PUT', body: settings } );
+			const response = await mpfbsRequest< PricingSettings >( 'pricing/settings', { method: 'PUT', body: settings } );
 			setSettings( response.data );
 			setDirty( false );
-			toast.notify( fbmText( 'Pricing saved.' ), 'success' );
+			toast.notify( mpfbsText( 'Pricing saved.' ), 'success' );
 		} catch ( caught: unknown ) {
-			toast.notify( caught instanceof FbmApiError ? caught.message : fbmText( 'Something went wrong.' ), 'error' );
+			toast.notify( caught instanceof MpfbsApiError ? caught.message : mpfbsText( 'Something went wrong.' ), 'error' );
 		} finally {
 			setSaving( false );
 		}
@@ -388,10 +367,10 @@ function SettingsPanel( { section }: { section: 'charges' | 'discounts' } ): JSX
 
 	if ( ! settings ) {
 		return (
-			<div className="fbm-panel">
-				<div className="fbm-settings" aria-hidden="true">
-					<span className="fbm-skeleton fbm-skeleton--text" />
-					<span className="fbm-skeleton fbm-skeleton--text" />
+			<div className="mpfbs-panel">
+				<div className="mpfbs-settings" aria-hidden="true">
+					<span className="mpfbs-skeleton mpfbs-skeleton--text" />
+					<span className="mpfbs-skeleton mpfbs-skeleton--text" />
 				</div>
 			</div>
 		);
@@ -399,37 +378,37 @@ function SettingsPanel( { section }: { section: 'charges' | 'discounts' } ): JSX
 
 	return (
 		<>
-		<div className="fbm-panel">
-			<div className="fbm-panel__header">
+		<div className="mpfbs-panel">
+			<div className="mpfbs-panel__header">
 				<div>
-					<h2 className="fbm-panel__title">{ charges ? fbmText( 'Taxes and fees' ) : fbmText( 'Discounts' ) }</h2>
-					<p className="fbm-panel__description">
+					<h2 className="mpfbs-panel__title">{ charges ? mpfbsText( 'Taxes and fees' ) : mpfbsText( 'Discounts' ) }</h2>
+					<p className="mpfbs-panel__description">
 						{ charges
-							? fbmText( 'Applied on top of the fare. Every total the customer sees is worked out on the server with these rules.' )
-							: fbmText( 'Reductions are always taken from the fare before tax, and can never exceed it.' ) }
+							? mpfbsText( 'Applied on top of the fare. Every total the customer sees is worked out on the server with these rules.' )
+							: mpfbsText( 'Reductions are always taken from the fare before tax, and can never exceed it.' ) }
 					</p>
 				</div>
 			</div>
 
-			<div className="fbm-settings">
+			<div className="mpfbs-settings">
 				{ charges ? (
 					<>
 						<SwitchField
-							label={ fbmText( 'Charge tax' ) }
+							label={ mpfbsText( 'Charge tax' ) }
 							checked={ settings.tax_enabled }
 							onChange={ ( checked ) => set( 'tax_enabled', checked ) }
 						/>
 						{ settings.tax_enabled ? (
 							<>
 								<TextField
-									label={ fbmText( 'Tax name' ) }
+									label={ mpfbsText( 'Tax name' ) }
 									name="tax_label"
 									value={ settings.tax_label }
 									onChange={ ( value ) => set( 'tax_label', value ) }
-									hint={ fbmText( 'Shown on tickets and invoices, for example VAT or GST.' ) }
+									hint={ mpfbsText( 'Shown on the price breakdown, for example VAT or GST.' ) }
 								/>
 								<NumberField
-									label={ fbmText( 'Tax rate' ) }
+									label={ mpfbsText( 'Tax rate' ) }
 									name="tax_rate"
 									value={ settings.tax_rate }
 									min={ 0 }
@@ -439,26 +418,26 @@ function SettingsPanel( { section }: { section: 'charges' | 'discounts' } ): JSX
 									onChange={ ( value ) => set( 'tax_rate', value ) }
 								/>
 								<SelectField
-									label={ fbmText( 'Fares include tax' ) }
+									label={ mpfbsText( 'Fares include tax' ) }
 									name="tax_mode"
 									value={ settings.tax_mode }
 									options={ [
-										{ value: 'exclusive', label: fbmText( 'No — add tax on top' ) },
-										{ value: 'inclusive', label: fbmText( 'Yes — tax is already in the fare' ) },
+										{ value: 'exclusive', label: mpfbsText( 'No — add tax on top' ) },
+										{ value: 'inclusive', label: mpfbsText( 'Yes — tax is already in the fare' ) },
 									] }
 									onChange={ ( value ) => set( 'tax_mode', value ) }
 								/>
 								<SwitchField
-									label={ fbmText( 'Tax booking fees too' ) }
+									label={ mpfbsText( 'Tax booking fees too' ) }
 									checked={ settings.tax_applies_to_fees }
 									onChange={ ( checked ) => set( 'tax_applies_to_fees', checked ) }
 								/>
 							</>
 						) : null }
 
-						<h3 className="fbm-subheading">{ fbmText( 'Fees' ) }</h3>
+						<h3 className="mpfbs-subheading">{ mpfbsText( 'Fees' ) }</h3>
 						<TextField
-							label={ fbmText( 'Fee name' ) }
+							label={ mpfbsText( 'Fee name' ) }
 							name="fee_label"
 							value={ settings.fee_label }
 							onChange={ ( value ) => set( 'fee_label', value ) }
@@ -482,28 +461,28 @@ function SettingsPanel( { section }: { section: 'charges' | 'discounts' } ): JSX
 				) : (
 					<>
 						<NumberField
-							label={ fbmText( 'Return journey discount' ) }
+							label={ mpfbsText( 'Return journey discount' ) }
 							name="return_discount"
 							value={ settings.return_discount }
 							min={ 0 }
 							max={ 100 }
 							step={ 0.5 }
 							suffix="%"
-							hint={ fbmText( 'Taken off the whole round trip when both legs are booked together.' ) }
+							hint={ mpfbsText( 'Taken off the whole round trip when both legs are booked together.' ) }
 							onChange={ ( value ) => set( 'return_discount', value ) }
 						/>
 						<NumberField
-							label={ fbmText( 'Group discount from' ) }
+							label={ mpfbsText( 'Group discount from' ) }
 							name="group_discount_from"
 							value={ settings.group_discount_from }
 							min={ 0 }
 							max={ 99 }
-							suffix={ fbmText( 'passengers' ) }
-							hint={ fbmText( 'Use 0 to turn the group discount off. Passengers who take no seat do not count.' ) }
+							suffix={ mpfbsText( 'passengers' ) }
+							hint={ mpfbsText( 'Use 0 to turn the group discount off. Passengers who take no seat do not count.' ) }
 							onChange={ ( value ) => set( 'group_discount_from', value ) }
 						/>
 						<NumberField
-							label={ fbmText( 'Group discount' ) }
+							label={ mpfbsText( 'Group discount' ) }
 							name="group_discount"
 							value={ settings.group_discount }
 							min={ 0 }
@@ -534,13 +513,13 @@ interface MoneyFieldProps {
 function MoneyField( { label, value, onChange }: MoneyFieldProps ): JSX.Element {
 	return (
 		<NumberField
-			label={ fbmText( label ) }
+			label={ mpfbsText( label ) }
 			name={ label }
-			value={ fbmToMajor( value ) }
+			value={ mpfbsToMajor( value ) }
 			min={ 0 }
-			step={ fbmMoneyStep() }
-			suffix={ fbmConfig().currency.code }
-			onChange={ ( next ) => onChange( fbmToMinor( next ) ) }
+			step={ mpfbsMoneyStep() }
+			suffix={ mpfbsConfig().currency.code }
+			onChange={ ( next ) => onChange( mpfbsToMinor( next ) ) }
 		/>
 	);
 }

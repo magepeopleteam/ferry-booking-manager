@@ -14,14 +14,9 @@ import { SwitchField, TextAreaField, TextField } from '../components/Fields';
 import { PageHeader } from '../components/PageHeader';
 import { SaveBar } from '../components/SaveBar';
 import { EmptyState } from '../components/States';
-import { Tabs } from '../components/Tabs';
-import { useFbmToast } from '../components/Toast';
-import { fbmRequest, FbmApiError } from '../lib/api';
-import { fbmConfig } from '../lib/config';
-import { fbmFormat, fbmText } from '../lib/i18n';
-import { fbmNavigate } from '../lib/router';
-import { AutomationsPanel } from './AutomationsPanel';
-import { EmailTemplatesPanel } from './EmailTemplatesPanel';
+import { useMpfbsToast } from '../components/Toast';
+import { mpfbsRequest, MpfbsApiError } from '../lib/api';
+import { mpfbsFormat, mpfbsText } from '../lib/i18n';
 
 interface SettingsPayload {
 	settings: Record< string, unknown >;
@@ -64,9 +59,8 @@ const MESSAGES: MessageDefinition[] = [
 /**
  * Renders the emails destination.
  */
-export function EmailsScreen( { tab = '' }: { tab?: string } ): JSX.Element {
-	const config = fbmConfig();
-	const toast = useFbmToast();
+export function EmailsScreen(): JSX.Element {
+	const toast = useMpfbsToast();
 	const [ settings, setSettings ] = useState< Record< string, unknown > | null >( null );
 	const [ dirty, setDirty ] = useState( false );
 	const [ saving, setSaving ] = useState( false );
@@ -79,11 +73,11 @@ export function EmailsScreen( { tab = '' }: { tab?: string } ): JSX.Element {
 		setError( '' );
 
 		try {
-			const payload = await fbmRequest< SettingsPayload >( 'settings' );
+			const payload = await mpfbsRequest< SettingsPayload >( 'settings' );
 			setSettings( payload.data.settings );
 			setDirty( false );
 		} catch ( caught: unknown ) {
-			setError( caught instanceof FbmApiError ? caught.message : fbmText( 'Something went wrong.' ) );
+			setError( caught instanceof MpfbsApiError ? caught.message : mpfbsText( 'Something went wrong.' ) );
 		}
 	}, [] );
 
@@ -104,11 +98,11 @@ export function EmailsScreen( { tab = '' }: { tab?: string } ): JSX.Element {
 		setSaving( true );
 
 		try {
-			await fbmRequest( 'settings', { method: 'PUT', body: { settings } } );
-			toast.notify( fbmText( 'Email settings saved.' ), 'success' );
+			await mpfbsRequest( 'settings', { method: 'PUT', body: { settings } } );
+			toast.notify( mpfbsText( 'Email settings saved.' ), 'success' );
 			setDirty( false );
 		} catch ( caught: unknown ) {
-			toast.notify( caught instanceof FbmApiError ? caught.message : fbmText( 'Something went wrong.' ), 'error' );
+			toast.notify( caught instanceof MpfbsApiError ? caught.message : mpfbsText( 'Something went wrong.' ), 'error' );
 		} finally {
 			setSaving( false );
 		}
@@ -119,16 +113,16 @@ export function EmailsScreen( { tab = '' }: { tab?: string } ): JSX.Element {
 		setTestResult( null );
 
 		try {
-			const response = await fbmRequest< { sent: boolean; to: string } >( 'settings/test-email', {
+			const response = await mpfbsRequest< { sent: boolean; to: string } >( 'settings/test-email', {
 				method: 'POST',
 				body: { to: testTo },
 			} );
 
-			setTestResult( { ok: true, message: fbmFormat( 'Test message sent to %s.', response.data.to ) } );
+			setTestResult( { ok: true, message: mpfbsFormat( 'Test message sent to %s.', response.data.to ) } );
 		} catch ( caught: unknown ) {
 			setTestResult( {
 				ok: false,
-				message: caught instanceof FbmApiError ? caught.message : fbmText( 'Something went wrong.' ),
+				message: caught instanceof MpfbsApiError ? caught.message : mpfbsText( 'Something went wrong.' ),
 			} );
 		} finally {
 			setTesting( false );
@@ -138,8 +132,8 @@ export function EmailsScreen( { tab = '' }: { tab?: string } ): JSX.Element {
 	if ( error !== '' ) {
 		return (
 			<>
-				<PageHeader title={ fbmText( 'Emails' ) } />
-				<div className="fbm-panel">
+				<PageHeader title={ mpfbsText( 'Emails' ) } />
+				<div className="mpfbs-panel">
 					<EmptyState icon="mail" title={ error } />
 				</div>
 			</>
@@ -148,58 +142,33 @@ export function EmailsScreen( { tab = '' }: { tab?: string } ): JSX.Element {
 
 	const enabled = MESSAGES.filter( ( message ) => Boolean( settings?.[ message.key ] ) ).length;
 
-	// The builder is a Pro screen, so the tabs only appear when there is more
-	// than one thing to choose between.
-	const panels = config.proActive
-		? [
-				{ id: '', label: fbmText( 'Messages' ) },
-				{ id: 'templates', label: fbmText( 'Templates' ) },
-				{ id: 'automations', label: fbmText( 'Automations' ) },
-		  ]
-		: [];
-
-	const active = panels.some( ( panel ) => panel.id === tab ) ? tab : '';
-
 	return (
 		<>
 			<PageHeader
-				title={ fbmText( 'Emails' ) }
-				description={ fbmText( 'What the plugin sends, how it looks, and who it comes from.' ) }
+				title={ mpfbsText( 'Emails' ) }
+				description={ mpfbsText( 'What the plugin sends, how it looks, and who it comes from.' ) }
 			/>
 
-			{ panels.length > 0 ? (
-				<Tabs
-					label={ fbmText( 'Emails' ) }
-					active={ active }
-					onSelect={ ( id ) => fbmNavigate( id === '' ? '/emails' : `/emails/${ id }` ) }
-					tabs={ panels }
-				/>
-			) : null }
-
-			{ active === 'templates' ? <EmailTemplatesPanel /> : null }
-			{ active === 'automations' ? <AutomationsPanel /> : null }
-
-			{ active === '' ? (
-			<div className="fbm-panel">
-				<div className="fbm-panel__header">
+			<div className="mpfbs-panel">
+				<div className="mpfbs-panel__header">
 					<div>
-						<h2 className="fbm-panel__title">{ fbmText( 'Messages' ) }</h2>
-						<p className="fbm-panel__description">
-							{ fbmText( 'Switching a message off does not stop the booking — it only stops the notification.' ) }
+						<h2 className="mpfbs-panel__title">{ mpfbsText( 'Messages' ) }</h2>
+						<p className="mpfbs-panel__description">
+							{ mpfbsText( 'Switching a message off does not stop the booking — it only stops the notification.' ) }
 						</p>
 					</div>
 				</div>
 
-				<div className="fbm-fieldgrid">
+				<div className="mpfbs-fieldgrid">
 					{ MESSAGES.map( ( message ) => (
-						<div className="fbm-fieldrow" key={ message.key }>
-							<div className="fbm-fieldrow__label">
-								<span className="fbm-fieldrow__name">{ fbmText( message.label ) }</span>
-								<span className="fbm-pill fbm-pill--muted">{ fbmText( message.audience ) }</span>
-								<span className="fbm-fieldrow__hint">{ fbmText( message.description ) }</span>
+						<div className="mpfbs-fieldrow" key={ message.key }>
+							<div className="mpfbs-fieldrow__label">
+								<span className="mpfbs-fieldrow__name">{ mpfbsText( message.label ) }</span>
+								<span className="mpfbs-pill mpfbs-pill--muted">{ mpfbsText( message.audience ) }</span>
+								<span className="mpfbs-fieldrow__hint">{ mpfbsText( message.description ) }</span>
 							</div>
 							<SwitchField
-								label={ fbmText( message.label ) }
+								label={ mpfbsText( message.label ) }
 								checked={ Boolean( settings?.[ message.key ] ) }
 								onChange={ ( checked ) => set( message.key, checked ) }
 							/>
@@ -207,83 +176,80 @@ export function EmailsScreen( { tab = '' }: { tab?: string } ): JSX.Element {
 					) ) }
 				</div>
 
-				<h3 className="fbm-subheading">{ fbmText( 'Sender' ) }</h3>
+				<h3 className="mpfbs-subheading">{ mpfbsText( 'Sender' ) }</h3>
 
-				<div className="fbm-settings">
+				<div className="mpfbs-settings">
 					<TextField
-						label={ fbmText( 'From name' ) }
+						label={ mpfbsText( 'From name' ) }
 						name="email_from_name"
 						value={ String( settings?.email_from_name ?? '' ) }
 						onChange={ ( value ) => set( 'email_from_name', value ) }
-						hint={ fbmText( 'Leave blank to use the site name.' ) }
+						hint={ mpfbsText( 'Leave blank to use the site name.' ) }
 					/>
 					<TextField
-						label={ fbmText( 'From address' ) }
+						label={ mpfbsText( 'From address' ) }
 						name="email_from_address"
 						type="email"
 						value={ String( settings?.email_from_address ?? '' ) }
 						onChange={ ( value ) => set( 'email_from_address', value ) }
-						hint={ fbmText( 'Use an address on your own domain, or messages will be treated as spam.' ) }
+						hint={ mpfbsText( 'Use an address on your own domain, or messages will be treated as spam.' ) }
 					/>
 					<TextField
-						label={ fbmText( 'Staff notification address' ) }
+						label={ mpfbsText( 'Staff notification address' ) }
 						name="admin_notification_email"
 						type="email"
 						value={ String( settings?.admin_notification_email ?? '' ) }
 						onChange={ ( value ) => set( 'admin_notification_email', value ) }
-						hint={ fbmText( 'Where new booking alerts go. Leave blank to use the site administrator.' ) }
+						hint={ mpfbsText( 'Where new booking alerts go. Leave blank to use the site administrator.' ) }
 					/>
 					<TextAreaField
-						label={ fbmText( 'Footer text' ) }
+						label={ mpfbsText( 'Footer text' ) }
 						name="email_footer_text"
 						value={ String( settings?.email_footer_text ?? '' ) }
 						onChange={ ( value ) => set( 'email_footer_text', value ) }
 						rows={ 3 }
-						hint={ fbmText( 'Added to the bottom of every customer message. Good place for a port address or a check-in reminder.' ) }
+						hint={ mpfbsText( 'Added to the bottom of every customer message. Good place for a port address or a check-in reminder.' ) }
 					/>
 				</div>
 
-				<h3 className="fbm-subheading">{ fbmText( 'Check delivery' ) }</h3>
+				<h3 className="mpfbs-subheading">{ mpfbsText( 'Check delivery' ) }</h3>
 
-				<div className="fbm-settings">
-					<p className="fbm-panel__description">
-						{ fbmText(
+				<div className="mpfbs-settings">
+					<p className="mpfbs-panel__description">
+						{ mpfbsText(
 							'Sends one message through WordPress using the sender above. If it does not arrive, the problem is mail delivery on this site rather than the plugin.'
 						) }
 					</p>
 
-					<div className="fbm-fieldadd__row">
+					<div className="mpfbs-fieldadd__row">
 						<input
 							type="email"
-							className="fbm-input"
+							className="mpfbs-input"
 							value={ testTo }
-							placeholder={ fbmText( 'you@example.com' ) }
-							aria-label={ fbmText( 'Send the test to' ) }
+							placeholder={ mpfbsText( 'you@example.com' ) }
+							aria-label={ mpfbsText( 'Send the test to' ) }
 							onChange={ ( event ) => setTestTo( event.target.value ) }
 						/>
-						<button type="button" className="fbm-button fbm-button--secondary" onClick={ sendTest } disabled={ testing }>
-							{ testing ? fbmText( 'Sending…' ) : fbmText( 'Send test email' ) }
+						<button type="button" className="mpfbs-button mpfbs-button--secondary" onClick={ sendTest } disabled={ testing }>
+							{ testing ? mpfbsText( 'Sending…' ) : mpfbsText( 'Send test email' ) }
 						</button>
 					</div>
 
 					{ testResult ? (
-						<div className={ `fbm-alert fbm-alert--${ testResult.ok ? 'success' : 'error' }` } role="status">
+						<div className={ `mpfbs-alert mpfbs-alert--${ testResult.ok ? 'success' : 'error' }` } role="status">
 							{ testResult.message }
 						</div>
 					) : null }
 				</div>
 			</div>
-			) : null }
 
-			{ active === '' ? (
-				<SaveBar
-					dirty={ dirty }
-					saving={ saving }
-					onSave={ save }
-					onReset={ load }
-					summary={ fbmFormat( '%1$s of %2$s messages enabled', String( enabled ), String( MESSAGES.length ) ) }
-				/>
-			) : null }
+			<SaveBar
+				dirty={ dirty }
+				saving={ saving }
+				onSave={ save }
+				onReset={ load }
+				summary={ mpfbsFormat( '%1$s of %2$s messages enabled', String( enabled ), String( MESSAGES.length ) ) }
+			/>
 		</>
 	);
 }

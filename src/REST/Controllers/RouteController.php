@@ -7,11 +7,11 @@
 
 declare( strict_types=1 );
 
-namespace FBM\REST\Controllers;
+namespace MPFBS\REST\Controllers;
 
-use FBM\Models\Port;
-use FBM\REST\EntityController;
-use FBM\Models\Entity;
+use MPFBS\Models\Port;
+use MPFBS\REST\EntityController;
+use MPFBS\Models\Entity;
 use WP_Error;
 use WP_REST_Request;
 
@@ -43,7 +43,7 @@ final class RouteController extends EntityController {
 
 		if ( $origin > 0 && $origin === $destination ) {
 			return new WP_Error(
-				'fbm_invalid_route',
+				'mpfbs_invalid_route',
 				__( 'A route must start and finish at different ports.', 'magepeople-ferry-booking-system' ),
 				array(
 					'status' => 422,
@@ -58,7 +58,7 @@ final class RouteController extends EntityController {
 
 		if ( in_array( $origin, $intermediate, true ) || in_array( $destination, $intermediate, true ) ) {
 			return new WP_Error(
-				'fbm_invalid_route',
+				'mpfbs_invalid_route',
 				__( 'A port cannot be both a terminus and an intermediate call on the same route.', 'magepeople-ferry-booking-system' ),
 				array(
 					'status' => 422,
@@ -72,7 +72,7 @@ final class RouteController extends EntityController {
 		foreach ( $intermediate as $port_id ) {
 			if ( get_post_type( $port_id ) !== Port::POST_TYPE ) {
 				return new WP_Error(
-					'fbm_invalid_route',
+					'mpfbs_invalid_route',
 					__( 'One of the intermediate calls does not refer to an existing port.', 'magepeople-ferry-booking-system' ),
 					array(
 						'status' => 422,

@@ -16,15 +16,15 @@ export interface PageHeaderProps {
  */
 export function PageHeader( { title, description, badge, actions }: PageHeaderProps ): JSX.Element {
 	return (
-		<header className="fbm-page-header">
-			<div className="fbm-page-header__text">
-				<h1 className="fbm-page-header__title">
+		<header className="mpfbs-page-header">
+			<div className="mpfbs-page-header__text">
+				<h1 className="mpfbs-page-header__title">
 					{ title }
-					{ badge ? <span className="fbm-page-header__badge">{ badge }</span> : null }
+					{ badge ? <span className="mpfbs-page-header__badge">{ badge }</span> : null }
 				</h1>
-				{ description ? <p className="fbm-page-header__description">{ description }</p> : null }
+				{ description ? <p className="mpfbs-page-header__description">{ description }</p> : null }
 			</div>
-			{ actions ? <div className="fbm-page-header__actions">{ actions }</div> : null }
+			{ actions ? <div className="mpfbs-page-header__actions">{ actions }</div> : null }
 		</header>
 	);
 }
