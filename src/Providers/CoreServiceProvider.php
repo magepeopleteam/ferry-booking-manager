@@ -7,16 +7,16 @@
 
 declare( strict_types=1 );
 
-namespace FBM\Providers;
+namespace MPFBS\Providers;
 
-use FBM\Cache\CacheManager;
-use FBM\Contracts\ContainerInterface;
-use FBM\Contracts\LoggerInterface;
-use FBM\Core\Activator;
-use FBM\Core\ServiceProvider;
-use FBM\Settings\SettingsBridge;
-use FBM\Support\Logger;
-use FBM\Support\Options;
+use MPFBS\Cache\CacheManager;
+use MPFBS\Contracts\ContainerInterface;
+use MPFBS\Contracts\LoggerInterface;
+use MPFBS\Core\Activator;
+use MPFBS\Core\ServiceProvider;
+use MPFBS\Settings\SettingsBridge;
+use MPFBS\Support\Logger;
+use MPFBS\Support\Options;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -78,7 +78,7 @@ final class CoreServiceProvider extends ServiceProvider {
 				 *
 				 * @param ContainerInterface $container Plugin container.
 				 */
-				do_action( 'fbm_daily_maintenance_run', $container );
+				do_action( 'mpfbs_daily_maintenance_run', $container );
 			}
 		);
 
@@ -102,13 +102,13 @@ final class CoreServiceProvider extends ServiceProvider {
 	public function maybe_upgrade(): void {
 		$stored = Options::get_string( 'version', '' );
 
-		if ( FBM_VERSION === $stored ) {
+		if ( MPFBS_VERSION === $stored ) {
 			return;
 		}
 
-		\FBM\Security\Roles::install();
+		\MPFBS\Security\Roles::install();
 
-		Options::set( 'version', FBM_VERSION, true );
+		Options::set( 'version', MPFBS_VERSION, true );
 		Options::set( 'needs_rewrite_flush', 1 );
 
 		/**
@@ -119,6 +119,6 @@ final class CoreServiceProvider extends ServiceProvider {
 		 * @param string $from Previously stored version, empty on first run.
 		 * @param string $to   Version now running.
 		 */
-		do_action( 'fbm_upgraded', $stored, FBM_VERSION );
+		do_action( 'mpfbs_upgraded', $stored, MPFBS_VERSION );
 	}
 }

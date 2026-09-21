@@ -1,14 +1,14 @@
 /**
- * REST client for the `fbm/v1` namespace.
+ * REST client for the `mpfbs/v1` namespace.
  *
  * Every request carries the WordPress REST nonce; every response is unwrapped
  * from the plugin envelope so callers deal in plain data or a typed error.
  */
 
-import { fbmConfig } from './config';
-import { fbmText } from './i18n';
+import { mpfbsConfig } from './config';
+import { mpfbsText } from './i18n';
 
-export interface FbmMeta {
+export interface MpfbsMeta {
 	page?: number;
 	per_page?: number;
 	total?: number;
@@ -16,12 +16,12 @@ export interface FbmMeta {
 	[ key: string ]: unknown;
 }
 
-export interface FbmResult< T > {
+export interface MpfbsResult< T > {
 	data: T;
-	meta: FbmMeta;
+	meta: MpfbsMeta;
 }
 
-export class FbmApiError extends Error {
+export class MpfbsApiError extends Error {
 	public readonly code: string;
 
 	public readonly status: number;
@@ -35,7 +35,7 @@ export class FbmApiError extends Error {
 		details: Record< string, unknown > = {}
 	) {
 		super( message );
-		this.name = 'FbmApiError';
+		this.name = 'MpfbsApiError';
 		this.code = code;
 		this.status = status;
 		this.details = details;
@@ -45,7 +45,7 @@ export class FbmApiError extends Error {
 interface EnvelopeSuccess< T > {
 	success: true;
 	data: T;
-	meta?: FbmMeta;
+	meta?: MpfbsMeta;
 }
 
 interface EnvelopeError {
@@ -57,7 +57,7 @@ interface EnvelopeError {
 
 type Envelope< T > = EnvelopeSuccess< T > | EnvelopeError;
 
-export interface FbmRequestOptions {
+export interface MpfbsRequestOptions {
 	method?: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
 	query?: Record< string, string | number | boolean | undefined | null >;
 	body?: unknown;
@@ -69,9 +69,9 @@ export interface FbmRequestOptions {
  *
  * The base is not always a clean path. A site that has not chosen a permalink
  * structure — WordPress's own default, and what every fresh install has — serves
- * the API from `index.php?rest_route=/fbm/v1/`, so the base already carries a
+ * the API from `index.php?rest_route=/mpfbs/v1/`, so the base already carries a
  * query string. Appending ours with a second `?` puts it inside the route value:
- * `?rest_route=/fbm/v1/bookings?page=1` asks for a route literally named
+ * `?rest_route=/mpfbs/v1/bookings?page=1` asks for a route literally named
  * "bookings?page=1", which matches nothing, and every listing in the dashboard
  * fails with `rest_no_route` while the endpoints that take no parameters carry
  * on working.
@@ -79,15 +79,15 @@ export interface FbmRequestOptions {
  * Exported because download links are built by hand on four screens and have to
  * agree with this; a URL assembled with a bare `?` is broken the same way.
  */
-export function fbmRestUrl( path: string, query?: FbmRequestOptions[ 'query' ] ): string {
-	const base = fbmConfig().restUrl.replace( /\/+$/, '' );
+export function mpfbsRestUrl( path: string, query?: MpfbsRequestOptions[ 'query' ] ): string {
+	const base = mpfbsConfig().restUrl.replace( /\/+$/, '' );
 	const search = new URLSearchParams();
 
 	/*
 	 * A path is allowed to carry its own query string, and it is pulled off and
 	 * merged rather than left where it is. On a site with plain permalinks the
-	 * REST base is already `index.php?rest_route=/fbm/v1/`, so a second `?`
-	 * lands inside the route name — `rest_route=/fbm/v1/reports?from=…` asks
+	 * REST base is already `index.php?rest_route=/mpfbs/v1/`, so a second `?`
+	 * lands inside the route name — `rest_route=/mpfbs/v1/reports?from=…` asks
 	 * for a route called "reports?from=…", and every such call 404s. Handling
 	 * it here rather than only at the call sites means the next one cannot
 	 * reintroduce it.
@@ -121,14 +121,14 @@ export function fbmRestUrl( path: string, query?: FbmRequestOptions[ 'query' ] )
 /**
  * Performs a request against the plugin REST namespace.
  */
-export async function fbmRequest< T >(
+export async function mpfbsRequest< T >(
 	path: string,
-	options: FbmRequestOptions = {}
-): Promise< FbmResult< T > > {
+	options: MpfbsRequestOptions = {}
+): Promise< MpfbsResult< T > > {
 	const { method = 'GET', query, body, signal } = options;
 	const headers: Record< string, string > = {
 		Accept: 'application/json',
-		'X-WP-Nonce': fbmConfig().restNonce,
+		'X-WP-Nonce': mpfbsConfig().restNonce,
 	};
 
 	if ( body !== undefined ) {
@@ -138,7 +138,7 @@ export async function fbmRequest< T >(
 	let response: Response;
 
 	try {
-		response = await fetch( fbmRestUrl( path, query ), {
+		response = await fetch( mpfbsRestUrl( path, query ), {
 			method,
 			headers,
 			credentials: 'same-origin',
@@ -150,7 +150,7 @@ export async function fbmRequest< T >(
 			throw error;
 		}
 
-		throw new FbmApiError( 'fbm_network_error', fbmText( 'Something went wrong.' ), 0 );
+		throw new MpfbsApiError( 'mpfbs_network_error', mpfbsText( 'Something went wrong.' ), 0 );
 	}
 
 	let payload: Envelope< T > | null = null;
@@ -162,20 +162,20 @@ export async function fbmRequest< T >(
 	}
 
 	if ( ! payload ) {
-		throw new FbmApiError( 'fbm_invalid_response', fbmText( 'Something went wrong.' ), response.status );
+		throw new MpfbsApiError( 'mpfbs_invalid_response', mpfbsText( 'Something went wrong.' ), response.status );
 	}
 
 	if ( payload.success === false ) {
-		throw new FbmApiError(
-			payload.code || 'fbm_error',
-			payload.message || fbmText( 'Something went wrong.' ),
+		throw new MpfbsApiError(
+			payload.code || 'mpfbs_error',
+			payload.message || mpfbsText( 'Something went wrong.' ),
 			response.status,
 			payload.data ?? {}
 		);
 	}
 
 	if ( ! response.ok ) {
-		throw new FbmApiError( 'fbm_error', fbmText( 'Something went wrong.' ), response.status );
+		throw new MpfbsApiError( 'mpfbs_error', mpfbsText( 'Something went wrong.' ), response.status );
 	}
 
 	return { data: payload.data, meta: payload.meta ?? {} };

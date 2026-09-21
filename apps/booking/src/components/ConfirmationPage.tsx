@@ -47,10 +47,10 @@ export function ConfirmationPage( { pages = {} }: ConfirmationPageProps ): JSX.E
 	}, [] );
 
 	return (
-		<div className="fbmb-confirmation">
-			<header className="fbmb-confirmation__head">
-				<h2 className="fbmb-confirmation__title">{ t( 'Your booking' ) }</h2>
-				<p className="fbmb-confirmation__note">
+		<div className="mpfbsb-confirmation">
+			<header className="mpfbsb-confirmation__head">
+				<h2 className="mpfbsb-confirmation__title">{ t( 'Your booking' ) }</h2>
+				<p className="mpfbsb-confirmation__note">
 					{ t( 'Confirm the email address you booked with to see your crossing.' ) }
 				</p>
 			</header>
@@ -58,8 +58,8 @@ export function ConfirmationPage( { pages = {} }: ConfirmationPageProps ): JSX.E
 			<Lookup reference={ reference } />
 
 			{ pages.myBookings ? (
-				<p className="fbmb-confirmation__action">
-					<a className="fbmb-link" href={ pages.myBookings }>
+				<p className="mpfbsb-confirmation__action">
+					<a className="mpfbsb-link" href={ pages.myBookings }>
 						{ t( 'See all my bookings' ) }
 					</a>
 				</p>

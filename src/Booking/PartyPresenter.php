@@ -7,13 +7,13 @@
 
 declare( strict_types=1 );
 
-namespace FBM\Booking;
+namespace MPFBS\Booking;
 
-use FBM\Models\Booking;
-use FBM\Models\PassengerType;
-use FBM\Models\VehicleType;
-use FBM\Repositories\PassengerTypeRepository;
-use FBM\Repositories\VehicleTypeRepository;
+use MPFBS\Models\Booking;
+use MPFBS\Models\PassengerType;
+use MPFBS\Models\VehicleType;
+use MPFBS\Repositories\PassengerTypeRepository;
+use MPFBS\Repositories\VehicleTypeRepository;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -24,8 +24,8 @@ defined( 'ABSPATH' ) || exit;
  * whatever detail fields the operator asked for. That is the right thing to
  * store and the wrong thing to show — nobody can check a passport against
  * `{"type_id":6,"details":{"document_number":"…"}}`. This resolves the type
- * names and the field labels once, so the dashboard, the manifest and the
- * ticket all describe a traveller the same way.
+ * names and the field labels once, so the dashboard, the emails and the
+ * customer's booking page all describe a traveller the same way.
  *
  * Only fields the operator has actually turned on are returned. A detail left
  * over from a form field that was later switched off is dropped rather than

@@ -7,7 +7,7 @@
 
 declare( strict_types=1 );
 
-namespace FBM\Core;
+namespace MPFBS\Core;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -35,7 +35,7 @@ final class Autoloader {
 	/**
 	 * Registers a namespace prefix with the autoloader.
 	 *
-	 * @param string $prefix   Namespace prefix, e.g. "FBM\".
+	 * @param string $prefix   Namespace prefix, e.g. "MPFBS\".
 	 * @param string $base_dir Absolute directory that maps to the prefix.
 	 * @return void
 	 */

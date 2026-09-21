@@ -2,8 +2,7 @@
  * Dashboard navigation.
  *
  * Sticky on desktop, collapsible below the tablet breakpoint. Destinations the
- * signed-in user cannot reach are not rendered at all, and neither are the Pro
- * screens when Pro is not installed.
+ * signed-in user cannot reach are not rendered at all.
  *
  * Grouped into sections because eighteen destinations in one column is a list
  * nobody reads to the bottom. Grouping hides nothing: every destination keeps
@@ -14,10 +13,10 @@
 import { useCallback, useState, type JSX } from 'react';
 
 import { Icon } from './Icon';
-import { fbmCan, fbmConfig } from '../lib/config';
-import { fbmFormat, fbmText } from '../lib/i18n';
-import { FBM_ROUTES, FBM_ROUTE_GROUPS, type FbmRoute, type FbmRouteGroup } from '../lib/routes';
-import { fbmSetupBlocks, useFbmSetup } from '../lib/setup';
+import { mpfbsCan } from '../lib/config';
+import { mpfbsFormat, mpfbsText } from '../lib/i18n';
+import { MPFBS_ROUTES, MPFBS_ROUTE_GROUPS, type MpfbsRoute, type MpfbsRouteGroup } from '../lib/routes';
+import { useMpfbsSetup } from '../lib/setup';
 
 export interface SidebarProps {
 	activeRouteId: string | null;
@@ -25,7 +24,7 @@ export interface SidebarProps {
 	onNavigate: () => void;
 }
 
-const COLLAPSED_KEY = 'fbm.sidebar.collapsed.v1';
+const COLLAPSED_KEY = 'mpfbs.sidebar.collapsed.v1';
 
 /**
  * Reads which sections the operator last had shut.
@@ -33,11 +32,11 @@ const COLLAPSED_KEY = 'fbm.sidebar.collapsed.v1';
  * A convenience, not state the dashboard depends on: a private window or
  * blocked site data simply means every section starts open.
  */
-function readCollapsed(): FbmRouteGroup[] {
+function readCollapsed(): MpfbsRouteGroup[] {
 	try {
 		const raw = window.localStorage.getItem( COLLAPSED_KEY );
 
-		return raw ? ( JSON.parse( raw ) as FbmRouteGroup[] ) : [];
+		return raw ? ( JSON.parse( raw ) as MpfbsRouteGroup[] ) : [];
 	} catch {
 		return [];
 	}
@@ -47,21 +46,15 @@ function readCollapsed(): FbmRouteGroup[] {
  * Renders the persistent left navigation.
  */
 export function Sidebar( { activeRouteId, open, onNavigate }: SidebarProps ): JSX.Element {
-	const [ collapsed, setCollapsed ] = useState< FbmRouteGroup[] >( readCollapsed );
-	const { setup } = useFbmSetup();
-	const canManage = fbmCan( 'fbm_manage_settings' );
+	const [ collapsed, setCollapsed ] = useState< MpfbsRouteGroup[] >( readCollapsed );
+	const { setup } = useMpfbsSetup();
 
-	/*
-	 * A destination the installation cannot reach is not listed. Without Pro
-	 * installed its screens do not exist, so advertising them here would leave
-	 * an operator clicking through navigation into a page that only says no.
-	 */
-	const proActive = fbmConfig().proActive;
-	const visible: FbmRoute[] = FBM_ROUTES.filter(
-		( route ) => fbmCan( route.capability ) && ( proActive || ! route.pro ) && ! route.hidden
+	// A destination the signed-in user cannot reach is not listed.
+	const visible: MpfbsRoute[] = MPFBS_ROUTES.filter(
+		( route ) => mpfbsCan( route.capability ) && ! route.hidden
 	);
 
-	const toggle = useCallback( ( group: FbmRouteGroup ) => {
+	const toggle = useCallback( ( group: MpfbsRouteGroup ) => {
 		setCollapsed( ( current ) => {
 			const next = current.includes( group ) ? current.filter( ( id ) => id !== group ) : [ ...current, group ];
 
@@ -75,75 +68,66 @@ export function Sidebar( { activeRouteId, open, onNavigate }: SidebarProps ): JS
 		} );
 	}, [] );
 
-	const link = ( route: FbmRoute ): JSX.Element => {
+	const link = ( route: MpfbsRoute ): JSX.Element => {
 		const isActive = route.id === activeRouteId;
-		// Still a link: following it lands on the setup steps, which is the
-		// answer to "why can't I open this".
-		const locked = fbmSetupBlocks( setup, route.id, canManage );
 
 		return (
-			<li key={ route.id } className="fbm-sidebar__item">
+			<li key={ route.id } className="mpfbs-sidebar__item">
 				<a
-					className={ `fbm-sidebar__link${ isActive ? ' is-active' : '' }${ locked ? ' is-locked' : '' }` }
+					className={ `mpfbs-sidebar__link${ isActive ? ' is-active' : '' }` }
 					href={ `#${ route.path }` }
 					aria-current={ isActive ? 'page' : undefined }
 					onClick={ onNavigate }
 				>
 					<Icon name={ route.icon } size={ 18 } />
-					<span className="fbm-sidebar__label">{ fbmText( route.label ) }</span>
-					{ locked ? (
-						<span className="fbm-sidebar__lock" title={ fbmText( 'Opens when setup is finished' ) }>
-							<Icon name="lock" size={ 14 } />
-						</span>
-					) : null }
+					<span className="mpfbs-sidebar__label">{ mpfbsText( route.label ) }</span>
 				</a>
 			</li>
 		);
 	};
 
-	const start = FBM_ROUTES.find( ( route ) => route.id === 'get-started' );
+	const start = MPFBS_ROUTES.find( ( route ) => route.id === 'get-started' );
 	const showStart = start !== undefined && setup !== null && ! setup.completed;
 
 	const pinned = visible.filter( ( route ) => ! route.group );
 
 	return (
 		<nav
-			id="fbm-sidebar"
-			className={ `fbm-sidebar${ open ? ' fbm-sidebar--open' : '' }` }
-			aria-label={ fbmText( 'Ferry Manager' ) }
+			id="mpfbs-sidebar"
+			className={ `mpfbs-sidebar${ open ? ' mpfbs-sidebar--open' : '' }` }
+			aria-label={ mpfbsText( 'Ferry Manager' ) }
 		>
-			<div className="fbm-sidebar__brand">
-				<span className="fbm-sidebar__mark" aria-hidden="true">
+			<div className="mpfbs-sidebar__brand">
+				<span className="mpfbs-sidebar__mark" aria-hidden="true">
 					<Icon name="ship" size={ 20 } />
 				</span>
-				<span className="fbm-sidebar__name">Ferry Manager</span>
+				<span className="mpfbs-sidebar__name">Ferry Manager</span>
 			</div>
 
 			{ showStart && start ? (
-				<ul className="fbm-sidebar__list">
-					<li className="fbm-sidebar__item">
+				<ul className="mpfbs-sidebar__list">
+					<li className="mpfbs-sidebar__item">
 						<a
-							className={ `fbm-sidebar__link fbm-sidebar__link--start${ activeRouteId === start.id ? ' is-active' : '' }` }
+							className={ `mpfbs-sidebar__link mpfbs-sidebar__link--start${ activeRouteId === start.id ? ' is-active' : '' }` }
 							href={ `#${ start.path }` }
 							aria-current={ activeRouteId === start.id ? 'page' : undefined }
 							onClick={ onNavigate }
 						>
 							<Icon name={ start.icon } size={ 18 } />
-							<span className="fbm-sidebar__label">{ fbmText( start.label ) }</span>
-							<span className="fbm-sidebar__badge">{ fbmFormat( '%1$s of %2$s', String( setup.done ), '3' ) }</span>
+							<span className="mpfbs-sidebar__label">{ mpfbsText( start.label ) }</span>
+							<span className="mpfbs-sidebar__badge">{ mpfbsFormat( '%1$s of %2$s', String( setup.done ), '3' ) }</span>
 						</a>
 					</li>
 				</ul>
 			) : null }
 
-			{ pinned.length > 0 ? <ul className="fbm-sidebar__list">{ pinned.map( link ) }</ul> : null }
+			{ pinned.length > 0 ? <ul className="mpfbs-sidebar__list">{ pinned.map( link ) }</ul> : null }
 
-			{ FBM_ROUTE_GROUPS.map( ( group ) => {
+			{ MPFBS_ROUTE_GROUPS.map( ( group ) => {
 				const routes = visible.filter( ( route ) => route.group === group.id );
 
-				// A section whose every destination is gated away — Pro screens
-				// on a Free install, or a role without the capability — is not
-				// drawn as an empty heading.
+				// A section whose every destination is gated away by a missing
+				// capability is not drawn as an empty heading.
 				if ( routes.length === 0 ) {
 					return null;
 				}
@@ -153,20 +137,20 @@ export function Sidebar( { activeRouteId, open, onNavigate }: SidebarProps ): JS
 				const shut = collapsed.includes( group.id ) && ! holdsActive;
 
 				return (
-					<section className="fbm-sidebar__group" key={ group.id }>
-						<h2 className="fbm-sidebar__grouphead">
+					<section className="mpfbs-sidebar__group" key={ group.id }>
+						<h2 className="mpfbs-sidebar__grouphead">
 							<button
 								type="button"
-								className="fbm-sidebar__grouptoggle"
+								className="mpfbs-sidebar__grouptoggle"
 								aria-expanded={ ! shut }
-								aria-controls={ `fbm-sidebar-${ group.id }` }
+								aria-controls={ `mpfbs-sidebar-${ group.id }` }
 								onClick={ () => toggle( group.id ) }
 							>
-								<span>{ fbmText( group.label ) }</span>
+								<span>{ mpfbsText( group.label ) }</span>
 								<Icon name="chevron" size={ 14 } />
 							</button>
 						</h2>
-						<ul className="fbm-sidebar__list" id={ `fbm-sidebar-${ group.id }` } hidden={ shut }>
+						<ul className="mpfbs-sidebar__list" id={ `mpfbs-sidebar-${ group.id }` } hidden={ shut }>
 							{ routes.map( link ) }
 						</ul>
 					</section>

@@ -8,11 +8,10 @@
 
 import { useCallback, useEffect, useState } from 'react';
 
-import { fbmRequest } from './api';
+import { mpfbsRequest } from './api';
 
-export interface FbmSetupStatus {
+export interface MpfbsSetupStatus {
 	completed: boolean;
-	locked: boolean;
 	business: boolean;
 	crossing: {
 		ports: number;
@@ -37,10 +36,10 @@ export interface FbmSetupStatus {
 	};
 }
 
-type Listener = ( status: FbmSetupStatus ) => void;
+type Listener = ( status: MpfbsSetupStatus ) => void;
 
-let cached: FbmSetupStatus | null = null;
-let inflight: Promise< FbmSetupStatus > | null = null;
+let cached: MpfbsSetupStatus | null = null;
+let inflight: Promise< MpfbsSetupStatus > | null = null;
 const listeners = new Set< Listener >();
 
 /**
@@ -49,7 +48,7 @@ const listeners = new Set< Listener >();
  * Called with the body of any setup write, so the lock lifts the moment the
  * server says it may without another round trip.
  */
-export function fbmSetSetupStatus( status: FbmSetupStatus ): void {
+export function mpfbsSetSetupStatus( status: MpfbsSetupStatus ): void {
 	cached = status;
 	listeners.forEach( ( listener ) => listener( status ) );
 }
@@ -57,15 +56,15 @@ export function fbmSetSetupStatus( status: FbmSetupStatus ): void {
 /**
  * Fetches the status, reusing an in-flight or completed request.
  */
-export function fbmFetchSetup( force = false ): Promise< FbmSetupStatus > {
+export function mpfbsFetchSetup( force = false ): Promise< MpfbsSetupStatus > {
 	if ( cached && ! force ) {
 		return Promise.resolve( cached );
 	}
 
 	if ( ! inflight || force ) {
-		inflight = fbmRequest< FbmSetupStatus >( 'setup' )
+		inflight = mpfbsRequest< MpfbsSetupStatus >( 'setup' )
 			.then( ( result ) => {
-				fbmSetSetupStatus( result.data );
+				mpfbsSetSetupStatus( result.data );
 
 				return result.data;
 			} )
@@ -78,7 +77,7 @@ export function fbmFetchSetup( force = false ): Promise< FbmSetupStatus > {
 }
 
 export interface UseSetupResult {
-	setup: FbmSetupStatus | null;
+	setup: MpfbsSetupStatus | null;
 	/** True when the status could not be read. The dashboard then stays open. */
 	failed: boolean;
 	reload: () => void;
@@ -87,8 +86,8 @@ export interface UseSetupResult {
 /**
  * Subscribes a component to the setup status.
  */
-export function useFbmSetup(): UseSetupResult {
-	const [ setup, setSetup ] = useState< FbmSetupStatus | null >( cached );
+export function useMpfbsSetup(): UseSetupResult {
+	const [ setup, setSetup ] = useState< MpfbsSetupStatus | null >( cached );
 	const [ failed, setFailed ] = useState( false );
 
 	useEffect( () => {
@@ -101,10 +100,9 @@ export function useFbmSetup(): UseSetupResult {
 
 		listeners.add( listener );
 
-		fbmFetchSetup().catch( () => {
-			// A dashboard that cannot read its setup state is not locked: the
-			// lock protects operators from empty screens, and an outage is not
-			// a reason to take their bookings away from them.
+		mpfbsFetchSetup().catch( () => {
+			// A dashboard that cannot read its setup state simply does not
+			// show setup progress.
 			if ( active ) {
 				setFailed( true );
 			}
@@ -117,28 +115,8 @@ export function useFbmSetup(): UseSetupResult {
 	}, [] );
 
 	const reload = useCallback( () => {
-		fbmFetchSetup( true ).catch( () => undefined );
+		mpfbsFetchSetup( true ).catch( () => undefined );
 	}, [] );
 
 	return { setup, failed, reload };
-}
-
-/**
- * Destinations a manager can still reach while setup is unfinished.
- *
- * The screens setup itself sends people to: the catalogue the wizard builds,
- * the passenger and vehicle types it prices, and the payment and page settings
- * the last step checks. Everything else waits until there is something to sell.
- */
-export const FBM_SETUP_OPEN_ROUTES = [ 'get-started', 'setup', 'settings', 'passengers', 'vehicles', 'payments' ];
-
-/**
- * Whether a destination is out of reach while setup is unfinished.
- */
-export function fbmSetupBlocks( setup: FbmSetupStatus | null, routeId: string, canManage: boolean ): boolean {
-	if ( ! setup || ! setup.locked ) {
-		return false;
-	}
-
-	return ! ( canManage && FBM_SETUP_OPEN_ROUTES.includes( routeId ) );
 }

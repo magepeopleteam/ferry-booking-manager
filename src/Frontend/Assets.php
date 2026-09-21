@@ -7,10 +7,10 @@
 
 declare( strict_types=1 );
 
-namespace FBM\Frontend;
+namespace MPFBS\Frontend;
 
-use FBM\Booking\FieldConfig;
-use FBM\Settings\Settings;
+use MPFBS\Booking\FieldConfig;
+use MPFBS\Settings\Settings;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -28,12 +28,12 @@ final class Assets {
 	/**
 	 * Script handle.
 	 */
-	public const SCRIPT = 'fbm-booking';
+	public const SCRIPT = 'mpfbs-booking';
 
 	/**
 	 * Style handle.
 	 */
-	public const STYLE = 'fbm-booking';
+	public const STYLE = 'mpfbs-booking';
 
 	/**
 	 * Components rendered on this request.
@@ -80,14 +80,14 @@ final class Assets {
 
 		wp_register_style(
 			self::STYLE,
-			FBM_URL . 'assets/frontend/' . $manifest['css'],
+			MPFBS_URL . 'assets/frontend/' . $manifest['css'],
 			array(),
 			null // phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion -- The filename carries a content hash, so a version query would only defeat caching.
 		);
 
 		wp_register_script(
 			self::SCRIPT,
-			FBM_URL . 'assets/frontend/' . $manifest['js'],
+			MPFBS_URL . 'assets/frontend/' . $manifest['js'],
 			array(),
 			null, // phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion -- Content-hashed filename.
 			array(
@@ -129,7 +129,7 @@ final class Assets {
 
 		wp_add_inline_script(
 			self::SCRIPT,
-			'window.fbmBooking = ' . wp_json_encode( $this->config() ) . ';',
+			'window.mpfbsBooking = ' . wp_json_encode( $this->config() ) . ';',
 			'before'
 		);
 	}
@@ -164,7 +164,7 @@ final class Assets {
 		wp_add_inline_style(
 			self::STYLE,
 			sprintf(
-				'.fbm-frontend{--fbmb-accent:%1$s;--fbmb-accent-hover:color-mix(in srgb,%1$s 82%%,#000);--fbmb-accent-soft:color-mix(in srgb,%1$s 12%%,#fff);}',
+				'.mpfbs-frontend{--mpfbsb-accent:%1$s;--mpfbsb-accent-hover:color-mix(in srgb,%1$s 82%%,#000);--mpfbsb-accent-soft:color-mix(in srgb,%1$s 12%%,#fff);}',
 				$accent
 			)
 		);
@@ -202,7 +202,7 @@ final class Assets {
 			return $manifest;
 		}
 
-		$path = FBM_PATH . 'assets/frontend/manifest.json';
+		$path = MPFBS_PATH . 'assets/frontend/manifest.json';
 
 		if ( ! is_readable( $path ) ) {
 			$manifest = array();
@@ -239,7 +239,7 @@ final class Assets {
 		$settings = Settings::all();
 
 		$config = array(
-			'restUrl'     => wp_make_link_relative( rest_url( 'fbm/v1/' ) ),
+			'restUrl'     => wp_make_link_relative( rest_url( 'mpfbs/v1/' ) ),
 			'restNonce'   => wp_create_nonce( 'wp_rest' ),
 			'homeUrl'     => esc_url_raw( home_url( '/' ) ),
 			'locale'      => str_replace( '_', '-', get_user_locale() ),
@@ -267,7 +267,7 @@ final class Assets {
 		 *
 		 * @param array<string, mixed> $config Runtime configuration.
 		 */
-		return (array) apply_filters( 'fbm_frontend_config', $config );
+		return (array) apply_filters( 'mpfbs_frontend_config', $config );
 	}
 
 	/**
@@ -389,7 +389,7 @@ final class Assets {
 			'Vehicle details'                              => __( 'Vehicle details', 'magepeople-ferry-booking-system' ),
 			'Vehicles carried'                             => __( 'Vehicles carried', 'magepeople-ferry-booking-system' ),
 			'We have emailed your confirmation. Please bring your reference to check-in.' => __( 'We have emailed your confirmation. Please bring your reference to check-in.', 'magepeople-ferry-booking-system' ),
-			'We send your tickets and any schedule changes to this address.' => __( 'We send your tickets and any schedule changes to this address.', 'magepeople-ferry-booking-system' ),
+			'We send your booking confirmation and any schedule changes to this address.' => __( 'We send your booking confirmation and any schedule changes to this address.', 'magepeople-ferry-booking-system' ),
 			'Your booking is confirmed'                    => __( 'Your booking is confirmed', 'magepeople-ferry-booking-system' ),
 			'Your crossing'                                => __( 'Your crossing', 'magepeople-ferry-booking-system' ),
 			'Your details'                                 => __( 'Your details', 'magepeople-ferry-booking-system' ),
@@ -431,7 +431,6 @@ final class Assets {
 			'Search your bookings'                         => __( 'Search your bookings', 'magepeople-ferry-booking-system' ),
 			/* translators: 1: value 1, 2: value 2, 3: value 3. */
 			'Showing %1$s–%2$s of %3$s'                    => __( 'Showing %1$s–%2$s of %3$s', 'magepeople-ferry-booking-system' ),
-			'Ticket'                                       => __( 'Ticket', 'magepeople-ferry-booking-system' ),
 			'Try a different reference, route or port, or clear the filters.' => __( 'Try a different reference, route or port, or clear the filters.', 'magepeople-ferry-booking-system' ),
 			'Upcoming'                                     => __( 'Upcoming', 'magepeople-ferry-booking-system' ),
 			'Which bookings'                               => __( 'Which bookings', 'magepeople-ferry-booking-system' ),
@@ -445,7 +444,7 @@ final class Assets {
 		 *
 		 * @param array<string, string> $strings Source string => translation.
 		 */
-		return (array) apply_filters( 'fbm_frontend_translations', $strings );
+		return (array) apply_filters( 'mpfbs_frontend_translations', $strings );
 	}
 
 	/**

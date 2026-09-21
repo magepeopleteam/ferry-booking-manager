@@ -7,9 +7,9 @@
 
 declare( strict_types=1 );
 
-namespace FBM\Models;
+namespace MPFBS\Models;
 
-use FBM\Support\Schema\EntitySchema;
+use MPFBS\Support\Schema\EntitySchema;
 use WP_Post;
 
 defined( 'ABSPATH' ) || exit;
@@ -225,7 +225,7 @@ abstract class Entity {
 		 * @param array<string, mixed> $payload Serialised entity.
 		 * @param Entity               $entity  Entity instance.
 		 */
-		return (array) apply_filters( 'fbm_serialize_' . static::key(), $payload, $this );
+		return (array) apply_filters( 'mpfbs_serialize_' . static::key(), $payload, $this );
 	}
 
 	/**

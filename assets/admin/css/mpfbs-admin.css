@@ -21,42 +21,42 @@
  * The way back is the button in the dashboard header, which is the only exit,
  * so it is never removed.
  */
-.fbm-admin-screen {
+.mpfbs-admin-screen {
 	margin-top: -32px;
 	height: calc( 100% + 32px );
 }
 
-.fbm-admin-screen #wpadminbar,
-.fbm-admin-screen #adminmenumain {
+.mpfbs-admin-screen #wpadminbar,
+.mpfbs-admin-screen #adminmenumain {
 	display: none;
 }
 
-.fbm-admin-screen #wpcontent,
-.fbm-admin-screen #wpfooter {
+.mpfbs-admin-screen #wpcontent,
+.mpfbs-admin-screen #wpfooter {
 	margin-left: 0;
 }
 
-.fbm-admin-screen #wpcontent {
+.mpfbs-admin-screen #wpcontent {
 	padding-left: 0;
 }
 
-.fbm-admin-screen #wpbody-content {
+.mpfbs-admin-screen #wpbody-content {
 	padding-bottom: 0;
 	float: none;
 }
 
-.fbm-admin-screen #wpfooter {
+.mpfbs-admin-screen #wpfooter {
 	display: none;
 }
 
-.fbm-admin-screen .update-nag,
-.fbm-admin-screen .notice,
-.fbm-admin-screen div.error,
-.fbm-admin-screen div.updated {
+.mpfbs-admin-screen .update-nag,
+.mpfbs-admin-screen .notice,
+.mpfbs-admin-screen div.error,
+.mpfbs-admin-screen div.updated {
 	margin: 12px 20px 0;
 }
 
-.fbm-admin-wrap {
+.mpfbs-admin-wrap {
 	margin: 0;
 	padding: 0;
 }
@@ -66,7 +66,7 @@
 	min-height: 200px;
 }
 
-.fbm-boot-error {
+.mpfbs-boot-error {
 	margin: 24px;
 	padding: 20px 24px;
 	border-left: 4px solid #b32d2e;
@@ -74,23 +74,23 @@
 	box-shadow: 0 1px 2px rgba( 0, 0, 0, 0.08 );
 }
 
-.fbm-boot-error__title {
+.mpfbs-boot-error__title {
 	margin: 0 0 8px;
 	font-size: 15px;
 }
 
-.fbm-boot-error__text {
+.mpfbs-boot-error__text {
 	margin: 0;
 	color: #50575e;
 }
 
 @media screen and (max-width: 782px) {
-	.fbm-admin-screen .notice {
+	.mpfbs-admin-screen .notice {
 		margin: 12px 12px 0;
 	}
 
 	/* The admin bar is taller here, so there is more padding to cancel. */
-	.fbm-admin-screen {
+	.mpfbs-admin-screen {
 		margin-top: -46px;
 		height: calc( 100% + 46px );
 	}
@@ -103,12 +103,12 @@
  * screen — so the offset is removed where it actually is.
  */
 @media screen and (max-width: 600px) {
-	.fbm-admin-screen {
+	.mpfbs-admin-screen {
 		margin-top: 0;
 		height: auto;
 	}
 
-	.fbm-admin-screen #wpbody {
+	.mpfbs-admin-screen #wpbody {
 		padding-top: 0;
 	}
 }

@@ -2,12 +2,10 @@
 #
 # Builds a clean, installable production zip of the plugin.
 #
-# The working tree also contains the Node.js source projects used to produce
-# the pre-built bundles in assets/ (apps/admin, apps/booking - node_modules,
-# .next cache, etc.) and dev-only Composer tooling (vendor/: phpunit, phpcs).
-# None of that is needed on a live site - WordPress only ever loads files
-# from assets/, src/, templates/, and languages/. This script copies just the
-# runtime files into a staging directory and zips that.
+# The bundles in assets/ are compiled from the Node.js projects in apps/admin
+# and apps/booking. Their source ships in the zip so the compiled code can be
+# studied and rebuilt, but their dependency trees and build caches do not.
+# Dev-only Composer tooling (vendor/: phpunit, phpcs) is left out too.
 #
 # Usage: ./build-zip.sh [output-dir]
 
@@ -22,7 +20,12 @@ ZIP_PATH="${OUT_DIR}/${PLUGIN_SLUG}.zip"
 mkdir -p "${STAGE_DIR}"
 
 rsync -a "${PLUGIN_DIR}/" "${STAGE_DIR}/" \
-	--exclude 'apps/' \
+	--exclude 'apps/*/node_modules/' \
+	--exclude 'apps/*/.next/' \
+	--exclude 'apps/*/out/' \
+	--exclude 'apps/*/next-env.d.ts' \
+	--exclude '*.tsbuildinfo' \
+	--exclude 'assets/admin/app/_next/mpfbs/' \
 	--exclude 'vendor/' \
 	--exclude 'tests/' \
 	--exclude 'docs/' \

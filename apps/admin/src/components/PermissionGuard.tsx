@@ -8,8 +8,8 @@
 import type { JSX, ReactNode } from 'react';
 
 import { EmptyState } from './States';
-import { fbmCan } from '../lib/config';
-import { fbmText } from '../lib/i18n';
+import { mpfbsCan } from '../lib/config';
+import { mpfbsText } from '../lib/i18n';
 
 export interface PermissionGuardProps {
 	capability: string;
@@ -21,7 +21,7 @@ export interface PermissionGuardProps {
  * Renders children only when the capability is held.
  */
 export function PermissionGuard( { capability, children, fallback }: PermissionGuardProps ): JSX.Element {
-	if ( fbmCan( capability ) ) {
+	if ( mpfbsCan( capability ) ) {
 		return <>{ children }</>;
 	}
 
@@ -32,7 +32,7 @@ export function PermissionGuard( { capability, children, fallback }: PermissionG
 	return (
 		<EmptyState
 			icon="lock"
-			title={ fbmText( 'You do not have permission to view this section.' ) }
+			title={ mpfbsText( 'You do not have permission to view this section.' ) }
 		/>
 	);
 }

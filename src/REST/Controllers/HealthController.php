@@ -7,10 +7,10 @@
 
 declare( strict_types=1 );
 
-namespace FBM\REST\Controllers;
+namespace MPFBS\REST\Controllers;
 
-use FBM\REST\AbstractController;
-use FBM\Security\Capabilities;
+use MPFBS\REST\AbstractController;
+use MPFBS\Security\Capabilities;
 use WP_REST_Request;
 use WP_REST_Response;
 
@@ -62,26 +62,25 @@ final class HealthController extends AbstractController {
 
 		$payload = array(
 			'status'       => 'ok',
-			'version'      => FBM_VERSION,
+			'version'      => MPFBS_VERSION,
 			'php'          => PHP_VERSION,
 			'wp'           => get_bloginfo( 'version' ),
 			'timezone'     => wp_timezone_string(),
 			'locale'       => determine_locale(),
 			'is_rtl'       => is_rtl(),
 			'woocommerce'  => class_exists( 'WooCommerce' ),
-			'pro_active'   => (bool) apply_filters( 'fbm_pro_active', false ),
 			'capabilities' => $this->permissions->current_user_capabilities(),
 			'server_time'  => gmdate( 'c' ),
 		);
 
 		/**
-		 * Filters the payload returned by GET /fbm/v1/health.
+		 * Filters the payload returned by GET /mpfbs/v1/health.
 		 *
 		 * @since 1.0.0
 		 *
 		 * @param array<string, mixed> $payload Health payload.
 		 */
-		$payload = (array) apply_filters( 'fbm_rest_health_payload', $payload );
+		$payload = (array) apply_filters( 'mpfbs_rest_health_payload', $payload );
 
 		return $this->respond( $payload );
 	}
@@ -94,7 +93,7 @@ final class HealthController extends AbstractController {
 	public function get_public_item_schema(): array {
 		return array(
 			'$schema'    => 'http://json-schema.org/draft-04/schema#',
-			'title'      => 'fbm_health',
+			'title'      => 'mpfbs_health',
 			'type'       => 'object',
 			'properties' => array(
 				'status'       => array(
@@ -128,10 +127,6 @@ final class HealthController extends AbstractController {
 					'readonly' => true,
 				),
 				'woocommerce'  => array(
-					'type'     => 'boolean',
-					'readonly' => true,
-				),
-				'pro_active'   => array(
 					'type'     => 'boolean',
 					'readonly' => true,
 				),

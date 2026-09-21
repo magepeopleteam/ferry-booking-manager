@@ -19,9 +19,9 @@ export default defineConfig( {
 		rollupOptions: {
 			input: 'src/main.tsx',
 			output: {
-				entryFileNames: 'fbm-booking.[hash].js',
-				chunkFileNames: 'fbm-booking.[hash].chunk.js',
-				assetFileNames: 'fbm-booking.[hash][extname]',
+				entryFileNames: 'mpfbs-booking.[hash].js',
+				chunkFileNames: 'mpfbs-booking.[hash].chunk.js',
+				assetFileNames: 'mpfbs-booking.[hash][extname]',
 			},
 		},
 	},

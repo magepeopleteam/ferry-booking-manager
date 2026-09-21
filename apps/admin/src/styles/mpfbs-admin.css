@@ -1,0 +1,3727 @@
+/**
+ * MagePeople Ferry Booking System - dashboard design system.
+ *
+ * Every selector carries the `mpfbs-` prefix and every rule is scoped inside the
+ * application root, so wp-admin cannot restyle the dashboard and the dashboard
+ * cannot leak into wp-admin. Layout uses logical properties throughout so the
+ * RTL admin works without a mirrored stylesheet.
+ */
+
+.mpfbs-app {
+	--mpfbs-bg: #f5f6fa;
+	--mpfbs-surface: #ffffff;
+	--mpfbs-surface-muted: #fafbfd;
+	--mpfbs-border: #e2e5ef;
+	--mpfbs-border-strong: #ccd2e0;
+	--mpfbs-text: #1b2333;
+	--mpfbs-text-muted: #5c6580;
+	--mpfbs-text-faint: #8a93a8;
+	--mpfbs-primary: #0b62c4;
+	--mpfbs-primary-hover: #094f9f;
+	--mpfbs-primary-soft: #e8f1fc;
+	--mpfbs-positive: #0f8a5f;
+	--mpfbs-positive-soft: #e6f5ef;
+	--mpfbs-warning: #b26a00;
+	--mpfbs-warning-soft: #fdf3e3;
+	--mpfbs-danger: #c2372f;
+	--mpfbs-danger-soft: #fcecea;
+	--mpfbs-sidebar-bg: #10233d;
+	--mpfbs-sidebar-text: #c3cddd;
+	--mpfbs-sidebar-active: #ffffff;
+	--mpfbs-sidebar-width: 248px;
+	--mpfbs-header-height: 60px;
+
+	/*
+	 * Height of the WordPress admin bar above the application. The dashboard
+	 * hides the bar and takes the whole canvas, so it is zero; it stays a token
+	 * because five sticky offsets depend on it and they must agree.
+	 */
+	--mpfbs-admin-bar: 0px;
+	--mpfbs-radius-sm: 6px;
+	--mpfbs-radius: 10px;
+	--mpfbs-radius-lg: 14px;
+	--mpfbs-shadow-sm: 0 1px 2px rgba( 16, 35, 61, 0.06 );
+	--mpfbs-shadow: 0 4px 16px rgba( 16, 35, 61, 0.08 );
+	--mpfbs-shadow-lg: 0 18px 48px rgba( 16, 35, 61, 0.18 );
+	--mpfbs-space-1: 4px;
+	--mpfbs-space-2: 8px;
+	--mpfbs-space-3: 12px;
+	--mpfbs-space-4: 16px;
+	--mpfbs-space-5: 24px;
+	--mpfbs-space-6: 32px;
+	--mpfbs-font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+
+	display: flex;
+	position: relative;
+	min-height: calc( 100vh - var( --mpfbs-admin-bar ) );
+	background: var( --mpfbs-bg );
+	color: var( --mpfbs-text );
+	font-family: var( --mpfbs-font );
+	font-size: 14px;
+	line-height: 1.5;
+	box-sizing: border-box;
+}
+
+.mpfbs-app *,
+.mpfbs-app *::before,
+.mpfbs-app *::after {
+	box-sizing: border-box;
+}
+
+/* Neutralise wp-admin form styling inside the dashboard. */
+.mpfbs-app button,
+.mpfbs-app input,
+.mpfbs-app select,
+.mpfbs-app textarea {
+	font: inherit;
+	color: inherit;
+	margin: 0;
+	border-radius: var( --mpfbs-radius-sm );
+	box-shadow: none;
+	min-height: 0;
+}
+
+.mpfbs-app button {
+	cursor: pointer;
+	background: none;
+	border: 0;
+	padding: 0;
+}
+
+.mpfbs-app a {
+	color: var( --mpfbs-primary );
+	text-decoration: none;
+}
+
+.mpfbs-app a:hover {
+	color: var( --mpfbs-primary-hover );
+}
+
+.mpfbs-app h1,
+.mpfbs-app h2,
+.mpfbs-app h3,
+.mpfbs-app p,
+.mpfbs-app ul,
+.mpfbs-app ol {
+	margin: 0;
+	padding: 0;
+}
+
+.mpfbs-app ul,
+.mpfbs-app ol {
+	list-style: none;
+}
+
+.mpfbs-app :focus-visible {
+	outline: 2px solid var( --mpfbs-primary );
+	outline-offset: 2px;
+	border-radius: var( --mpfbs-radius-sm );
+}
+
+.mpfbs-app .mpfbs-screen-reader-text {
+	position: absolute !important;
+	width: 1px;
+	height: 1px;
+	padding: 0;
+	margin: -1px;
+	overflow: hidden;
+	clip: rect( 0, 0, 0, 0 );
+	white-space: nowrap;
+	border: 0;
+}
+
+.mpfbs-app .mpfbs-skip-link {
+	position: absolute;
+	inset-block-start: -60px;
+	inset-inline-start: var( --mpfbs-space-4 );
+	z-index: 40;
+	padding: var( --mpfbs-space-2 ) var( --mpfbs-space-4 );
+	background: var( --mpfbs-surface );
+	border-radius: var( --mpfbs-radius-sm );
+	box-shadow: var( --mpfbs-shadow );
+	transition: inset-block-start 0.15s ease;
+}
+
+.mpfbs-app .mpfbs-skip-link:focus {
+	inset-block-start: var( --mpfbs-space-4 );
+}
+
+/* ---------------------------------------------------------------- Sidebar */
+
+.mpfbs-app .mpfbs-sidebar {
+	position: sticky;
+	inset-block-start: var( --mpfbs-admin-bar );
+	align-self: flex-start;
+	flex: 0 0 var( --mpfbs-sidebar-width );
+	width: var( --mpfbs-sidebar-width );
+	max-height: calc( 100vh - var( --mpfbs-admin-bar ) );
+	overflow-y: auto;
+	padding: var( --mpfbs-space-4 ) var( --mpfbs-space-3 ) var( --mpfbs-space-6 );
+	background: var( --mpfbs-sidebar-bg );
+	color: var( --mpfbs-sidebar-text );
+}
+
+.mpfbs-app .mpfbs-sidebar__brand {
+	display: flex;
+	align-items: center;
+	gap: var( --mpfbs-space-3 );
+	padding: var( --mpfbs-space-2 ) var( --mpfbs-space-3 ) var( --mpfbs-space-5 );
+	color: var( --mpfbs-sidebar-active );
+	font-size: 15px;
+	font-weight: 600;
+	letter-spacing: 0.01em;
+}
+
+.mpfbs-app .mpfbs-sidebar__mark {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 32px;
+	height: 32px;
+	border-radius: var( --mpfbs-radius-sm );
+	background: rgba( 255, 255, 255, 0.1 );
+}
+
+/* -------------------------------------------------------------- Listbox */
+
+/*
+ * Replaces every native <select> in the dashboard. The wrapper is the
+ * positioning context for the panel; the control keeps .mpfbs-input so it stays
+ * identical in size and colour to the text fields beside it.
+ */
+.mpfbs-app .mpfbs-listbox {
+	position: relative;
+	display: block;
+}
+
+/* Raised only while open, so the panel clears a sticky save bar or table head. */
+.mpfbs-app .mpfbs-listbox.is-open {
+	z-index: 40;
+}
+
+.mpfbs-app .mpfbs-listbox--compact {
+	display: inline-block;
+}
+
+.mpfbs-app .mpfbs-listbox__control {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: var( --mpfbs-space-2 );
+	text-align: start;
+	font-family: inherit;
+	cursor: pointer;
+}
+
+.mpfbs-app .mpfbs-listbox--compact .mpfbs-listbox__control {
+	width: auto;
+	padding: 4px 8px;
+}
+
+.mpfbs-app .mpfbs-listbox__control[disabled] {
+	cursor: not-allowed;
+	opacity: 0.6;
+}
+
+.mpfbs-app .mpfbs-listbox__control svg {
+	flex: 0 0 auto;
+	color: var( --mpfbs-text-muted );
+	transition: transform 0.15s ease;
+}
+
+.mpfbs-app .mpfbs-listbox.is-open .mpfbs-listbox__control svg {
+	transform: rotate( 180deg );
+}
+
+.mpfbs-app .mpfbs-listbox__value {
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}
+
+.mpfbs-app .mpfbs-listbox__value.is-placeholder {
+	color: var( --mpfbs-text-muted );
+}
+
+/*
+ * Never narrower than its control, and free to grow past it: a sailing reads
+ * "06:30 · Battery Park → St. George · MV Staten Islander" and a filter-bar
+ * control is nowhere near that wide.
+ */
+.mpfbs-app .mpfbs-listbox__panel {
+	/*
+	 * Fixed and portalled to the application root, because panels, tables and
+	 * the drawer all clip their own overflow and an absolutely-positioned list
+	 * inside one is cut off at the card's edge. Its position, width and height
+	 * are set inline from the control's measured rect.
+	 */
+	position: fixed;
+	z-index: 100;
+	inline-size: max-content;
+	max-inline-size: min( 34rem, 90vw );
+	overflow-y: auto;
+	overscroll-behavior: contain;
+	padding: 4px;
+	background: var( --mpfbs-surface );
+	border: 1px solid var( --mpfbs-border-strong );
+	border-radius: var( --mpfbs-radius-sm );
+	box-shadow: var( --mpfbs-shadow-lg );
+}
+
+.mpfbs-app .mpfbs-listbox__option {
+	padding: 6px 8px;
+	border-radius: calc( var( --mpfbs-radius-sm ) - 2px );
+	color: var( --mpfbs-text );
+	font-size: 14px;
+	line-height: 1.4;
+	white-space: nowrap;
+	cursor: pointer;
+}
+
+.mpfbs-app .mpfbs-listbox__option.is-selected {
+	font-weight: 600;
+}
+
+.mpfbs-app .mpfbs-listbox__option.is-active {
+	background: var( --mpfbs-primary );
+	color: #ffffff;
+}
+
+.mpfbs-app .mpfbs-listbox__option.is-disabled {
+	color: var( --mpfbs-text-muted );
+	cursor: not-allowed;
+}
+
+.mpfbs-app .mpfbs-listbox__empty {
+	margin: 0;
+	padding: 6px 8px;
+	color: var( --mpfbs-text-muted );
+	font-size: 13px;
+}
+
+@media ( prefers-reduced-motion: reduce ) {
+	.mpfbs-app .mpfbs-listbox__control svg {
+		transition: none;
+	}
+}
+
+/* ----------------------------------------------------------- Setup panel */
+
+.mpfbs-app .mpfbs-setup {
+	padding: var( --mpfbs-space-5 );
+}
+
+.mpfbs-app .mpfbs-setup .mpfbs-panel__title {
+	margin: 0 0 var( --mpfbs-space-2 );
+}
+
+.mpfbs-app .mpfbs-setup .mpfbs-panel__description {
+	margin: 0 0 var( --mpfbs-space-4 );
+	max-inline-size: 62ch;
+}
+
+.mpfbs-app .mpfbs-setup__list {
+	list-style: none;
+	margin: 0 0 var( --mpfbs-space-4 );
+	padding: 0;
+	display: flex;
+	flex-wrap: wrap;
+	gap: var( --mpfbs-space-2 );
+}
+
+.mpfbs-app .mpfbs-setup__list li {
+	padding: 4px 10px;
+	border-radius: 999px;
+	background: var( --mpfbs-danger-soft );
+	border: 1px solid var( --mpfbs-danger );
+	color: var( --mpfbs-danger );
+	font-size: 12px;
+	font-weight: 600;
+}
+
+.mpfbs-app .mpfbs-setup__list li.is-done {
+	background: var( --mpfbs-positive-soft );
+	border-color: var( --mpfbs-positive );
+	color: var( --mpfbs-positive );
+}
+
+.mpfbs-app .mpfbs-setup__progress {
+	list-style: none;
+	margin: var( --mpfbs-space-3 ) 0 0;
+	padding: 0;
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+	color: var( --mpfbs-text-muted );
+	font-size: 13px;
+}
+
+/* ------------------------------------------------------------ Get started */
+
+.mpfbs-app .mpfbs-start__checks {
+	list-style: none;
+	margin: 0 0 var( --mpfbs-space-4 );
+	padding: 0;
+	display: grid;
+	gap: var( --mpfbs-space-2 );
+}
+
+.mpfbs-app .mpfbs-start__checks li {
+	display: flex;
+	align-items: flex-start;
+	gap: var( --mpfbs-space-3 );
+	padding: var( --mpfbs-space-3 ) var( --mpfbs-space-4 );
+	border: 1px solid var( --mpfbs-border );
+	border-radius: var( --mpfbs-radius-sm );
+}
+
+.mpfbs-app .mpfbs-start__checks li > svg {
+	flex: 0 0 auto;
+	margin-block-start: 2px;
+	color: var( --mpfbs-positive );
+}
+
+.mpfbs-app .mpfbs-start__checks li.is-warning {
+	border-color: var( --mpfbs-warning );
+	background: var( --mpfbs-warning-soft );
+}
+
+.mpfbs-app .mpfbs-start__checks li.is-warning > svg {
+	color: var( --mpfbs-warning );
+}
+
+.mpfbs-app .mpfbs-start__checks p {
+	margin: 2px 0 var( --mpfbs-space-1 );
+	color: var( --mpfbs-text-muted );
+	font-size: 13px;
+	overflow-wrap: anywhere;
+}
+
+/* A link that looks like one, whether it is an anchor or a button. */
+.mpfbs-app .mpfbs-start__link {
+	padding: 0;
+	border: 0;
+	background: none;
+	font: inherit;
+	font-size: 13px;
+	font-weight: 600;
+	color: var( --mpfbs-accent );
+	text-decoration: underline;
+	text-underline-offset: 2px;
+	cursor: pointer;
+}
+
+.mpfbs-app .mpfbs-start__link:hover,
+.mpfbs-app .mpfbs-start__link:focus-visible {
+	text-decoration-thickness: 2px;
+}
+
+.mpfbs-app .mpfbs-sidebar__badge {
+	margin-inline-start: auto;
+	display: inline-flex;
+	align-items: center;
+}
+
+.mpfbs-app .mpfbs-sidebar__badge {
+	padding: 1px 8px;
+	border-radius: 999px;
+	background: var( --mpfbs-accent );
+	color: #ffffff;
+	font-size: 11px;
+	font-weight: 700;
+	white-space: nowrap;
+}
+
+/* ------------------------------------------------------ Sidebar sections */
+
+.mpfbs-app .mpfbs-sidebar__group {
+	margin-block-start: var( --mpfbs-space-3 );
+}
+
+.mpfbs-app .mpfbs-sidebar__grouphead {
+	margin: 0;
+}
+
+.mpfbs-app .mpfbs-sidebar__grouptoggle {
+	inline-size: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: var( --mpfbs-space-2 );
+	padding: 6px var( --mpfbs-space-4 );
+	background: none;
+	border: 0;
+	font: inherit;
+	font-size: 10px;
+	font-weight: 700;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+	color: rgba( 255, 255, 255, 0.5 );
+	cursor: pointer;
+}
+
+.mpfbs-app .mpfbs-sidebar__grouptoggle:hover {
+	color: rgba( 255, 255, 255, 0.85 );
+}
+
+.mpfbs-app .mpfbs-sidebar__grouptoggle svg {
+	flex: 0 0 auto;
+	transition: transform 0.15s ease;
+}
+
+/* One chevron, turned rather than swapped for a second icon. */
+.mpfbs-app .mpfbs-sidebar__grouptoggle[aria-expanded='false'] svg {
+	transform: rotate( -90deg );
+}
+
+@media ( prefers-reduced-motion: reduce ) {
+	.mpfbs-app .mpfbs-sidebar__grouptoggle svg {
+		transition: none;
+	}
+}
+
+.mpfbs-app .mpfbs-sidebar__list {
+	display: flex;
+	flex-direction: column;
+	gap: 2px;
+}
+
+.mpfbs-app .mpfbs-sidebar__link {
+	display: flex;
+	align-items: center;
+	gap: var( --mpfbs-space-3 );
+	padding: 9px var( --mpfbs-space-3 );
+	border-radius: var( --mpfbs-radius-sm );
+	color: var( --mpfbs-sidebar-text );
+	font-weight: 500;
+	transition: background-color 0.12s ease, color 0.12s ease;
+}
+
+.mpfbs-app .mpfbs-sidebar__link:hover {
+	background: rgba( 255, 255, 255, 0.07 );
+	color: var( --mpfbs-sidebar-active );
+}
+
+.mpfbs-app .mpfbs-sidebar__link.is-active {
+	background: var( --mpfbs-primary );
+	color: #fff;
+}
+
+.mpfbs-app .mpfbs-sidebar__label {
+	flex: 1 1 auto;
+}
+
+/* Booting skeleton: same structure, no runtime data. */
+
+.mpfbs-app--booting .mpfbs-sidebar__brand,
+.mpfbs-app--booting .mpfbs-header {
+	align-items: center;
+}
+
+.mpfbs-app--booting .mpfbs-sidebar__list {
+	gap: var( --mpfbs-space-2 );
+}
+
+.mpfbs-app--booting .mpfbs-sidebar__item {
+	padding: 9px var( --mpfbs-space-3 );
+}
+
+.mpfbs-app--booting .mpfbs-main__inner .mpfbs-stat > .mpfbs-skeleton {
+	display: block;
+}
+
+/* ----------------------------------------------------------------- Header */
+
+.mpfbs-app .mpfbs-app__body {
+	display: flex;
+	flex-direction: column;
+	flex: 1 1 auto;
+	min-width: 0;
+}
+
+.mpfbs-app .mpfbs-header {
+	position: sticky;
+	inset-block-start: var( --mpfbs-admin-bar );
+	z-index: 20;
+	display: flex;
+	align-items: center;
+	gap: var( --mpfbs-space-3 );
+	min-height: var( --mpfbs-header-height );
+	padding: 0 var( --mpfbs-space-5 );
+	background: var( --mpfbs-surface );
+	border-block-end: 1px solid var( --mpfbs-border );
+}
+
+.mpfbs-app .mpfbs-header__toggle {
+	display: none;
+	align-items: center;
+	justify-content: center;
+	width: 36px;
+	height: 36px;
+	border-radius: var( --mpfbs-radius-sm );
+	color: var( --mpfbs-text-muted );
+}
+
+.mpfbs-app .mpfbs-header__toggle:hover {
+	background: var( --mpfbs-surface-muted );
+}
+
+.mpfbs-app .mpfbs-header__search {
+	display: flex;
+	align-items: center;
+	gap: var( --mpfbs-space-2 );
+	min-width: 240px;
+	max-width: 420px;
+	flex: 1 1 auto;
+	padding: 7px var( --mpfbs-space-3 );
+	border: 1px solid var( --mpfbs-border );
+	border-radius: var( --mpfbs-radius );
+	background: var( --mpfbs-surface-muted );
+	color: var( --mpfbs-text-faint );
+	text-align: start;
+}
+
+.mpfbs-app .mpfbs-header__search:hover {
+	border-color: var( --mpfbs-border-strong );
+}
+
+.mpfbs-app .mpfbs-header__search span {
+	flex: 1 1 auto;
+}
+
+.mpfbs-app .mpfbs-header__kbd {
+	padding: 1px 6px;
+	border: 1px solid var( --mpfbs-border );
+	border-radius: 4px;
+	background: var( --mpfbs-surface );
+	font-family: inherit;
+	font-size: 11px;
+	color: var( --mpfbs-text-faint );
+}
+
+.mpfbs-app .mpfbs-header__meta {
+	display: flex;
+	align-items: center;
+	gap: var( --mpfbs-space-4 );
+	margin-inline-start: auto;
+}
+
+.mpfbs-app .mpfbs-header__user {
+	display: flex;
+	align-items: center;
+	gap: var( --mpfbs-space-2 );
+	font-weight: 500;
+}
+
+.mpfbs-app .mpfbs-header__avatar {
+	width: 28px;
+	height: 28px;
+	border-radius: 50%;
+	display: block;
+}
+
+/* The only way back to wp-admin once the admin bar is hidden. */
+.mpfbs-app .mpfbs-header__exit {
+	display: inline-flex;
+	align-items: center;
+	gap: var( --mpfbs-space-2 );
+	padding: 6px var( --mpfbs-space-3 );
+	border: 1px solid var( --mpfbs-border );
+	border-radius: var( --mpfbs-radius-sm );
+	background: var( --mpfbs-surface );
+	color: var( --mpfbs-text-muted );
+	font-weight: 600;
+	text-decoration: none;
+	white-space: nowrap;
+	transition: background-color 0.12s ease, color 0.12s ease, border-color 0.12s ease;
+}
+
+.mpfbs-app .mpfbs-header__exit:hover {
+	background: var( --mpfbs-surface-muted );
+	border-color: var( --mpfbs-border-strong );
+	color: var( --mpfbs-text );
+}
+
+.mpfbs-app .mpfbs-header__exit:focus-visible {
+	outline: 2px solid var( --mpfbs-primary );
+	outline-offset: 1px;
+}
+
+/* On a narrow header the arrow alone carries it; the title attribute names it. */
+@media ( max-width: 900px ) {
+	.mpfbs-app .mpfbs-header__exitlabel {
+		position: absolute;
+		width: 1px;
+		height: 1px;
+		margin: -1px;
+		padding: 0;
+		overflow: hidden;
+		clip-path: inset( 50% );
+		white-space: nowrap;
+		border: 0;
+	}
+
+	.mpfbs-app .mpfbs-header__exit {
+		padding: 6px var( --mpfbs-space-2 );
+	}
+}
+
+.mpfbs-app .mpfbs-status {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	padding: 3px 10px;
+	border-radius: 999px;
+	background: var( --mpfbs-surface-muted );
+	font-size: 12px;
+	color: var( --mpfbs-text-muted );
+}
+
+.mpfbs-app .mpfbs-status__dot {
+	width: 7px;
+	height: 7px;
+	border-radius: 50%;
+	background: var( --mpfbs-text-faint );
+}
+
+.mpfbs-app .mpfbs-status--ok {
+	background: var( --mpfbs-positive-soft );
+	color: var( --mpfbs-positive );
+}
+
+.mpfbs-app .mpfbs-status--ok .mpfbs-status__dot {
+	background: var( --mpfbs-positive );
+}
+
+.mpfbs-app .mpfbs-status--down {
+	background: var( --mpfbs-danger-soft );
+	color: var( --mpfbs-danger );
+}
+
+.mpfbs-app .mpfbs-status--down .mpfbs-status__dot {
+	background: var( --mpfbs-danger );
+}
+
+/* ------------------------------------------------------------------- Main */
+
+.mpfbs-app .mpfbs-main {
+	flex: 1 1 auto;
+	padding: var( --mpfbs-space-6 ) var( --mpfbs-space-5 ) var( --mpfbs-space-6 );
+}
+
+.mpfbs-app .mpfbs-main:focus {
+	outline: none;
+}
+
+.mpfbs-app .mpfbs-main__inner {
+	max-width: 1360px;
+	margin-inline: auto;
+	display: flex;
+	flex-direction: column;
+	gap: var( --mpfbs-space-5 );
+}
+
+.mpfbs-app .mpfbs-page-header {
+	display: flex;
+	align-items: flex-start;
+	gap: var( --mpfbs-space-4 );
+	flex-wrap: wrap;
+}
+
+.mpfbs-app .mpfbs-page-header__title {
+	display: flex;
+	align-items: center;
+	gap: var( --mpfbs-space-3 );
+	font-size: 22px;
+	font-weight: 600;
+	line-height: 1.25;
+	color: var( --mpfbs-text );
+}
+
+.mpfbs-app .mpfbs-page-header__description {
+	margin-block-start: var( --mpfbs-space-1 );
+	color: var( --mpfbs-text-muted );
+}
+
+.mpfbs-app .mpfbs-page-header__actions {
+	margin-inline-start: auto;
+	display: flex;
+	gap: var( --mpfbs-space-2 );
+}
+
+/* ------------------------------------------------------------------ Cards */
+
+.mpfbs-app .mpfbs-stat-grid {
+	display: grid;
+	grid-template-columns: repeat( auto-fill, minmax( 220px, 1fr ) );
+	gap: var( --mpfbs-space-4 );
+}
+
+.mpfbs-app .mpfbs-stat {
+	padding: var( --mpfbs-space-4 );
+	background: var( --mpfbs-surface );
+	border: 1px solid var( --mpfbs-border );
+	border-radius: var( --mpfbs-radius-lg );
+	box-shadow: var( --mpfbs-shadow-sm );
+}
+
+/*
+ * A stat card is sometimes built from a head row and sometimes from three bare
+ * spans. Inline spans would sit on one line and read as "Crossings176", so the
+ * parts are blocks whenever they are direct children — inside the head row the
+ * label stays a flex item and is unaffected.
+ */
+.mpfbs-app .mpfbs-stat > .mpfbs-stat__label,
+.mpfbs-app .mpfbs-stat > .mpfbs-stat__value,
+.mpfbs-app .mpfbs-stat > .mpfbs-stat__hint {
+	display: block;
+}
+
+.mpfbs-app .mpfbs-stat > .mpfbs-stat__label {
+	color: var( --mpfbs-text-muted );
+	font-size: 12px;
+	text-transform: uppercase;
+	letter-spacing: 0.04em;
+}
+
+.mpfbs-app .mpfbs-stat__head {
+	display: flex;
+	align-items: center;
+	gap: var( --mpfbs-space-2 );
+	color: var( --mpfbs-text-muted );
+	font-size: 12px;
+	text-transform: uppercase;
+	letter-spacing: 0.04em;
+}
+
+.mpfbs-app .mpfbs-stat__label {
+	flex: 1 1 auto;
+}
+
+.mpfbs-app .mpfbs-stat__value {
+	margin-block-start: var( --mpfbs-space-2 );
+	font-size: 24px;
+	font-weight: 600;
+	line-height: 1.2;
+	word-break: break-word;
+}
+
+.mpfbs-app .mpfbs-stat__hint {
+	margin-block-start: var( --mpfbs-space-1 );
+	color: var( --mpfbs-text-faint );
+	font-size: 12px;
+}
+
+.mpfbs-app .mpfbs-stat--positive .mpfbs-stat__value {
+	color: var( --mpfbs-positive );
+}
+
+.mpfbs-app .mpfbs-stat--warning .mpfbs-stat__value {
+	color: var( --mpfbs-warning );
+}
+
+.mpfbs-app .mpfbs-stat--danger .mpfbs-stat__value {
+	color: var( --mpfbs-danger );
+}
+
+/* ---------------------------------------------------------------- Buttons */
+
+.mpfbs-app .mpfbs-button {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: var( --mpfbs-space-2 );
+	padding: 8px 16px;
+	border-radius: var( --mpfbs-radius-sm );
+	border: 1px solid transparent;
+	font-weight: 500;
+	transition: background-color 0.12s ease, border-color 0.12s ease;
+}
+
+.mpfbs-app .mpfbs-button--primary {
+	background: var( --mpfbs-primary );
+	color: #fff;
+}
+
+.mpfbs-app .mpfbs-button--primary:hover {
+	background: var( --mpfbs-primary-hover );
+}
+
+.mpfbs-app .mpfbs-button--secondary {
+	background: var( --mpfbs-surface );
+	border-color: var( --mpfbs-border-strong );
+	color: var( --mpfbs-text );
+}
+
+.mpfbs-app .mpfbs-button--secondary:hover {
+	background: var( --mpfbs-surface-muted );
+}
+
+/* ----------------------------------------------------------------- States */
+
+.mpfbs-app .mpfbs-state {
+	padding: var( --mpfbs-space-6 );
+	background: var( --mpfbs-surface );
+	border: 1px solid var( --mpfbs-border );
+	border-radius: var( --mpfbs-radius-lg );
+	text-align: center;
+}
+
+.mpfbs-app .mpfbs-state--loading {
+	text-align: start;
+	display: flex;
+	flex-direction: column;
+	gap: var( --mpfbs-space-4 );
+}
+
+.mpfbs-app .mpfbs-skeleton-row {
+	display: flex;
+	flex-direction: column;
+	gap: var( --mpfbs-space-2 );
+}
+
+.mpfbs-app .mpfbs-skeleton {
+	display: block;
+	background: linear-gradient( 90deg, #eef0f6 25%, #e3e6ef 37%, #eef0f6 63% );
+	background-size: 400% 100%;
+	animation: mpfbs-shimmer 1.4s ease infinite;
+}
+
+@keyframes mpfbs-shimmer {
+	0% {
+		background-position: 100% 50%;
+	}
+
+	100% {
+		background-position: 0 50%;
+	}
+}
+
+@media ( prefers-reduced-motion: reduce ) {
+	.mpfbs-app .mpfbs-skeleton {
+		animation: none;
+	}
+}
+
+.mpfbs-app .mpfbs-state__icon {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 56px;
+	height: 56px;
+	margin-block-end: var( --mpfbs-space-3 );
+	border-radius: 50%;
+	background: var( --mpfbs-primary-soft );
+	color: var( --mpfbs-primary );
+}
+
+.mpfbs-app .mpfbs-state__icon--danger {
+	background: var( --mpfbs-danger-soft );
+	color: var( --mpfbs-danger );
+}
+
+.mpfbs-app .mpfbs-state__title {
+	font-size: 16px;
+	font-weight: 600;
+}
+
+.mpfbs-app .mpfbs-state__text {
+	margin-block-start: var( --mpfbs-space-2 );
+	color: var( --mpfbs-text-muted );
+}
+
+.mpfbs-app .mpfbs-state__code {
+	margin-block-start: var( --mpfbs-space-2 );
+	font-family: Menlo, Consolas, monospace;
+	font-size: 12px;
+	color: var( --mpfbs-text-faint );
+}
+
+.mpfbs-app .mpfbs-state__action {
+	margin-block-start: var( --mpfbs-space-4 );
+}
+
+/* -------------------------------------------------------- Command palette */
+
+.mpfbs-app .mpfbs-palette {
+	position: fixed;
+	inset: 0;
+	z-index: 100000;
+	display: flex;
+	align-items: flex-start;
+	justify-content: center;
+	padding-block-start: 12vh;
+	background: rgba( 16, 35, 61, 0.45 );
+}
+
+.mpfbs-app .mpfbs-palette__dialog {
+	width: min( 560px, calc( 100% - 32px ) );
+	background: var( --mpfbs-surface );
+	border-radius: var( --mpfbs-radius-lg );
+	box-shadow: var( --mpfbs-shadow-lg );
+	overflow: hidden;
+	font-family: var( --mpfbs-font );
+	color: var( --mpfbs-text );
+}
+
+.mpfbs-app .mpfbs-palette__field {
+	display: flex;
+	align-items: center;
+	gap: var( --mpfbs-space-3 );
+	padding: var( --mpfbs-space-4 );
+	border-block-end: 1px solid var( --mpfbs-border );
+	color: var( --mpfbs-text-faint );
+}
+
+.mpfbs-app .mpfbs-palette__input {
+	flex: 1 1 auto;
+	border: 0;
+	background: transparent;
+	font-size: 15px;
+	color: var( --mpfbs-text );
+	outline: none;
+	padding: 0;
+}
+
+.mpfbs-app .mpfbs-palette__results {
+	max-height: 320px;
+	overflow-y: auto;
+	padding: var( --mpfbs-space-2 );
+}
+
+.mpfbs-app .mpfbs-palette__result {
+	display: flex;
+	align-items: center;
+	gap: var( --mpfbs-space-3 );
+	padding: 9px var( --mpfbs-space-3 );
+	border-radius: var( --mpfbs-radius-sm );
+	cursor: pointer;
+	color: var( --mpfbs-text-muted );
+}
+
+.mpfbs-app .mpfbs-palette__result.is-active {
+	background: var( --mpfbs-primary-soft );
+	color: var( --mpfbs-primary );
+}
+
+.mpfbs-app .mpfbs-palette__empty {
+	padding: var( --mpfbs-space-4 );
+	text-align: center;
+	color: var( --mpfbs-text-faint );
+}
+
+/* ----------------------------------------------------------------- Toasts */
+
+/*
+ * Toasts sit top-centre, above every overlay.
+ *
+ * The obvious corners are all occupied: the inline-end one by drawer footers
+ * and modal actions — covering the Save button exactly when feedback appears —
+ * and the inline-start one by the navigation. Top-centre is clear of all three
+ * and stays clear when a drawer goes full width on a phone, where only the
+ * heading sits underneath. The container ignores pointer events so the area it
+ * spans never swallows a click meant for the page beneath it.
+ */
+.mpfbs-app .mpfbs-toasts {
+	position: fixed;
+	inset-block-start: 48px;
+	inset-inline: 0;
+	margin-inline: auto;
+	width: max-content;
+	max-width: min( 420px, calc( 100vw - 32px ) );
+	z-index: 100003;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: var( --mpfbs-space-2 );
+	pointer-events: none;
+}
+
+@media screen and ( max-width: 782px ) {
+	.mpfbs-app .mpfbs-toasts {
+		inset-block-start: 60px;
+	}
+}
+
+.mpfbs-app .mpfbs-toast {
+	pointer-events: auto;
+	display: flex;
+	align-items: flex-start;
+	gap: var( --mpfbs-space-2 );
+	padding: var( --mpfbs-space-3 ) var( --mpfbs-space-4 );
+	border-radius: var( --mpfbs-radius );
+	background: var( --mpfbs-surface );
+	border: 1px solid var( --mpfbs-border );
+	box-shadow: var( --mpfbs-shadow );
+	font-family: var( --mpfbs-font );
+	font-size: 13px;
+	color: var( --mpfbs-text );
+}
+
+.mpfbs-app .mpfbs-toast--success {
+	border-inline-start: 3px solid var( --mpfbs-positive );
+	color: var( --mpfbs-positive );
+}
+
+.mpfbs-app .mpfbs-toast--error {
+	border-inline-start: 3px solid var( --mpfbs-danger );
+	color: var( --mpfbs-danger );
+}
+
+.mpfbs-app .mpfbs-toast__message {
+	flex: 1 1 auto;
+	color: var( --mpfbs-text );
+}
+
+.mpfbs-app .mpfbs-toast__close {
+	color: var( --mpfbs-text-faint );
+	font-size: 16px;
+	line-height: 1;
+}
+
+/* ------------------------------------------------------------- Responsive */
+
+.mpfbs-app .mpfbs-app__scrim {
+	display: none;
+}
+
+@media screen and ( max-width: 960px ) {
+	.mpfbs-app .mpfbs-sidebar {
+		position: fixed;
+		inset-block: var( --mpfbs-admin-bar ) 0;
+		inset-inline-start: 0;
+		z-index: 30;
+		max-height: none;
+		transform: translateX( -100% );
+		transition: transform 0.18s ease;
+	}
+
+	.mpfbs-app [ dir='rtl' ] .mpfbs-sidebar {
+		transform: translateX( 100% );
+	}
+
+	.mpfbs-app .mpfbs-sidebar--open {
+		transform: none;
+		box-shadow: var( --mpfbs-shadow-lg );
+	}
+
+	.mpfbs-app .mpfbs-header__toggle {
+		display: inline-flex;
+	}
+
+	.mpfbs-app--nav-open .mpfbs-app__scrim {
+		display: block;
+		position: fixed;
+		inset: var( --mpfbs-admin-bar ) 0 0;
+		z-index: 25;
+		background: rgba( 16, 35, 61, 0.4 );
+	}
+}
+
+@media screen and ( max-width: 782px ) {
+	/*
+	 * The sticky offsets and the canvas height used to be re-stated here for
+	 * the taller mobile admin bar. The bar is hidden at every width now, so the
+	 * base rules already hold and repeating them only left a band of empty
+	 * WordPress background above the header.
+	 */
+	.mpfbs-app .mpfbs-main {
+		padding: var( --mpfbs-space-4 ) var( --mpfbs-space-3 );
+	}
+
+	.mpfbs-app .mpfbs-header {
+		padding: 0 var( --mpfbs-space-3 );
+	}
+
+	.mpfbs-header__username,
+	.mpfbs-app .mpfbs-header__kbd {
+		display: none;
+	}
+
+	.mpfbs-app .mpfbs-header__search {
+		min-width: 0;
+	}
+
+	.mpfbs-app .mpfbs-page-header__title {
+		font-size: 19px;
+	}
+}
+
+@media screen and ( max-width: 400px ) {
+	.mpfbs-app .mpfbs-stat-grid {
+		grid-template-columns: 1fr;
+	}
+
+	.mpfbs-app .mpfbs-status {
+		padding: 3px 8px;
+	}
+}
+
+/* ------------------------------------------------------------------ Panel */
+
+.mpfbs-app .mpfbs-panel {
+	background: var( --mpfbs-surface );
+	border: 1px solid var( --mpfbs-border );
+	border-radius: var( --mpfbs-radius-lg );
+	box-shadow: var( --mpfbs-shadow-sm );
+	overflow: hidden;
+}
+
+.mpfbs-app .mpfbs-muted {
+	color: var( --mpfbs-text-faint );
+}
+
+.mpfbs-app .mpfbs-code {
+	display: inline-block;
+	padding: 1px 6px;
+	border-radius: 4px;
+	background: var( --mpfbs-surface-muted );
+	border: 1px solid var( --mpfbs-border );
+	font-family: Menlo, Consolas, monospace;
+	font-size: 12px;
+	color: var( --mpfbs-text-muted );
+}
+
+.mpfbs-app .mpfbs-pill {
+	display: inline-flex;
+	align-items: center;
+	padding: 2px 10px;
+	border-radius: 999px;
+	font-size: 12px;
+	font-weight: 500;
+	background: var( --mpfbs-surface-muted );
+	color: var( --mpfbs-text-muted );
+}
+
+.mpfbs-app .mpfbs-pill--positive {
+	background: var( --mpfbs-positive-soft );
+	color: var( --mpfbs-positive );
+}
+
+.mpfbs-app .mpfbs-pill--warning {
+	background: var( --mpfbs-warning-soft );
+	color: var( --mpfbs-warning );
+}
+
+.mpfbs-app .mpfbs-pill--danger {
+	background: var( --mpfbs-danger-soft );
+	color: var( --mpfbs-danger );
+}
+
+/* ------------------------------------------------------------- Filter bar */
+
+.mpfbs-app .mpfbs-filter-bar {
+	display: flex;
+	align-items: center;
+	gap: var( --mpfbs-space-3 );
+	padding: var( --mpfbs-space-3 ) var( --mpfbs-space-4 );
+	border-block-end: 1px solid var( --mpfbs-border );
+	flex-wrap: wrap;
+}
+
+.mpfbs-app .mpfbs-filter-bar__search {
+	display: flex;
+	align-items: center;
+	gap: var( --mpfbs-space-2 );
+	flex: 1 1 260px;
+	min-width: 0;
+	padding: 0 var( --mpfbs-space-3 );
+	border: 1px solid var( --mpfbs-border );
+	border-radius: var( --mpfbs-radius-sm );
+	background: var( --mpfbs-surface-muted );
+	color: var( --mpfbs-text-faint );
+}
+
+.mpfbs-app .mpfbs-filter-bar__search:focus-within {
+	border-color: var( --mpfbs-primary );
+	background: var( --mpfbs-surface );
+}
+
+.mpfbs-app .mpfbs-filter-bar__actions {
+	margin-inline-start: auto;
+}
+
+/* ---------------------------------------------------------------- Inputs */
+
+.mpfbs-app .mpfbs-input {
+	width: 100%;
+	padding: 7px 10px;
+	border: 1px solid var( --mpfbs-border-strong );
+	border-radius: var( --mpfbs-radius-sm );
+	background: var( --mpfbs-surface );
+	color: var( --mpfbs-text );
+	font-size: 14px;
+	line-height: 1.4;
+}
+
+.mpfbs-app .mpfbs-input:focus {
+	border-color: var( --mpfbs-primary );
+	outline: 2px solid transparent;
+	box-shadow: 0 0 0 3px var( --mpfbs-primary-soft );
+}
+
+.mpfbs-app .mpfbs-input--bare {
+	border: 0;
+	background: transparent;
+	padding: 8px 0;
+}
+
+.mpfbs-app .mpfbs-input--bare:focus {
+	box-shadow: none;
+}
+
+.mpfbs-app .mpfbs-input--compact {
+	width: auto;
+	padding: 4px 8px;
+}
+
+.mpfbs-app .mpfbs-input--textarea {
+	resize: vertical;
+	min-height: 64px;
+}
+
+.mpfbs-app .mpfbs-input-group {
+	display: flex;
+	align-items: center;
+	gap: var( --mpfbs-space-2 );
+}
+
+.mpfbs-app .mpfbs-input-group__suffix {
+	flex: 0 0 auto;
+	color: var( --mpfbs-text-faint );
+	font-size: 12px;
+	white-space: nowrap;
+}
+
+/* ----------------------------------------------------------------- Table */
+
+.mpfbs-app .mpfbs-table-wrap {
+	position: relative;
+	overflow-x: auto;
+}
+
+.mpfbs-app .mpfbs-table-wrap.is-refreshing {
+	opacity: 0.7;
+}
+
+.mpfbs-app .mpfbs-table {
+	width: 100%;
+	border-collapse: collapse;
+	font-size: 13px;
+}
+
+.mpfbs-table th,
+.mpfbs-app .mpfbs-table td {
+	padding: 11px var( --mpfbs-space-4 );
+	text-align: start;
+	border-block-end: 1px solid var( --mpfbs-border );
+	vertical-align: middle;
+}
+
+.mpfbs-app .mpfbs-table th {
+	background: var( --mpfbs-surface-muted );
+	color: var( --mpfbs-text-muted );
+	font-size: 11px;
+	font-weight: 600;
+	text-transform: uppercase;
+	letter-spacing: 0.05em;
+	white-space: nowrap;
+}
+
+.mpfbs-table th.is-end,
+.mpfbs-app .mpfbs-table td.is-end {
+	text-align: end;
+}
+
+.mpfbs-app .mpfbs-table tbody tr:last-child td {
+	border-block-end: 0;
+}
+
+.mpfbs-app .mpfbs-table tbody tr.is-clickable {
+	cursor: pointer;
+}
+
+.mpfbs-app .mpfbs-table tbody tr:hover {
+	background: var( --mpfbs-surface-muted );
+}
+
+.mpfbs-app .mpfbs-table__sort {
+	display: inline-flex;
+	align-items: center;
+	gap: 4px;
+	font: inherit;
+	color: inherit;
+	text-transform: inherit;
+	letter-spacing: inherit;
+}
+
+.mpfbs-app .mpfbs-table__sort.is-active {
+	color: var( --mpfbs-primary );
+}
+
+.mpfbs-app .mpfbs-table__sort-icon {
+	opacity: 0.6;
+	font-size: 10px;
+}
+
+.mpfbs-app .mpfbs-cell-primary {
+	display: flex;
+	flex-direction: column;
+	gap: 2px;
+}
+
+.mpfbs-app .mpfbs-cell-primary__title {
+	display: flex;
+	align-items: center;
+	gap: var( --mpfbs-space-2 );
+	font-weight: 600;
+	color: var( --mpfbs-text );
+	font-size: 13px;
+}
+
+.mpfbs-app .mpfbs-cell-primary__meta {
+	color: var( --mpfbs-text-faint );
+	font-size: 12px;
+}
+
+.mpfbs-app .mpfbs-table__actions {
+	display: inline-flex;
+	gap: var( --mpfbs-space-2 );
+	justify-content: flex-end;
+}
+
+.mpfbs-app .mpfbs-table__action {
+	color: var( --mpfbs-primary );
+	font-size: 12px;
+	font-weight: 500;
+	padding: 2px 4px;
+	border-radius: 4px;
+}
+
+.mpfbs-app .mpfbs-table__action:hover {
+	background: var( --mpfbs-primary-soft );
+}
+
+.mpfbs-app .mpfbs-table__action.is-danger {
+	color: var( --mpfbs-danger );
+}
+
+.mpfbs-app .mpfbs-table__action.is-danger:hover {
+	background: var( --mpfbs-danger-soft );
+}
+
+.mpfbs-app .mpfbs-table__refresh {
+	position: absolute;
+	inset-block-start: 12px;
+	inset-inline-end: 12px;
+	color: var( --mpfbs-text-faint );
+}
+
+/* ------------------------------------------------------------ Pagination */
+
+.mpfbs-app .mpfbs-pagination {
+	display: flex;
+	align-items: center;
+	gap: var( --mpfbs-space-3 );
+	padding: var( --mpfbs-space-3 ) var( --mpfbs-space-4 );
+	border-block-start: 1px solid var( --mpfbs-border );
+	flex-wrap: wrap;
+	font-size: 12px;
+	color: var( --mpfbs-text-muted );
+}
+
+.mpfbs-app .mpfbs-pagination__buttons {
+	display: flex;
+	align-items: center;
+	gap: var( --mpfbs-space-2 );
+	margin-inline-start: auto;
+}
+
+.mpfbs-app .mpfbs-button--compact {
+	padding: 4px 10px;
+	font-size: 12px;
+}
+
+/* ------------------------------------------------------------ Form steps */
+
+/*
+ * A rail rather than a row of numbered dots. The titles are the point — a
+ * reader deciding whether to press Next wants to know what Next is going to
+ * ask — and titles do not fit across the top of a drawer.
+ */
+.mpfbs-app .mpfbs-steps {
+	list-style: none;
+	margin: 0 0 var( --mpfbs-space-4 );
+	padding: 0;
+	display: grid;
+	gap: var( --mpfbs-space-1 );
+	grid-template-columns: repeat( auto-fit, minmax( 160px, 1fr ) );
+}
+
+.mpfbs-app .mpfbs-steps__button {
+	inline-size: 100%;
+	display: flex;
+	align-items: center;
+	gap: var( --mpfbs-space-2 );
+	padding: var( --mpfbs-space-2 );
+	background: transparent;
+	border: 1px solid transparent;
+	border-radius: var( --mpfbs-radius-sm );
+	font: inherit;
+	color: var( --mpfbs-text-muted );
+	text-align: start;
+	cursor: pointer;
+}
+
+.mpfbs-app .mpfbs-steps__button:disabled {
+	cursor: default;
+	opacity: 0.6;
+}
+
+.mpfbs-app .mpfbs-steps__button:not( :disabled ):hover {
+	background: var( --mpfbs-surface-muted );
+}
+
+.mpfbs-app .mpfbs-steps__item.is-current .mpfbs-steps__button {
+	background: var( --mpfbs-surface-muted );
+	border-color: var( --mpfbs-border );
+	color: var( --mpfbs-text );
+}
+
+.mpfbs-app .mpfbs-steps__marker {
+	flex: 0 0 auto;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	inline-size: 24px;
+	block-size: 24px;
+	border-radius: 50%;
+	background: var( --mpfbs-surface );
+	border: 1px solid var( --mpfbs-border-strong );
+	font-size: 12px;
+	font-weight: 700;
+}
+
+.mpfbs-app .mpfbs-steps__marker svg {
+	inline-size: 14px;
+	block-size: 14px;
+}
+
+.mpfbs-app .mpfbs-steps__item.is-current .mpfbs-steps__marker {
+	background: var( --mpfbs-accent );
+	border-color: var( --mpfbs-accent );
+	color: #ffffff;
+}
+
+.mpfbs-app .mpfbs-steps__item.is-done .mpfbs-steps__marker {
+	background: var( --mpfbs-positive-soft );
+	border-color: var( --mpfbs-positive );
+	color: var( --mpfbs-positive );
+}
+
+.mpfbs-app .mpfbs-steps__item.is-invalid .mpfbs-steps__marker {
+	background: var( --mpfbs-danger-soft );
+	border-color: var( --mpfbs-danger );
+	color: var( --mpfbs-danger );
+}
+
+.mpfbs-app .mpfbs-steps__label {
+	min-inline-size: 0;
+	display: flex;
+	flex-direction: column;
+}
+
+.mpfbs-app .mpfbs-steps__count {
+	font-size: 10px;
+	font-weight: 700;
+	letter-spacing: 0.06em;
+	text-transform: uppercase;
+	color: var( --mpfbs-text-muted );
+}
+
+.mpfbs-app .mpfbs-steps__title {
+	font-size: 13px;
+	font-weight: 600;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+/* Pushed to the end whether the footer distributes or packs its children. */
+.mpfbs-app .mpfbs-drawer__footer-end {
+	margin-inline-start: auto;
+	display: flex;
+	align-items: center;
+	gap: var( --mpfbs-space-2 );
+}
+
+.mpfbs-app .mpfbs-form__note {
+	margin: 0 0 var( --mpfbs-space-3 );
+	color: var( --mpfbs-text-muted );
+	font-size: 13px;
+	line-height: 1.5;
+}
+
+.mpfbs-app .mpfbs-button--danger {
+	background: var( --mpfbs-danger );
+	color: #fff;
+}
+
+.mpfbs-app .mpfbs-button--danger:hover {
+	background: #a52c25;
+}
+
+.mpfbs-app .mpfbs-button:disabled {
+	opacity: 0.5;
+	cursor: not-allowed;
+}
+
+/* ---------------------------------------------------------------- Drawer */
+
+.mpfbs-app .mpfbs-drawer {
+	position: fixed;
+	inset: 0;
+	z-index: 100000;
+	display: flex;
+	justify-content: flex-end;
+	background: rgba( 16, 35, 61, 0.45 );
+}
+
+.mpfbs-app .mpfbs-drawer__panel {
+	display: flex;
+	flex-direction: column;
+	width: min( 480px, 100% );
+	height: 100%;
+	background: var( --mpfbs-surface );
+	box-shadow: var( --mpfbs-shadow-lg );
+	font-family: var( --mpfbs-font );
+	color: var( --mpfbs-text );
+	animation: mpfbs-slide-in 0.16s ease;
+}
+
+.mpfbs-app .mpfbs-drawer__panel--wide {
+	width: min( 620px, 100% );
+}
+
+/*
+ * Wider still, for a stepped form: the step rail runs down one side of it and
+ * the fields need the rest, and a fare table with a row per route is unreadable
+ * squeezed into 620px.
+ */
+.mpfbs-app .mpfbs-drawer__panel--xwide {
+	width: min( 860px, 100% );
+}
+
+@keyframes mpfbs-slide-in {
+	from {
+		transform: translateX( 24px );
+		opacity: 0.6;
+	}
+}
+
+@media ( prefers-reduced-motion: reduce ) {
+	.mpfbs-app .mpfbs-drawer__panel {
+		animation: none;
+	}
+}
+
+.mpfbs-app .mpfbs-drawer__header {
+	display: flex;
+	align-items: flex-start;
+	gap: var( --mpfbs-space-3 );
+	padding: var( --mpfbs-space-4 ) var( --mpfbs-space-5 );
+	border-block-end: 1px solid var( --mpfbs-border );
+}
+
+.mpfbs-app .mpfbs-drawer__title {
+	font-size: 16px;
+	font-weight: 600;
+}
+
+.mpfbs-app .mpfbs-drawer__description {
+	margin-block-start: 2px;
+	font-size: 12px;
+	color: var( --mpfbs-text-faint );
+}
+
+.mpfbs-app .mpfbs-drawer__close {
+	margin-inline-start: auto;
+	color: var( --mpfbs-text-faint );
+	padding: 4px;
+	border-radius: var( --mpfbs-radius-sm );
+}
+
+.mpfbs-app .mpfbs-drawer__close:hover {
+	background: var( --mpfbs-surface-muted );
+	color: var( --mpfbs-text );
+}
+
+.mpfbs-app .mpfbs-drawer__body {
+	flex: 1 1 auto;
+	overflow-y: auto;
+	padding: var( --mpfbs-space-5 );
+}
+
+.mpfbs-app .mpfbs-record__row.is-due .mpfbs-record__value {
+	font-weight: 700;
+	color: var( --mpfbs-warning );
+}
+
+/* ------------------------------------------------- Journey and travellers */
+
+.mpfbs-app .mpfbs-record__section {
+	padding: 0 var( --mpfbs-space-4 );
+}
+
+.mpfbs-app .mpfbs-record__empty {
+	margin: 0 0 var( --mpfbs-space-3 );
+	color: var( --mpfbs-text-muted );
+	font-size: 13px;
+}
+
+.mpfbs-app .mpfbs-legs,
+.mpfbs-app .mpfbs-travellers {
+	list-style: none;
+	margin: 0 0 var( --mpfbs-space-3 );
+	padding: 0;
+	display: flex;
+	flex-direction: column;
+	gap: var( --mpfbs-space-2 );
+}
+
+.mpfbs-app .mpfbs-legs__item,
+.mpfbs-app .mpfbs-travellers__item {
+	padding: var( --mpfbs-space-3 );
+	background: var( --mpfbs-surface-muted );
+	border: 1px solid var( --mpfbs-border );
+	border-radius: var( --mpfbs-radius-sm );
+}
+
+.mpfbs-app .mpfbs-legs__label {
+	display: block;
+	color: var( --mpfbs-text-muted );
+	font-size: 11px;
+	font-weight: 700;
+	letter-spacing: 0.05em;
+	text-transform: uppercase;
+}
+
+.mpfbs-app .mpfbs-legs__ports {
+	display: block;
+	margin-block-start: 2px;
+	font-weight: 600;
+}
+
+.mpfbs-app .mpfbs-legs__meta {
+	display: block;
+	margin-block-start: 2px;
+	color: var( --mpfbs-text-muted );
+	font-size: 12px;
+}
+
+.mpfbs-app .mpfbs-travellers__head {
+	display: flex;
+	align-items: center;
+	gap: var( --mpfbs-space-2 );
+	margin: 0;
+}
+
+.mpfbs-app .mpfbs-travellers__index {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	inline-size: 20px;
+	block-size: 20px;
+	border-radius: 50%;
+	background: var( --mpfbs-surface );
+	border: 1px solid var( --mpfbs-border-strong );
+	color: var( --mpfbs-text-muted );
+	font-size: 11px;
+	font-weight: 700;
+}
+
+.mpfbs-app .mpfbs-travellers__type {
+	font-weight: 600;
+}
+
+.mpfbs-app .mpfbs-travellers__none {
+	margin: var( --mpfbs-space-2 ) 0 0;
+	color: var( --mpfbs-text-muted );
+	font-size: 12px;
+}
+
+/*
+ * Two columns where the drawer is wide enough for them, one where it is not:
+ * a passport number wrapping under its own label is still readable, a label
+ * squeezed to three characters is not.
+ */
+.mpfbs-app .mpfbs-travellers__details {
+	margin: var( --mpfbs-space-2 ) 0 0;
+	display: grid;
+	grid-template-columns: repeat( auto-fit, minmax( 150px, 1fr ) );
+	gap: var( --mpfbs-space-2 );
+}
+
+.mpfbs-app .mpfbs-travellers__detail dt {
+	color: var( --mpfbs-text-muted );
+	font-size: 11px;
+	font-weight: 600;
+}
+
+.mpfbs-app .mpfbs-travellers__detail dd {
+	margin: 0;
+	overflow-wrap: anywhere;
+}
+
+.mpfbs-app .mpfbs-drawer__footer {
+	display: flex;
+	justify-content: flex-end;
+	gap: var( --mpfbs-space-2 );
+	padding: var( --mpfbs-space-4 ) var( --mpfbs-space-5 );
+	border-block-start: 1px solid var( --mpfbs-border );
+	background: var( --mpfbs-surface-muted );
+}
+
+/* ------------------------------------------------------------------ Form */
+
+.mpfbs-app .mpfbs-form {
+	display: grid;
+	gap: var( --mpfbs-space-4 );
+}
+
+.mpfbs-app .mpfbs-field {
+	display: flex;
+	flex-direction: column;
+	gap: 5px;
+}
+
+.mpfbs-app .mpfbs-field__label {
+	font-size: 12px;
+	font-weight: 600;
+	color: var( --mpfbs-text-muted );
+}
+
+.mpfbs-app .mpfbs-field__required {
+	color: var( --mpfbs-danger );
+	margin-inline-start: 3px;
+}
+
+.mpfbs-app .mpfbs-field__hint {
+	font-size: 12px;
+	color: var( --mpfbs-text-faint );
+}
+
+.mpfbs-app .mpfbs-field__error {
+	font-size: 12px;
+	color: var( --mpfbs-danger );
+}
+
+.mpfbs-app .mpfbs-field--invalid .mpfbs-input {
+	border-color: var( --mpfbs-danger );
+}
+
+.mpfbs-app .mpfbs-field--invalid .mpfbs-input:focus {
+	box-shadow: 0 0 0 3px var( --mpfbs-danger-soft );
+}
+
+.mpfbs-app .mpfbs-alert {
+	padding: var( --mpfbs-space-3 ) var( --mpfbs-space-4 );
+	border-radius: var( --mpfbs-radius-sm );
+	font-size: 13px;
+}
+
+.mpfbs-app .mpfbs-alert--error {
+	background: var( --mpfbs-danger-soft );
+	color: var( --mpfbs-danger );
+	border-inline-start: 3px solid var( --mpfbs-danger );
+}
+
+/* ---------------------------------------------------------------- Switch */
+
+.mpfbs-app .mpfbs-switch {
+	display: inline-flex;
+	align-items: center;
+	gap: var( --mpfbs-space-3 );
+	cursor: pointer;
+}
+
+.mpfbs-app .mpfbs-switch__input {
+	position: absolute;
+	opacity: 0;
+	width: 0;
+	height: 0;
+}
+
+.mpfbs-app .mpfbs-switch__track {
+	position: relative;
+	display: inline-block;
+	width: 38px;
+	height: 22px;
+	border-radius: 999px;
+	background: var( --mpfbs-border-strong );
+	transition: background-color 0.14s ease;
+	flex: 0 0 auto;
+}
+
+.mpfbs-app .mpfbs-switch__thumb {
+	position: absolute;
+	inset-block-start: 3px;
+	inset-inline-start: 3px;
+	width: 16px;
+	height: 16px;
+	border-radius: 50%;
+	background: #fff;
+	transition: transform 0.14s ease;
+}
+
+.mpfbs-app .mpfbs-switch__input:checked + .mpfbs-switch__track {
+	background: var( --mpfbs-primary );
+}
+
+.mpfbs-app .mpfbs-switch__input:checked + .mpfbs-switch__track .mpfbs-switch__thumb {
+	transform: translateX( 16px );
+}
+
+.mpfbs-app [ dir='rtl' ] .mpfbs-switch__input:checked + .mpfbs-switch__track .mpfbs-switch__thumb {
+	transform: translateX( -16px );
+}
+
+.mpfbs-app .mpfbs-switch__input:focus-visible + .mpfbs-switch__track {
+	outline: 2px solid var( --mpfbs-primary );
+	outline-offset: 2px;
+}
+
+.mpfbs-app .mpfbs-switch__label {
+	font-size: 13px;
+	font-weight: 500;
+}
+
+/* ------------------------------------------------------------------ Tags */
+
+.mpfbs-app .mpfbs-tags {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 6px;
+	margin: 0;
+	padding: 0;
+}
+
+.mpfbs-app .mpfbs-tag {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	padding: 3px 6px 3px 10px;
+	border-radius: 999px;
+	background: var( --mpfbs-primary-soft );
+	color: var( --mpfbs-primary );
+	font-size: 12px;
+}
+
+.mpfbs-app .mpfbs-tag__index {
+	font-weight: 700;
+	opacity: 0.6;
+}
+
+.mpfbs-app .mpfbs-tag__remove {
+	color: inherit;
+	font-size: 14px;
+	line-height: 1;
+	padding: 0 2px;
+	opacity: 0.7;
+}
+
+.mpfbs-app .mpfbs-tag__remove:hover {
+	opacity: 1;
+}
+
+/* ----------------------------------------------------------------- Modal */
+
+.mpfbs-app .mpfbs-modal {
+	position: fixed;
+	inset: 0;
+	z-index: 100002;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: var( --mpfbs-space-4 );
+	background: rgba( 16, 35, 61, 0.45 );
+}
+
+.mpfbs-app .mpfbs-modal__dialog {
+	width: min( 420px, 100% );
+	padding: var( --mpfbs-space-5 );
+	border-radius: var( --mpfbs-radius-lg );
+	background: var( --mpfbs-surface );
+	box-shadow: var( --mpfbs-shadow-lg );
+	font-family: var( --mpfbs-font );
+	color: var( --mpfbs-text );
+}
+
+.mpfbs-app .mpfbs-modal__title {
+	font-size: 16px;
+	font-weight: 600;
+}
+
+.mpfbs-app .mpfbs-modal__text {
+	margin-block-start: var( --mpfbs-space-2 );
+	color: var( --mpfbs-text-muted );
+	font-size: 13px;
+}
+
+.mpfbs-app .mpfbs-modal__actions {
+	display: flex;
+	justify-content: flex-end;
+	gap: var( --mpfbs-space-2 );
+	margin-block-start: var( --mpfbs-space-5 );
+}
+
+@media screen and ( max-width: 782px ) {
+	.mpfbs-table th,
+	.mpfbs-app .mpfbs-table td {
+		padding: 10px var( --mpfbs-space-3 );
+	}
+
+	.mpfbs-app .mpfbs-filter-bar {
+		padding: var( --mpfbs-space-3 );
+	}
+
+	.mpfbs-app .mpfbs-filter-bar__actions {
+		margin-inline-start: 0;
+		width: 100%;
+	}
+
+	.mpfbs-app .mpfbs-filter-bar__actions .mpfbs-button {
+		width: 100%;
+	}
+
+	.mpfbs-drawer__panel,
+	.mpfbs-app .mpfbs-drawer__panel--wide,
+	.mpfbs-app .mpfbs-drawer__panel--xwide {
+		width: 100%;
+	}
+}
+
+/* --------------------------------------------------- Sailings & scheduling */
+
+.mpfbs-app .mpfbs-form__row {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: var( --mpfbs-space-4 );
+}
+
+.mpfbs-app .mpfbs-fieldset {
+	border: 0;
+	padding: 0;
+	margin: 0;
+}
+
+.mpfbs-app .mpfbs-weekdays {
+	display: flex;
+	gap: 6px;
+	flex-wrap: wrap;
+}
+
+.mpfbs-app .mpfbs-weekday {
+	position: relative;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	min-width: 40px;
+	height: 34px;
+	padding: 0 8px;
+	border: 1px solid var( --mpfbs-border-strong );
+	border-radius: var( --mpfbs-radius-sm );
+	background: var( --mpfbs-surface );
+	color: var( --mpfbs-text-muted );
+	font-size: 12px;
+	font-weight: 600;
+	cursor: pointer;
+	transition: background-color 0.12s ease, border-color 0.12s ease, color 0.12s ease;
+}
+
+.mpfbs-app .mpfbs-weekday.is-on {
+	background: var( --mpfbs-primary );
+	border-color: var( --mpfbs-primary );
+	color: #fff;
+}
+
+.mpfbs-app .mpfbs-weekday__input {
+	position: absolute;
+	opacity: 0;
+	width: 100%;
+	height: 100%;
+	margin: 0;
+	cursor: pointer;
+}
+
+.mpfbs-app .mpfbs-weekday__input:focus-visible {
+	outline: 2px solid var( --mpfbs-primary );
+	outline-offset: 2px;
+	border-radius: var( --mpfbs-radius-sm );
+}
+
+.mpfbs-app .mpfbs-capacity {
+	display: inline-flex;
+	gap: var( --mpfbs-space-3 );
+	align-items: center;
+	justify-content: flex-end;
+	color: var( --mpfbs-text-muted );
+	font-variant-numeric: tabular-nums;
+}
+
+.mpfbs-app .mpfbs-capacity span {
+	display: inline-flex;
+	align-items: center;
+	gap: 4px;
+}
+
+.mpfbs-app .mpfbs-preview {
+	border: 1px solid var( --mpfbs-border );
+	border-radius: var( --mpfbs-radius );
+	overflow: hidden;
+}
+
+.mpfbs-app .mpfbs-preview__summary {
+	display: flex;
+	gap: var( --mpfbs-space-2 );
+	flex-wrap: wrap;
+	padding: var( --mpfbs-space-3 );
+	background: var( --mpfbs-surface-muted );
+	border-block-end: 1px solid var( --mpfbs-border );
+}
+
+.mpfbs-app .mpfbs-preview__list {
+	max-height: 260px;
+	overflow-y: auto;
+	margin: 0;
+	padding: 0;
+}
+
+.mpfbs-app .mpfbs-preview__item {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: var( --mpfbs-space-3 );
+	padding: 7px var( --mpfbs-space-3 );
+	border-block-end: 1px solid var( --mpfbs-border );
+	font-size: 12px;
+}
+
+.mpfbs-app .mpfbs-preview__item:last-child {
+	border-block-end: 0;
+}
+
+.mpfbs-app .mpfbs-preview__when {
+	font-weight: 500;
+	font-variant-numeric: tabular-nums;
+}
+
+.mpfbs-app .mpfbs-preview__outcome {
+	color: var( --mpfbs-text-faint );
+	text-align: end;
+}
+
+.mpfbs-app .mpfbs-preview__item.is-new .mpfbs-preview__outcome {
+	color: var( --mpfbs-positive );
+}
+
+.mpfbs-app .mpfbs-preview__item.is-conflict {
+	background: var( --mpfbs-danger-soft );
+}
+
+.mpfbs-app .mpfbs-preview__item.is-conflict .mpfbs-preview__outcome {
+	color: var( --mpfbs-danger );
+}
+
+@media screen and ( max-width: 782px ) {
+	.mpfbs-app .mpfbs-form__row {
+		grid-template-columns: 1fr;
+	}
+}
+
+/* ------------------------------------------------------------------- Tabs */
+
+/*
+ * The strip scrolls sideways on a narrow screen, and nothing else.
+ *
+ * It used to draw its rule as a border and pull each tab 1px down over it with
+ * a negative margin. With overflow-x set, the other axis cannot stay visible —
+ * it computes to auto — so that 1px overhang made every tab strip in the
+ * dashboard vertically scrollable, and each one grew a thin scrollbar beside
+ * its last tab. The rule is now an inset shadow, the tabs sit entirely inside
+ * the box, and the vertical axis is closed off for good measure.
+ */
+.mpfbs-app .mpfbs-tabs {
+	display: flex;
+	gap: var( --mpfbs-space-1 );
+	margin-block-end: var( --mpfbs-space-4 );
+	box-shadow: inset 0 -1px 0 var( --mpfbs-border );
+	overflow-x: auto;
+	overflow-y: hidden;
+	scrollbar-width: none;
+}
+
+.mpfbs-app .mpfbs-tabs::-webkit-scrollbar {
+	display: none;
+}
+
+.mpfbs-app .mpfbs-tabs__tab {
+	appearance: none;
+	background: none;
+	border: 0;
+	border-block-end: 2px solid transparent;
+	padding: var( --mpfbs-space-3 ) var( --mpfbs-space-4 );
+	font: inherit;
+	font-weight: 600;
+	color: var( --mpfbs-text-muted );
+	cursor: pointer;
+	white-space: nowrap;
+	border-radius: var( --mpfbs-radius-sm ) var( --mpfbs-radius-sm ) 0 0;
+}
+
+.mpfbs-app .mpfbs-tabs__tab:hover {
+	color: var( --mpfbs-text );
+	background: var( --mpfbs-surface-muted );
+}
+
+.mpfbs-app .mpfbs-tabs__tab:focus-visible {
+	outline: 2px solid var( --mpfbs-primary );
+	outline-offset: -2px;
+}
+
+.mpfbs-app .mpfbs-tabs__tab.is-active {
+	color: var( --mpfbs-primary );
+	border-block-end-color: var( --mpfbs-primary );
+}
+
+/* ------------------------------------------------------- Panel header bar */
+
+.mpfbs-app .mpfbs-panel__header {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: flex-start;
+	justify-content: space-between;
+	gap: var( --mpfbs-space-4 );
+	padding: var( --mpfbs-space-5 );
+	background: var( --mpfbs-surface );
+	border-block-end: 1px solid var( --mpfbs-border );
+}
+
+.mpfbs-app .mpfbs-panel__title {
+	margin: 0;
+	font-size: 16px;
+	font-weight: 600;
+	color: var( --mpfbs-text );
+}
+
+.mpfbs-app .mpfbs-panel__description {
+	margin: var( --mpfbs-space-1 ) 0 0;
+	max-width: 68ch;
+	color: var( --mpfbs-text-muted );
+}
+
+.mpfbs-app .mpfbs-panel__actions {
+	display: flex;
+	align-items: center;
+	gap: var( --mpfbs-space-3 );
+	flex-shrink: 0;
+}
+
+/* ------------------------------------------------- Capture field matrix */
+
+.mpfbs-app .mpfbs-fieldgrid {
+	display: flex;
+	flex-direction: column;
+}
+
+.mpfbs-app .mpfbs-fieldrow {
+	display: flex;
+	align-items: center;
+	gap: var( --mpfbs-space-4 );
+	padding: var( --mpfbs-space-3 ) var( --mpfbs-space-5 );
+	border-block-end: 1px solid var( --mpfbs-border );
+}
+
+.mpfbs-app .mpfbs-fieldrow:last-child {
+	border-block-end: 0;
+}
+
+.mpfbs-app .mpfbs-fieldrow:hover {
+	background: var( --mpfbs-surface-muted );
+}
+
+.mpfbs-app .mpfbs-fieldrow__label {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: var( --mpfbs-space-2 );
+	flex: 1 1 auto;
+	min-width: 0;
+}
+
+.mpfbs-app .mpfbs-fieldrow__name {
+	font-weight: 500;
+	color: var( --mpfbs-text );
+}
+
+.mpfbs-app .mpfbs-fieldrow__hint {
+	flex: 1 0 100%;
+	color: var( --mpfbs-text-faint );
+	font-size: 12px;
+}
+
+.mpfbs-app .mpfbs-fieldrow__spacer {
+	display: block;
+	inline-size: 32px;
+	flex-shrink: 0;
+}
+
+.mpfbs-app .mpfbs-fieldrow--skeleton {
+	block-size: 49px;
+}
+
+.mpfbs-app .mpfbs-fieldrow--skeleton .mpfbs-skeleton--text {
+	block-size: 12px;
+	inline-size: 40%;
+	border-radius: 4px;
+}
+
+/* ------------------------------------------------------ Segmented control */
+
+.mpfbs-app .mpfbs-segmented {
+	display: inline-flex;
+	flex-shrink: 0;
+	padding: 2px;
+	border: 1px solid var( --mpfbs-border );
+	border-radius: var( --mpfbs-radius );
+	background: var( --mpfbs-surface-muted );
+}
+
+.mpfbs-app .mpfbs-segmented__option {
+	appearance: none;
+	border: 0;
+	background: none;
+	padding: 5px 12px;
+	border-radius: var( --mpfbs-radius-sm );
+	font: inherit;
+	font-size: 13px;
+	color: var( --mpfbs-text-muted );
+	cursor: pointer;
+	white-space: nowrap;
+}
+
+.mpfbs-app .mpfbs-segmented__option:hover:not( :disabled ) {
+	color: var( --mpfbs-text );
+}
+
+.mpfbs-app .mpfbs-segmented__option:focus-visible {
+	outline: 2px solid var( --mpfbs-primary );
+	outline-offset: -1px;
+}
+
+.mpfbs-app .mpfbs-segmented__option.is-selected {
+	background: var( --mpfbs-surface );
+	color: var( --mpfbs-text );
+	font-weight: 600;
+	box-shadow: var( --mpfbs-shadow-sm );
+}
+
+.mpfbs-app .mpfbs-segmented__option:disabled {
+	cursor: not-allowed;
+	opacity: 0.65;
+}
+
+/* ---------------------------------------------------------- Icon button */
+
+.mpfbs-app .mpfbs-iconbutton {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	inline-size: 32px;
+	block-size: 32px;
+	flex-shrink: 0;
+	padding: 0;
+	border: 1px solid transparent;
+	border-radius: var( --mpfbs-radius-sm );
+	background: none;
+	color: var( --mpfbs-text-faint );
+	cursor: pointer;
+}
+
+.mpfbs-app .mpfbs-iconbutton:hover {
+	background: var( --mpfbs-surface-muted );
+	border-color: var( --mpfbs-border );
+	color: var( --mpfbs-text );
+}
+
+.mpfbs-app .mpfbs-iconbutton:focus-visible {
+	outline: 2px solid var( --mpfbs-primary );
+	outline-offset: 1px;
+}
+
+.mpfbs-app .mpfbs-iconbutton--danger:hover {
+	background: var( --mpfbs-danger-soft );
+	border-color: var( --mpfbs-danger );
+	color: var( --mpfbs-danger );
+}
+
+.mpfbs-app .mpfbs-iconbutton svg {
+	inline-size: 16px;
+	block-size: 16px;
+}
+
+/* -------------------------------------------------------- Add a field row */
+
+.mpfbs-app .mpfbs-fieldadd {
+	padding: var( --mpfbs-space-5 );
+	border-block-start: 1px solid var( --mpfbs-border );
+	background: var( --mpfbs-surface-muted );
+}
+
+.mpfbs-app .mpfbs-fieldadd__label {
+	display: block;
+	margin-block-end: var( --mpfbs-space-2 );
+	font-weight: 600;
+	font-size: 13px;
+	color: var( --mpfbs-text-muted );
+}
+
+.mpfbs-app .mpfbs-fieldadd__row {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var( --mpfbs-space-2 );
+}
+
+.mpfbs-app .mpfbs-fieldadd__row .mpfbs-input {
+	flex: 1 1 220px;
+	min-inline-size: 0;
+}
+
+@media ( max-width: 782px ) {
+	.mpfbs-app .mpfbs-fieldrow {
+		flex-wrap: wrap;
+		align-items: flex-start;
+	}
+
+	.mpfbs-app .mpfbs-fieldrow__label {
+		flex: 1 1 100%;
+	}
+
+	.mpfbs-app .mpfbs-segmented {
+		inline-size: 100%;
+	}
+
+	.mpfbs-app .mpfbs-segmented__option {
+		flex: 1 1 0;
+		text-align: center;
+	}
+
+	.mpfbs-app .mpfbs-fieldrow__spacer {
+		display: none;
+	}
+
+	.mpfbs-app .mpfbs-panel__actions {
+		inline-size: 100%;
+		justify-content: space-between;
+	}
+}
+
+/* --------------------------------------------------------------- Settings */
+
+.mpfbs-app .mpfbs-settings {
+	display: flex;
+	flex-direction: column;
+	gap: var( --mpfbs-space-4 );
+	padding: var( --mpfbs-space-5 );
+	max-inline-size: 620px;
+}
+
+.mpfbs-app .mpfbs-subheading {
+	margin: 0;
+	padding: var( --mpfbs-space-4 ) var( --mpfbs-space-5 ) var( --mpfbs-space-2 );
+	font-size: 12px;
+	font-weight: 700;
+	letter-spacing: 0.06em;
+	text-transform: uppercase;
+	color: var( --mpfbs-text-faint );
+	border-block-start: 1px solid var( --mpfbs-border );
+}
+
+.mpfbs-app .mpfbs-settings .mpfbs-subheading {
+	padding-inline: 0;
+	margin-block-start: var( --mpfbs-space-2 );
+}
+
+/* ------------------------------------------------------------ Fare inputs */
+
+.mpfbs-app .mpfbs-fare {
+	display: flex;
+	align-items: center;
+	gap: var( --mpfbs-space-2 );
+	flex-shrink: 0;
+}
+
+.mpfbs-app .mpfbs-fare__symbol {
+	color: var( --mpfbs-text-faint );
+	font-size: 13px;
+}
+
+.mpfbs-app .mpfbs-input--money {
+	inline-size: 120px;
+	text-align: end;
+	font-variant-numeric: tabular-nums;
+}
+
+@media ( max-width: 782px ) {
+	.mpfbs-app .mpfbs-fare {
+		inline-size: 100%;
+		justify-content: flex-end;
+	}
+}
+
+/* --------------------------------------------------------------- Save bar */
+
+.mpfbs-app .mpfbs-savebar {
+	position: sticky;
+	inset-block-end: var( --mpfbs-space-4 );
+	z-index: 5;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: var( --mpfbs-space-4 );
+	margin-block-start: var( --mpfbs-space-4 );
+	padding: var( --mpfbs-space-3 ) var( --mpfbs-space-4 );
+	background: var( --mpfbs-surface );
+	border: 1px solid var( --mpfbs-border );
+	border-radius: var( --mpfbs-radius );
+	box-shadow: var( --mpfbs-shadow );
+}
+
+.mpfbs-app .mpfbs-savebar.is-dirty {
+	border-color: var( --mpfbs-primary );
+}
+
+.mpfbs-app .mpfbs-savebar__status {
+	color: var( --mpfbs-text-muted );
+	font-size: 13px;
+	min-inline-size: 0;
+}
+
+.mpfbs-app .mpfbs-savebar.is-dirty .mpfbs-savebar__status {
+	color: var( --mpfbs-primary );
+	font-weight: 600;
+}
+
+.mpfbs-app .mpfbs-savebar__actions {
+	display: flex;
+	align-items: center;
+	gap: var( --mpfbs-space-2 );
+	flex-shrink: 0;
+}
+
+/* -------------------------------------------------------- Record summary */
+
+.mpfbs-app .mpfbs-record {
+	margin-block-end: var( --mpfbs-space-5 );
+	border: 1px solid var( --mpfbs-border );
+	border-radius: var( --mpfbs-radius );
+	background: var( --mpfbs-surface-muted );
+	overflow: hidden;
+}
+
+.mpfbs-app .mpfbs-record__head {
+	display: flex;
+	align-items: flex-start;
+	justify-content: space-between;
+	gap: var( --mpfbs-space-4 );
+	padding: var( --mpfbs-space-4 );
+	background: var( --mpfbs-surface );
+	border-block-end: 1px solid var( --mpfbs-border );
+}
+
+.mpfbs-app .mpfbs-record__ref {
+	margin: 0;
+	font-family: Menlo, Consolas, monospace;
+	font-size: 15px;
+	font-weight: 700;
+	letter-spacing: 0.04em;
+}
+
+.mpfbs-app .mpfbs-record__meta {
+	margin: 2px 0 0;
+	color: var( --mpfbs-text-muted );
+	font-size: 12px;
+}
+
+.mpfbs-app .mpfbs-record__total {
+	margin: 0;
+	font-size: 20px;
+	font-weight: 700;
+	font-variant-numeric: tabular-nums;
+	white-space: nowrap;
+}
+
+/*
+ * A definition list needs an explicit two-column layout: with the browser
+ * default the term and its description sit on separate lines with no gap, and
+ * a stack of them reads as one run-on sentence — "ReferenceMPFBS-2068".
+ */
+.mpfbs-app .mpfbs-record__grid {
+	margin: 0;
+	padding: var( --mpfbs-space-2 ) var( --mpfbs-space-4 );
+}
+
+.mpfbs-app .mpfbs-record__row {
+	display: flex;
+	align-items: baseline;
+	justify-content: space-between;
+	gap: var( --mpfbs-space-4 );
+	padding-block: 7px;
+	border-block-end: 1px solid var( --mpfbs-border );
+}
+
+.mpfbs-app .mpfbs-record__row:last-child {
+	border-block-end: 0;
+}
+
+.mpfbs-app .mpfbs-record__label {
+	margin: 0;
+	color: var( --mpfbs-text-muted );
+	font-size: 12px;
+	font-weight: 600;
+}
+
+.mpfbs-app .mpfbs-record__value {
+	margin: 0;
+	text-align: end;
+	font-variant-numeric: tabular-nums;
+}
+
+.mpfbs-app .mpfbs-record__row.is-total {
+	margin-block-start: var( --mpfbs-space-1 );
+	padding-block-start: var( --mpfbs-space-3 );
+	border-block-start: 1px solid var( --mpfbs-border-strong );
+	border-block-end: 0;
+}
+
+.mpfbs-app .mpfbs-record__row.is-total .mpfbs-record__label,
+.mpfbs-app .mpfbs-record__row.is-total .mpfbs-record__value {
+	font-size: 15px;
+	font-weight: 700;
+	color: var( --mpfbs-text );
+}
+
+.mpfbs-app .mpfbs-drawer__footer {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: var( --mpfbs-space-3 );
+	margin-block-start: var( --mpfbs-space-5 );
+	padding-block-start: var( --mpfbs-space-4 );
+	border-block-start: 1px solid var( --mpfbs-border );
+}
+
+.mpfbs-app .mpfbs-button--danger {
+	background: var( --mpfbs-surface );
+	border: 1px solid var( --mpfbs-danger );
+	color: var( --mpfbs-danger );
+}
+
+.mpfbs-app .mpfbs-button--danger:hover:not( :disabled ) {
+	background: var( --mpfbs-danger-soft );
+}
+
+/* ------------------------------------------------------------- Dashboard */
+
+.mpfbs-app .mpfbs-dash {
+	display: grid;
+	grid-template-columns: 1fr;
+	gap: var( --mpfbs-space-4 );
+	margin-block-start: var( --mpfbs-space-4 );
+}
+
+@media ( min-width: 1100px ) {
+	.mpfbs-app .mpfbs-dash {
+		grid-template-columns: 1.35fr 1fr;
+		align-items: start;
+	}
+}
+
+.mpfbs-app .mpfbs-departures,
+.mpfbs-app .mpfbs-recent {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+.mpfbs-app .mpfbs-departure {
+	display: grid;
+	grid-template-columns: auto 1fr auto auto;
+	align-items: center;
+	gap: var( --mpfbs-space-4 );
+	padding: var( --mpfbs-space-3 ) var( --mpfbs-space-5 );
+	border-block-end: 1px solid var( --mpfbs-border );
+}
+
+.mpfbs-app .mpfbs-departure:last-child {
+	border-block-end: 0;
+}
+
+.mpfbs-app .mpfbs-departure__time {
+	font-size: 15px;
+	font-weight: 700;
+	font-variant-numeric: tabular-nums;
+	min-inline-size: 48px;
+}
+
+.mpfbs-app .mpfbs-departure__detail {
+	display: flex;
+	flex-direction: column;
+	min-inline-size: 0;
+}
+
+.mpfbs-app .mpfbs-departure__route {
+	font-weight: 600;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.mpfbs-app .mpfbs-departure__vessel {
+	color: var( --mpfbs-text-faint );
+	font-size: 12px;
+}
+
+.mpfbs-app .mpfbs-departure__load {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-end;
+	gap: 4px;
+	min-inline-size: 110px;
+}
+
+.mpfbs-app .mpfbs-departure__figures {
+	font-size: 12px;
+	font-variant-numeric: tabular-nums;
+	color: var( --mpfbs-text-muted );
+}
+
+.mpfbs-app .mpfbs-meter {
+	display: block;
+	inline-size: 100px;
+	block-size: 6px;
+	border-radius: 999px;
+	background: var( --mpfbs-surface-muted );
+	border: 1px solid var( --mpfbs-border );
+	overflow: hidden;
+}
+
+.mpfbs-app .mpfbs-meter__fill {
+	display: block;
+	block-size: 100%;
+	border-radius: 999px;
+}
+
+.mpfbs-app .mpfbs-meter--quiet .mpfbs-meter__fill {
+	background: var( --mpfbs-positive );
+}
+
+.mpfbs-app .mpfbs-meter--busy .mpfbs-meter__fill {
+	background: var( --mpfbs-warning );
+}
+
+.mpfbs-app .mpfbs-meter--full .mpfbs-meter__fill {
+	background: var( --mpfbs-danger );
+}
+
+.mpfbs-app .mpfbs-recent__row {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: var( --mpfbs-space-4 );
+	padding: var( --mpfbs-space-3 ) var( --mpfbs-space-5 );
+	border-block-end: 1px solid var( --mpfbs-border );
+}
+
+.mpfbs-app .mpfbs-recent__row:last-child {
+	border-block-end: 0;
+}
+
+.mpfbs-app .mpfbs-recent__main {
+	display: flex;
+	flex-direction: column;
+	gap: 2px;
+	min-inline-size: 0;
+}
+
+.mpfbs-app .mpfbs-recent__customer {
+	font-weight: 600;
+}
+
+.mpfbs-app .mpfbs-recent__departure {
+	color: var( --mpfbs-text-faint );
+	font-size: 12px;
+}
+
+.mpfbs-app .mpfbs-recent__meta {
+	display: flex;
+	align-items: center;
+	gap: var( --mpfbs-space-3 );
+	flex-shrink: 0;
+}
+
+.mpfbs-app .mpfbs-recent__total {
+	font-weight: 700;
+	font-variant-numeric: tabular-nums;
+}
+
+/* ------------------------------------------------- System information */
+
+.mpfbs-app .mpfbs-system {
+	margin-block-start: var( --mpfbs-space-5 );
+	border: 1px solid var( --mpfbs-border );
+	border-radius: var( --mpfbs-radius );
+	background: var( --mpfbs-surface );
+}
+
+.mpfbs-app .mpfbs-system__summary {
+	display: flex;
+	align-items: center;
+	gap: var( --mpfbs-space-2 );
+	padding: var( --mpfbs-space-3 ) var( --mpfbs-space-4 );
+	color: var( --mpfbs-text-muted );
+	font-size: 13px;
+	font-weight: 600;
+	cursor: pointer;
+	list-style: none;
+}
+
+.mpfbs-app .mpfbs-system__summary::-webkit-details-marker {
+	display: none;
+}
+
+.mpfbs-app .mpfbs-system__grid {
+	display: grid;
+	grid-template-columns: repeat( auto-fit, minmax( 150px, 1fr ) );
+	gap: var( --mpfbs-space-3 ) var( --mpfbs-space-5 );
+	margin: 0;
+	padding: 0 var( --mpfbs-space-4 ) var( --mpfbs-space-4 );
+}
+
+.mpfbs-app .mpfbs-system__item dt {
+	color: var( --mpfbs-text-faint );
+	font-size: 11px;
+	font-weight: 700;
+	letter-spacing: 0.05em;
+	text-transform: uppercase;
+}
+
+.mpfbs-app .mpfbs-system__item dd {
+	margin: 2px 0 0;
+	font-weight: 600;
+}
+
+@media ( max-width: 782px ) {
+	.mpfbs-app .mpfbs-departure {
+		grid-template-columns: auto 1fr;
+		row-gap: var( --mpfbs-space-2 );
+	}
+
+	.mpfbs-app .mpfbs-departure__load {
+		grid-column: 1 / -1;
+		align-items: flex-start;
+	}
+}
+
+/* --------------------------------------------------------- Settings screen */
+
+.mpfbs-app .mpfbs-settings__lede {
+	margin: 0 0 var( --mpfbs-space-4 );
+	max-inline-size: 70ch;
+	color: var( --mpfbs-text-muted );
+}
+
+/* A full-width row inside the settings column: a long explanation, a wide
+   select, or an action button that should not be mistaken for a field. */
+.mpfbs-app .mpfbs-settings__wide {
+	grid-column: 1 / -1;
+}
+
+.mpfbs-app .mpfbs-visually-hidden {
+	position: absolute;
+	inline-size: 1px;
+	block-size: 1px;
+	margin: -1px;
+	padding: 0;
+	overflow: hidden;
+	clip-path: inset( 50% );
+	white-space: nowrap;
+	border: 0;
+}
+
+/* ------------------------------------------------------------ Colour field */
+
+.mpfbs-app .mpfbs-colorfield {
+	display: flex;
+	align-items: center;
+	gap: var( --mpfbs-space-2 );
+}
+
+.mpfbs-app .mpfbs-colorfield__swatch {
+	inline-size: 44px;
+	block-size: 38px;
+	padding: 2px;
+	border: 1px solid var( --mpfbs-border );
+	border-radius: var( --mpfbs-radius-sm );
+	background: var( --mpfbs-surface );
+	cursor: pointer;
+	flex-shrink: 0;
+}
+
+.mpfbs-app .mpfbs-colorfield__hex {
+	font-family: var( --mpfbs-font-mono, ui-monospace, monospace );
+	max-inline-size: 10rem;
+	text-transform: lowercase;
+}
+
+/* ---------------------------------------------------------- Managed pages */
+
+.mpfbs-app .mpfbs-pagelist {
+	list-style: none;
+	margin: 0;
+	padding: var( --mpfbs-space-2 ) var( --mpfbs-space-5 ) var( --mpfbs-space-5 );
+}
+
+.mpfbs-app .mpfbs-pagelist__row {
+	display: flex;
+	align-items: center;
+	gap: var( --mpfbs-space-3 );
+	padding-block: var( --mpfbs-space-3 );
+	border-block-start: 1px solid var( --mpfbs-border-subtle, var( --mpfbs-border ) );
+}
+
+.mpfbs-app .mpfbs-pagelist__row:first-child {
+	border-block-start: 0;
+}
+
+.mpfbs-app .mpfbs-pagelist__title {
+	flex: 1 1 auto;
+	font-weight: 600;
+}
+
+.mpfbs-app .mpfbs-pagelist__missing {
+	color: var( --mpfbs-danger, #b32d2e );
+	font-weight: 600;
+}
+
+/* --------------------------------------------------- Settings navigation */
+
+/*
+ * A dozen tabs or more. A horizontal strip that wide has to scroll
+ * sideways, which hides settings behind a gesture nobody makes, so the tabs are
+ * a grouped column beside the panel instead. Below the breakpoint the same
+ * markup wraps into rows rather than gaining a scrollbar.
+ */
+.mpfbs-app .mpfbs-settings__layout {
+	display: grid;
+	grid-template-columns: 232px minmax( 0, 1fr );
+	gap: var( --mpfbs-space-5 );
+	align-items: start;
+}
+
+.mpfbs-app .mpfbs-settings__nav {
+	position: sticky;
+	inset-block-start: calc( var( --mpfbs-header-height ) + var( --mpfbs-space-4 ) );
+	display: grid;
+	gap: var( --mpfbs-space-4 );
+	min-inline-size: 0;
+}
+
+.mpfbs-app .mpfbs-settings__navgroup {
+	min-inline-size: 0;
+}
+
+.mpfbs-app .mpfbs-settings__navtitle {
+	margin: 0 0 var( --mpfbs-space-2 );
+	padding-inline: var( --mpfbs-space-3 );
+	font-size: 11px;
+	font-weight: 700;
+	letter-spacing: 0.06em;
+	text-transform: uppercase;
+	color: var( --mpfbs-text-faint );
+}
+
+.mpfbs-app .mpfbs-settings__navlist {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	display: grid;
+	gap: 2px;
+}
+
+/* wp-admin gives every list item a bottom margin; the gap sets the rhythm here. */
+.mpfbs-app .mpfbs-settings__navlist li {
+	margin: 0;
+}
+
+.mpfbs-app .mpfbs-settings__navlink {
+	display: block;
+	padding: 7px var( --mpfbs-space-3 );
+	border-radius: var( --mpfbs-radius-sm );
+	color: var( --mpfbs-text-muted );
+	font-weight: 600;
+	text-decoration: none;
+	transition: background-color 0.12s ease, color 0.12s ease;
+}
+
+.mpfbs-app .mpfbs-settings__navlink:hover {
+	background: var( --mpfbs-surface-muted );
+	color: var( --mpfbs-text );
+}
+
+.mpfbs-app .mpfbs-settings__navlink:focus-visible {
+	outline: 2px solid var( --mpfbs-primary );
+	outline-offset: 1px;
+}
+
+.mpfbs-app .mpfbs-settings__navlink.is-active {
+	background: var( --mpfbs-primary-soft );
+	color: var( --mpfbs-primary );
+}
+
+.mpfbs-app .mpfbs-settings__panels {
+	min-inline-size: 0;
+}
+
+@media ( max-width: 1200px ) {
+	.mpfbs-app .mpfbs-settings__layout {
+		grid-template-columns: minmax( 0, 1fr );
+		gap: var( --mpfbs-space-4 );
+	}
+
+	.mpfbs-app .mpfbs-settings__nav {
+		position: static;
+		gap: var( --mpfbs-space-2 );
+		padding-block-end: var( --mpfbs-space-3 );
+		border-block-end: 1px solid var( --mpfbs-border );
+	}
+
+	.mpfbs-app .mpfbs-settings__navgroup {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: var( --mpfbs-space-2 );
+	}
+
+	.mpfbs-app .mpfbs-settings__navtitle {
+		margin: 0;
+		padding-inline: 0;
+		flex: 0 0 auto;
+		min-inline-size: 9rem;
+	}
+
+	.mpfbs-app .mpfbs-settings__navlist {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 2px;
+	}
+}
+
+@media ( max-width: 600px ) {
+	.mpfbs-app .mpfbs-settings__navtitle {
+		flex: 1 0 100%;
+		min-inline-size: 0;
+	}
+}
+
+/* -------------------------------------------------------- Permission matrix */
+
+/* The matrix is as wide as the number of roles, which an operator may add to,
+   so it scrolls inside its own box rather than pushing the page sideways. */
+.mpfbs-app .mpfbs-matrix__scroll {
+	overflow-x: auto;
+	padding: var( --mpfbs-space-2 ) var( --mpfbs-space-5 ) var( --mpfbs-space-5 );
+}
+
+.mpfbs-app .mpfbs-matrix {
+	border-collapse: collapse;
+	inline-size: 100%;
+	min-inline-size: 40rem;
+}
+
+.mpfbs-app .mpfbs-matrix th,
+.mpfbs-app .mpfbs-matrix td {
+	padding: var( --mpfbs-space-2 ) var( --mpfbs-space-3 );
+	border-block-end: 1px solid var( --mpfbs-border-subtle, var( --mpfbs-border ) );
+	text-align: start;
+}
+
+.mpfbs-app .mpfbs-matrix thead th {
+	vertical-align: bottom;
+	border-block-end: 1px solid var( --mpfbs-border );
+}
+
+.mpfbs-app .mpfbs-matrix tbody th {
+	font-weight: 500;
+	color: var( --mpfbs-text );
+}
+
+.mpfbs-app .mpfbs-matrix td {
+	text-align: center;
+	inline-size: 1%;
+}
+
+.mpfbs-app .mpfbs-matrix__role {
+	display: block;
+	font-size: 12px;
+	font-weight: 700;
+	white-space: nowrap;
+}
+
+.mpfbs-app .mpfbs-matrix__count {
+	display: block;
+	font-size: 11px;
+	font-weight: 400;
+	color: var( --mpfbs-text-faint );
+	white-space: nowrap;
+}
+
+.mpfbs-app .mpfbs-matrix__cell {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	padding: var( --mpfbs-space-1 );
+	cursor: pointer;
+}
+
+/* ------------------------------------------------------- Staff booking form */
+
+/* The price panel sticks alongside on a wide screen and drops to the bottom on
+   a narrow one, so the total is always in view while the form is being filled. */
+.mpfbs-app .mpfbs-booking-form {
+	display: grid;
+	gap: var( --mpfbs-space-4 );
+	align-items: start;
+}
+
+@media ( min-width: 60rem ) {
+	.mpfbs-app .mpfbs-booking-form {
+		grid-template-columns: minmax( 0, 1fr ) 20rem;
+	}
+
+	.mpfbs-app .mpfbs-booking-form__side {
+		position: sticky;
+		inset-block-start: var( --mpfbs-space-4 );
+	}
+}
+
+.mpfbs-app .mpfbs-booking-form__main {
+	display: grid;
+	gap: var( --mpfbs-space-4 );
+	min-inline-size: 0;
+}
+
+/* ------------------------------------------------------- Booking wizard */
+
+/*
+ * One card holding the step being answered, rather than five stacked panels.
+ * The price rail beside it stays put, because the number staff are quoting down
+ * the phone must not scroll away while they fill in the party.
+ */
+.mpfbs-app .mpfbs-wizard {
+	padding: var( --mpfbs-space-5 );
+}
+
+.mpfbs-app .mpfbs-wizard__note {
+	margin: 0 0 var( --mpfbs-space-4 );
+	max-inline-size: 68ch;
+	color: var( --mpfbs-text-muted );
+	font-size: 13px;
+	line-height: 1.55;
+}
+
+.mpfbs-app .mpfbs-wizard__subhead {
+	display: flex;
+	align-items: baseline;
+	justify-content: space-between;
+	gap: var( --mpfbs-space-3 );
+	margin-block-start: var( --mpfbs-space-5 );
+	padding-block-start: var( --mpfbs-space-4 );
+	border-block-start: 1px solid var( --mpfbs-border );
+}
+
+.mpfbs-app .mpfbs-wizard__subhead .mpfbs-subheading {
+	margin: 0;
+}
+
+.mpfbs-app .mpfbs-wizard__footer {
+	display: flex;
+	align-items: center;
+	gap: var( --mpfbs-space-3 );
+	margin-block-start: var( --mpfbs-space-5 );
+	padding-block-start: var( --mpfbs-space-4 );
+	border-block-start: 1px solid var( --mpfbs-border );
+}
+
+.mpfbs-app .mpfbs-wizard__footer-end {
+	margin-inline-start: auto;
+	display: flex;
+	align-items: center;
+	gap: var( --mpfbs-space-2 );
+}
+
+/* ------------------------------------------------------- Quantity picker */
+
+.mpfbs-app .mpfbs-qty-groups {
+	display: grid;
+	gap: var( --mpfbs-space-4 );
+}
+
+@media ( min-width: 48rem ) {
+	.mpfbs-app .mpfbs-qty-groups {
+		grid-template-columns: repeat( auto-fit, minmax( 17rem, 1fr ) );
+	}
+}
+
+.mpfbs-app .mpfbs-qty__title {
+	display: flex;
+	align-items: center;
+	gap: var( --mpfbs-space-2 );
+	margin: 0 0 var( --mpfbs-space-2 );
+	color: var( --mpfbs-text-muted );
+	font-size: 11px;
+	font-weight: 700;
+	letter-spacing: 0.06em;
+	text-transform: uppercase;
+}
+
+.mpfbs-app .mpfbs-qty__count {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	min-inline-size: 18px;
+	padding: 0 5px;
+	border-radius: 999px;
+	background: var( --mpfbs-primary );
+	color: #ffffff;
+	font-size: 10px;
+	letter-spacing: 0;
+}
+
+.mpfbs-app .mpfbs-qty__list {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	border: 1px solid var( --mpfbs-border );
+	border-radius: var( --mpfbs-radius-sm );
+	overflow: hidden;
+}
+
+.mpfbs-app .mpfbs-qty__row {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: var( --mpfbs-space-3 );
+	padding: 5px var( --mpfbs-space-3 );
+	border-block-end: 1px solid var( --mpfbs-border );
+}
+
+.mpfbs-app .mpfbs-qty__row:last-child {
+	border-block-end: 0;
+}
+
+/* A row that has been added to is tinted, so a built party reads at a glance. */
+.mpfbs-app .mpfbs-qty__row.is-chosen {
+	background: var( --mpfbs-primary-soft );
+}
+
+.mpfbs-app .mpfbs-qty__label {
+	min-inline-size: 0;
+	display: flex;
+	flex-direction: column;
+}
+
+.mpfbs-app .mpfbs-qty__name {
+	font-size: 13px;
+	font-weight: 600;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.mpfbs-app .mpfbs-qty__meta {
+	color: var( --mpfbs-text-muted );
+	font-size: 11px;
+}
+
+.mpfbs-app .mpfbs-qty__stepper {
+	flex: 0 0 auto;
+	display: inline-flex;
+	align-items: center;
+	gap: 2px;
+}
+
+.mpfbs-app .mpfbs-qty__button {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	inline-size: 24px;
+	block-size: 24px;
+	padding: 0;
+	background: var( --mpfbs-surface );
+	border: 1px solid var( --mpfbs-border-strong );
+	border-radius: var( --mpfbs-radius-sm );
+	color: var( --mpfbs-text );
+	cursor: pointer;
+}
+
+.mpfbs-app .mpfbs-qty__button:hover:not( :disabled ) {
+	border-color: var( --mpfbs-primary );
+	color: var( --mpfbs-primary );
+}
+
+.mpfbs-app .mpfbs-qty__button:disabled {
+	opacity: 0.4;
+	cursor: not-allowed;
+}
+
+.mpfbs-app .mpfbs-qty__value {
+	min-inline-size: 24px;
+	text-align: center;
+	font-size: 13px;
+	font-weight: 600;
+	font-variant-numeric: tabular-nums;
+}
+
+.mpfbs-app .mpfbs-qty__empty {
+	margin: var( --mpfbs-space-2 ) 0 0;
+	color: var( --mpfbs-text-muted );
+	font-size: 12px;
+}
+
+/* ------------------------------------------------------------ Sailing picker */
+
+.mpfbs-app .mpfbs-sailinglist {
+	list-style: none;
+	margin: 0;
+	padding: 0 var( --mpfbs-space-5 ) var( --mpfbs-space-5 );
+}
+
+.mpfbs-app .mpfbs-sailinglist__empty {
+	padding-block: var( --mpfbs-space-3 );
+	color: var( --mpfbs-text-muted );
+}
+
+.mpfbs-app .mpfbs-sailinglist__row {
+	display: grid;
+	grid-template-columns: auto auto minmax( 0, 1fr ) auto auto;
+	align-items: center;
+	gap: var( --mpfbs-space-3 );
+	padding: var( --mpfbs-space-3 );
+	border: 1px solid var( --mpfbs-border );
+	border-radius: var( --mpfbs-radius-sm );
+	margin-block-start: var( --mpfbs-space-2 );
+	cursor: pointer;
+}
+
+.mpfbs-app .mpfbs-sailinglist__row:hover {
+	border-color: var( --mpfbs-border-strong );
+	background: var( --mpfbs-surface-muted );
+}
+
+.mpfbs-app .mpfbs-sailinglist__row.is-selected {
+	border-color: var( --mpfbs-primary );
+	background: var( --mpfbs-primary-soft, var( --mpfbs-surface-muted ) );
+}
+
+.mpfbs-app .mpfbs-sailinglist__row:has( input:disabled ) {
+	opacity: 0.55;
+	cursor: not-allowed;
+}
+
+.mpfbs-app .mpfbs-sailinglist__time {
+	font-weight: 700;
+	font-variant-numeric: tabular-nums;
+}
+
+.mpfbs-app .mpfbs-sailinglist__route {
+	min-inline-size: 0;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.mpfbs-app .mpfbs-sailinglist__vessel,
+.mpfbs-app .mpfbs-sailinglist__seats {
+	color: var( --mpfbs-text-muted );
+	font-size: 13px;
+	white-space: nowrap;
+}
+
+/* -------------------------------------------------------- Customer matches */
+
+.mpfbs-app .mpfbs-matchlist {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	border: 1px solid var( --mpfbs-border );
+	border-radius: var( --mpfbs-radius-sm );
+	overflow: hidden;
+}
+
+.mpfbs-app .mpfbs-matchlist__row {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var( --mpfbs-space-2 );
+	inline-size: 100%;
+	padding: var( --mpfbs-space-3 );
+	border: 0;
+	border-block-start: 1px solid var( --mpfbs-border );
+	background: none;
+	font: inherit;
+	text-align: start;
+	cursor: pointer;
+}
+
+.mpfbs-app .mpfbs-matchlist li:first-child .mpfbs-matchlist__row {
+	border-block-start: 0;
+}
+
+.mpfbs-app .mpfbs-matchlist__row:hover {
+	background: var( --mpfbs-surface-muted );
+}
+
+.mpfbs-app .mpfbs-matchlist__name {
+	font-weight: 600;
+}
+
+.mpfbs-app .mpfbs-matchlist__email {
+	color: var( --mpfbs-text-muted );
+}
+
+/* ------------------------------------------------------------- Price panel */
+
+.mpfbs-app .mpfbs-quote .mpfbs-panel__header {
+	display: flex;
+	align-items: baseline;
+	justify-content: space-between;
+	gap: var( --mpfbs-space-3 );
+}
+
+.mpfbs-app .mpfbs-quote__headline {
+	margin: 0;
+	font-size: 18px;
+	font-weight: 700;
+	font-variant-numeric: tabular-nums;
+	color: var( --mpfbs-primary );
+}
+
+.mpfbs-app .mpfbs-qty__fare {
+	margin-inline-start: auto;
+	color: var( --mpfbs-text-muted );
+	font-size: 12px;
+	font-weight: 600;
+	font-variant-numeric: tabular-nums;
+	white-space: nowrap;
+}
+
+.mpfbs-app .mpfbs-qty__fare.is-free {
+	color: var( --mpfbs-positive );
+	text-transform: uppercase;
+	font-size: 10px;
+	letter-spacing: 0.05em;
+}
+
+.mpfbs-app .mpfbs-quote__lines {
+	list-style: none;
+	margin: 0;
+	padding: var( --mpfbs-space-4 ) var( --mpfbs-space-5 ) 0;
+}
+
+.mpfbs-app .mpfbs-quote__lines li {
+	display: flex;
+	justify-content: space-between;
+	gap: var( --mpfbs-space-3 );
+	padding-block: var( --mpfbs-space-2 );
+	border-block-end: 1px solid var( --mpfbs-border );
+	font-size: 13px;
+}
+
+.mpfbs-app .mpfbs-quote__total {
+	display: flex;
+	justify-content: space-between;
+	gap: var( --mpfbs-space-3 );
+	margin: 0;
+	padding: var( --mpfbs-space-4 ) var( --mpfbs-space-5 ) 0;
+	font-size: 18px;
+	font-weight: 700;
+}
+
+.mpfbs-app .mpfbs-quote__empty,
+.mpfbs-app .mpfbs-quote__note {
+	margin: 0;
+	padding: var( --mpfbs-space-3 ) var( --mpfbs-space-5 ) 0;
+	color: var( --mpfbs-text-muted );
+	font-size: 13px;
+}
+
+/* Each traveller's own fields, kept visually separate so a busy desk can see
+   at a glance which name belongs to which person. */
+.mpfbs-app .mpfbs-party-row {
+	border-block-start: 1px solid var( --mpfbs-border );
+}
+
+.mpfbs-app .mpfbs-party-row__title {
+	margin: 0;
+	padding: var( --mpfbs-space-4 ) var( --mpfbs-space-5 ) 0;
+	font-size: 12px;
+	font-weight: 700;
+	letter-spacing: 0.06em;
+	text-transform: uppercase;
+	color: var( --mpfbs-text-faint );
+}
+
+.mpfbs-app .mpfbs-party-row .mpfbs-settings {
+	padding-block-start: var( --mpfbs-space-3 );
+}
+
+/* ------------------------------------------------------- Large buttons */
+
+.mpfbs-app .mpfbs-button--large {
+	min-block-size: 56px;
+	padding-inline: var( --mpfbs-space-6 );
+	font-size: 17px;
+}
+
+/* ---------------------------------------------------------- Icon buttons */
+
+.mpfbs-app .mpfbs-iconbutton {
+	inline-size: 28px;
+	block-size: 28px;
+	border: 1px solid var( --mpfbs-border );
+	border-radius: var( --mpfbs-radius-sm );
+	background: var( --mpfbs-surface, #fff );
+	font: inherit;
+	line-height: 1;
+	cursor: pointer;
+	color: var( --mpfbs-text-muted );
+}
+
+.mpfbs-app .mpfbs-iconbutton:hover:not( :disabled ) {
+	border-color: var( --mpfbs-border-strong );
+	color: var( --mpfbs-text );
+}
+
+.mpfbs-app .mpfbs-iconbutton:disabled {
+	opacity: 0.4;
+	cursor: not-allowed;
+}
+
+/* ------------------------------------------------------------ Stat tones */
+
+.mpfbs-app .mpfbs-stat--warning .mpfbs-stat__value {
+	color: var( --mpfbs-warning, #a35c00 );
+}
+
+.mpfbs-app .mpfbs-stat--danger .mpfbs-stat__value {
+	color: var( --mpfbs-danger );
+}
+
+.mpfbs-app .mpfbs-pill--warning {
+	background: var( --mpfbs-warning-soft, #fdf2e2 );
+	color: var( --mpfbs-warning, #a35c00 );
+}
+
+/* --------------------------------------------------------- Shared pieces */
+
+/*
+ * Alerts in the remaining tones. The error tone already existed; these follow
+ * the same shape so a panel can switch tone without switching layout.
+ */
+.mpfbs-app .mpfbs-alert--success {
+	background: var( --mpfbs-positive-soft );
+	color: var( --mpfbs-positive );
+	border-inline-start: 3px solid var( --mpfbs-positive );
+}
+
+.mpfbs-app .mpfbs-alert--warning {
+	background: var( --mpfbs-warning-soft );
+	color: var( --mpfbs-warning );
+	border-inline-start: 3px solid var( --mpfbs-warning );
+}
+
+.mpfbs-app .mpfbs-alert--info {
+	background: var( --mpfbs-primary-soft );
+	color: var( --mpfbs-primary );
+	border-inline-start: 3px solid var( --mpfbs-primary );
+}
+
+.mpfbs-app .mpfbs-alert .mpfbs-list {
+	margin: var( --mpfbs-space-2 ) 0 0;
+	padding-inline-start: var( --mpfbs-space-5 );
+}
+
+.mpfbs-app .mpfbs-stat__value.is-negative {
+	color: var( --mpfbs-danger );
+}
+
+/* ------------------------------------------------- Settings signposts */
+
+/*
+ * A settings tab that no longer holds the controls says where they went. The
+ * tab stays where an operator expects to find it; the setting has one home.
+ */
+.mpfbs-app .mpfbs-settings__elsewhere {
+	padding: 0 var( --mpfbs-space-5 ) var( --mpfbs-space-5 );
+}
+
+/* ------------------------------------------------------ First-run demo offer */
+
+/*
+ * Shown once, over an empty dashboard. It sits above the sidebar and header
+ * because there is nothing useful behind it yet on an install with no data.
+ */
+.mpfbs-app .mpfbs-demo__backdrop {
+	position: fixed;
+	inset: 0;
+	z-index: 60;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: var( --mpfbs-space-5 );
+	background: rgba( 16, 35, 61, 0.55 );
+	overflow-y: auto;
+}
+
+.mpfbs-app .mpfbs-demo {
+	inline-size: min( 560px, 100% );
+	background: var( --mpfbs-surface );
+	border-radius: var( --mpfbs-radius-lg );
+	box-shadow: var( --mpfbs-shadow-lg );
+	padding: var( --mpfbs-space-6 );
+	margin-block: auto;
+}
+
+.mpfbs-app .mpfbs-demo:focus-visible {
+	outline: 2px solid var( --mpfbs-primary );
+	outline-offset: 2px;
+}
+
+.mpfbs-app .mpfbs-demo__head {
+	display: flex;
+	gap: var( --mpfbs-space-4 );
+	align-items: flex-start;
+}
+
+.mpfbs-app .mpfbs-demo__mark {
+	flex: 0 0 auto;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	inline-size: 44px;
+	block-size: 44px;
+	border-radius: 50%;
+	background: var( --mpfbs-primary-soft );
+	color: var( --mpfbs-primary );
+}
+
+.mpfbs-app .mpfbs-demo__title {
+	margin: 0 0 var( --mpfbs-space-2 );
+	font-size: 19px;
+	line-height: 1.3;
+}
+
+.mpfbs-app .mpfbs-demo__lede {
+	margin: 0;
+	color: var( --mpfbs-text-muted );
+}
+
+.mpfbs-app .mpfbs-demo__name {
+	margin: var( --mpfbs-space-5 ) 0 var( --mpfbs-space-3 );
+	font-weight: 700;
+}
+
+.mpfbs-app .mpfbs-demo__list {
+	list-style: none;
+	margin: 0 0 var( --mpfbs-space-5 );
+	padding: 0;
+	display: grid;
+	gap: var( --mpfbs-space-2 );
+}
+
+.mpfbs-app .mpfbs-demo__list li {
+	display: flex;
+	gap: var( --mpfbs-space-2 );
+	align-items: flex-start;
+	margin: 0;
+	color: var( --mpfbs-text-muted );
+}
+
+.mpfbs-app .mpfbs-demo__list svg {
+	flex: 0 0 auto;
+	margin-block-start: 3px;
+	color: var( --mpfbs-positive );
+}
+
+.mpfbs-app .mpfbs-demo__progress {
+	margin-block-end: var( --mpfbs-space-4 );
+}
+
+.mpfbs-app .mpfbs-demo__bar {
+	block-size: 6px;
+	border-radius: 999px;
+	background: var( --mpfbs-surface-muted );
+	overflow: hidden;
+}
+
+.mpfbs-app .mpfbs-demo__fill {
+	display: block;
+	block-size: 100%;
+	background: var( --mpfbs-primary );
+	transition: inline-size 0.2s ease;
+}
+
+.mpfbs-app .mpfbs-demo__step {
+	display: flex;
+	justify-content: space-between;
+	gap: var( --mpfbs-space-3 );
+	margin: var( --mpfbs-space-2 ) 0 0;
+	font-size: 13px;
+	color: var( --mpfbs-text-muted );
+}
+
+.mpfbs-app .mpfbs-demo__count {
+	flex: 0 0 auto;
+	font-variant-numeric: tabular-nums;
+}
+
+.mpfbs-app .mpfbs-demo__error {
+	margin: 0 0 var( --mpfbs-space-4 );
+	padding: var( --mpfbs-space-3 );
+	border-radius: var( --mpfbs-radius-sm );
+	background: var( --mpfbs-danger-soft );
+	color: var( --mpfbs-danger );
+}
+
+.mpfbs-app .mpfbs-demo__note {
+	margin: 0 0 var( --mpfbs-space-5 );
+	font-size: 13px;
+	color: var( --mpfbs-text-faint );
+}
+
+.mpfbs-app .mpfbs-demo__actions {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var( --mpfbs-space-3 );
+	justify-content: flex-end;
+}
+
+@media ( max-width: 600px ) {
+	.mpfbs-app .mpfbs-demo {
+		padding: var( --mpfbs-space-5 );
+	}
+
+	.mpfbs-app .mpfbs-demo__actions .mpfbs-button {
+		flex: 1 1 100%;
+	}
+}

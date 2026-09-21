@@ -7,7 +7,7 @@
 
 declare( strict_types=1 );
 
-namespace FBM\Payment;
+namespace MPFBS\Payment;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -15,9 +15,9 @@ defined( 'ABSPATH' ) || exit;
  * One way of taking money for a booking.
  *
  * A gateway knows how to present itself, whether it is available right now,
- * and what happens when a booking is confirmed through it. The Free plugin
- * ships offline gateways; Pro and third parties register Stripe, PayPal and
- * friends through the registry without touching the booking engine.
+ * and what happens when a booking is confirmed through it. The plugin
+ * ships offline gateways; third parties can register online gateways through
+ * the registry without touching the booking engine.
  *
  * BookingService never hard-codes a gateway id: it consults the registry,
  * which is what keeps the booking path open to new payment methods.

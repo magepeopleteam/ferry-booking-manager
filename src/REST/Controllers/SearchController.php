@@ -7,19 +7,19 @@
 
 declare( strict_types=1 );
 
-namespace FBM\REST\Controllers;
+namespace MPFBS\REST\Controllers;
 
-use FBM\Booking\FieldConfig;
-use FBM\Models\PassengerType;
-use FBM\Repositories\PassengerTypeRepository;
-use FBM\Repositories\VehicleTypeRepository;
-use FBM\REST\AbstractController;
-use FBM\REST\Response;
-use FBM\Search\SearchService;
-use FBM\Security\Permissions;
+use MPFBS\Booking\FieldConfig;
+use MPFBS\Models\PassengerType;
+use MPFBS\Repositories\PassengerTypeRepository;
+use MPFBS\Repositories\VehicleTypeRepository;
+use MPFBS\REST\AbstractController;
+use MPFBS\REST\Response;
+use MPFBS\Search\SearchService;
+use MPFBS\Security\Permissions;
 use WP_REST_Request;
 use WP_REST_Response;
-use FBM\Support\Money;
+use MPFBS\Support\Money;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -93,8 +93,8 @@ final class SearchController extends AbstractController {
 			array(
 				array(
 					'methods'             => 'GET',
-					'callback'            => array( $this, 'get_results' ),
-					'permission_callback' => $this->permissions->rest_public_callback( 'search', 90 ),
+					'callback'            => $this->public_handler( 'search', 90, array( $this, 'get_results' ) ),
+					'permission_callback' => '__return_true',
 					'args'                => $this->search_args(),
 				),
 			)
@@ -106,8 +106,8 @@ final class SearchController extends AbstractController {
 			array(
 				array(
 					'methods'             => 'GET',
-					'callback'            => array( $this, 'get_fares' ),
-					'permission_callback' => $this->permissions->rest_public_callback( 'fares', 120 ),
+					'callback'            => $this->public_handler( 'fares', 120, array( $this, 'get_fares' ) ),
+					'permission_callback' => '__return_true',
 					'args'                => array(
 						'origin'      => array(
 							'description'       => __( 'Departure port id.', 'magepeople-ferry-booking-system' ),
@@ -132,8 +132,8 @@ final class SearchController extends AbstractController {
 			array(
 				array(
 					'methods'             => 'GET',
-					'callback'            => array( $this, 'get_options' ),
-					'permission_callback' => $this->permissions->rest_public_callback( 'options', 120 ),
+					'callback'            => $this->public_handler( 'options', 120, array( $this, 'get_options' ) ),
+					'permission_callback' => '__return_true',
 				),
 			)
 		);
@@ -322,7 +322,7 @@ final class SearchController extends AbstractController {
 		 *
 		 * @param array<string, mixed> $currency Currency settings.
 		 */
-		return (array) apply_filters( 'fbm_frontend_currency', $currency );
+		return (array) apply_filters( 'mpfbs_frontend_currency', $currency );
 	}
 
 	/**

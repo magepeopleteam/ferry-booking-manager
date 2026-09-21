@@ -168,9 +168,6 @@ export interface CustomerBookingLeg {
 
 /**
  * A booking as its owner sees it.
- *
- * `tickets` is filled in by the Pro plugin through the fbm_customer_booking
- * filter; Free never sends any, so the card simply renders no actions.
  */
 export interface CustomerBooking {
 	reference: string;
@@ -190,9 +187,7 @@ export interface CustomerBooking {
 	booked_on: string;
 	departure_ts: number;
 	upcoming: boolean;
-	cancellable: boolean;
 	legs: CustomerBookingLeg[];
-	tickets?: Array< { label: string; url: string } >;
 }
 
 export interface CustomerBookings {

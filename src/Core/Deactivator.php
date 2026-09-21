@@ -7,9 +7,9 @@
 
 declare( strict_types=1 );
 
-namespace FBM\Core;
+namespace MPFBS\Core;
 
-use FBM\Availability\HoldManager;
+use MPFBS\Availability\HoldManager;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -38,6 +38,6 @@ final class Deactivator {
 		 *
 		 * @since 1.0.0
 		 */
-		do_action( 'fbm_deactivated' );
+		do_action( 'mpfbs_deactivated' );
 	}
 }

@@ -7,9 +7,9 @@
 
 declare( strict_types=1 );
 
-namespace FBM\Models;
+namespace MPFBS\Models;
 
-use FBM\Security\Capabilities;
+use MPFBS\Security\Capabilities;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -20,7 +20,7 @@ defined( 'ABSPATH' ) || exit;
  * they are never queried — they are read once a booking is already identified.
  */
 final class Booking extends Entity {
-	public const POST_TYPE = 'fbm_booking';
+	public const POST_TYPE = 'mpfbs_booking';
 
 	public const STATUS_PENDING = 'pending';
 
@@ -110,126 +110,126 @@ final class Booking extends Entity {
 		return array(
 			'booking_number'    => array(
 				'type'        => 'string',
-				'meta'        => '_fbm_booking_number',
+				'meta'        => '_mpfbs_booking_number',
 				'max'         => 32,
 				'searchable'  => true,
 				'description' => __( 'Booking reference', 'magepeople-ferry-booking-system' ),
 			),
 			'customer_id'       => array(
 				'type'        => 'int',
-				'meta'        => '_fbm_customer_id',
+				'meta'        => '_mpfbs_customer_id',
 				'min'         => 0,
 				'description' => __( 'Customer user id', 'magepeople-ferry-booking-system' ),
 			),
 			'customer_email'    => array(
 				'type'        => 'email',
-				'meta'        => '_fbm_customer_email',
+				'meta'        => '_mpfbs_customer_email',
 				'searchable'  => true,
 				'description' => __( 'Customer email', 'magepeople-ferry-booking-system' ),
 			),
 			'customer_name'     => array(
 				'type'        => 'string',
-				'meta'        => '_fbm_customer_name',
+				'meta'        => '_mpfbs_customer_name',
 				'max'         => 200,
 				'searchable'  => true,
 				'description' => __( 'Customer name', 'magepeople-ferry-booking-system' ),
 			),
 			'customer_phone'    => array(
 				'type'        => 'string',
-				'meta'        => '_fbm_customer_phone',
+				'meta'        => '_mpfbs_customer_phone',
 				'max'         => 40,
 				'description' => __( 'Customer phone', 'magepeople-ferry-booking-system' ),
 			),
 			'sailing_id'        => array(
 				'type'        => 'id',
-				'meta'        => '_fbm_sailing_id',
+				'meta'        => '_mpfbs_sailing_id',
 				'references'  => Sailing::POST_TYPE,
 				'required'    => true,
 				'description' => __( 'Outbound sailing', 'magepeople-ferry-booking-system' ),
 			),
 			'return_sailing_id' => array(
 				'type'        => 'id',
-				'meta'        => '_fbm_return_sailing_id',
+				'meta'        => '_mpfbs_return_sailing_id',
 				'references'  => Sailing::POST_TYPE,
 				'description' => __( 'Return sailing', 'magepeople-ferry-booking-system' ),
 			),
 			'booking_type'      => array(
 				'type'        => 'enum',
-				'meta'        => '_fbm_booking_type',
+				'meta'        => '_mpfbs_booking_type',
 				'enum'        => array( self::TYPE_ONE_WAY, self::TYPE_RETURN ),
 				'default'     => self::TYPE_ONE_WAY,
 				'description' => __( 'Booking type', 'magepeople-ferry-booking-system' ),
 			),
 			'passenger_count'   => array(
 				'type'        => 'int',
-				'meta'        => '_fbm_passenger_count',
+				'meta'        => '_mpfbs_passenger_count',
 				'min'         => 0,
 				'max'         => 100000,
 				'description' => __( 'Passenger count', 'magepeople-ferry-booking-system' ),
 			),
 			'vehicle_count'     => array(
 				'type'        => 'int',
-				'meta'        => '_fbm_vehicle_count',
+				'meta'        => '_mpfbs_vehicle_count',
 				'min'         => 0,
 				'max'         => 100000,
 				'description' => __( 'Vehicle count', 'magepeople-ferry-booking-system' ),
 			),
 			'lane_metres'       => array(
 				'type'        => 'float',
-				'meta'        => '_fbm_lane_metres',
+				'meta'        => '_mpfbs_lane_metres',
 				'min'         => 0,
 				'description' => __( 'Lane metres consumed', 'magepeople-ferry-booking-system' ),
 			),
 			'subtotal'          => array(
 				'type'        => 'money',
-				'meta'        => '_fbm_subtotal',
+				'meta'        => '_mpfbs_subtotal',
 				'description' => __( 'Subtotal (minor units)', 'magepeople-ferry-booking-system' ),
 			),
 			'discount'          => array(
 				'type'        => 'money',
-				'meta'        => '_fbm_discount',
+				'meta'        => '_mpfbs_discount',
 				'description' => __( 'Discount (minor units)', 'magepeople-ferry-booking-system' ),
 			),
 			'tax'               => array(
 				'type'        => 'money',
-				'meta'        => '_fbm_tax',
+				'meta'        => '_mpfbs_tax',
 				'description' => __( 'Tax (minor units)', 'magepeople-ferry-booking-system' ),
 			),
 			'fees'              => array(
 				'type'        => 'money',
-				'meta'        => '_fbm_fees',
+				'meta'        => '_mpfbs_fees',
 				'description' => __( 'Fees (minor units)', 'magepeople-ferry-booking-system' ),
 			),
 			'total'             => array(
 				'type'        => 'money',
-				'meta'        => '_fbm_total',
+				'meta'        => '_mpfbs_total',
 				'description' => __( 'Total (minor units)', 'magepeople-ferry-booking-system' ),
 			),
 			'paid'              => array(
 				'type'        => 'money',
-				'meta'        => '_fbm_paid',
+				'meta'        => '_mpfbs_paid',
 				'description' => __( 'Amount paid (minor units)', 'magepeople-ferry-booking-system' ),
 			),
 			'refunded'          => array(
 				'type'        => 'money',
-				'meta'        => '_fbm_refunded',
+				'meta'        => '_mpfbs_refunded',
 				'description' => __( 'Amount refunded (minor units)', 'magepeople-ferry-booking-system' ),
 			),
 			'currency'          => array(
 				'type'        => 'string',
-				'meta'        => '_fbm_currency',
+				'meta'        => '_mpfbs_currency',
 				'max'         => 3,
 				'description' => __( 'Currency code', 'magepeople-ferry-booking-system' ),
 			),
 			'payment_method'    => array(
 				'type'        => 'string',
-				'meta'        => '_fbm_payment_method',
+				'meta'        => '_mpfbs_payment_method',
 				'max'         => 64,
 				'description' => __( 'Payment method', 'magepeople-ferry-booking-system' ),
 			),
 			'payment_status'    => array(
 				'type'        => 'enum',
-				'meta'        => '_fbm_payment_status',
+				'meta'        => '_mpfbs_payment_status',
 				'enum'        => array(
 					self::PAYMENT_UNPAID,
 					self::PAYMENT_PARTIAL,
@@ -242,7 +242,7 @@ final class Booking extends Entity {
 			),
 			'booking_status'    => array(
 				'type'        => 'enum',
-				'meta'        => '_fbm_booking_status',
+				'meta'        => '_mpfbs_booking_status',
 				'enum'        => array(
 					self::STATUS_PENDING,
 					self::STATUS_ON_HOLD,
@@ -257,65 +257,54 @@ final class Booking extends Entity {
 			),
 			'channel'           => array(
 				'type'        => 'enum',
-				'meta'        => '_fbm_channel',
-				'enum'        => array( 'web', 'backend', 'pos', 'agent', 'api' ),
+				'meta'        => '_mpfbs_channel',
+				'enum'        => array( 'web', 'backend', 'api' ),
 				'default'     => 'web',
 				'description' => __( 'Sales channel', 'magepeople-ferry-booking-system' ),
 			),
 			'wc_order_id'       => array(
 				'type'        => 'int',
-				'meta'        => '_fbm_wc_order_id',
+				'meta'        => '_mpfbs_wc_order_id',
 				'min'         => 0,
 				'description' => __( 'WooCommerce order id', 'magepeople-ferry-booking-system' ),
 			),
-			'agent_id'          => array(
-				'type'        => 'int',
-				'meta'        => '_fbm_agent_id',
-				'min'         => 0,
-				'description' => __( 'Agent user id', 'magepeople-ferry-booking-system' ),
-			),
 			'created_by'        => array(
 				'type'        => 'int',
-				'meta'        => '_fbm_created_by',
+				'meta'        => '_mpfbs_created_by',
 				'min'         => 0,
 				'description' => __( 'Created by user id', 'magepeople-ferry-booking-system' ),
 			),
 			'departure_ts'      => array(
 				'type'        => 'int',
-				'meta'        => '_fbm_departure_ts',
+				'meta'        => '_mpfbs_departure_ts',
 				'readonly'    => true,
 				'description' => __( 'Outbound departure timestamp (UTC)', 'magepeople-ferry-booking-system' ),
 			),
 			'idempotency_key'   => array(
 				'type'        => 'string',
-				'meta'        => '_fbm_idempotency_key',
+				'meta'        => '_mpfbs_idempotency_key',
 				'max'         => 64,
 				'description' => __( 'Idempotency key', 'magepeople-ferry-booking-system' ),
 			),
 			'hold_expires_ts'   => array(
 				'type'        => 'int',
-				'meta'        => '_fbm_hold_expires_ts',
+				'meta'        => '_mpfbs_hold_expires_ts',
 				'min'         => 0,
 				'description' => __( 'Hold expiry timestamp (UTC)', 'magepeople-ferry-booking-system' ),
 			),
 			'passengers'        => array(
 				'type'        => 'string_list',
-				'meta'        => '_fbm_passengers',
+				'meta'        => '_mpfbs_passengers',
 				'description' => __( 'Passengers', 'magepeople-ferry-booking-system' ),
 			),
 			'vehicles'          => array(
 				'type'        => 'string_list',
-				'meta'        => '_fbm_vehicles',
+				'meta'        => '_mpfbs_vehicles',
 				'description' => __( 'Vehicles', 'magepeople-ferry-booking-system' ),
-			),
-			'extras'            => array(
-				'type'        => 'string_list',
-				'meta'        => '_fbm_extras',
-				'description' => __( 'Extras', 'magepeople-ferry-booking-system' ),
 			),
 			'internal_notes'    => array(
 				'type'        => 'text',
-				'meta'        => '_fbm_internal_notes',
+				'meta'        => '_mpfbs_internal_notes',
 				'max'         => 5000,
 				'description' => __( 'Internal notes', 'magepeople-ferry-booking-system' ),
 			),

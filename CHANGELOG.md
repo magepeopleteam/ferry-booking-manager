@@ -11,19 +11,19 @@ This project follows [Semantic Versioning](https://semver.org/).
   instead of fatalling, a bundled PSR-4 autoloader so Composer is never a runtime
   dependency, a small explicit service container, service providers, a redacting
   file logger with rotation and retention, and a group-versioned cache manager.
-- **Permissions.** Fifteen `fbm_` capabilities and five operational roles — Ferry
-  Manager, Booking Manager, Cashier, Check-In Staff, Agent — provisioned on
+- **Permissions.** Eleven `mpfbs_` capabilities and three operational roles — Ferry
+  Manager, Booking Manager, Cashier — provisioned on
   activation and refreshed automatically when the capability map changes.
 - **Dashboard.** A single `Ferry Manager` admin page hosting a Next.js
   application exported at build time, with client-side hash routing, a sticky
   sidebar, a command palette on Ctrl/Cmd+K, toasts, skeleton loading and a
   responsive layout down to 320px.
-- **Storage.** Five custom post types — `fbm_port`, `fbm_vessel`, `fbm_route`,
-  `fbm_sailing`, `fbm_booking` — with schema-driven meta registration. No custom
+- **Storage.** Five custom post types — `mpfbs_port`, `mpfbs_vessel`, `mpfbs_route`,
+  `mpfbs_sailing`, `mpfbs_booking` — with schema-driven meta registration. No custom
   database tables and no direct SQL.
 - **Schema layer.** One declaration per entity drives sanitisation, validation,
   persistence, search indexing, the REST arguments and the JSON schema.
-- **REST API.** `fbm/v1` with a consistent success/error envelope, per-field
+- **REST API.** `mpfbs/v1` with a consistent success/error envelope, per-field
   validation messages, server pagination and capability-gated endpoints for
   ports, vessels, routes, sailings, references and health.
 - **Admin CRUD.** Working Ports, Vessels and Routes screens: searchable
@@ -47,8 +47,8 @@ This project follows [Semantic Versioning](https://semver.org/).
   traveller and vehicle is a three-state choice per field — not collected,
   optional, required — with operator-defined custom fields, and one validator
   that every booking path shares.
-- **Availability engine.** One authority — `FBM\Availability\AvailabilityService`
-  — that every path consults: search, the wizard, the counter and the importer.
+- **Availability engine.** One authority — `MPFBS\Availability\AvailabilityService`
+  — that every path consults: search, the booking wizard and the REST API.
   It resolves capacity (sailing override over vessel figure), subtracts sold and
   held inventory, drops lapsed holds the instant they lapse, and reports
   passengers, vehicle slots and lane metres in the same shape.
@@ -60,7 +60,7 @@ This project follows [Semantic Versioning](https://semver.org/).
   second, against a booking order every concurrent request agrees on, and a
   request that finds it took space it could not have rolls itself back.
   Idempotency keys mean a double-clicked Pay button produces one booking.
-- **Pricing engine.** `FBM\Pricing\PricingService` produces an itemised,
+- **Pricing engine.** `MPFBS\Pricing\PricingService` produces an itemised,
   deterministic quote: passenger and vehicle fares, route fare overrides,
   per-departure adjustments, return and group discounts, per-booking and
   per-head fees, and inclusive or exclusive tax. The server is authoritative;
@@ -105,7 +105,7 @@ This project follows [Semantic Versioning](https://semver.org/).
   default — meaning a passenger-only crossing silently went on accepting
   vehicles. Booleans now store `1` and `0`, and the hydrator distinguishes an
   empty value from a missing one.
-- `fbmFormat()` did not treat `%%` as an escaped percent sign the way its PHP
+- `mpfbsFormat()` did not treat `%%` as an escaped percent sign the way its PHP
   counterpart does, so a percentage fare rendered as `80%% of base`.
 - Table loading placeholders were exposed to assistive technology as five empty
   data rows.

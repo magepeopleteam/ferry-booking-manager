@@ -7,14 +7,14 @@
 
 declare( strict_types=1 );
 
-namespace FBM\Providers;
+namespace MPFBS\Providers;
 
-use FBM\Contracts\ContainerInterface;
-use FBM\Core\ServiceProvider;
-use FBM\Security\Permissions;
-use FBM\Security\RateLimiter;
-use FBM\Security\RoleSettings;
-use FBM\Security\Roles;
+use MPFBS\Contracts\ContainerInterface;
+use MPFBS\Core\ServiceProvider;
+use MPFBS\Security\Permissions;
+use MPFBS\Security\RateLimiter;
+use MPFBS\Security\RoleSettings;
+use MPFBS\Security\Roles;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -68,7 +68,7 @@ final class SecurityServiceProvider extends ServiceProvider {
 			$roles->hooks();
 		}
 
-		// Late priority so Pro has already registered its capabilities.
+		// Late priority so extensions have already registered their capabilities.
 		add_action( 'admin_init', array( Roles::class, 'maybe_refresh' ), 20 );
 	}
 }

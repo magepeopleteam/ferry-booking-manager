@@ -7,9 +7,9 @@
 
 declare( strict_types=1 );
 
-namespace FBM\Support\Schema;
+namespace MPFBS\Support\Schema;
 
-use FBM\Support\Money;
+use MPFBS\Support\Money;
 use WP_Error;
 
 defined( 'ABSPATH' ) || exit;
@@ -667,7 +667,7 @@ final class Field {
 	 */
 	private function error( string $message ): WP_Error {
 		return new WP_Error(
-			'fbm_invalid_field',
+			'mpfbs_invalid_field',
 			$message,
 			array(
 				'status' => 422,

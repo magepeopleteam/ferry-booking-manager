@@ -88,7 +88,7 @@ function announce( booking: BookingResult ): void {
 			// while the API speaks in minor units throughout.
 			value: booking.total / 100,
 		},
-		fbm_measurement_id: cfg.measurementId,
+		mpfbs_measurement_id: cfg.measurementId,
 	} );
 }
 
@@ -343,7 +343,7 @@ function BookingFlow( { component, attributes }: AppProps ): JSX.Element {
 
 				// A capacity failure means the sailing changed under them, so
 				// the results have to be re-fetched rather than re-shown.
-				if ( error.code === 'fbm_capacity_taken' || error.code === 'fbm_insufficient_capacity' ) {
+				if ( error.code === 'mpfbs_capacity_taken' || error.code === 'mpfbs_insufficient_capacity' ) {
 					setStep( 'search' );
 					void runSearch( criteria );
 				}
@@ -384,7 +384,7 @@ function BookingFlow( { component, attributes }: AppProps ): JSX.Element {
 	}
 
 	return (
-		<div className="fbmb">
+		<div className="mpfbsb">
 			{ ! searchOnly && step !== 'search' ? <Steps steps={ steps } current={ step } /> : null }
 
 			{ step === 'search' ? (
@@ -432,7 +432,7 @@ function BookingFlow( { component, attributes }: AppProps ): JSX.Element {
 									) : null }
 
 									{ ready ? (
-										<div className="fbmb-actions fbmb-actions--sticky">
+										<div className="mpfbsb-actions mpfbsb-actions--sticky">
 											<SelectionSummary outbound={ outbound } inbound={ inbound } />
 											<Button size="lg" onClick={ proceed }>
 												{ t( 'Continue' ) }
@@ -480,7 +480,7 @@ function BookingFlow( { component, attributes }: AppProps ): JSX.Element {
 						onChange={ ( key, value ) => setCustomer( ( current ) => ( { ...current, [ key ]: value } ) ) }
 					/>
 
-					<div className="fbmb-actions">
+					<div className="mpfbsb-actions">
 						<Button variant="secondary" onClick={ () => setStep( 'search' ) }>
 							{ t( 'Back' ) }
 						</Button>
@@ -521,7 +521,7 @@ let attemptKey = '';
 
 function idempotencyKey(): string {
 	if ( attemptKey === '' ) {
-		attemptKey = `fbm-${ Date.now().toString( 36 ) }-${ Math.random().toString( 36 ).slice( 2, 10 ) }`;
+		attemptKey = `mpfbs-${ Date.now().toString( 36 ) }-${ Math.random().toString( 36 ).slice( 2, 10 ) }`;
 	}
 
 	return attemptKey;
@@ -534,8 +534,8 @@ function SelectionSummary( { outbound, inbound }: { outbound: SailingResult | nu
 	const total = ( outbound?.price?.total ?? 0 ) + ( inbound?.price?.total ?? 0 );
 
 	return (
-		<div className="fbmb-summary">
-			<div className="fbmb-summary__legs">
+		<div className="mpfbsb-summary">
+			<div className="mpfbsb-summary__legs">
 				{ outbound ? (
 					<span>
 						{ formatDate( outbound.departure ) } · { time( outbound.departure ) }
@@ -548,7 +548,7 @@ function SelectionSummary( { outbound, inbound }: { outbound: SailingResult | nu
 				) : null }
 			</div>
 			{ total > 0 ? (
-				<p className="fbmb-summary__total">
+				<p className="mpfbsb-summary__total">
 					<span>{ t( 'Total' ) }</span>
 					<strong>{ money( total ) }</strong>
 				</p>
@@ -588,40 +588,40 @@ function Review( {
 			{ formError !== '' ? <Alert tone="error">{ formError }</Alert> : null }
 
 			<section>
-				<h3 className="fbmb-section__title">{ t( 'Your crossing' ) }</h3>
+				<h3 className="mpfbsb-section__title">{ t( 'Your crossing' ) }</h3>
 				{ [ outbound, inbound ].filter( Boolean ).map( ( leg, index ) => (
 					<Card key={ index }>
-						<div className="fbmb-review__leg">
+						<div className="mpfbsb-review__leg">
 							<div>
-								<p className="fbmb-review__route">{ leg!.route_name }</p>
-								<p className="fbmb-review__when">
+								<p className="mpfbsb-review__route">{ leg!.route_name }</p>
+								<p className="mpfbsb-review__when">
 									{ formatDate( leg!.departure, true ) } · { time( leg!.departure ) } – { time( leg!.arrival ) }
 								</p>
-								{ leg!.vessel.name ? <p className="fbmb-review__vessel">{ leg!.vessel.name }</p> : null }
+								{ leg!.vessel.name ? <p className="mpfbsb-review__vessel">{ leg!.vessel.name }</p> : null }
 							</div>
-							<span className="fbmb-review__tag">{ index === 0 ? t( 'Outbound' ) : t( 'Return' ) }</span>
+							<span className="mpfbsb-review__tag">{ index === 0 ? t( 'Outbound' ) : t( 'Return' ) }</span>
 						</div>
 					</Card>
 				) ) }
 			</section>
 
 			<section>
-				<h3 className="fbmb-section__title">{ t( 'Price' ) }</h3>
+				<h3 className="mpfbsb-section__title">{ t( 'Price' ) }</h3>
 				{ quote ? (
-					<table className="fbmb-price">
+					<table className="mpfbsb-price">
 						<tbody>
 							{ quote.lines.map( ( line, index ) => (
-								<tr key={ index } className={ `fbmb-price__row fbmb-price__row--${ line.type }` }>
+								<tr key={ index } className={ `mpfbsb-price__row mpfbsb-price__row--${ line.type }` }>
 									<th scope="row">
 										{ line.label }
-										{ line.quantity > 1 ? <span className="fbmb-price__qty">{ `× ${ line.quantity }` }</span> : null }
+										{ line.quantity > 1 ? <span className="mpfbsb-price__qty">{ `× ${ line.quantity }` }</span> : null }
 									</th>
 									<td>{ money( line.amount ) }</td>
 								</tr>
 							) ) }
 						</tbody>
 						<tfoot>
-							<tr className="fbmb-price__total">
+							<tr className="mpfbsb-price__total">
 								<th scope="row">{ t( 'Total' ) }</th>
 								<td>{ money( quote.total ) }</td>
 							</tr>
@@ -633,8 +633,8 @@ function Review( {
 			</section>
 
 			<section>
-				<h3 className="fbmb-section__title">{ t( 'Contact' ) }</h3>
-				<p className="fbmb-review__customer">
+				<h3 className="mpfbsb-section__title">{ t( 'Contact' ) }</h3>
+				<p className="mpfbsb-review__customer">
 					{ customer.name }
 					<br />
 					{ customer.email }
@@ -649,7 +649,7 @@ function Review( {
 
 			<PaymentChoice value={ paymentMethod } onChange={ onPaymentMethod } />
 
-			<div className="fbmb-actions">
+			<div className="mpfbsb-actions">
 				<Button variant="secondary" onClick={ onBack } disabled={ submitting }>
 					{ t( 'Back' ) }
 				</Button>
@@ -665,7 +665,7 @@ function Review( {
  * Payment method chooser.
  *
  * The methods available come from the server on submit; this offers the
- * offline ones the Free plugin ships with, and stays out of the way when the
+ * offline ones the plugin ships with, and stays out of the way when the
  * site routes payment through WooCommerce.
  */
 function PaymentChoice( { value, onChange }: { value: string; onChange: ( value: string ) => void } ): JSX.Element {
@@ -700,20 +700,20 @@ function PaymentChoice( { value, onChange }: { value: string; onChange: ( value:
 
 	return (
 		<section>
-			<h3 className="fbmb-section__title">{ t( 'Payment' ) }</h3>
-			<div className="fbmb-payments">
+			<h3 className="mpfbsb-section__title">{ t( 'Payment' ) }</h3>
+			<div className="mpfbsb-payments">
 				{ methods.map( ( method ) => (
-					<label className={ `fbmb-payment${ value === method.id ? ' is-selected' : '' }` } key={ method.id }>
+					<label className={ `mpfbsb-payment${ value === method.id ? ' is-selected' : '' }` } key={ method.id }>
 						<input
 							type="radio"
-							name="fbm-payment"
+							name="mpfbs-payment"
 							value={ method.id }
 							checked={ value === method.id }
 							onChange={ () => onChange( method.id ) }
 						/>
-						<span className="fbmb-payment__body">
-							<span className="fbmb-payment__label">{ method.label }</span>
-							{ method.description ? <span className="fbmb-payment__description">{ method.description }</span> : null }
+						<span className="mpfbsb-payment__body">
+							<span className="mpfbsb-payment__label">{ method.label }</span>
+							{ method.description ? <span className="mpfbsb-payment__description">{ method.description }</span> : null }
 						</span>
 					</label>
 				) ) }
@@ -727,23 +727,23 @@ function PaymentChoice( { value, onChange }: { value: string; onChange: ( value:
  */
 function Confirmation( { booking }: { booking: BookingResult } ): JSX.Element {
 	return (
-		<div className="fbmb-done">
-			<div className="fbmb-done__mark" aria-hidden="true">
+		<div className="mpfbsb-done">
+			<div className="mpfbsb-done__mark" aria-hidden="true">
 				<svg viewBox="0 0 48 48">
 					<path d="m14 25 7 7 14-15" fill="none" stroke="currentColor" strokeWidth="3.4" strokeLinecap="round" strokeLinejoin="round" />
 				</svg>
 			</div>
 
-			<h3 className="fbmb-done__title">{ t( 'Your booking is confirmed' ) }</h3>
-			<p className="fbmb-done__reference">
+			<h3 className="mpfbsb-done__title">{ t( 'Your booking is confirmed' ) }</h3>
+			<p className="mpfbsb-done__reference">
 				{ t( 'Booking reference' ) }
 				<strong>{ booking.reference }</strong>
 			</p>
-			<p className="fbmb-done__note">{ t( 'We have emailed your confirmation. Please bring your reference to check-in.' ) }</p>
+			<p className="mpfbsb-done__note">{ t( 'We have emailed your confirmation. Please bring your reference to check-in.' ) }</p>
 
 			{ booking.instructions ? <Alert tone="info">{ booking.instructions }</Alert> : null }
 
-			<p className="fbmb-done__total">
+			<p className="mpfbsb-done__total">
 				<span>{ t( 'Total' ) }</span>
 				<strong>{ money( booking.total ) }</strong>
 			</p>

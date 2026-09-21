@@ -1,5 +1,5 @@
 === MagePeople Ferry Booking System ===
-Contributors: magepeople
+Contributors: magepeopleteam
 Tags: ferry, booking, ticketing, woocommerce, transport
 Requires at least: 6.0
 Tested up to: 7.1
@@ -23,7 +23,7 @@ from one dashboard.
 * Bulk schedule generator with conflict detection and a preview before anything
   is created
 * Per-sailing capacity overrides for passengers, vehicles and lane metres
-* Operational roles for booking staff, cashiers and check-in crews
+* Operational roles for ferry managers, booking managers and cashiers
 * Passenger and vehicle type management with server-validated configuration
 * Booking workflows that use the same availability and pricing rules in admin,
   checkout and API requests
@@ -34,8 +34,8 @@ from one dashboard.
 
 **Built for real operations**
 
-* One authoritative availability engine - the storefront and the counter can
-  never disagree
+* One authoritative availability engine - the storefront and staff bookings
+  can never disagree
 * Server-calculated prices; the interface only ever previews them
 * A vessel cannot be scheduled in two places at once
 * Records still in use cannot be deleted out from under a booking
@@ -51,7 +51,7 @@ from one dashboard.
 * No Node.js process on your server. The dashboard ships pre-built.
 * Translation-ready, RTL-ready, and compatible with WPML, Polylang and
   TranslatePress.
-* Public `fbm_*` hooks let developers extend entities, validation,
+* Public `mpfbs_*` hooks let developers extend entities, validation,
   capabilities, REST controllers, runtime configuration and dashboard
   translations without patching core files
 
@@ -93,37 +93,18 @@ The free plugin supports:
 
 **Developer and extension details**
 
-The public hook surface is versioned under the `fbm_` prefix. Extension points
+The public hook surface is versioned under the `mpfbs_` prefix. Extension points
 include:
 
-* `fbm_service_providers`
-* `fbm_entity_fields`
-* `fbm_validate_entity`
-* `fbm_rest_controllers`
-* `fbm_admin_config`
-* `fbm_js_translations`
-* `fbm_pro_active`
+* `mpfbs_service_providers`
+* `mpfbs_entity_fields`
+* `mpfbs_validate_entity`
+* `mpfbs_rest_controllers`
+* `mpfbs_admin_config`
+* `mpfbs_js_translations`
 
 This keeps customisations inside normal WordPress hooks instead of requiring
 direct edits to the plugin.
-
-**Upgrade to Pro**
-
-MagePeople Ferry Booking System Pro extends the same free-plugin container and services.
-It adds advanced commercial and operational tools including:
-
-* PDF tickets and ticket download links
-* QR token generation and check-in workflows
-* Sailing manifests and export tools
-* Cabins and deck-capacity management
-* Dynamic pricing rules and extras pricing
-* Booking modification, transfer and refund workflows
-* POS and receipt rendering
-* Agent accounts, commission handling and wallet tools
-* Reports, automations, webhooks, calendars and email templates
-
-If you need that expanded toolset, install MagePeople Ferry Booking System Pro alongside
-this plugin.
 
 == Installation ==
 
@@ -134,17 +115,22 @@ this plugin.
 5. Configure passenger types, vehicle types and checkout settings.
 6. Publish sailings and test a booking flow before going live.
 
-== Development ==
+== Source code and build ==
 
-* Runtime code lives in `src/`, templates in `templates/`, and translations in
-  `languages/`.
-* The admin application source lives in `apps/admin/` and its production export
-  is committed under `assets/admin/app/`.
-* The booking frontend application source lives in `apps/booking/` and its
-  built assets are committed under `assets/frontend/`.
-* `build-zip.sh` creates a clean production zip and excludes developer-only
-  directories such as `apps/` dependency trees, test scaffolding and Composer
-  tooling.
+The JavaScript and CSS in `assets/` are compiled. Their full, human-readable
+source ships with the plugin, and is also public at
+https://github.com/magepeopleteam/ferry-booking-manager
+
+* `apps/admin/` - the admin dashboard (Next.js, React, TypeScript). Its static
+  export is written to `assets/admin/app/`.
+* `apps/booking/` - the customer booking form (Preact, TypeScript, Vite). Its
+  bundle is written to `assets/frontend/`.
+* PHP runtime code lives in `src/` and is not compiled.
+
+To rebuild the assets (Node.js 20 or newer):
+
+`cd apps/admin && npm ci && npm run build`
+`cd apps/booking && npm ci && npm run build`
 
 == Frequently Asked Questions ==
 
@@ -163,36 +149,26 @@ No. Node is only used to build the dashboard before release.
 
 = Can developers extend the data model and dashboard? =
 
-Yes. The plugin exposes a public `fbm_*` hook surface for entities,
+Yes. The plugin exposes a public `mpfbs_*` hook surface for entities,
 validation, capabilities, REST controllers, runtime config and translated UI
 strings.
-
-= What does Pro add on top of Free? =
-
-Pro adds advanced ticketing, operations and commerce features such as PDF
-tickets, QR check-in, manifests, cabins, dynamic pricing, extras, refunds,
-POS, agent tools, reports, automations and webhooks.
 
 == Changelog ==
 
 = 1.0.0 =
 * Initial release: vessels, ports, routes, sailings, passenger and vehicle
   types, a bulk schedule generator, and a capacity-and-hold-aware
-  availability engine shared by search, the admin wizard, the counter and
-  the importer.
+  availability engine shared by search, the admin booking wizard and the
+  REST API.
 * Native checkout and optional WooCommerce integration, both driven by the
   same server-authoritative pricing engine.
-* REST API (`fbm/v1`) with capability-gated endpoints for dashboard,
+* REST API (`mpfbs/v1`) with capability-gated endpoints for dashboard,
   search, availability, bookings, setup, settings, pricing and reference
   data.
 * Admin dashboard: a single "Ferry Manager" screen hosting a pre-built
   Next.js application, with working Ports, Vessels, Routes and Sailings
   management.
-* Fifteen `fbm_` capabilities and five operational roles (Ferry Manager,
-  Booking Manager, Cashier, Check-In Staff, Agent) provisioned on
-  activation.
+* Eleven `mpfbs_` capabilities and three operational roles (Ferry Manager,
+  Booking Manager, Cashier) provisioned on activation.
 * No custom database tables; everything is stored in normal WordPress
   posts, post meta and options.
-
-See [CHANGELOG.md](https://github.com/magepeopleteam/magepeople-ferry-booking-system/blob/main/CHANGELOG.md)
-for full development-level detail.

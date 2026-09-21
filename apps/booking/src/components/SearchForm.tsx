@@ -240,18 +240,18 @@ export function SearchForm( { options, initial, busy, onSearch, layout = 'inline
 
 	return (
 		<form
-			className={ `fbmb-search fbmb-search--${ layout }` }
+			className={ `mpfbsb-search mpfbsb-search--${ layout }` }
 			onSubmit={ ( event ) => {
 				event.preventDefault();
 				submit();
 			} }
 		>
-			<section className="fbmb-search__section" aria-label={ t( 'Journey type' ) }>
-				<h3 className="fbmb-search__section-title">{ t( 'Journey' ) }</h3>
-				<div className="fbmb-search__trip" role="group" aria-label={ t( 'Journey type' ) }>
+			<section className="mpfbsb-search__section" aria-label={ t( 'Journey type' ) }>
+				<h3 className="mpfbsb-search__section-title">{ t( 'Journey' ) }</h3>
+				<div className="mpfbsb-search__trip" role="group" aria-label={ t( 'Journey type' ) }>
 					<button
 						type="button"
-						className={ `fbmb-toggle${ ! wantsReturn ? ' is-active' : '' }` }
+						className={ `mpfbsb-toggle${ ! wantsReturn ? ' is-active' : '' }` }
 						aria-pressed={ ! wantsReturn }
 						onClick={ () => setWantsReturn( false ) }
 					>
@@ -259,7 +259,7 @@ export function SearchForm( { options, initial, busy, onSearch, layout = 'inline
 					</button>
 					<button
 						type="button"
-						className={ `fbmb-toggle${ wantsReturn ? ' is-active' : '' }` }
+						className={ `mpfbsb-toggle${ wantsReturn ? ' is-active' : '' }` }
 						aria-pressed={ wantsReturn }
 						onClick={ () => {
 							setWantsReturn( true );
@@ -274,13 +274,13 @@ export function SearchForm( { options, initial, busy, onSearch, layout = 'inline
 				</div>
 			</section>
 
-			<div className="fbmb-search__body">
-			<section className="fbmb-search__section" aria-label={ t( 'Route and date' ) }>
-				<h3 className="fbmb-search__section-title">{ t( 'Route and date' ) }</h3>
-				<div className="fbmb-search__grid">
-					<Field label={ t( 'From' ) } htmlFor="fbm-origin" required>
+			<div className="mpfbsb-search__body">
+			<section className="mpfbsb-search__section" aria-label={ t( 'Route and date' ) }>
+				<h3 className="mpfbsb-search__section-title">{ t( 'Route and date' ) }</h3>
+				<div className="mpfbsb-search__grid">
+					<Field label={ t( 'From' ) } htmlFor="mpfbs-origin" required>
 						<Select
-							id="fbm-origin"
+							id="mpfbs-origin"
 							value={ origin || '' }
 							options={ portOptions }
 							placeholder={ t( 'Select a port' ) }
@@ -297,7 +297,7 @@ export function SearchForm( { options, initial, busy, onSearch, layout = 'inline
 
 					<button
 						type="button"
-						className="fbmb-swap"
+						className="mpfbsb-swap"
 						aria-label={ t( 'Swap ports' ) }
 						onClick={ () => {
 							setOrigin( destination );
@@ -311,7 +311,7 @@ export function SearchForm( { options, initial, busy, onSearch, layout = 'inline
 
 					<Field
 						label={ t( 'To' ) }
-						htmlFor="fbm-destination"
+						htmlFor="mpfbs-destination"
 						required
 						hint={
 							origin && destinationOptions.length === 0
@@ -320,7 +320,7 @@ export function SearchForm( { options, initial, busy, onSearch, layout = 'inline
 						}
 					>
 						<Select
-							id="fbm-destination"
+							id="mpfbs-destination"
 							value={ destination || '' }
 							options={ destinationOptions }
 							// With one destination there is nothing to choose
@@ -332,9 +332,9 @@ export function SearchForm( { options, initial, busy, onSearch, layout = 'inline
 						/>
 					</Field>
 
-					<Field label={ t( 'Departure' ) } htmlFor="fbm-date" required>
+					<Field label={ t( 'Departure' ) } htmlFor="mpfbs-date" required>
 						<Input
-							id="fbm-date"
+							id="mpfbs-date"
 							type="date"
 							value={ date }
 							min={ options.today || today() }
@@ -349,9 +349,9 @@ export function SearchForm( { options, initial, busy, onSearch, layout = 'inline
 					</Field>
 
 					{ wantsReturn ? (
-						<Field label={ t( 'Return' ) } htmlFor="fbm-return">
+						<Field label={ t( 'Return' ) } htmlFor="mpfbs-return">
 							<Input
-								id="fbm-return"
+								id="mpfbs-return"
 								type="date"
 								value={ returnDate }
 								min={ date || options.today }
@@ -362,22 +362,22 @@ export function SearchForm( { options, initial, busy, onSearch, layout = 'inline
 				</div>
 			</section>
 
-			<section className="fbmb-search__section" aria-label={ t( 'Travellers' ) }>
-				<h3 className="fbmb-search__section-title">{ t( 'Travellers' ) }</h3>
-				<div className="fbmb-search__travellers">
+			<section className="mpfbsb-search__section" aria-label={ t( 'Travellers' ) }>
+				<h3 className="mpfbsb-search__section-title">{ t( 'Travellers' ) }</h3>
+				<div className="mpfbsb-search__travellers">
 					<Field
 						label={ t( 'Passengers' ) }
-						htmlFor="fbm-party"
+						htmlFor="mpfbs-party"
 						required
 						error={ partyError && seats < 1 ? t( 'Add at least one passenger.' ) : undefined }
 					>
 						<button
 							type="button"
-							id="fbm-party"
+							id="mpfbs-party"
 							ref={ triggerRef }
-							className={ `fbmb-party-trigger${ partyOpen ? ' is-open' : '' }` }
+							className={ `mpfbsb-party-trigger${ partyOpen ? ' is-open' : '' }` }
 							aria-expanded={ partyOpen }
-							aria-controls="fbm-party-panel"
+							aria-controls="mpfbs-party-panel"
 							onClick={ () => setPartyOpen( ! partyOpen ) }
 						>
 							<span>{ partyLabel }</span>
@@ -387,7 +387,7 @@ export function SearchForm( { options, initial, busy, onSearch, layout = 'inline
 						</button>
 					</Field>
 
-					<div className="fbmb-search__submit">
+					<div className="mpfbsb-search__submit">
 						<Button type="submit" size="lg" disabled={ busy } block>
 							{ busy ? t( 'Searching…' ) : t( 'Search sailings' ) }
 						</Button>
@@ -397,14 +397,14 @@ export function SearchForm( { options, initial, busy, onSearch, layout = 'inline
 			</div>
 
 			{ partyOpen ? (
-				<div className="fbmb-party" id="fbm-party-panel" ref={ partyRef }>
-					<div className="fbmb-party__group">
-						<h4 className="fbmb-party__heading">{ t( 'Passengers' ) }</h4>
+				<div className="mpfbsb-party" id="mpfbs-party-panel" ref={ partyRef }>
+					<div className="mpfbsb-party__group">
+						<h4 className="mpfbsb-party__heading">{ t( 'Passengers' ) }</h4>
 						{ options.passenger_types.map( ( type ) => (
-							<div className="fbmb-party__row" key={ type.id }>
+							<div className="mpfbsb-party__row" key={ type.id }>
 								<div>
-									<span className="fbmb-party__name">{ type.name }</span>
-									<span className="fbmb-party__meta">{ ageBand( type.min_age, type.max_age ) }</span>
+									<span className="mpfbsb-party__name">{ type.name }</span>
+									<span className="mpfbsb-party__meta">{ ageBand( type.min_age, type.max_age ) }</span>
 								</div>
 								<FareTag fare={ fareFor( fares, 'passengers', type.id ) } free={ type.is_free } />
 								<Stepper
@@ -419,8 +419,8 @@ export function SearchForm( { options, initial, busy, onSearch, layout = 'inline
 					</div>
 
 					{ options.vehicle_types.length > 0 && cfg.vehiclesEnabled ? (
-						<div className={ `fbmb-party__group${ vehiclesRefused ? ' is-unavailable' : '' }` }>
-							<h4 className="fbmb-party__heading">{ t( 'Vehicles' ) }</h4>
+						<div className={ `mpfbsb-party__group${ vehiclesRefused ? ' is-unavailable' : '' }` }>
+							<h4 className="mpfbsb-party__heading">{ t( 'Vehicles' ) }</h4>
 							{ /*
 							 * Said once, at the top, rather than left for the
 							 * customer to infer from a column of blank fares:
@@ -428,14 +428,14 @@ export function SearchForm( { options, initial, busy, onSearch, layout = 'inline
 							 * search, two clicks later.
 							 */ }
 							{ vehiclesRefused ? (
-								<p className="fbmb-party__note">{ t( 'This crossing carries foot passengers only.' ) }</p>
+								<p className="mpfbsb-party__note">{ t( 'This crossing carries foot passengers only.' ) }</p>
 							) : null }
 							{ options.vehicle_types.map( ( type ) => (
-								<div className="fbmb-party__row" key={ type.id }>
+								<div className="mpfbsb-party__row" key={ type.id }>
 									<div>
-										<span className="fbmb-party__name">{ type.name }</span>
+										<span className="mpfbsb-party__name">{ type.name }</span>
 										{ type.length > 0 ? (
-											<span className="fbmb-party__meta">{ `${ t( 'up to' ) } ${ type.length } m` }</span>
+											<span className="mpfbsb-party__meta">{ `${ t( 'up to' ) } ${ type.length } m` }</span>
 										) : null }
 									</div>
 									<FareTag fare={ fareFor( fares, 'vehicles', type.id ) } free={ false } />
@@ -451,16 +451,16 @@ export function SearchForm( { options, initial, busy, onSearch, layout = 'inline
 						</div>
 					) : null }
 
-					<div className="fbmb-party__footer">
-						<span className="fbmb-party__summary">
+					<div className="mpfbsb-party__footer">
+						<span className="mpfbsb-party__summary">
 							{ partyLabel }
 							{ fares?.routed ? (
-								<span className="fbmb-party__note">
+								<span className="mpfbsb-party__note">
 									{ t( 'Fares shown are per person, one way. Your total is confirmed when you choose a sailing.' ) }
 								</span>
 							) : null }
 							{ cfg.maxPassengers > 0 && seats >= cfg.maxPassengers ? (
-								<span className="fbmb-party__limit">
+								<span className="mpfbsb-party__limit">
 									{ `${ t( 'Largest party we can book online is' ) } ${ cfg.maxPassengers }` }
 								</span>
 							) : null }
@@ -478,7 +478,7 @@ export function SearchForm( { options, initial, busy, onSearch, layout = 'inline
 			) : null }
 
 			{ error ? (
-				<p className="fbmb-search__error" role="alert">
+				<p className="mpfbsb-search__error" role="alert">
 					{ error }
 				</p>
 			) : null }
@@ -566,8 +566,8 @@ function FareTag( { fare, free }: { fare: number | null; free: boolean } ): JSX.
 	}
 
 	if ( fare === 0 ) {
-		return free ? <span className="fbmb-party__fare is-free">{ t( 'Free' ) }</span> : null;
+		return free ? <span className="mpfbsb-party__fare is-free">{ t( 'Free' ) }</span> : null;
 	}
 
-	return <span className="fbmb-party__fare">{ money( fare ) }</span>;
+	return <span className="mpfbsb-party__fare">{ money( fare ) }</span>;
 }

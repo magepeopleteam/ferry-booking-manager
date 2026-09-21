@@ -7,28 +7,28 @@
 
 declare( strict_types=1 );
 
-namespace FBM\Booking;
+namespace MPFBS\Booking;
 
-use FBM\Availability\Availability;
-use FBM\Availability\AvailabilityService;
-use FBM\Availability\HoldManager;
-use FBM\Contracts\LoggerInterface;
-use FBM\Models\Booking;
-use FBM\Models\PassengerType;
-use FBM\Models\Route;
-use FBM\Models\Sailing;
-use FBM\Models\VehicleType;
-use FBM\Notification\NotificationService;
-use FBM\Payment\PaymentGatewayRegistry;
-use FBM\Pricing\PricingService;
-use FBM\Pricing\Quote;
-use FBM\Repositories\BookingRepository;
-use FBM\Repositories\PassengerTypeRepository;
-use FBM\Repositories\RouteRepository;
-use FBM\Repositories\SailingRepository;
-use FBM\Repositories\VehicleTypeRepository;
-use FBM\Repositories\VesselRepository;
-use FBM\Settings\Settings;
+use MPFBS\Availability\Availability;
+use MPFBS\Availability\AvailabilityService;
+use MPFBS\Availability\HoldManager;
+use MPFBS\Contracts\LoggerInterface;
+use MPFBS\Models\Booking;
+use MPFBS\Models\PassengerType;
+use MPFBS\Models\Route;
+use MPFBS\Models\Sailing;
+use MPFBS\Models\VehicleType;
+use MPFBS\Notification\NotificationService;
+use MPFBS\Payment\PaymentGatewayRegistry;
+use MPFBS\Pricing\PricingService;
+use MPFBS\Pricing\Quote;
+use MPFBS\Repositories\BookingRepository;
+use MPFBS\Repositories\PassengerTypeRepository;
+use MPFBS\Repositories\RouteRepository;
+use MPFBS\Repositories\SailingRepository;
+use MPFBS\Repositories\VehicleTypeRepository;
+use MPFBS\Repositories\VesselRepository;
+use MPFBS\Settings\Settings;
 use WP_Error;
 use WP_User;
 
@@ -216,7 +216,7 @@ final class BookingService {
 
 		if ( ! $sailing instanceof Sailing ) {
 			return new WP_Error(
-				'fbm_sailing_not_found',
+				'mpfbs_sailing_not_found',
 				__( 'That sailing could not be found.', 'magepeople-ferry-booking-system' ),
 				array( 'status' => 404 )
 			);
@@ -230,7 +230,7 @@ final class BookingService {
 
 			if ( ! $return_sailing instanceof Sailing ) {
 				return new WP_Error(
-					'fbm_return_sailing_not_found',
+					'mpfbs_return_sailing_not_found',
 					__( 'That return sailing could not be found.', 'magepeople-ferry-booking-system' ),
 					array( 'status' => 404 )
 				);
@@ -249,7 +249,7 @@ final class BookingService {
 
 		if ( array() === $passengers && array() === $vehicles ) {
 			return new WP_Error(
-				'fbm_empty_party',
+				'mpfbs_empty_party',
 				__( 'Add at least one passenger or vehicle before booking.', 'magepeople-ferry-booking-system' ),
 				array( 'status' => 400 )
 			);
@@ -264,9 +264,8 @@ final class BookingService {
 		/*
 		 * The booking request is carried through, with the values resolved above
 		 * put back on top. A booking has to be priced with the same inputs the
-		 * customer was quoted on — including anything an add-on prices, such as
-		 * extras — or the total on the confirmation would not match the total on
-		 * the review screen.
+		 * customer was quoted on, or the total on the confirmation would not
+		 * match the total on the review screen.
 		 */
 		$quote = $this->pricing->quote(
 			array_merge(
@@ -304,11 +303,9 @@ final class BookingService {
 		// payment path decides what happens to the hold.
 
 		/*
-		 * The quote's usage, not the party's. Both agree on seats and vehicles,
-		 * but an add-on that sells inventory of its own — a cabin, a berth,
-		 * a deck slot measured in metres — declares it on the quote, and the
-		 * hold has to reserve everything the customer is actually buying or the
-		 * extra inventory would never sell out.
+		 * The quote's usage, not the party's: it includes the vehicle deck
+		 * space measured in metres as well as seats and vehicles, and the hold
+		 * has to reserve everything the customer is actually buying.
 		 */
 		$usage = array_merge( $usage, $quote->usage );
 
@@ -323,7 +320,7 @@ final class BookingService {
 				'customer_phone'    => $customer['phone'],
 				'customer_id'       => $customer['id'],
 				'channel'           => $staff ? $this->staff_channel( $request ) : 'web',
-				// Who took the booking, which for a counter sale is the member
+				// Who took the booking, which for a staff booking is the member
 				// of staff rather than the customer they took it for.
 				'created_by'        => $staff ? get_current_user_id() : ( $customer['id'] > 0 ? $customer['id'] : 0 ),
 			),
@@ -338,7 +335,7 @@ final class BookingService {
 			$this->logger->error( 'Booking hold returned an unexpected result.', array( 'sailing' => $sailing->id ) );
 
 			return new WP_Error(
-				'fbm_booking_failed',
+				'mpfbs_booking_failed',
 				__( 'The booking could not be created. Please try again.', 'magepeople-ferry-booking-system' ),
 				array( 'status' => 500 )
 			);
@@ -423,7 +420,7 @@ final class BookingService {
 		 * @param Booking              $booking Saved booking.
 		 * @param array<string, mixed> $request Original request.
 		 */
-		do_action( 'fbm_before_payment', $booking, $request );
+		do_action( 'mpfbs_before_payment', $booking, $request );
 
 		$payment = $this->apply_payment( $booking, $request, $settings, $staff );
 
@@ -451,14 +448,14 @@ final class BookingService {
 		/**
 		 * Filters whether a booking goes through WooCommerce.
 		 *
-		 * Lets Pro route specific bookings elsewhere without editing Free.
+		 * Lets an extension route specific bookings elsewhere without editing the plugin.
 		 *
 		 * @since 1.0.0
 		 *
 		 * @param bool    $use_woocommerce Whether WooCommerce handles checkout.
 		 * @param Booking $booking         Booking entity.
 		 */
-		$use_woocommerce = (bool) apply_filters( 'fbm_use_woocommerce_checkout', Settings::CHECKOUT_WOOCOMMERCE === $engine && class_exists( 'WooCommerce' ), $booking );
+		$use_woocommerce = (bool) apply_filters( 'mpfbs_use_woocommerce_checkout', Settings::CHECKOUT_WOOCOMMERCE === $engine && class_exists( 'WooCommerce' ), $booking );
 
 		if ( $use_woocommerce ) {
 			return $this->apply_woocommerce( $booking );
@@ -476,7 +473,7 @@ final class BookingService {
 	private function apply_woocommerce( Booking $booking ) {
 		if ( ! function_exists( 'wc_create_order' ) ) {
 			return new WP_Error(
-				'fbm_woocommerce_missing',
+				'mpfbs_woocommerce_missing',
 				__( 'WooCommerce is not available on this site.', 'magepeople-ferry-booking-system' ),
 				array( 'status' => 409 )
 			);
@@ -514,7 +511,7 @@ final class BookingService {
 			);
 
 			return new WP_Error(
-				'fbm_wc_order_failed',
+				'mpfbs_wc_order_failed',
 				__( 'The checkout could not be started. Please try again.', 'magepeople-ferry-booking-system' ),
 				array( 'status' => 500 )
 			);
@@ -575,7 +572,7 @@ final class BookingService {
 
 		$order->save();
 
-		update_post_meta( $order->get_id(), '_fbm_booking_id', $booking->id );
+		update_post_meta( $order->get_id(), '_mpfbs_booking_id', $booking->id );
 
 		$saved = $this->bookings->save(
 			array(
@@ -597,7 +594,7 @@ final class BookingService {
 		 * @param Booking  $booking Booking entity.
 		 * @param \WC_Order $order   WooCommerce order.
 		 */
-		do_action( 'fbm_wc_order_created', $saved, $order );
+		do_action( 'mpfbs_wc_order_created', $saved, $order );
 
 		return array(
 			'booking'  => $saved,
@@ -608,7 +605,7 @@ final class BookingService {
 	/**
 	 * Applies a native (offline) payment method.
 	 *
-	 * The Free gateways are all non-instant: the booking is recorded as
+	 * The bundled gateways are all non-instant: the booking is recorded as
 	 * pending payment, with a payment deadline when the operator configured
 	 * one, and the confirmation email carries the payment instructions.
 	 *
@@ -628,7 +625,7 @@ final class BookingService {
 
 		if ( null === $gateway ) {
 			return new WP_Error(
-				'fbm_payment_method_unavailable',
+				'mpfbs_payment_method_unavailable',
 				__( 'That payment method is not available.', 'magepeople-ferry-booking-system' ),
 				array(
 					'status' => 400,
@@ -653,7 +650,7 @@ final class BookingService {
 		 * @param Booking              $booking Booking entity.
 		 * @param array<string, mixed> $request Original request.
 		 */
-		$allowed = apply_filters( 'fbm_payment_allowed', true, $gateway->get_id(), $booking, $request );
+		$allowed = apply_filters( 'mpfbs_payment_allowed', true, $gateway->get_id(), $booking, $request );
 
 		if ( is_wp_error( $allowed ) ) {
 			return $allowed;
@@ -735,7 +732,7 @@ final class BookingService {
 			 * listening for a booking becoming confirmed, not for one
 			 * particular way of paying.
 			 */
-			do_action( 'fbm_booking_confirmed', $saved );
+			do_action( 'mpfbs_booking_confirmed', $saved );
 		}
 
 		/**
@@ -745,7 +742,7 @@ final class BookingService {
 		 *
 		 * @param Booking $booking Booking entity.
 		 */
-		do_action( 'fbm_native_payment_applied', $saved );
+		do_action( 'mpfbs_native_payment_applied', $saved );
 
 		return array( 'booking' => $saved );
 	}
@@ -794,7 +791,7 @@ final class BookingService {
 		 *
 		 * @param Booking $booking Confirmed booking.
 		 */
-		do_action( 'fbm_booking_confirmed', $saved );
+		do_action( 'mpfbs_booking_confirmed', $saved );
 
 		return $saved;
 	}
@@ -852,7 +849,7 @@ final class BookingService {
 		 * @param Booking $booking Cancelled booking.
 		 * @param string  $reason  Cancellation reason.
 		 */
-		do_action( 'fbm_booking_cancelled', $saved, $reason );
+		do_action( 'mpfbs_booking_cancelled', $saved, $reason );
 
 		return $saved;
 	}
@@ -875,7 +872,7 @@ final class BookingService {
 
 		if ( ! $booking instanceof Booking ) {
 			return new WP_Error(
-				'fbm_not_found',
+				'mpfbs_not_found',
 				__( 'That booking could not be found.', 'magepeople-ferry-booking-system' ),
 				array( 'status' => 404 )
 			);
@@ -945,7 +942,7 @@ final class BookingService {
 
 		if ( array() !== $fields ) {
 			return new WP_Error(
-				'fbm_validation_failed',
+				'mpfbs_validation_failed',
 				__( 'Please correct the highlighted fields.', 'magepeople-ferry-booking-system' ),
 				array(
 					'status' => 400,
@@ -977,7 +974,7 @@ final class BookingService {
 
 				if ( is_wp_error( $check ) ) {
 					return new WP_Error(
-						'fbm_capacity_taken',
+						'mpfbs_capacity_taken',
 						sprintf(
 							/* translators: %s: the reason the sailing cannot take the booking. */
 							__( 'This booking cannot be reinstated: %s', 'magepeople-ferry-booking-system' ),
@@ -1023,7 +1020,7 @@ final class BookingService {
 		 * @param Booking $saved    Updated booking.
 		 * @param string  $previous Previous booking status.
 		 */
-		do_action( 'fbm_booking_updated', $saved, $previous );
+		do_action( 'mpfbs_booking_updated', $saved, $previous );
 
 		return $saved;
 	}
@@ -1056,7 +1053,7 @@ final class BookingService {
 		 * @param array<string, mixed> $payload Response payload.
 		 * @param Booking              $booking Booking entity.
 		 */
-		return (array) apply_filters( 'fbm_booking_response', $payload, $booking );
+		return (array) apply_filters( 'mpfbs_booking_response', $payload, $booking );
 	}
 
 	/**
@@ -1099,7 +1096,7 @@ final class BookingService {
 		 * @param string $instructions Instructions text.
 		 * @param string $method       Payment method id.
 		 */
-		return (string) apply_filters( 'fbm_payment_instructions', $reference, $method );
+		return (string) apply_filters( 'mpfbs_payment_instructions', $reference, $method );
 	}
 
 	/**
@@ -1108,7 +1105,7 @@ final class BookingService {
 	 * The permitted values come from the booking schema rather than a list
 	 * repeated here. Naming a channel the schema does not declare would not
 	 * fail — the enum sanitiser would quietly store "web" instead, and every
-	 * counter sale would look like a website booking in the reports.
+	 * staff booking would look like a website booking.
 	 *
 	 * @param array<string, mixed> $request Booking request.
 	 * @return string
@@ -1143,17 +1140,6 @@ final class BookingService {
 
 		if ( '' !== $note ) {
 			$attributes['internal_notes'] = $note;
-		}
-
-		/*
-		 * The agency a counter or portal booking is being sold through. Free
-		 * records the id; whether it names a real agency, and what that agency's
-		 * terms are, is Pro's question to answer before it gets here.
-		 */
-		$agent_id = absint( $request['agent_id'] ?? 0 );
-
-		if ( $agent_id > 0 ) {
-			$attributes['agent_id'] = $agent_id;
 		}
 
 		$booking_status = sanitize_key( (string) ( $request['booking_status'] ?? '' ) );
@@ -1229,7 +1215,7 @@ final class BookingService {
 
 		if ( $amount > $quote->subtotal() ) {
 			return new WP_Error(
-				'fbm_discount_too_large',
+				'mpfbs_discount_too_large',
 				__( 'A discount cannot be larger than the fare.', 'magepeople-ferry-booking-system' ),
 				array(
 					'status' => 400,
@@ -1271,7 +1257,7 @@ final class BookingService {
 
 		if ( array() !== $vehicles && empty( $settings['vehicles_enabled'] ) ) {
 			return new WP_Error(
-				'fbm_vehicles_disabled',
+				'mpfbs_vehicles_disabled',
 				__( 'This service does not carry vehicles.', 'magepeople-ferry-booking-system' ),
 				array( 'status' => 400 )
 			);
@@ -1282,7 +1268,7 @@ final class BookingService {
 
 		if ( $max_passengers > 0 && $seats > $max_passengers ) {
 			return new WP_Error(
-				'fbm_party_too_large',
+				'mpfbs_party_too_large',
 				sprintf(
 					/* translators: %d: largest number of passengers allowed in one booking. */
 					_n(
@@ -1302,7 +1288,7 @@ final class BookingService {
 
 		if ( $max_vehicles > 0 && $units > $max_vehicles ) {
 			return new WP_Error(
-				'fbm_too_many_vehicles',
+				'mpfbs_too_many_vehicles',
 				sprintf(
 					/* translators: %d: largest number of vehicles allowed in one booking. */
 					_n(
@@ -1444,7 +1430,7 @@ final class BookingService {
 			}
 
 			return new WP_Error(
-				'fbm_validation_failed',
+				'mpfbs_validation_failed',
 				__( 'Please correct the highlighted fields.', 'magepeople-ferry-booking-system' ),
 				array(
 					'status' => 400,
@@ -1542,7 +1528,7 @@ final class BookingService {
 
 		if ( array() !== $errors ) {
 			return new WP_Error(
-				'fbm_validation_failed',
+				'mpfbs_validation_failed',
 				__( 'Please correct the highlighted fields.', 'magepeople-ferry-booking-system' ),
 				array(
 					'status' => 400,
@@ -1570,7 +1556,7 @@ final class BookingService {
 		 * @param array<string, mixed> $input    Submitted customer.
 		 */
 		return (array) apply_filters(
-			'fbm_booking_customer',
+			'mpfbs_booking_customer',
 			array(
 				'name'  => $name,
 				'email' => $email,
@@ -1590,7 +1576,7 @@ final class BookingService {
 	private function reference( int $booking_id ): string {
 		$settings = Settings::all();
 		$prefix   = (string) $settings['booking_reference_prefix'];
-		$prefix   = '' === $prefix ? 'FBM' : $prefix;
+		$prefix   = '' === $prefix ? 'MPFBS' : $prefix;
 
 		$base = strtoupper( $prefix ) . '-' . ( $booking_id + 1000 );
 

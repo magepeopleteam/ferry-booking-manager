@@ -7,7 +7,7 @@
 
 declare( strict_types=1 );
 
-namespace FBM\Contracts;
+namespace MPFBS\Contracts;
 
 defined( 'ABSPATH' ) || exit;
 

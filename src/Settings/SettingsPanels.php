@@ -7,10 +7,10 @@
 
 declare( strict_types=1 );
 
-namespace FBM\Settings;
+namespace MPFBS\Settings;
 
-use FBM\Pricing\PricingSettings;
-use FBM\Support\Logger;
+use MPFBS\Pricing\PricingSettings;
+use MPFBS\Support\Logger;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -20,18 +20,12 @@ defined( 'ABSPATH' ) || exit;
  * This is the single description the whole settings system is built from: the
  * store takes its defaults and its sanitisers from here, the REST endpoint hands
  * the description to the dashboard, and the dashboard renders whatever it is
- * given. A tab therefore needs no JavaScript of its own, which is what lets the
- * Pro plugin add PDF, QR and webhook settings to a dashboard bundle that was
- * compiled before Pro existed.
- *
- * Tabs whose features belong to Pro are declared here in a locked state so that
- * Pro has something to replace, but a locked tab is never described to the
- * dashboard: without Pro installed, only what the Free plugin can actually do is
- * offered. A settings screen that lists what you cannot configure is a catalogue,
- * not a settings screen.
+ * given. A tab therefore needs no JavaScript of its own, which is what lets an
+ * extension add settings through the `mpfbs_settings_panels` filter to a
+ * dashboard bundle that was compiled without knowing about it.
  *
  * Every tab names a `group`, and the dashboard draws one navigation column of
- * grouped links instead of a single strip. Fifteen tabs never fit across a
+ * grouped links instead of a single strip. A dozen tabs never fit across a
  * screen, and a strip that scrolls sideways hides settings behind a gesture
  * nobody makes.
  */
@@ -46,11 +40,9 @@ final class SettingsPanels {
 	public const CUSTOM_PAGES     = 'pages';
 	public const CUSTOM_EMAILS    = 'email-test';
 	public const CUSTOM_ROLES     = 'roles';
-	public const CUSTOM_WEBHOOKS  = 'webhooks';
-	public const CUSTOM_TRANSFER  = 'transfer';
 
 	/**
-	 * The Free settings option.
+	 * The plugin settings option.
 	 */
 	public const STORE_SETTINGS = 'settings';
 
@@ -63,7 +55,7 @@ final class SettingsPanels {
 	 * Returns the navigation groups, in display order, keyed by group slug.
 	 *
 	 * A tab naming an unknown group is not dropped — it is collected under the
-	 * last heading, so a third-party tab added through `fbm_settings_panels`
+	 * last heading, so a third-party tab added through `mpfbs_settings_panels`
 	 * always has somewhere to appear.
 	 *
 	 * @return array<string, string>
@@ -73,7 +65,7 @@ final class SettingsPanels {
 			'operation'  => __( 'Operation', 'magepeople-ferry-booking-system' ),
 			'travellers' => __( 'Travellers', 'magepeople-ferry-booking-system' ),
 			'money'      => __( 'Money', 'magepeople-ferry-booking-system' ),
-			'tickets'    => __( 'Tickets and messages', 'magepeople-ferry-booking-system' ),
+			'tickets'    => __( 'Booking messages', 'magepeople-ferry-booking-system' ),
 			'system'     => __( 'System', 'magepeople-ferry-booking-system' ),
 			'more'       => __( 'More', 'magepeople-ferry-booking-system' ),
 		);
@@ -95,8 +87,6 @@ final class SettingsPanels {
 			self::woocommerce(),
 			self::payments(),
 			self::emails(),
-			self::pdf(),
-			self::qr(),
 			self::taxes(),
 			self::integrations(),
 			self::roles(),
@@ -106,8 +96,7 @@ final class SettingsPanels {
 		/**
 		 * Filters the settings tabs.
 		 *
-		 * Pro replaces its locked placeholder tabs with working ones through
-		 * this filter, and may append tabs of its own. Each tab is an array of
+		 * Extensions may append tabs of their own through this filter. Each tab is an array of
 		 * `id`, `label`, `description` and `sections`; each section carries
 		 * either a `fields` list of SettingField objects or a `custom` slug.
 		 *
@@ -115,7 +104,7 @@ final class SettingsPanels {
 		 *
 		 * @param array<int, array<string, mixed>> $tabs Declared tabs.
 		 */
-		$tabs = (array) apply_filters( 'fbm_settings_panels', $tabs );
+		$tabs = (array) apply_filters( 'mpfbs_settings_panels', $tabs );
 
 		return array_values(
 			array_filter(
@@ -169,15 +158,6 @@ final class SettingsPanels {
 		$groups    = self::groups();
 
 		foreach ( self::all() as $tab ) {
-			/*
-			 * A locked tab is a placeholder Pro replaces. If Pro has not
-			 * replaced it, the feature is not installed, and the tab is left
-			 * out rather than shown as an advertisement among working settings.
-			 */
-			if ( ! empty( $tab['locked'] ) ) {
-				continue;
-			}
-
 			$sections = array();
 
 			foreach ( (array) ( $tab['sections'] ?? array() ) as $section ) {
@@ -249,11 +229,8 @@ final class SettingsPanels {
 					'fields' => array(
 						SettingField::make( 'company_name' )
 							->label( __( 'Company name', 'magepeople-ferry-booking-system' ) )
-							->help( __( 'Shown on confirmations, tickets and emails.', 'magepeople-ferry-booking-system' ) )
+							->help( __( 'Shown on confirmations and emails.', 'magepeople-ferry-booking-system' ) )
 							->default_to( (string) get_bloginfo( 'name' ) ),
-						SettingField::make( 'company_logo', SettingField::TYPE_URL )
-							->label( __( 'Logo URL', 'magepeople-ferry-booking-system' ) )
-							->help( __( 'Used on printed documents. Leave empty to use the company name as text.', 'magepeople-ferry-booking-system' ) ),
 						SettingField::make( 'support_email', SettingField::TYPE_EMAIL )
 							->label( __( 'Support email', 'magepeople-ferry-booking-system' ) )
 							->help( __( 'Where customers are told to write if something goes wrong.', 'magepeople-ferry-booking-system' ) )
@@ -323,7 +300,7 @@ final class SettingsPanels {
 						SettingField::make( 'frontend_primary_color', SettingField::TYPE_COLOR )
 							->label( __( 'Accent colour', 'magepeople-ferry-booking-system' ) )
 							->help( __( 'Used for buttons and highlights in the booking form.', 'magepeople-ferry-booking-system' ) )
-							// Must match --fbmb-accent in the booking stylesheet. If the
+							// Must match --mpfbsb-accent in the booking stylesheet. If the
 							// two drift, the swatch on this screen stops describing the
 							// colour the customer actually sees.
 							->default_to( '#0b62c4' ),
@@ -450,7 +427,7 @@ final class SettingsPanels {
 			'sections'    => array(
 				array(
 					'title'       => __( 'Passenger fields', 'magepeople-ferry-booking-system' ),
-					'description' => __( 'First and last name are always collected — a passenger manifest is a named list. Everything else is yours to decide, and each passenger type can demand more on top.', 'magepeople-ferry-booking-system' ),
+					'description' => __( 'First and last name are always collected. Everything else is yours to decide, and each passenger type can demand more on top.', 'magepeople-ferry-booking-system' ),
 					'elsewhere'   => array(
 						'path'  => '/passengers/fields',
 						'label' => __( 'Edit the passenger form', 'magepeople-ferry-booking-system' ),
@@ -799,43 +776,6 @@ final class SettingsPanels {
 	}
 
 	/**
-	 * PDF tab.
-	 *
-	 * A placeholder for Pro to replace by id. Locked tabs are never described to
-	 * the dashboard, so without Pro the tab simply is not there.
-	 *
-	 * @return array<string, mixed>
-	 */
-	private static function pdf(): array {
-		return array(
-			'id'          => 'pdf',
-			'label'       => __( 'PDF', 'magepeople-ferry-booking-system' ),
-			'group'       => 'tickets',
-			'description' => __( 'Printable tickets and boarding passes.', 'magepeople-ferry-booking-system' ),
-			'locked'      => true,
-			'sections'    => array(),
-		);
-	}
-
-	/**
-	 * QR tab.
-	 *
-	 * A placeholder for Pro to replace by id, like the PDF tab above.
-	 *
-	 * @return array<string, mixed>
-	 */
-	private static function qr(): array {
-		return array(
-			'id'          => 'qr',
-			'label'       => __( 'QR', 'magepeople-ferry-booking-system' ),
-			'group'       => 'tickets',
-			'description' => __( 'Scannable codes and check-in at the gate.', 'magepeople-ferry-booking-system' ),
-			'locked'      => true,
-			'sections'    => array(),
-		);
-	}
-
-	/**
 	 * Taxes tab.
 	 *
 	 * @return array<string, mixed>
@@ -903,7 +843,7 @@ final class SettingsPanels {
 			'id'          => 'integrations',
 			'label'       => __( 'Integrations', 'magepeople-ferry-booking-system' ),
 			'group'       => 'system',
-			'description' => __( 'Sending booking events on to other systems.', 'magepeople-ferry-booking-system' ),
+			'description' => __( 'Passing booking events on to your analytics.', 'magepeople-ferry-booking-system' ),
 			'sections'    => array(
 				array(
 					'title'       => __( 'Analytics', 'magepeople-ferry-booking-system' ),
@@ -917,16 +857,6 @@ final class SettingsPanels {
 							->placeholder( 'G-XXXXXXX' )
 							->help( __( 'Optional. Included in the event so a tag can route it to the right property.', 'magepeople-ferry-booking-system' ) ),
 					),
-				),
-				array(
-					'title'       => __( 'Webhooks', 'magepeople-ferry-booking-system' ),
-					'description' => __( 'Post a signed message to another system when something happens. Payloads carry references and amounts, never passenger details.', 'magepeople-ferry-booking-system' ),
-					'custom'      => self::CUSTOM_WEBHOOKS,
-				),
-				array(
-					'title'       => __( 'Import and export', 'magepeople-ferry-booking-system' ),
-					'description' => __( 'Move ports, vessels, routes, sailings and fare types in and out as CSV.', 'magepeople-ferry-booking-system' ),
-					'custom'      => self::CUSTOM_TRANSFER,
 				),
 			),
 		);

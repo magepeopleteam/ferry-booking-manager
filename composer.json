@@ -14,12 +14,12 @@
   },
   "autoload": {
     "psr-4": {
-      "FBM\\": "src/"
+      "MPFBS\\": "src/"
     }
   },
   "autoload-dev": {
     "psr-4": {
-      "FBM\\Tests\\": "tests/unit/"
+      "MPFBS\\Tests\\": "tests/unit/"
     }
   },
   "config": {

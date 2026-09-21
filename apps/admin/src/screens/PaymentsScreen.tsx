@@ -13,10 +13,10 @@ import { NumberField, SelectField, SwitchField } from '../components/Fields';
 import { PageHeader } from '../components/PageHeader';
 import { SaveBar } from '../components/SaveBar';
 import { EmptyState } from '../components/States';
-import { useFbmToast } from '../components/Toast';
-import { fbmRequest, FbmApiError } from '../lib/api';
-import { fbmConfig } from '../lib/config';
-import { fbmFormat, fbmText } from '../lib/i18n';
+import { useMpfbsToast } from '../components/Toast';
+import { mpfbsRequest, MpfbsApiError } from '../lib/api';
+import { mpfbsConfig } from '../lib/config';
+import { mpfbsFormat, mpfbsText } from '../lib/i18n';
 
 interface GatewayState {
 	label: string;
@@ -33,7 +33,7 @@ interface SettingsPayload {
  * Renders the payments destination.
  */
 export function PaymentsScreen(): JSX.Element {
-	const toast = useFbmToast();
+	const toast = useMpfbsToast();
 	const [ settings, setSettings ] = useState< Record< string, unknown > | null >( null );
 	const [ gateways, setGateways ] = useState< Record< string, GatewayState > >( {} );
 	const [ dirty, setDirty ] = useState( false );
@@ -44,12 +44,12 @@ export function PaymentsScreen(): JSX.Element {
 		setError( '' );
 
 		try {
-			const payload = await fbmRequest< SettingsPayload >( 'settings' );
+			const payload = await mpfbsRequest< SettingsPayload >( 'settings' );
 			setSettings( payload.data.settings );
 			setGateways( payload.data.gateways );
 			setDirty( false );
 		} catch ( caught: unknown ) {
-			setError( caught instanceof FbmApiError ? caught.message : fbmText( 'Something went wrong.' ) );
+			setError( caught instanceof MpfbsApiError ? caught.message : mpfbsText( 'Something went wrong.' ) );
 		}
 	}, [] );
 
@@ -80,11 +80,11 @@ export function PaymentsScreen(): JSX.Element {
 		} );
 
 		try {
-			await fbmRequest( 'settings', { method: 'PUT', body: { settings, gateways: gatewayFlags } } );
-			toast.notify( fbmText( 'Payment settings saved.' ), 'success' );
+			await mpfbsRequest( 'settings', { method: 'PUT', body: { settings, gateways: gatewayFlags } } );
+			toast.notify( mpfbsText( 'Payment settings saved.' ), 'success' );
 			setDirty( false );
 		} catch ( caught: unknown ) {
-			toast.notify( caught instanceof FbmApiError ? caught.message : fbmText( 'Something went wrong.' ), 'error' );
+			toast.notify( caught instanceof MpfbsApiError ? caught.message : mpfbsText( 'Something went wrong.' ), 'error' );
 		} finally {
 			setSaving( false );
 		}
@@ -96,13 +96,13 @@ export function PaymentsScreen(): JSX.Element {
 	);
 
 	const engine = String( settings?.checkout_engine ?? 'native' );
-	const woo = fbmConfig().woocommerce;
+	const woo = mpfbsConfig().woocommerce;
 
 	if ( error !== '' ) {
 		return (
 			<>
-				<PageHeader title={ fbmText( 'Payments' ) } />
-				<div className="fbm-panel">
+				<PageHeader title={ mpfbsText( 'Payments' ) } />
+				<div className="mpfbs-panel">
 					<EmptyState icon="card" title={ error } />
 				</div>
 			</>
@@ -112,70 +112,70 @@ export function PaymentsScreen(): JSX.Element {
 	return (
 		<>
 			<PageHeader
-				title={ fbmText( 'Payments' ) }
-				description={ fbmText( 'Where a customer pays, and what they can pay with.' ) }
+				title={ mpfbsText( 'Payments' ) }
+				description={ mpfbsText( 'Where a customer pays, and what they can pay with.' ) }
 			/>
 
-			<div className="fbm-panel">
-				<div className="fbm-panel__header">
+			<div className="mpfbs-panel">
+				<div className="mpfbs-panel__header">
 					<div>
-						<h2 className="fbm-panel__title">{ fbmText( 'Checkout' ) }</h2>
-						<p className="fbm-panel__description">
-							{ fbmText(
+						<h2 className="mpfbs-panel__title">{ mpfbsText( 'Checkout' ) }</h2>
+						<p className="mpfbs-panel__description">
+							{ mpfbsText(
 								'WooCommerce brings its own gateways, coupons and tax handling. The built-in checkout takes offline payments without any of that.'
 							) }
 						</p>
 					</div>
 				</div>
 
-				<div className="fbm-settings">
+				<div className="mpfbs-settings">
 					<SelectField
-						label={ fbmText( 'Checkout engine' ) }
+						label={ mpfbsText( 'Checkout engine' ) }
 						name="checkout_engine"
 						value={ engine }
 						options={ [
-							{ value: 'native', label: fbmText( 'Built-in checkout' ) },
+							{ value: 'native', label: mpfbsText( 'Built-in checkout' ) },
 							{
 								value: 'woocommerce',
 								label: woo
-									? fbmText( 'WooCommerce' )
-									: fbmText( 'WooCommerce — not installed' ),
+									? mpfbsText( 'WooCommerce' )
+									: mpfbsText( 'WooCommerce — not installed' ),
 							},
 						] }
 						onChange={ ( value ) => set( 'checkout_engine', value ) }
 						hint={
 							! woo && engine === 'woocommerce'
-								? fbmText( 'WooCommerce is not active, so bookings will fall back to the built-in checkout.' )
+								? mpfbsText( 'WooCommerce is not active, so bookings will fall back to the built-in checkout.' )
 								: undefined
 						}
 					/>
 
 					<NumberField
-						label={ fbmText( 'Payment deadline' ) }
+						label={ mpfbsText( 'Payment deadline' ) }
 						name="payment_deadline_minutes"
 						value={ Number( settings?.payment_deadline_minutes ?? 0 ) }
 						min={ 0 }
 						max={ 525600 }
-						suffix={ fbmText( 'minutes' ) }
-						hint={ fbmText( 'How long an unpaid booking is held before staff should chase it. Use 0 for no deadline.' ) }
+						suffix={ mpfbsText( 'minutes' ) }
+						hint={ mpfbsText( 'How long an unpaid booking is held before staff should chase it. Use 0 for no deadline.' ) }
 						onChange={ ( value ) => set( 'payment_deadline_minutes', value ) }
 					/>
 				</div>
 
-				<h3 className="fbm-subheading">{ fbmText( 'Payment methods' ) }</h3>
+				<h3 className="mpfbs-subheading">{ mpfbsText( 'Payment methods' ) }</h3>
 
 				{ Object.keys( gateways ).length === 0 ? (
-					<EmptyState icon="card" title={ fbmText( 'No payment methods are registered.' ) } />
+					<EmptyState icon="card" title={ mpfbsText( 'No payment methods are registered.' ) } />
 				) : (
-					<div className="fbm-fieldgrid">
+					<div className="mpfbs-fieldgrid">
 						{ Object.entries( gateways ).map( ( [ id, state ] ) => (
-							<div className="fbm-fieldrow" key={ id }>
-								<div className="fbm-fieldrow__label">
-									<span className="fbm-fieldrow__name">{ state.label }</span>
-									{ state.description ? <span className="fbm-fieldrow__hint">{ state.description }</span> : null }
+							<div className="mpfbs-fieldrow" key={ id }>
+								<div className="mpfbs-fieldrow__label">
+									<span className="mpfbs-fieldrow__name">{ state.label }</span>
+									{ state.description ? <span className="mpfbs-fieldrow__hint">{ state.description }</span> : null }
 								</div>
 								<SwitchField
-									label={ fbmFormat( 'Offer %s', state.label ) }
+									label={ mpfbsFormat( 'Offer %s', state.label ) }
 									checked={ state.enabled }
 									onChange={ ( checked ) => toggleGateway( id, checked ) }
 								/>
@@ -184,15 +184,15 @@ export function PaymentsScreen(): JSX.Element {
 					</div>
 				) }
 
-				<div className="fbm-settings">
+				<div className="mpfbs-settings">
 					<SelectField
-						label={ fbmText( 'Default method' ) }
+						label={ mpfbsText( 'Default method' ) }
 						name="default_payment_method"
 						value={ String( settings?.default_payment_method ?? '' ) }
-						placeholder={ fbmText( 'First enabled method' ) }
+						placeholder={ mpfbsText( 'First enabled method' ) }
 						options={ enabledIds.map( ( id ) => ( { value: id, label: gateways[ id ]!.label } ) ) }
 						onChange={ ( value ) => set( 'default_payment_method', value ) }
-						hint={ fbmText( 'Pre-selected on the booking form.' ) }
+						hint={ mpfbsText( 'Pre-selected on the booking form.' ) }
 					/>
 				</div>
 			</div>
@@ -204,8 +204,8 @@ export function PaymentsScreen(): JSX.Element {
 				onReset={ load }
 				summary={
 					enabledIds.length === 0
-						? fbmText( 'No methods enabled — customers cannot pay.' )
-						: fbmFormat( '%s payment methods enabled', String( enabledIds.length ) )
+						? mpfbsText( 'No methods enabled — customers cannot pay.' )
+						: mpfbsFormat( '%s payment methods enabled', String( enabledIds.length ) )
 				}
 			/>
 		</>

@@ -7,15 +7,15 @@
 
 declare( strict_types=1 );
 
-namespace FBM\Providers;
+namespace MPFBS\Providers;
 
-use FBM\Admin\AppRenderer;
-use FBM\Admin\Menu;
-use FBM\Contracts\ContainerInterface;
-use FBM\Contracts\LoggerInterface;
-use FBM\Core\Assets;
-use FBM\Core\ServiceProvider;
-use FBM\Security\Permissions;
+use MPFBS\Admin\AppRenderer;
+use MPFBS\Admin\Menu;
+use MPFBS\Contracts\ContainerInterface;
+use MPFBS\Contracts\LoggerInterface;
+use MPFBS\Core\Assets;
+use MPFBS\Core\ServiceProvider;
+use MPFBS\Security\Permissions;
 
 defined( 'ABSPATH' ) || exit;
 

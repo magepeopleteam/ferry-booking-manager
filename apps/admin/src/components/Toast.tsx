@@ -18,7 +18,7 @@ import {
 } from 'react';
 
 import { Icon } from './Icon';
-import { fbmText } from '../lib/i18n';
+import { mpfbsText } from '../lib/i18n';
 
 export type ToastTone = 'success' | 'error' | 'info';
 
@@ -91,21 +91,21 @@ export function ToastProvider( { children }: ToastProviderProps ): JSX.Element {
 	return (
 		<ToastContext.Provider value={ api }>
 			{ children }
-			<div className="fbm-toasts">
+			<div className="mpfbs-toasts">
 				{ toasts.map( ( toast ) => (
 					<div
 						key={ toast.id }
-						className={ `fbm-toast fbm-toast--${ toast.tone }` }
+						className={ `mpfbs-toast mpfbs-toast--${ toast.tone }` }
 						role={ toast.tone === 'error' ? 'alert' : 'status' }
 						aria-live={ toast.tone === 'error' ? 'assertive' : 'polite' }
 					>
 						<Icon name={ toast.tone === 'error' ? 'alert' : 'check' } size={ 16 } />
-						<span className="fbm-toast__message">{ toast.message }</span>
+						<span className="mpfbs-toast__message">{ toast.message }</span>
 						<button
 							type="button"
-							className="fbm-toast__close"
+							className="mpfbs-toast__close"
 							onClick={ () => dismiss( toast.id ) }
-							aria-label={ fbmText( 'Close' ) }
+							aria-label={ mpfbsText( 'Close' ) }
 						>
 							×
 						</button>
@@ -119,11 +119,11 @@ export function ToastProvider( { children }: ToastProviderProps ): JSX.Element {
 /**
  * Returns the toast API.
  */
-export function useFbmToast(): ToastApi {
+export function useMpfbsToast(): ToastApi {
 	const context = useContext( ToastContext );
 
 	if ( ! context ) {
-		throw new Error( 'useFbmToast must be used inside <ToastProvider>.' );
+		throw new Error( 'useMpfbsToast must be used inside <ToastProvider>.' );
 	}
 
 	return context;

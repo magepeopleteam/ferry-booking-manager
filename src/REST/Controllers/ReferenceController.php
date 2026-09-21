@@ -7,16 +7,16 @@
 
 declare( strict_types=1 );
 
-namespace FBM\REST\Controllers;
+namespace MPFBS\REST\Controllers;
 
-use FBM\Repositories\PassengerTypeRepository;
-use FBM\Repositories\PortRepository;
-use FBM\Repositories\RouteRepository;
-use FBM\Repositories\VehicleTypeRepository;
-use FBM\Repositories\VesselRepository;
-use FBM\REST\AbstractController;
-use FBM\Security\Capabilities;
-use FBM\Security\Permissions;
+use MPFBS\Repositories\PassengerTypeRepository;
+use MPFBS\Repositories\PortRepository;
+use MPFBS\Repositories\RouteRepository;
+use MPFBS\Repositories\VehicleTypeRepository;
+use MPFBS\Repositories\VesselRepository;
+use MPFBS\REST\AbstractController;
+use MPFBS\Security\Capabilities;
+use MPFBS\Security\Permissions;
 use WP_REST_Request;
 use WP_REST_Response;
 
@@ -190,7 +190,7 @@ final class ReferenceController extends AbstractController {
 	/**
 	 * Reduces a repository result to id, name and the fields a picker needs.
 	 *
-	 * @param array{items: array<int, \FBM\Models\Entity>, total: int, page: int, per_page: int} $result Repository result.
+	 * @param array{items: array<int, \MPFBS\Models\Entity>, total: int, page: int, per_page: int} $result Repository result.
 	 * @param string[]                                                                           $fields Field names to include.
 	 * @return array<int, array<string, mixed>>
 	 */

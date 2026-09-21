@@ -1,7 +1,6 @@
 .git
 .gitignore
 .distignore
-apps
 vendor
 tests
 docs
@@ -14,3 +13,8 @@ phpunit.xml
 build-zip.sh
 *.png
 *.log
+apps/*/node_modules
+apps/*/.next
+apps/*/out
+apps/*/next-env.d.ts
+*.tsbuildinfo

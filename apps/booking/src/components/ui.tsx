@@ -35,10 +35,10 @@ export function Button( {
 		<button
 			type={ type }
 			className={ [
-				'fbmb-button',
-				`fbmb-button--${ variant }`,
-				size ? `fbmb-button--${ size }` : '',
-				block ? 'fbmb-button--block' : '',
+				'mpfbsb-button',
+				`mpfbsb-button--${ variant }`,
+				size ? `mpfbsb-button--${ size }` : '',
+				block ? 'mpfbsb-button--block' : '',
 			]
 				.filter( Boolean )
 				.join( ' ' ) }
@@ -67,22 +67,22 @@ export function Field( {
 	children: ComponentChildren;
 } ): JSX.Element {
 	return (
-		<div className={ `fbmb-field${ error ? ' is-invalid' : '' }` }>
-			<label className="fbmb-field__label" htmlFor={ htmlFor }>
+		<div className={ `mpfbsb-field${ error ? ' is-invalid' : '' }` }>
+			<label className="mpfbsb-field__label" htmlFor={ htmlFor }>
 				{ label }
 				{ required ? (
-					<span className="fbmb-field__required" aria-hidden="true">
+					<span className="mpfbsb-field__required" aria-hidden="true">
 						*
 					</span>
 				) : null }
 			</label>
 			{ children }
 			{ error ? (
-				<p className="fbmb-field__error" role="alert">
+				<p className="mpfbsb-field__error" role="alert">
 					{ error }
 				</p>
 			) : hint ? (
-				<p className="fbmb-field__hint">{ hint }</p>
+				<p className="mpfbsb-field__hint">{ hint }</p>
 			) : null }
 		</div>
 	);
@@ -134,7 +134,7 @@ export function Select( {
 	);
 
 	const selected = rows.findIndex( ( row ) => String( row.value ) === String( value ) );
-	const listId = `${ id ?? 'fbmb-select' }-listbox`;
+	const listId = `${ id ?? 'mpfbsb-select' }-listbox`;
 
 	const commit = ( index: number ): void => {
 		const row = rows[ index ];
@@ -309,12 +309,12 @@ export function Select( {
 	const label = selected >= 0 ? rows[ selected ]?.label ?? '' : placeholder ?? '';
 
 	return (
-		<div className={ `fbmb-select${ open ? ' is-open' : '' }` } ref={ rootRef }>
+		<div className={ `mpfbsb-select${ open ? ' is-open' : '' }` } ref={ rootRef }>
 			<button
 				type="button"
 				id={ id }
 				ref={ buttonRef }
-				className="fbmb-select__control"
+				className="mpfbsb-select__control"
 				disabled={ disabled }
 				role="combobox"
 				aria-haspopup="listbox"
@@ -324,17 +324,17 @@ export function Select( {
 				onClick={ () => ( open ? setOpen( false ) : reveal() ) }
 				onKeyDown={ onKeyDown }
 			>
-				<span className={ `fbmb-select__value${ selected > 0 || ! placeholder ? '' : ' is-placeholder' }` }>
+				<span className={ `mpfbsb-select__value${ selected > 0 || ! placeholder ? '' : ' is-placeholder' }` }>
 					{ label }
 				</span>
 			</button>
-			<svg className="fbmb-select__arrow" viewBox="0 0 20 20" aria-hidden="true">
+			<svg className="mpfbsb-select__arrow" viewBox="0 0 20 20" aria-hidden="true">
 				<path d="M5 8l5 5 5-5" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
 			</svg>
 
 			{ open ? (
 				<div
-					className={ `fbmb-select__panel${ flip ? ' is-above' : '' }` }
+					className={ `mpfbsb-select__panel${ flip ? ' is-above' : '' }` }
 					id={ listId }
 					role="listbox"
 					ref={ listRef }
@@ -348,7 +348,7 @@ export function Select( {
 							aria-selected={ index === selected }
 							aria-disabled={ row.disabled ? true : undefined }
 							className={ [
-								'fbmb-select__option',
+								'mpfbsb-select__option',
 								index === active ? 'is-active' : '',
 								index === selected ? 'is-selected' : '',
 								row.disabled ? 'is-disabled' : '',
@@ -395,7 +395,7 @@ export function Input( {
 	return (
 		<input
 			id={ id }
-			className="fbmb-input"
+			className="mpfbsb-input"
 			type={ type }
 			value={ value }
 			placeholder={ placeholder }
@@ -428,10 +428,10 @@ export function Stepper( {
 	const clamp = ( next: number ): number => Math.max( min, Math.min( max, next ) );
 
 	return (
-		<div className="fbmb-stepper" role="group" aria-label={ label }>
+		<div className="mpfbsb-stepper" role="group" aria-label={ label }>
 			<button
 				type="button"
-				className="fbmb-stepper__button"
+				className="mpfbsb-stepper__button"
 				onClick={ () => onChange( clamp( value - 1 ) ) }
 				disabled={ value <= min }
 				aria-label={ `${ label } −` }
@@ -441,7 +441,7 @@ export function Stepper( {
 				</svg>
 			</button>
 			<span
-				className="fbmb-stepper__value"
+				className="mpfbsb-stepper__value"
 				role="status"
 				aria-live="polite"
 				aria-valuenow={ value }
@@ -452,7 +452,7 @@ export function Stepper( {
 			</span>
 			<button
 				type="button"
-				className="fbmb-stepper__button"
+				className="mpfbsb-stepper__button"
 				onClick={ () => onChange( clamp( value + 1 ) ) }
 				disabled={ value >= max }
 				aria-label={ `${ label } +` }
@@ -472,7 +472,7 @@ export function Badge( {
 	children: ComponentChildren;
 	tone?: 'neutral' | 'positive' | 'warning' | 'danger' | 'accent';
 } ): JSX.Element {
-	return <span className={ `fbmb-badge fbmb-badge--${ tone }` }>{ children }</span>;
+	return <span className={ `mpfbsb-badge mpfbsb-badge--${ tone }` }>{ children }</span>;
 }
 
 export function Alert( {
@@ -483,7 +483,7 @@ export function Alert( {
 	tone?: 'error' | 'info' | 'success' | 'warning';
 } ): JSX.Element {
 	return (
-		<div className={ `fbmb-alert fbmb-alert--${ tone }` } role={ tone === 'error' ? 'alert' : 'status' }>
+		<div className={ `mpfbsb-alert mpfbsb-alert--${ tone }` } role={ tone === 'error' ? 'alert' : 'status' }>
 			{ children }
 		</div>
 	);
@@ -491,7 +491,7 @@ export function Alert( {
 
 export function Card( { children, onClick, selected }: { children: ComponentChildren; onClick?: () => void; selected?: boolean } ): JSX.Element {
 	return (
-		<div className={ `fbmb-card${ selected ? ' is-selected' : '' }${ onClick ? ' is-clickable' : '' }` } onClick={ onClick }>
+		<div className={ `mpfbsb-card${ selected ? ' is-selected' : '' }${ onClick ? ' is-clickable' : '' }` } onClick={ onClick }>
 			{ children }
 		</div>
 	);
@@ -499,9 +499,9 @@ export function Card( { children, onClick, selected }: { children: ComponentChil
 
 export function Skeleton( { rows = 3 }: { rows?: number } ): JSX.Element {
 	return (
-		<div className="fbmb-skeletons" aria-hidden="true">
+		<div className="mpfbsb-skeletons" aria-hidden="true">
 			{ Array.from( { length: rows } ).map( ( _, index ) => (
-				<div key={ index } className="fbmb-skeleton" />
+				<div key={ index } className="mpfbsb-skeleton" />
 			) ) }
 		</div>
 	);
@@ -509,8 +509,8 @@ export function Skeleton( { rows = 3 }: { rows?: number } ): JSX.Element {
 
 export function Empty( { title, description }: { title: string; description?: string } ): JSX.Element {
 	return (
-		<div className="fbmb-empty">
-			<svg viewBox="0 0 48 48" aria-hidden="true" className="fbmb-empty__icon">
+		<div className="mpfbsb-empty">
+			<svg viewBox="0 0 48 48" aria-hidden="true" className="mpfbsb-empty__icon">
 				<path
 					d="M6 30h36l-4 10H10L6 30Zm6-12h24l3 10H9l3-10Zm6-10h12l2 8H16l2-8Z"
 					fill="none"
@@ -519,16 +519,16 @@ export function Empty( { title, description }: { title: string; description?: st
 					strokeLinejoin="round"
 				/>
 			</svg>
-			<p className="fbmb-empty__title">{ title }</p>
-			{ description ? <p className="fbmb-empty__description">{ description }</p> : null }
+			<p className="mpfbsb-empty__title">{ title }</p>
+			{ description ? <p className="mpfbsb-empty__description">{ description }</p> : null }
 		</div>
 	);
 }
 
 export function ErrorState( { message, onRetry }: { message: string; onRetry?: () => void } ): JSX.Element {
 	return (
-		<div className="fbmb-empty">
-			<p className="fbmb-empty__title">{ message }</p>
+		<div className="mpfbsb-empty">
+			<p className="mpfbsb-empty__title">{ message }</p>
 			{ onRetry ? (
 				<Button variant="secondary" onClick={ onRetry }>
 					{ t( 'Try again' ) }

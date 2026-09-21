@@ -13,7 +13,7 @@
 
 import type { JSX } from 'react';
 
-import { fbmFormat, fbmText } from '../lib/i18n';
+import { mpfbsFormat, mpfbsText } from '../lib/i18n';
 
 export interface SaveBarProps {
 	dirty: boolean;
@@ -29,20 +29,20 @@ export interface SaveBarProps {
  */
 export function SaveBar( { dirty, saving, onSave, onReset, summary }: SaveBarProps ): JSX.Element {
 	return (
-		<div className={ `fbm-savebar${ dirty ? ' is-dirty' : '' }` }>
-			<span className="fbm-savebar__status" role="status">
-				{ dirty ? fbmText( 'Unsaved changes' ) : summary ?? '' }
+		<div className={ `mpfbs-savebar${ dirty ? ' is-dirty' : '' }` }>
+			<span className="mpfbs-savebar__status" role="status">
+				{ dirty ? mpfbsText( 'Unsaved changes' ) : summary ?? '' }
 			</span>
 
-			<div className="fbm-savebar__actions">
+			<div className="mpfbs-savebar__actions">
 				{ onReset && dirty ? (
-					<button type="button" className="fbm-button fbm-button--secondary" onClick={ onReset } disabled={ saving }>
-						{ fbmText( 'Discard' ) }
+					<button type="button" className="mpfbs-button mpfbs-button--secondary" onClick={ onReset } disabled={ saving }>
+						{ mpfbsText( 'Discard' ) }
 					</button>
 				) : null }
 
-				<button type="button" className="fbm-button fbm-button--primary" onClick={ onSave } disabled={ saving || ! dirty }>
-					{ saving ? fbmText( 'Saving…' ) : fbmText( 'Save changes' ) }
+				<button type="button" className="mpfbs-button mpfbs-button--primary" onClick={ onSave } disabled={ saving || ! dirty }>
+					{ saving ? mpfbsText( 'Saving…' ) : mpfbsText( 'Save changes' ) }
 				</button>
 			</div>
 		</div>
@@ -52,6 +52,6 @@ export function SaveBar( { dirty, saving, onSave, onReset, summary }: SaveBarPro
 /**
  * Builds the idle summary for a field matrix.
  */
-export function fbmFieldSummary( required: number, optional: number ): string {
-	return fbmFormat( '%1$s required, %2$s optional', String( required ), String( optional ) );
+export function mpfbsFieldSummary( required: number, optional: number ): string {
+	return mpfbsFormat( '%1$s required, %2$s optional', String( required ), String( optional ) );
 }

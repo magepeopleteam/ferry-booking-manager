@@ -10,14 +10,14 @@
 ( function ( window, document ) {
 	'use strict';
 
-	var config = window.fbmAdmin || {};
+	var config = window.mpfbsAdmin || {};
 
 	config.version = config.version || '0.0.0';
 	config.capabilities = config.capabilities || {};
 	config.i18n = config.i18n || {};
 	config.bootedAt = Date.now();
 
-	window.fbmAdmin = config;
+	window.mpfbsAdmin = config;
 
 	/*
 	 * Tell the bundler runtime where the dashboard chunks actually live.
@@ -40,32 +40,32 @@
 	 * @param {string} message Human readable message.
 	 * @return {void}
 	 */
-	function fbmRenderBootFailure( message ) {
+	function mpfbsRenderBootFailure( message ) {
 		var root = document.getElementById( '__next' );
 
-		if ( ! root || root.getAttribute( 'data-fbm-failed' ) === '1' ) {
+		if ( ! root || root.getAttribute( 'data-mpfbs-failed' ) === '1' ) {
 			return;
 		}
 
-		root.setAttribute( 'data-fbm-failed', '1' );
+		root.setAttribute( 'data-mpfbs-failed', '1' );
 		root.innerHTML =
-			'<div class="fbm-boot-error" role="alert">' +
-			'<h2 class="fbm-boot-error__title"></h2>' +
-			'<p class="fbm-boot-error__text"></p>' +
+			'<div class="mpfbs-boot-error" role="alert">' +
+			'<h2 class="mpfbs-boot-error__title"></h2>' +
+			'<p class="mpfbs-boot-error__text"></p>' +
 			'</div>';
 
-		root.querySelector( '.fbm-boot-error__title' ).textContent =
+		root.querySelector( '.mpfbs-boot-error__title' ).textContent =
 			config.i18n[ 'Something went wrong.' ] || 'Something went wrong.';
-		root.querySelector( '.fbm-boot-error__text' ).textContent = message;
+		root.querySelector( '.mpfbs-boot-error__text' ).textContent = message;
 	}
 
-	window.fbmAdminBootFailure = fbmRenderBootFailure;
+	window.mpfbsAdminBootFailure = mpfbsRenderBootFailure;
 
 	window.addEventListener( 'error', function ( event ) {
 		if ( ! event || ! event.filename || event.filename.indexOf( '/ferry-booking-manager/' ) === -1 ) {
 			return;
 		}
 
-		fbmRenderBootFailure( event.message || 'Script error.' );
+		mpfbsRenderBootFailure( event.message || 'Script error.' );
 	} );
 }( window, document ) );

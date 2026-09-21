@@ -7,27 +7,27 @@
 
 declare( strict_types=1 );
 
-namespace FBM\Providers;
+namespace MPFBS\Providers;
 
-use FBM\Booking\BookingPresenter;
-use FBM\Booking\PartyPresenter;
-use FBM\Booking\BookingService;
-use FBM\Contracts\ContainerInterface;
-use FBM\Core\ServiceProvider;
-use FBM\Frontend\Assets;
-use FBM\Frontend\Components;
-use FBM\Frontend\Pages;
-use FBM\Notification\NotificationService;
-use FBM\Payment\PaymentGatewayRegistry;
-use FBM\Repositories\BookingRepository;
-use FBM\REST\Controllers\BookingController;
-use FBM\REST\Controllers\CustomerController;
-use FBM\REST\Controllers\SearchController;
-use FBM\REST\Controllers\SettingsController;
-use FBM\REST\RestServer;
-use FBM\Search\SearchService;
-use FBM\Security\Permissions;
-use FBM\WooCommerce\WooCommerceIntegration;
+use MPFBS\Booking\BookingPresenter;
+use MPFBS\Booking\PartyPresenter;
+use MPFBS\Booking\BookingService;
+use MPFBS\Contracts\ContainerInterface;
+use MPFBS\Core\ServiceProvider;
+use MPFBS\Frontend\Assets;
+use MPFBS\Frontend\Components;
+use MPFBS\Frontend\Pages;
+use MPFBS\Notification\NotificationService;
+use MPFBS\Payment\PaymentGatewayRegistry;
+use MPFBS\Repositories\BookingRepository;
+use MPFBS\REST\Controllers\BookingController;
+use MPFBS\REST\Controllers\CustomerController;
+use MPFBS\REST\Controllers\SearchController;
+use MPFBS\REST\Controllers\SettingsController;
+use MPFBS\REST\RestServer;
+use MPFBS\Search\SearchService;
+use MPFBS\Security\Permissions;
+use MPFBS\WooCommerce\WooCommerceIntegration;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -78,13 +78,13 @@ final class FrontendServiceProvider extends ServiceProvider {
 			SearchService::class,
 			static function ( ContainerInterface $c ): SearchService {
 				return new SearchService(
-					$c->get( \FBM\Repositories\SailingRepository::class ),
-					$c->get( \FBM\Repositories\RouteRepository::class ),
-					$c->get( \FBM\Repositories\VesselRepository::class ),
-					$c->get( \FBM\Repositories\PortRepository::class ),
-					$c->get( \FBM\Availability\AvailabilityService::class ),
-					$c->get( \FBM\Pricing\PricingService::class ),
-					$c->get( \FBM\Cache\CacheManager::class )
+					$c->get( \MPFBS\Repositories\SailingRepository::class ),
+					$c->get( \MPFBS\Repositories\RouteRepository::class ),
+					$c->get( \MPFBS\Repositories\VesselRepository::class ),
+					$c->get( \MPFBS\Repositories\PortRepository::class ),
+					$c->get( \MPFBS\Availability\AvailabilityService::class ),
+					$c->get( \MPFBS\Pricing\PricingService::class ),
+					$c->get( \MPFBS\Cache\CacheManager::class )
 				);
 			}
 		);
@@ -93,9 +93,9 @@ final class FrontendServiceProvider extends ServiceProvider {
 			NotificationService::class,
 			static function ( ContainerInterface $c ): NotificationService {
 				return new NotificationService(
-					$c->get( \FBM\Repositories\SailingRepository::class ),
-					$c->get( \FBM\Repositories\RouteRepository::class ),
-					$c->get( \FBM\Repositories\VesselRepository::class )
+					$c->get( \MPFBS\Repositories\SailingRepository::class ),
+					$c->get( \MPFBS\Repositories\RouteRepository::class ),
+					$c->get( \MPFBS\Repositories\VesselRepository::class )
 				);
 			}
 		);
@@ -105,17 +105,17 @@ final class FrontendServiceProvider extends ServiceProvider {
 			static function ( ContainerInterface $c ): BookingService {
 				return new BookingService(
 					$c->get( BookingRepository::class ),
-					$c->get( \FBM\Repositories\SailingRepository::class ),
-					$c->get( \FBM\Repositories\RouteRepository::class ),
-					$c->get( \FBM\Repositories\VesselRepository::class ),
-					$c->get( \FBM\Repositories\PassengerTypeRepository::class ),
-					$c->get( \FBM\Repositories\VehicleTypeRepository::class ),
-					$c->get( \FBM\Pricing\PricingService::class ),
-					$c->get( \FBM\Availability\AvailabilityService::class ),
-					$c->get( \FBM\Availability\HoldManager::class ),
+					$c->get( \MPFBS\Repositories\SailingRepository::class ),
+					$c->get( \MPFBS\Repositories\RouteRepository::class ),
+					$c->get( \MPFBS\Repositories\VesselRepository::class ),
+					$c->get( \MPFBS\Repositories\PassengerTypeRepository::class ),
+					$c->get( \MPFBS\Repositories\VehicleTypeRepository::class ),
+					$c->get( \MPFBS\Pricing\PricingService::class ),
+					$c->get( \MPFBS\Availability\AvailabilityService::class ),
+					$c->get( \MPFBS\Availability\HoldManager::class ),
 					$c->get( PaymentGatewayRegistry::class ),
 					$c->get( NotificationService::class ),
-					$c->get( \FBM\Contracts\LoggerInterface::class )
+					$c->get( \MPFBS\Contracts\LoggerInterface::class )
 				);
 			}
 		);
@@ -126,7 +126,7 @@ final class FrontendServiceProvider extends ServiceProvider {
 				return new WooCommerceIntegration(
 					$c->get( BookingService::class ),
 					$c->get( BookingRepository::class ),
-					$c->get( \FBM\Contracts\LoggerInterface::class )
+					$c->get( \MPFBS\Contracts\LoggerInterface::class )
 				);
 			}
 		);
@@ -137,8 +137,8 @@ final class FrontendServiceProvider extends ServiceProvider {
 				return new SearchController(
 					$c->get( Permissions::class ),
 					$c->get( SearchService::class ),
-					$c->get( \FBM\Repositories\PassengerTypeRepository::class ),
-					$c->get( \FBM\Repositories\VehicleTypeRepository::class )
+					$c->get( \MPFBS\Repositories\PassengerTypeRepository::class ),
+					$c->get( \MPFBS\Repositories\VehicleTypeRepository::class )
 				);
 			}
 		);
@@ -147,10 +147,10 @@ final class FrontendServiceProvider extends ServiceProvider {
 			BookingPresenter::class,
 			static function ( ContainerInterface $c ): BookingPresenter {
 				return new BookingPresenter(
-					$c->get( \FBM\Repositories\SailingRepository::class ),
-					$c->get( \FBM\Repositories\RouteRepository::class ),
-					$c->get( \FBM\Repositories\PortRepository::class ),
-					$c->get( \FBM\Repositories\VesselRepository::class )
+					$c->get( \MPFBS\Repositories\SailingRepository::class ),
+					$c->get( \MPFBS\Repositories\RouteRepository::class ),
+					$c->get( \MPFBS\Repositories\PortRepository::class ),
+					$c->get( \MPFBS\Repositories\VesselRepository::class )
 				);
 			}
 		);
@@ -159,8 +159,8 @@ final class FrontendServiceProvider extends ServiceProvider {
 			PartyPresenter::class,
 			static function ( ContainerInterface $c ): PartyPresenter {
 				return new PartyPresenter(
-					$c->get( \FBM\Repositories\PassengerTypeRepository::class ),
-					$c->get( \FBM\Repositories\VehicleTypeRepository::class )
+					$c->get( \MPFBS\Repositories\PassengerTypeRepository::class ),
+					$c->get( \MPFBS\Repositories\VehicleTypeRepository::class )
 				);
 			}
 		);

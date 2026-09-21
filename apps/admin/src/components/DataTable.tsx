@@ -9,7 +9,7 @@ import type { JSX, ReactNode } from 'react';
 
 import { Icon } from './Icon';
 import { Skeleton } from './States';
-import { fbmText } from '../lib/i18n';
+import { mpfbsText } from '../lib/i18n';
 
 export interface Column< T > {
 	key: string;
@@ -66,8 +66,8 @@ export function DataTable< T >( {
 	}
 
 	return (
-		<div className={ `fbm-table-wrap${ refreshing ? ' is-refreshing' : '' }` }>
-			<table className="fbm-table" aria-busy={ loading || refreshing }>
+		<div className={ `mpfbs-table-wrap${ refreshing ? ' is-refreshing' : '' }` }>
+			<table className="mpfbs-table" aria-busy={ loading || refreshing }>
 				<thead>
 					<tr>
 						{ columns.map( ( column ) => {
@@ -85,11 +85,11 @@ export function DataTable< T >( {
 									{ sortable ? (
 										<button
 											type="button"
-											className={ `fbm-table__sort${ active ? ' is-active' : '' }` }
+											className={ `mpfbs-table__sort${ active ? ' is-active' : '' }` }
 											onClick={ () => onSort?.( column.sortBy as string ) }
 										>
 											{ column.label }
-											<span className="fbm-table__sort-icon" aria-hidden="true">
+											<span className="mpfbs-table__sort-icon" aria-hidden="true">
 												{ active ? ( order === 'asc' ? '↑' : '↓' ) : '↕' }
 											</span>
 										</button>
@@ -101,7 +101,7 @@ export function DataTable< T >( {
 						} ) }
 						{ actions.length > 0 ? (
 							<th scope="col" className="is-end">
-								<span className="fbm-screen-reader-text">{ fbmText( 'Actions' ) }</span>
+								<span className="mpfbs-screen-reader-text">{ mpfbsText( 'Actions' ) }</span>
 							</th>
 						) : null }
 					</tr>
@@ -110,7 +110,7 @@ export function DataTable< T >( {
 				<tbody>
 					{ loading
 						? Array.from( { length: 5 } ).map( ( _, rowIndex ) => (
-								<tr key={ `skeleton-${ rowIndex }` } className="fbm-table__placeholder" aria-hidden="true">
+								<tr key={ `skeleton-${ rowIndex }` } className="mpfbs-table__placeholder" aria-hidden="true">
 									{ Array.from( { length: columnCount } ).map( ( __, cellIndex ) => (
 										<td key={ cellIndex }>
 											<Skeleton height="14px" width={ cellIndex === 0 ? '70%' : '45%' } />
@@ -132,14 +132,14 @@ export function DataTable< T >( {
 
 									{ actions.length > 0 ? (
 										<td className="is-end">
-											<div className="fbm-table__actions">
+											<div className="mpfbs-table__actions">
 												{ actions
 													.filter( ( action ) => ! action.isVisible || action.isVisible( item ) )
 													.map( ( action ) => (
 														<button
 															key={ action.key }
 															type="button"
-															className={ `fbm-table__action${
+															className={ `mpfbs-table__action${
 																action.tone === 'danger' ? ' is-danger' : ''
 															}` }
 															onClick={ ( event ) => {
@@ -159,9 +159,9 @@ export function DataTable< T >( {
 			</table>
 
 			{ refreshing ? (
-				<span className="fbm-table__refresh" role="status">
+				<span className="mpfbs-table__refresh" role="status">
 					<Icon name="clock" size={ 14 } />
-					<span className="fbm-screen-reader-text">{ fbmText( 'Loading' ) }</span>
+					<span className="mpfbs-screen-reader-text">{ mpfbsText( 'Loading' ) }</span>
 				</span>
 			) : null }
 		</div>

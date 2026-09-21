@@ -7,7 +7,7 @@
 
 declare( strict_types=1 );
 
-namespace FBM\Security;
+namespace MPFBS\Security;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -16,25 +16,21 @@ defined( 'ABSPATH' ) || exit;
  *
  * Nothing in the plugin may gate behaviour on `manage_options` alone; every
  * privileged operation maps to one of these capabilities so that site owners can
- * delegate work to counter staff, agents and check-in crews.
+ * delegate work to booking and counter staff.
  */
 final class Capabilities {
 
-	public const ACCESS_DASHBOARD = 'fbm_access_dashboard';
-	public const MANAGE_SETTINGS  = 'fbm_manage_settings';
-	public const MANAGE_VESSELS   = 'fbm_manage_vessels';
-	public const MANAGE_PORTS     = 'fbm_manage_ports';
-	public const MANAGE_ROUTES    = 'fbm_manage_routes';
-	public const MANAGE_SAILINGS  = 'fbm_manage_sailings';
-	public const MANAGE_PRICING   = 'fbm_manage_pricing';
-	public const MANAGE_BOOKINGS  = 'fbm_manage_bookings';
-	public const CREATE_BOOKING   = 'fbm_create_booking';
-	public const MODIFY_BOOKING   = 'fbm_modify_booking';
-	public const CANCEL_BOOKING   = 'fbm_cancel_booking';
-	public const ISSUE_REFUND     = 'fbm_issue_refund';
-	public const CHECKIN          = 'fbm_checkin';
-	public const VIEW_REPORTS     = 'fbm_view_reports';
-	public const MANAGE_AGENTS    = 'fbm_manage_agents';
+	public const ACCESS_DASHBOARD = 'mpfbs_access_dashboard';
+	public const MANAGE_SETTINGS  = 'mpfbs_manage_settings';
+	public const MANAGE_VESSELS   = 'mpfbs_manage_vessels';
+	public const MANAGE_PORTS     = 'mpfbs_manage_ports';
+	public const MANAGE_ROUTES    = 'mpfbs_manage_routes';
+	public const MANAGE_SAILINGS  = 'mpfbs_manage_sailings';
+	public const MANAGE_PRICING   = 'mpfbs_manage_pricing';
+	public const MANAGE_BOOKINGS  = 'mpfbs_manage_bookings';
+	public const CREATE_BOOKING   = 'mpfbs_create_booking';
+	public const MODIFY_BOOKING   = 'mpfbs_modify_booking';
+	public const CANCEL_BOOKING   = 'mpfbs_cancel_booking';
 
 	/**
 	 * Returns every capability the plugin defines.
@@ -54,23 +50,19 @@ final class Capabilities {
 			self::CREATE_BOOKING,
 			self::MODIFY_BOOKING,
 			self::CANCEL_BOOKING,
-			self::ISSUE_REFUND,
-			self::CHECKIN,
-			self::VIEW_REPORTS,
-			self::MANAGE_AGENTS,
 		);
 
 		/**
 		 * Filters the full capability catalogue.
 		 *
-		 * Pro adds its own capabilities here so that role provisioning and the
-		 * Roles settings screen stay in sync automatically.
+		 * Extensions add their own capabilities here so that role provisioning
+		 * and the Roles settings screen stay in sync automatically.
 		 *
 		 * @since 1.0.0
 		 *
 		 * @param string[] $capabilities Capability slugs.
 		 */
-		return array_values( array_unique( (array) apply_filters( 'fbm_capabilities', $capabilities ) ) );
+		return array_values( array_unique( (array) apply_filters( 'mpfbs_capabilities', $capabilities ) ) );
 	}
 
 	/**
@@ -91,10 +83,6 @@ final class Capabilities {
 			self::CREATE_BOOKING   => __( 'Create bookings', 'magepeople-ferry-booking-system' ),
 			self::MODIFY_BOOKING   => __( 'Modify bookings', 'magepeople-ferry-booking-system' ),
 			self::CANCEL_BOOKING   => __( 'Cancel bookings', 'magepeople-ferry-booking-system' ),
-			self::ISSUE_REFUND     => __( 'Issue refunds', 'magepeople-ferry-booking-system' ),
-			self::CHECKIN          => __( 'Check in and board passengers', 'magepeople-ferry-booking-system' ),
-			self::VIEW_REPORTS     => __( 'View reports', 'magepeople-ferry-booking-system' ),
-			self::MANAGE_AGENTS    => __( 'Manage agents', 'magepeople-ferry-booking-system' ),
 		);
 
 		/**
@@ -104,6 +92,6 @@ final class Capabilities {
 		 *
 		 * @param array<string, string> $labels Capability slug => label.
 		 */
-		return (array) apply_filters( 'fbm_capability_labels', $labels );
+		return (array) apply_filters( 'mpfbs_capability_labels', $labels );
 	}
 }

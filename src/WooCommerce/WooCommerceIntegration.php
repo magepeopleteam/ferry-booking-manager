@@ -7,13 +7,13 @@
 
 declare( strict_types=1 );
 
-namespace FBM\WooCommerce;
+namespace MPFBS\WooCommerce;
 
-use FBM\Booking\BookingService;
-use FBM\Contracts\LoggerInterface;
-use FBM\Models\Booking;
-use FBM\Repositories\BookingRepository;
-use FBM\Settings\Settings;
+use MPFBS\Booking\BookingService;
+use MPFBS\Contracts\LoggerInterface;
+use MPFBS\Models\Booking;
+use MPFBS\Repositories\BookingRepository;
+use MPFBS\Settings\Settings;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -22,7 +22,7 @@ defined( 'ABSPATH' ) || exit;
  *
  * A booking handed to WooCommerce is confirmed the moment its order is paid,
  * and cancelled when the order is cancelled. The link lives on both records:
- * `_fbm_wc_order_id` on the booking and `_fbm_booking_id` on the order, so
+ * `_mpfbs_wc_order_id` on the booking and `_mpfbs_booking_id` on the order, so
  * either side can find the other.
  */
 final class WooCommerceIntegration {
@@ -86,7 +86,7 @@ final class WooCommerceIntegration {
 		// the parameter has to stay for the callback to match the hook.
 		unset( $order );
 
-		$booking_id = (int) get_post_meta( $order_id, '_fbm_booking_id', true );
+		$booking_id = (int) get_post_meta( $order_id, '_mpfbs_booking_id', true );
 
 		if ( $booking_id < 1 ) {
 			return;
@@ -148,7 +148,7 @@ final class WooCommerceIntegration {
 	public function order_cancelled( int $order_id, $order ): void {
 		unset( $order );
 
-		$booking_id = (int) get_post_meta( $order_id, '_fbm_booking_id', true );
+		$booking_id = (int) get_post_meta( $order_id, '_mpfbs_booking_id', true );
 
 		if ( $booking_id < 1 ) {
 			return;

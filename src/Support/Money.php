@@ -7,7 +7,7 @@
 
 declare( strict_types=1 );
 
-namespace FBM\Support;
+namespace MPFBS\Support;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -145,7 +145,7 @@ final class Money {
 	 * @return array<string, mixed>
 	 */
 	public static function currency(): array {
-		$settings = class_exists( '\\FBM\\Settings\\Settings' ) ? \FBM\Settings\Settings::all() : array();
+		$settings = class_exists( '\\MPFBS\\Settings\\Settings' ) ? \MPFBS\Settings\Settings::all() : array();
 		$code     = strtoupper( trim( (string) ( $settings['currency'] ?? '' ) ) );
 
 		if ( '' === $code ) {
@@ -192,7 +192,7 @@ final class Money {
 		 *
 		 * @param array<string, mixed> $currency Currency settings.
 		 */
-		return (array) apply_filters( 'fbm_currency_settings', $currency );
+		return (array) apply_filters( 'mpfbs_currency_settings', $currency );
 	}
 
 	/**
@@ -250,7 +250,7 @@ final class Money {
 		 *
 		 * @param array<string, string> $symbols ISO code => symbol.
 		 */
-		$symbols = (array) apply_filters( 'fbm_currency_symbols', $symbols );
+		$symbols = (array) apply_filters( 'mpfbs_currency_symbols', $symbols );
 
 		$code = strtoupper( trim( $code ) );
 

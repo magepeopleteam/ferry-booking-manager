@@ -7,13 +7,13 @@
 
 declare( strict_types=1 );
 
-namespace FBM\Sailing;
+namespace MPFBS\Sailing;
 
-use FBM\Models\Route;
-use FBM\Models\Sailing;
-use FBM\Repositories\RouteRepository;
-use FBM\Repositories\SailingRepository;
-use FBM\Support\Time;
+use MPFBS\Models\Route;
+use MPFBS\Models\Sailing;
+use MPFBS\Repositories\RouteRepository;
+use MPFBS\Repositories\SailingRepository;
+use MPFBS\Support\Time;
 use WP_Error;
 
 defined( 'ABSPATH' ) || exit;
@@ -178,7 +178,7 @@ final class ScheduleGenerator {
 		 * @param int[]                $created Created sailing ids.
 		 * @param array<string, mixed> $pattern Generation pattern.
 		 */
-		do_action( 'fbm_schedule_generated', $created, $pattern );
+		do_action( 'mpfbs_schedule_generated', $created, $pattern );
 
 		return array(
 			'created' => count( $created ),
@@ -247,7 +247,7 @@ final class ScheduleGenerator {
 
 		if ( array() !== $fields ) {
 			return new WP_Error(
-				'fbm_invalid_schedule',
+				'mpfbs_invalid_schedule',
 				__( 'The schedule could not be generated. Check the highlighted fields.', 'magepeople-ferry-booking-system' ),
 				array(
 					'status' => 422,
@@ -261,7 +261,7 @@ final class ScheduleGenerator {
 
 		if ( $end < $start ) {
 			return new WP_Error(
-				'fbm_invalid_schedule',
+				'mpfbs_invalid_schedule',
 				__( 'The end date falls before the start date.', 'magepeople-ferry-booking-system' ),
 				array(
 					'status' => 422,
@@ -286,7 +286,7 @@ final class ScheduleGenerator {
 
 				if ( count( $departures ) > self::MAX_SAILINGS ) {
 					return new WP_Error(
-						'fbm_schedule_too_large',
+						'mpfbs_schedule_too_large',
 						sprintf(
 							/* translators: %d: maximum number of sailings. */
 							__( 'That pattern would create more than %d sailings. Narrow the date range or the number of departure times and run it again.', 'magepeople-ferry-booking-system' ),
@@ -329,12 +329,12 @@ final class ScheduleGenerator {
 				'meta_query'     => array(
 					'relation' => 'AND',
 					array(
-						'key'     => '_fbm_route_id',
+						'key'     => '_mpfbs_route_id',
 						'value'   => $route_id,
 						'compare' => '=',
 					),
 					array(
-						'key'     => '_fbm_departure_ts',
+						'key'     => '_mpfbs_departure_ts',
 						'value'   => $timestamp,
 						'compare' => '=',
 						'type'    => 'NUMERIC',

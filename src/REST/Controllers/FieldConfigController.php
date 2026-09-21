@@ -7,11 +7,11 @@
 
 declare( strict_types=1 );
 
-namespace FBM\REST\Controllers;
+namespace MPFBS\REST\Controllers;
 
-use FBM\Booking\FieldConfig;
-use FBM\REST\AbstractController;
-use FBM\Security\Capabilities;
+use MPFBS\Booking\FieldConfig;
+use MPFBS\REST\AbstractController;
+use MPFBS\Security\Capabilities;
 use WP_REST_Request;
 use WP_REST_Response;
 

@@ -8,7 +8,7 @@
 
 import { useCallback, useEffect, useState } from 'react';
 
-export interface FbmLocation {
+export interface MpfbsLocation {
 	/** Normalised path, always starting with a slash, never trailing. */
 	path: string;
 	/** Path split into segments, e.g. ["bookings", "123"]. */
@@ -17,12 +17,12 @@ export interface FbmLocation {
 	query: Record< string, string >;
 }
 
-export const FBM_DEFAULT_PATH = '/dashboard';
+export const MPFBS_DEFAULT_PATH = '/dashboard';
 
 /**
  * Parses a raw location fragment into a route descriptor.
  */
-export function fbmParseHash( hash: string ): FbmLocation {
+export function mpfbsParseHash( hash: string ): MpfbsLocation {
 	const raw = hash.replace( /^#/, '' );
 	const [ rawPath = '', rawQuery = '' ] = raw.split( '?' );
 
@@ -35,7 +35,7 @@ export function fbmParseHash( hash: string ): FbmLocation {
 	path = path.replace( /\/+$/, '' );
 
 	if ( path === '' ) {
-		path = FBM_DEFAULT_PATH;
+		path = MPFBS_DEFAULT_PATH;
 	}
 
 	const query: Record< string, string > = {};
@@ -54,7 +54,7 @@ export function fbmParseHash( hash: string ): FbmLocation {
 /**
  * Navigates to a dashboard path.
  */
-export function fbmNavigate( path: string, replace = false ): void {
+export function mpfbsNavigate( path: string, replace = false ): void {
 	if ( typeof window === 'undefined' ) {
 		return;
 	}
@@ -82,12 +82,12 @@ export function fbmNavigate( path: string, replace = false ): void {
  * Returns `null` until the component has mounted so that the exported markup and
  * the first client render agree; the shell renders its loading state meanwhile.
  */
-export function useFbmLocation(): FbmLocation | null {
-	const [ location, setLocation ] = useState< FbmLocation | null >( null );
+export function useMpfbsLocation(): MpfbsLocation | null {
+	const [ location, setLocation ] = useState< MpfbsLocation | null >( null );
 
 	useEffect( () => {
 		const read = (): void => {
-			setLocation( fbmParseHash( window.location.hash ) );
+			setLocation( mpfbsParseHash( window.location.hash ) );
 		};
 
 		read();
@@ -105,8 +105,8 @@ export function useFbmLocation(): FbmLocation | null {
 /**
  * Returns a stable navigate callback.
  */
-export function useFbmNavigate(): ( path: string, replace?: boolean ) => void {
+export function useMpfbsNavigate(): ( path: string, replace?: boolean ) => void {
 	return useCallback( ( path: string, replace = false ) => {
-		fbmNavigate( path, replace );
+		mpfbsNavigate( path, replace );
 	}, [] );
 }

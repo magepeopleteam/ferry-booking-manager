@@ -22,38 +22,38 @@ const STAT_CARDS = 6;
  */
 export function AppSkeleton(): JSX.Element {
 	return (
-		<div className="fbm-app fbm-app--booting" role="status" aria-label="Loading the Ferry Manager dashboard">
-			<div className="fbm-sidebar" aria-hidden="true">
-				<div className="fbm-sidebar__brand">
+		<div className="mpfbs-app mpfbs-app--booting" role="status" aria-label="Loading the Ferry Manager dashboard">
+			<div className="mpfbs-sidebar" aria-hidden="true">
+				<div className="mpfbs-sidebar__brand">
 					<Skeleton width="32px" height="32px" radius="6px" />
 					<Skeleton width="120px" height="14px" />
 				</div>
-				<div className="fbm-sidebar__list">
+				<div className="mpfbs-sidebar__list">
 					{ Array.from( { length: NAV_ITEMS } ).map( ( _, index ) => (
-						<div className="fbm-sidebar__item" key={ index }>
+						<div className="mpfbs-sidebar__item" key={ index }>
 							<Skeleton width="82%" height="16px" />
 						</div>
 					) ) }
 				</div>
 			</div>
 
-			<div className="fbm-app__body">
-				<div className="fbm-header" aria-hidden="true">
+			<div className="mpfbs-app__body">
+				<div className="mpfbs-header" aria-hidden="true">
 					<Skeleton width="280px" height="32px" radius="10px" />
-					<span className="fbm-header__meta">
+					<span className="mpfbs-header__meta">
 						<Skeleton width="96px" height="20px" radius="999px" />
 						<Skeleton width="28px" height="28px" radius="50%" />
 					</span>
 				</div>
 
-				<div className="fbm-main">
-					<div className="fbm-main__inner" aria-hidden="true">
+				<div className="mpfbs-main">
+					<div className="mpfbs-main__inner" aria-hidden="true">
 						<Skeleton width="220px" height="26px" />
-						<div className="fbm-stat-grid">
+						<div className="mpfbs-stat-grid">
 							{ Array.from( { length: STAT_CARDS } ).map( ( _, index ) => (
-								<div className="fbm-stat" key={ index }>
+								<div className="mpfbs-stat" key={ index }>
 									<Skeleton width="55%" height="11px" />
-									<div className="fbm-stat__value">
+									<div className="mpfbs-stat__value">
 										<Skeleton width="70%" height="24px" />
 									</div>
 								</div>

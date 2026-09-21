@@ -7,9 +7,9 @@
 
 declare( strict_types=1 );
 
-namespace FBM\Pricing;
+namespace MPFBS\Pricing;
 
-use FBM\Support\Money;
+use MPFBS\Support\Money;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -28,7 +28,6 @@ final class Quote {
 
 	public const LINE_PASSENGER = 'passenger';
 	public const LINE_VEHICLE   = 'vehicle';
-	public const LINE_EXTRA     = 'extra';
 	public const LINE_DISCOUNT  = 'discount';
 	public const LINE_FEE       = 'fee';
 	public const LINE_TAX       = 'tax';
@@ -146,7 +145,7 @@ final class Quote {
 	 * @return int
 	 */
 	public function gross(): int {
-		return $this->sum( self::LINE_PASSENGER, self::LINE_VEHICLE, self::LINE_EXTRA );
+		return $this->sum( self::LINE_PASSENGER, self::LINE_VEHICLE );
 	}
 
 	/**
@@ -230,6 +229,6 @@ final class Quote {
 		 * @param array<string, mixed> $payload Serialised quote.
 		 * @param Quote                $quote   Quote instance.
 		 */
-		return (array) apply_filters( 'fbm_serialize_quote', $payload, $this );
+		return (array) apply_filters( 'mpfbs_serialize_quote', $payload, $this );
 	}
 }

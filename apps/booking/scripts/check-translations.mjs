@@ -158,15 +158,15 @@ const missing = [ ...used ].filter( ( value ) => ! dictionary.has( value ) ).sor
 const unused = [ ...dictionary ].filter( ( value ) => ! used.has( value ) ).sort();
 
 if ( unused.length > 0 ) {
-	console.log( `[fbm] ${ unused.length } dictionary entries are not referenced by the booking form:` );
+	console.log( `[mpfbs] ${ unused.length } dictionary entries are not referenced by the booking form:` );
 	unused.forEach( ( value ) => console.log( `      · ${ value }` ) );
 }
 
 if ( missing.length > 0 ) {
-	console.error( `\n[fbm] ${ missing.length } booking form strings are missing from the PHP dictionary:` );
+	console.error( `\n[mpfbs] ${ missing.length } booking form strings are missing from the PHP dictionary:` );
 	missing.forEach( ( value ) => console.error( `      · ${ value }` ) );
-	console.error( '\nAdd them to FBM\\Frontend\\Assets::translations() so they reach translators.\n' );
+	console.error( '\nAdd them to MPFBS\\Frontend\\Assets::translations() so they reach translators.\n' );
 	process.exit( 1 );
 }
 
-console.log( `[fbm] Booking translations are complete: ${ used.size } strings.` );
+console.log( `[mpfbs] Booking translations are complete: ${ used.size } strings.` );

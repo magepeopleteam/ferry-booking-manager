@@ -15,11 +15,11 @@
 import { useEffect, useState, type JSX } from 'react';
 
 import { LoadingState } from './States';
-import { fbmRequest } from '../lib/api';
-import { fbmConfig } from '../lib/config';
-import { fbmFormat, fbmText } from '../lib/i18n';
-import { fbmMoneyStep, fbmToMajor } from '../lib/money';
-import { useFbmReferences } from '../lib/references';
+import { mpfbsRequest } from '../lib/api';
+import { mpfbsConfig } from '../lib/config';
+import { mpfbsFormat, mpfbsText } from '../lib/i18n';
+import { mpfbsMoneyStep, mpfbsToMajor } from '../lib/money';
+import { useMpfbsReferences } from '../lib/references';
 
 /** Route fares keyed by type id, in minor units. A blank means "no override". */
 export type FareOverrides = Record< number, string >;
@@ -44,9 +44,9 @@ interface RouteFares {
  * Renders one fare input per route.
  */
 export function RouteFaresField( { typeId, defaultFare, values, onChange }: RouteFaresFieldProps ): JSX.Element {
-	const { references } = useFbmReferences();
+	const { references } = useMpfbsReferences();
 	const [ routes, setRoutes ] = useState< RouteFares[] | null >( null );
-	const currency = fbmConfig().currency;
+	const currency = mpfbsConfig().currency;
 
 	/*
 	 * The reference list carries route names but not their fare tables, so the
@@ -59,7 +59,7 @@ export function RouteFaresField( { typeId, defaultFare, values, onChange }: Rout
 
 		Promise.all(
 			references.routes.map( ( route ) =>
-				fbmRequest< RouteFares >( `routes/${ route.id }` )
+				mpfbsRequest< RouteFares >( `routes/${ route.id }` )
 					.then( ( response ) => response.data )
 					.catch( () => null )
 			)
@@ -89,7 +89,7 @@ export function RouteFaresField( { typeId, defaultFare, values, onChange }: Rout
 			const stored = ( route.vehicle_prices ?? {} )[ String( typeId ) ];
 
 			if ( stored !== undefined && stored !== '' ) {
-				seeded[ route.id ] = String( fbmToMajor( Number( stored ) ) );
+				seeded[ route.id ] = String( mpfbsToMajor( Number( stored ) ) );
 			}
 		} );
 
@@ -105,42 +105,42 @@ export function RouteFaresField( { typeId, defaultFare, values, onChange }: Rout
 
 	if ( routes.length === 0 ) {
 		return (
-			<p className="fbm-record__empty">
-				{ fbmText( 'There are no routes yet. Add one and its fare for this vehicle can be set here.' ) }
+			<p className="mpfbs-record__empty">
+				{ mpfbsText( 'There are no routes yet. Add one and its fare for this vehicle can be set here.' ) }
 			</p>
 		);
 	}
 
 	return (
 		<>
-			<h3 className="fbm-subheading">{ fbmText( 'Fare on each route' ) }</h3>
-			<p className="fbm-form__note">
-				{ fbmFormat(
+			<h3 className="mpfbs-subheading">{ mpfbsText( 'Fare on each route' ) }</h3>
+			<p className="mpfbs-form__note">
+				{ mpfbsFormat(
 					'Leave a route blank to charge this type’s own fare of %s. A route that carries no vehicles is not listed.',
 					`${ currency.symbol }${ defaultFare.toFixed( currency.decimals ) }`
 				) }
 			</p>
 
-			<div className="fbm-fieldgrid">
+			<div className="mpfbs-fieldgrid">
 				{ routes
 					.filter( ( route ) => route.allows_vehicles !== false )
 					.map( ( route ) => (
-						<div className="fbm-fieldrow" key={ route.id }>
-							<div className="fbm-fieldrow__label">
-								<span className="fbm-fieldrow__name">{ route.name }</span>
+						<div className="mpfbs-fieldrow" key={ route.id }>
+							<div className="mpfbs-fieldrow__label">
+								<span className="mpfbs-fieldrow__name">{ route.name }</span>
 							</div>
-							<div className="fbm-fare">
-								<span className="fbm-fare__symbol" aria-hidden="true">
+							<div className="mpfbs-fare">
+								<span className="mpfbs-fare__symbol" aria-hidden="true">
 									{ currency.symbol }
 								</span>
 								<input
 									type="number"
-									className="fbm-input fbm-input--money"
+									className="mpfbs-input mpfbs-input--money"
 									min={ 0 }
-									step={ fbmMoneyStep() }
+									step={ mpfbsMoneyStep() }
 									value={ values[ route.id ] ?? '' }
-									placeholder={ fbmText( 'Default' ) }
-									aria-label={ fbmFormat( 'Fare for %s', route.name ) }
+									placeholder={ mpfbsText( 'Default' ) }
+									aria-label={ mpfbsFormat( 'Fare for %s', route.name ) }
 									onChange={ ( event ) => {
 										const next = { ...values };
 

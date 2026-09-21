@@ -7,10 +7,10 @@
 
 declare( strict_types=1 );
 
-namespace FBM\Core;
+namespace MPFBS\Core;
 
-use FBM\Contracts\ContainerInterface;
-use FBM\Contracts\ServiceProviderInterface;
+use MPFBS\Contracts\ContainerInterface;
+use MPFBS\Contracts\ServiceProviderInterface;
 
 defined( 'ABSPATH' ) || exit;
 

@@ -7,7 +7,7 @@
 
 declare( strict_types=1 );
 
-namespace FBM\Security;
+namespace MPFBS\Security;
 
 use WP_Error;
 
@@ -31,7 +31,7 @@ final class RateLimiter {
 	/**
 	 * Transient key prefix.
 	 */
-	private const PREFIX = 'fbm_rl_';
+	private const PREFIX = 'mpfbs_rl_';
 
 	/**
 	 * Applies a budget to the current caller.
@@ -52,7 +52,7 @@ final class RateLimiter {
 		 * @param int    $limit  Requests allowed in the window.
 		 * @param string $bucket Bucket name.
 		 */
-		$limit = (int) apply_filters( 'fbm_rate_limit', $limit, $bucket );
+		$limit = (int) apply_filters( 'mpfbs_rate_limit', $limit, $bucket );
 
 		if ( $limit < 1 ) {
 			return true;
@@ -70,7 +70,7 @@ final class RateLimiter {
 
 		if ( $count >= $limit ) {
 			return new WP_Error(
-				'fbm_rate_limited',
+				'mpfbs_rate_limited',
 				__( 'Too many requests. Please wait a moment and try again.', 'magepeople-ferry-booking-system' ),
 				array(
 					'status'      => 429,

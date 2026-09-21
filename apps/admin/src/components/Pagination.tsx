@@ -5,7 +5,7 @@
 import type { JSX } from 'react';
 import { Listbox } from './Listbox';
 
-import { fbmFormat, fbmText } from '../lib/i18n';
+import { mpfbsFormat, mpfbsText } from '../lib/i18n';
 
 export interface PaginationProps {
 	page: number;
@@ -30,38 +30,38 @@ export function Pagination( { page, perPage, total, totalPages, onPage, onPerPag
 	const last = Math.min( total, page * perPage );
 
 	return (
-		<nav className="fbm-pagination" aria-label={ fbmText( 'Pagination' ) }>
-			<span className="fbm-pagination__summary">
-				{ fbmFormat( 'Showing %1$s to %2$s of %3$s', first, last, total ) }
+		<nav className="mpfbs-pagination" aria-label={ mpfbsText( 'Pagination' ) }>
+			<span className="mpfbs-pagination__summary">
+				{ mpfbsFormat( 'Showing %1$s to %2$s of %3$s', first, last, total ) }
 			</span>
 
-			<div className="fbm-pagination__per-page">
+			<div className="mpfbs-pagination__per-page">
 				<Listbox
 					compact
 					value={ perPage }
 					options={ PER_PAGE_OPTIONS.map( ( option ) => ( { value: option, label: String( option ) } ) ) }
-					ariaLabel={ fbmText( 'Rows per page' ) }
+					ariaLabel={ mpfbsText( 'Rows per page' ) }
 					onChange={ ( value ) => onPerPage( Number( value ) ) }
 				/>
 			</div>
 
-			<div className="fbm-pagination__buttons">
+			<div className="mpfbs-pagination__buttons">
 				<button
 					type="button"
-					className="fbm-button fbm-button--secondary fbm-button--compact"
+					className="mpfbs-button mpfbs-button--secondary mpfbs-button--compact"
 					onClick={ () => onPage( page - 1 ) }
 					disabled={ page <= 1 }
 				>
-					{ fbmText( 'Previous' ) }
+					{ mpfbsText( 'Previous' ) }
 				</button>
-				<span className="fbm-pagination__page">{ fbmFormat( 'Page %1$s of %2$s', page, Math.max( 1, totalPages ) ) }</span>
+				<span className="mpfbs-pagination__page">{ mpfbsFormat( 'Page %1$s of %2$s', page, Math.max( 1, totalPages ) ) }</span>
 				<button
 					type="button"
-					className="fbm-button fbm-button--secondary fbm-button--compact"
+					className="mpfbs-button mpfbs-button--secondary mpfbs-button--compact"
 					onClick={ () => onPage( page + 1 ) }
 					disabled={ page >= totalPages }
 				>
-					{ fbmText( 'Next' ) }
+					{ mpfbsText( 'Next' ) }
 				</button>
 			</div>
 		</nav>

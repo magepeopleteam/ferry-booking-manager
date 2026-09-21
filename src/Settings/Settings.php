@@ -1,20 +1,20 @@
 <?php
 /**
- * Free settings store.
+ * Settings store.
  *
  * @package FerryBookingManager
  */
 
 declare( strict_types=1 );
 
-namespace FBM\Settings;
+namespace MPFBS\Settings;
 
-use FBM\Support\Options;
+use MPFBS\Support\Options;
 
 defined( 'ABSPATH' ) || exit;
 
 /**
- * The Free plugin's configuration: general behaviour, booking rules, the
+ * The plugin's configuration: general behaviour, booking rules, the
  * checkout engine, payment defaults and the email preferences.
  *
  * Every value is stored through the prefixed option helper so uninstall can
@@ -87,13 +87,13 @@ final class Settings {
 		$settings = array_merge( self::defaults(), $stored );
 
 		/**
-		 * Filters the resolved Free settings.
+		 * Filters the resolved settings.
 		 *
 		 * @since 1.0.0
 		 *
 		 * @param array<string, mixed> $settings Resolved settings.
 		 */
-		return (array) apply_filters( 'fbm_settings', $settings );
+		return (array) apply_filters( 'mpfbs_settings', $settings );
 	}
 
 	/**

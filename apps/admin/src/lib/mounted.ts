@@ -13,7 +13,7 @@ import { useEffect, useState } from 'react';
 /**
  * Returns false during the export and the first client render, true afterwards.
  */
-export function useFbmMounted(): boolean {
+export function useMpfbsMounted(): boolean {
 	const [ mounted, setMounted ] = useState( false );
 
 	useEffect( () => {

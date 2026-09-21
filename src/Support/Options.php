@@ -7,12 +7,12 @@
 
 declare( strict_types=1 );
 
-namespace FBM\Support;
+namespace MPFBS\Support;
 
 defined( 'ABSPATH' ) || exit;
 
 /**
- * Thin, typed accessor for `fbm_*` options.
+ * Thin, typed accessor for `mpfbs_*` options.
  *
  * Every option the plugin writes goes through here so that uninstall can find
  * them again and so that option names are guaranteed to carry the prefix.
@@ -22,12 +22,12 @@ final class Options {
 	/**
 	 * Option prefix enforced on every key.
 	 */
-	public const PREFIX = 'fbm_';
+	public const PREFIX = 'mpfbs_';
 
 	/**
 	 * Option storing the list of option names the plugin has written.
 	 */
-	public const REGISTRY = 'fbm_option_registry';
+	public const REGISTRY = 'mpfbs_option_registry';
 
 	/**
 	 * Reads an option.

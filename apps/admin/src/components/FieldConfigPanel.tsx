@@ -11,18 +11,18 @@
 import { useCallback, useEffect, useMemo, useState, type JSX } from 'react';
 import { Listbox } from './Listbox';
 
-import { fbmRequest, FbmApiError } from '../lib/api';
-import { fbmFormat, fbmText } from '../lib/i18n';
-import { useFbmToast } from '../components/Toast';
+import { mpfbsRequest, MpfbsApiError } from '../lib/api';
+import { mpfbsFormat, mpfbsText } from '../lib/i18n';
+import { useMpfbsToast } from '../components/Toast';
 import { Icon } from './Icon';
-import { fbmFieldSummary, SaveBar } from './SaveBar';
+import { mpfbsFieldSummary, SaveBar } from './SaveBar';
 
-export interface FbmConfigurableField {
+export interface MpfbsConfigurableField {
 	key: string;
 	label: string;
 	type: string;
 	mode: string;
-	locked: boolean;
+	always_on: boolean;
 	custom: boolean;
 	hint: string;
 }
@@ -30,7 +30,7 @@ export interface FbmConfigurableField {
 interface FieldConfigResponse {
 	group: string;
 	modes: string[];
-	fields: FbmConfigurableField[];
+	fields: MpfbsConfigurableField[];
 }
 
 export interface FieldConfigPanelProps {
@@ -51,8 +51,8 @@ const CUSTOM_TYPES = [ 'text', 'textarea', 'number', 'date', 'email', 'tel', 'sw
  * Renders the field matrix for one group.
  */
 export function FieldConfigPanel( { group, title, description }: FieldConfigPanelProps ): JSX.Element {
-	const toast = useFbmToast();
-	const [ fields, setFields ] = useState< FbmConfigurableField[] >( [] );
+	const toast = useMpfbsToast();
+	const [ fields, setFields ] = useState< MpfbsConfigurableField[] >( [] );
 	const [ loading, setLoading ] = useState( true );
 	const [ saving, setSaving ] = useState( false );
 	const [ error, setError ] = useState( '' );
@@ -65,11 +65,11 @@ export function FieldConfigPanel( { group, title, description }: FieldConfigPane
 		setError( '' );
 
 		try {
-			const response = await fbmRequest< FieldConfigResponse >( `field-config/${ group }` );
+			const response = await mpfbsRequest< FieldConfigResponse >( `field-config/${ group }` );
 			setFields( response.data.fields );
 			setDirty( false );
 		} catch ( caught: unknown ) {
-			setError( caught instanceof FbmApiError ? caught.message : fbmText( 'Something went wrong.' ) );
+			setError( caught instanceof MpfbsApiError ? caught.message : mpfbsText( 'Something went wrong.' ) );
 		} finally {
 			setLoading( false );
 		}
@@ -98,7 +98,7 @@ export function FieldConfigPanel( { group, title, description }: FieldConfigPane
 
 		setFields( ( current ) => [
 			...current,
-			{ key: '', label, type: newType, mode: 'optional', locked: false, custom: true, hint: '' },
+			{ key: '', label, type: newType, mode: 'optional', always_on: false, custom: true, hint: '' },
 		] );
 		setNewLabel( '' );
 		setNewType( 'text' );
@@ -114,22 +114,22 @@ export function FieldConfigPanel( { group, title, description }: FieldConfigPane
 		fields.forEach( ( field ) => {
 			if ( field.custom ) {
 				custom.push( { key: field.key, label: field.label, type: field.type, mode: field.mode } );
-			} else if ( ! field.locked ) {
+			} else if ( ! field.always_on ) {
 				modes[ field.key ] = field.mode;
 			}
 		} );
 
 		try {
-			const response = await fbmRequest< FieldConfigResponse >( `field-config/${ group }`, {
+			const response = await mpfbsRequest< FieldConfigResponse >( `field-config/${ group }`, {
 				method: 'PUT',
 				body: { modes, custom },
 			} );
 
 			setFields( response.data.fields );
 			setDirty( false );
-			toast.notify( fbmText( 'Booking form saved.' ), 'success' );
+			toast.notify( mpfbsText( 'Booking form saved.' ), 'success' );
 		} catch ( caught: unknown ) {
-			toast.notify( caught instanceof FbmApiError ? caught.message : fbmText( 'Something went wrong.' ), 'error' );
+			toast.notify( caught instanceof MpfbsApiError ? caught.message : mpfbsText( 'Something went wrong.' ), 'error' );
 		} finally {
 			setSaving( false );
 		}
@@ -137,7 +137,7 @@ export function FieldConfigPanel( { group, title, description }: FieldConfigPane
 
 	const summary = useMemo(
 		() =>
-			fbmFieldSummary(
+			mpfbsFieldSummary(
 				fields.filter( ( field ) => field.mode === 'required' ).length,
 				fields.filter( ( field ) => field.mode === 'optional' ).length
 			),
@@ -146,49 +146,49 @@ export function FieldConfigPanel( { group, title, description }: FieldConfigPane
 
 	return (
 		<>
-		<div className="fbm-panel">
-			<div className="fbm-panel__header">
+		<div className="mpfbs-panel">
+			<div className="mpfbs-panel__header">
 				<div>
-					<h2 className="fbm-panel__title">{ fbmText( title ) }</h2>
-					<p className="fbm-panel__description">{ fbmText( description ) }</p>
+					<h2 className="mpfbs-panel__title">{ mpfbsText( title ) }</h2>
+					<p className="mpfbs-panel__description">{ mpfbsText( description ) }</p>
 				</div>
 			</div>
 
 			{ error ? (
-				<div className="fbm-alert fbm-alert--error" role="alert">
+				<div className="mpfbs-alert mpfbs-alert--error" role="alert">
 					{ error }
 				</div>
 			) : null }
 
 			{ loading ? (
-				<div className="fbm-fieldgrid" aria-hidden="true">
+				<div className="mpfbs-fieldgrid" aria-hidden="true">
 					{ [ 0, 1, 2, 3, 4, 5 ].map( ( index ) => (
-						<div key={ index } className="fbm-fieldrow fbm-fieldrow--skeleton">
-							<span className="fbm-skeleton fbm-skeleton--text" />
+						<div key={ index } className="mpfbs-fieldrow mpfbs-fieldrow--skeleton">
+							<span className="mpfbs-skeleton mpfbs-skeleton--text" />
 						</div>
 					) ) }
 				</div>
 			) : (
-				<div className="fbm-fieldgrid">
+				<div className="mpfbs-fieldgrid">
 					{ fields.map( ( field ) => (
-						<div className="fbm-fieldrow" key={ field.key || field.label }>
-							<div className="fbm-fieldrow__label">
-								<span className="fbm-fieldrow__name">{ field.label }</span>
-								{ field.custom ? <span className="fbm-pill fbm-pill--muted">{ fbmText( 'Custom' ) }</span> : null }
-								{ field.hint ? <span className="fbm-fieldrow__hint">{ field.hint }</span> : null }
+						<div className="mpfbs-fieldrow" key={ field.key || field.label }>
+							<div className="mpfbs-fieldrow__label">
+								<span className="mpfbs-fieldrow__name">{ field.label }</span>
+								{ field.custom ? <span className="mpfbs-pill mpfbs-pill--muted">{ mpfbsText( 'Custom' ) }</span> : null }
+								{ field.hint ? <span className="mpfbs-fieldrow__hint">{ field.hint }</span> : null }
 							</div>
 
-							<div className="fbm-segmented" role="group" aria-label={ field.label }>
+							<div className="mpfbs-segmented" role="group" aria-label={ field.label }>
 								{ Object.keys( MODE_LABELS ).map( ( mode ) => (
 									<button
 										key={ mode }
 										type="button"
-										className={ `fbm-segmented__option${ field.mode === mode ? ' is-selected' : '' }` }
+										className={ `mpfbs-segmented__option${ field.mode === mode ? ' is-selected' : '' }` }
 										aria-pressed={ field.mode === mode }
-										disabled={ field.locked }
+										disabled={ field.always_on }
 										onClick={ () => setMode( field.key, mode ) }
 									>
-										{ fbmText( MODE_LABELS[ mode ] ?? mode ) }
+										{ mpfbsText( MODE_LABELS[ mode ] ?? mode ) }
 									</button>
 								) ) }
 							</div>
@@ -196,31 +196,31 @@ export function FieldConfigPanel( { group, title, description }: FieldConfigPane
 							{ field.custom ? (
 								<button
 									type="button"
-									className="fbm-iconbutton fbm-iconbutton--danger"
+									className="mpfbs-iconbutton mpfbs-iconbutton--danger"
 									onClick={ () => removeCustom( field.key ) }
-									aria-label={ fbmFormat( 'Remove %s', field.label ) }
+									aria-label={ mpfbsFormat( 'Remove %s', field.label ) }
 								>
 									<Icon name="trash" />
 								</button>
 							) : (
-								<span className="fbm-fieldrow__spacer" aria-hidden="true" />
+								<span className="mpfbs-fieldrow__spacer" aria-hidden="true" />
 							) }
 						</div>
 					) ) }
 				</div>
 			) }
 
-			<div className="fbm-fieldadd">
-				<label className="fbm-fieldadd__label" htmlFor={ `fbm-custom-${ group }` }>
-					{ fbmText( 'Add a custom field' ) }
+			<div className="mpfbs-fieldadd">
+				<label className="mpfbs-fieldadd__label" htmlFor={ `mpfbs-custom-${ group }` }>
+					{ mpfbsText( 'Add a custom field' ) }
 				</label>
-				<div className="fbm-fieldadd__row">
+				<div className="mpfbs-fieldadd__row">
 					<input
-						id={ `fbm-custom-${ group }` }
+						id={ `mpfbs-custom-${ group }` }
 						type="text"
-						className="fbm-input"
+						className="mpfbs-input"
 						value={ newLabel }
-						placeholder={ fbmText( 'Field label' ) }
+						placeholder={ mpfbsText( 'Field label' ) }
 						onChange={ ( event ) => setNewLabel( event.target.value ) }
 						onKeyDown={ ( event ) => {
 							if ( event.key === 'Enter' ) {
@@ -231,12 +231,12 @@ export function FieldConfigPanel( { group, title, description }: FieldConfigPane
 					/>
 					<Listbox
 						value={ newType }
-						options={ CUSTOM_TYPES.map( ( type ) => ( { value: type, label: fbmText( type ) } ) ) }
-						ariaLabel={ fbmText( 'Field type' ) }
+						options={ CUSTOM_TYPES.map( ( type ) => ( { value: type, label: mpfbsText( type ) } ) ) }
+						ariaLabel={ mpfbsText( 'Field type' ) }
 						onChange={ setNewType }
 					/>
-					<button type="button" className="fbm-button fbm-button--secondary" onClick={ addCustom } disabled={ newLabel.trim() === '' }>
-						{ fbmText( 'Add field' ) }
+					<button type="button" className="mpfbs-button mpfbs-button--secondary" onClick={ addCustom } disabled={ newLabel.trim() === '' }>
+						{ mpfbsText( 'Add field' ) }
 					</button>
 				</div>
 			</div>

@@ -7,11 +7,11 @@
 
 declare( strict_types=1 );
 
-namespace FBM\Repositories;
+namespace MPFBS\Repositories;
 
-use FBM\Cache\CacheManager;
-use FBM\Models\Entity;
-use FBM\Support\Schema\EntitySchema;
+use MPFBS\Cache\CacheManager;
+use MPFBS\Models\Entity;
+use MPFBS\Support\Schema\EntitySchema;
 use WP_Error;
 use WP_Post;
 use WP_Query;
@@ -193,7 +193,7 @@ abstract class AbstractRepository {
 		 * @param array<string, mixed> $args       Repository arguments.
 		 * @param string               $post_type  Post type being queried.
 		 */
-		$query_args = (array) apply_filters( 'fbm_repository_query_args', $query_args, $args, $this->post_type() );
+		$query_args = (array) apply_filters( 'mpfbs_repository_query_args', $query_args, $args, $this->post_type() );
 
 		$query = new WP_Query( $query_args );
 		$ids   = array_map( 'absint', (array) $query->posts );
@@ -262,7 +262,7 @@ abstract class AbstractRepository {
 
 		if ( $id > 0 && null === $existing ) {
 			return new WP_Error(
-				'fbm_not_found',
+				'mpfbs_not_found',
 				__( 'The record could not be found.', 'magepeople-ferry-booking-system' ),
 				array( 'status' => 404 )
 			);
@@ -299,7 +299,7 @@ abstract class AbstractRepository {
 
 		if ( is_wp_error( $result ) ) {
 			return new WP_Error(
-				'fbm_save_failed',
+				'mpfbs_save_failed',
 				$result->get_error_message(),
 				array( 'status' => 500 )
 			);
@@ -319,7 +319,7 @@ abstract class AbstractRepository {
 
 		if ( null === $saved ) {
 			return new WP_Error(
-				'fbm_save_failed',
+				'mpfbs_save_failed',
 				__( 'The record was saved but could not be read back.', 'magepeople-ferry-booking-system' ),
 				array( 'status' => 500 )
 			);
@@ -333,7 +333,7 @@ abstract class AbstractRepository {
 		 * @param Entity $saved   Saved entity.
 		 * @param bool   $created Whether the entity was just created.
 		 */
-		do_action( 'fbm_' . $saved::key() . '_saved', $saved, 0 === $id );
+		do_action( 'mpfbs_' . $saved::key() . '_saved', $saved, 0 === $id );
 
 		return $saved;
 	}
@@ -350,7 +350,7 @@ abstract class AbstractRepository {
 
 		if ( null === $entity ) {
 			return new WP_Error(
-				'fbm_not_found',
+				'mpfbs_not_found',
 				__( 'The record could not be found.', 'magepeople-ferry-booking-system' ),
 				array( 'status' => 404 )
 			);
@@ -366,7 +366,7 @@ abstract class AbstractRepository {
 
 		if ( ! $result ) {
 			return new WP_Error(
-				'fbm_delete_failed',
+				'mpfbs_delete_failed',
 				__( 'The record could not be deleted.', 'magepeople-ferry-booking-system' ),
 				array( 'status' => 500 )
 			);
@@ -382,7 +382,7 @@ abstract class AbstractRepository {
 		 * @param Entity $entity Entity that was deleted.
 		 * @param bool   $force  Whether the delete bypassed the trash.
 		 */
-		do_action( 'fbm_' . $entity::key() . '_deleted', $entity, $force );
+		do_action( 'mpfbs_' . $entity::key() . '_deleted', $entity, $force );
 
 		return true;
 	}

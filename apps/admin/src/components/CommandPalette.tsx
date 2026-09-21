@@ -16,10 +16,10 @@ import {
 } from 'react';
 
 import { Icon } from './Icon';
-import { fbmCan, fbmConfig } from '../lib/config';
-import { fbmText } from '../lib/i18n';
-import { FBM_ROUTES } from '../lib/routes';
-import { fbmNavigate } from '../lib/router';
+import { mpfbsCan } from '../lib/config';
+import { mpfbsText } from '../lib/i18n';
+import { MPFBS_ROUTES } from '../lib/routes';
+import { mpfbsNavigate } from '../lib/router';
 
 export interface CommandPaletteProps {
 	open: boolean;
@@ -39,16 +39,12 @@ export function CommandPalette( { open, onClose }: CommandPaletteProps ): JSX.El
 	const results = useMemo( () => {
 		const needle = query.trim().toLowerCase();
 
-		const proActive = fbmConfig().proActive;
-
-		return FBM_ROUTES.filter(
-			( route ) => fbmCan( route.capability ) && ( proActive || ! route.pro )
-		).filter( ( route ) => {
+		return MPFBS_ROUTES.filter( ( route ) => mpfbsCan( route.capability ) ).filter( ( route ) => {
 			if ( ! needle ) {
 				return true;
 			}
 
-			return fbmText( route.label ).toLowerCase().includes( needle ) || route.path.includes( needle );
+			return mpfbsText( route.label ).toLowerCase().includes( needle ) || route.path.includes( needle );
 		} );
 	}, [ query ] );
 
@@ -79,7 +75,7 @@ export function CommandPalette( { open, onClose }: CommandPaletteProps ): JSX.El
 				return;
 			}
 
-			fbmNavigate( route.path );
+			mpfbsNavigate( route.path );
 			onClose();
 		},
 		[ results, onClose ]
@@ -131,27 +127,27 @@ export function CommandPalette( { open, onClose }: CommandPaletteProps ): JSX.El
 	}
 
 	return (
-		<div className="fbm-palette" onMouseDown={ onClose }>
+		<div className="mpfbs-palette" onMouseDown={ onClose }>
 			<div
-				className="fbm-palette__dialog"
+				className="mpfbs-palette__dialog"
 				role="dialog"
 				aria-modal="true"
-				aria-label={ fbmText( 'Search' ) }
+				aria-label={ mpfbsText( 'Search' ) }
 				ref={ dialogRef }
 				onKeyDown={ onKeyDown }
 				onMouseDown={ ( event ) => event.stopPropagation() }
 			>
-				<div className="fbm-palette__field">
+				<div className="mpfbs-palette__field">
 					<Icon name="search" size={ 18 } />
 					<input
 						ref={ inputRef }
 						type="search"
-						className="fbm-palette__input"
+						className="mpfbs-palette__input"
 						value={ query }
-						placeholder={ fbmText( 'Search' ) }
-						aria-label={ fbmText( 'Search' ) }
-						aria-controls="fbm-palette-results"
-						aria-activedescendant={ results[ activeIndex ] ? `fbm-palette-option-${ results[ activeIndex ]!.id }` : undefined }
+						placeholder={ mpfbsText( 'Search' ) }
+						aria-label={ mpfbsText( 'Search' ) }
+						aria-controls="mpfbs-palette-results"
+						aria-activedescendant={ results[ activeIndex ] ? `mpfbs-palette-option-${ results[ activeIndex ]!.id }` : undefined }
 						onChange={ ( event ) => {
 							setQuery( event.target.value );
 							setActiveIndex( 0 );
@@ -159,23 +155,23 @@ export function CommandPalette( { open, onClose }: CommandPaletteProps ): JSX.El
 					/>
 				</div>
 
-				<ul className="fbm-palette__results" id="fbm-palette-results" role="listbox">
+				<ul className="mpfbs-palette__results" id="mpfbs-palette-results" role="listbox">
 					{ results.map( ( route, index ) => (
 						<li
 							key={ route.id }
-							id={ `fbm-palette-option-${ route.id }` }
+							id={ `mpfbs-palette-option-${ route.id }` }
 							role="option"
 							aria-selected={ index === activeIndex }
-							className={ `fbm-palette__result${ index === activeIndex ? ' is-active' : '' }` }
+							className={ `mpfbs-palette__result${ index === activeIndex ? ' is-active' : '' }` }
 							onMouseEnter={ () => setActiveIndex( index ) }
 							onClick={ () => choose( index ) }
 						>
 							<Icon name={ route.icon } size={ 16 } />
-							<span>{ fbmText( route.label ) }</span>
+							<span>{ mpfbsText( route.label ) }</span>
 						</li>
 					) ) }
 					{ results.length === 0 ? (
-						<li className="fbm-palette__empty">{ fbmText( 'Page not found.' ) }</li>
+						<li className="mpfbs-palette__empty">{ mpfbsText( 'Page not found.' ) }</li>
 					) : null }
 				</ul>
 			</div>

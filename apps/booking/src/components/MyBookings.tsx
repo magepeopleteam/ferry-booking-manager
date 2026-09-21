@@ -8,7 +8,7 @@
  * endless scroll.
  *
  * Each row carries what identifies a booking (reference, route, when) and what
- * a customer acts on (what is left to pay, the tickets). Everything else is a
+ * a customer acts on (what is left to pay). Everything else is a
  * detail they can open.
  */
 
@@ -147,14 +147,14 @@ export function MyBookings( { pages = {} }: MyBookingsProps ): JSX.Element {
 
 	if ( ! cfg.loggedIn ) {
 		return (
-			<div className="fbmb-panel">
+			<div className="mpfbsb-panel">
 				<Empty
 					title={ t( 'Please sign in to see your bookings' ) }
 					description={ t( 'Booked as a guest? Use the reference from your confirmation email to find it instead.' ) }
 				/>
 				{ lookupUrl !== '' ? (
-					<p className="fbmb-panel__action">
-						<a className="fbmb-button fbmb-button--secondary" href={ lookupUrl }>
+					<p className="mpfbsb-panel__action">
+						<a className="mpfbsb-button mpfbsb-button--secondary" href={ lookupUrl }>
 							{ t( 'Find my booking' ) }
 						</a>
 					</p>
@@ -187,9 +187,9 @@ export function MyBookings( { pages = {} }: MyBookingsProps ): JSX.Element {
 	const last = Math.min( total, first + items.length - 1 );
 
 	return (
-		<div className="fbmb-history">
-			<div className="fbmb-history__toolbar">
-				<div className="fbmb-segmented" role="group" aria-label={ t( 'Which bookings' ) }>
+		<div className="mpfbsb-history">
+			<div className="mpfbsb-history__toolbar">
+				<div className="mpfbsb-segmented" role="group" aria-label={ t( 'Which bookings' ) }>
 					{ ( [
 						[ 'upcoming', t( 'Upcoming' ), counts.upcoming ],
 						[ 'past', t( 'Past' ), counts.past ],
@@ -198,22 +198,22 @@ export function MyBookings( { pages = {} }: MyBookingsProps ): JSX.Element {
 						<button
 							type="button"
 							key={ id }
-							className={ `fbmb-segmented__option${ when === id ? ' is-selected' : '' }` }
+							className={ `mpfbsb-segmented__option${ when === id ? ' is-selected' : '' }` }
 							aria-pressed={ when === id }
 							onClick={ () => choose( id ) }
 						>
 							{ label }
-							<span className="fbmb-segmented__count">{ count }</span>
+							<span className="mpfbsb-segmented__count">{ count }</span>
 						</button>
 					) ) }
 				</div>
 
-				<div className="fbmb-history__filters">
-					<label className="fbmb-history__search">
-						<span className="fbmb-visually-hidden">{ t( 'Search your bookings' ) }</span>
+				<div className="mpfbsb-history__filters">
+					<label className="mpfbsb-history__search">
+						<span className="mpfbsb-visually-hidden">{ t( 'Search your bookings' ) }</span>
 						<input
 							type="search"
-							className="fbmb-input"
+							className="mpfbsb-input"
 							value={ typed }
 							placeholder={ t( 'Search by reference, route or port' ) }
 							onInput={ ( event ) => setTyped( ( event.target as HTMLInputElement ).value ) }
@@ -221,10 +221,10 @@ export function MyBookings( { pages = {} }: MyBookingsProps ): JSX.Element {
 					</label>
 
 					{ statuses.length > 1 || status !== '' ? (
-						<label className="fbmb-history__status">
-							<span className="fbmb-visually-hidden">{ t( 'Filter by status' ) }</span>
+						<label className="mpfbsb-history__status">
+							<span className="mpfbsb-visually-hidden">{ t( 'Filter by status' ) }</span>
 							<select
-								className="fbmb-select"
+								className="mpfbsb-select"
 								value={ status }
 								onChange={ ( event ) => {
 									setStatus( ( event.target as HTMLSelectElement ).value );
@@ -244,7 +244,7 @@ export function MyBookings( { pages = {} }: MyBookingsProps ): JSX.Element {
 			</div>
 
 			{ data?.capped ? (
-				<p className="fbmb-history__note" role="status">
+				<p className="mpfbsb-history__note" role="status">
 					{ t( 'Only your most recent bookings are shown. Older crossings are not listed here — ask us if you need one.' ) }
 				</p>
 			) : null }
@@ -274,11 +274,11 @@ export function MyBookings( { pages = {} }: MyBookingsProps ): JSX.Element {
 
 			{ ! loading && items.length > 0 ? (
 				<>
-					<p className="fbmb-history__summary" role="status">
+					<p className="mpfbsb-history__summary" role="status">
 						{ tf( 'Showing %1$s–%2$s of %3$s', String( first ), String( last ), String( total ) ) }
 					</p>
 
-					<ul className="fbmb-list">
+					<ul className="mpfbsb-list">
 						{ items.map( ( booking ) => (
 							<HistoryRow
 								booking={ booking }
@@ -292,33 +292,33 @@ export function MyBookings( { pages = {} }: MyBookingsProps ): JSX.Element {
 					</ul>
 
 					{ pageCount > 1 ? (
-						<nav className="fbmb-pager" aria-label={ t( 'Pages' ) }>
+						<nav className="mpfbsb-pager" aria-label={ t( 'Pages' ) }>
 							<button
 								type="button"
-								className="fbmb-button fbmb-button--secondary"
+								className="mpfbsb-button mpfbsb-button--secondary"
 								disabled={ page <= 1 }
 								onClick={ () => setPage( ( n ) => Math.max( 1, n - 1 ) ) }
 							>
 								{ t( 'Previous' ) }
 							</button>
 
-							<span className="fbmb-pager__status">
+							<span className="mpfbsb-pager__status">
 								{ tf( 'Page %1$s of %2$s', String( meta.page ?? page ), String( pageCount ) ) }
 							</span>
 
 							<button
 								type="button"
-								className="fbmb-button fbmb-button--secondary"
+								className="mpfbsb-button mpfbsb-button--secondary"
 								disabled={ page >= pageCount }
 								onClick={ () => setPage( ( n ) => Math.min( pageCount, n + 1 ) ) }
 							>
 								{ t( 'Next' ) }
 							</button>
 
-							<label className="fbmb-pager__size">
-								<span className="fbmb-visually-hidden">{ t( 'Bookings per page' ) }</span>
+							<label className="mpfbsb-pager__size">
+								<span className="mpfbsb-visually-hidden">{ t( 'Bookings per page' ) }</span>
 								<select
-									className="fbmb-select"
+									className="mpfbsb-select"
 									value={ String( perPage ) }
 									onChange={ ( event ) => {
 										setPerPage( Number( ( event.target as HTMLSelectElement ).value ) );
@@ -354,8 +354,7 @@ function HistoryRow( {
 } ): JSX.Element {
 	const cfg = config();
 	const leg = booking.legs[ 0 ];
-	const ticket = booking.tickets?.[ 0 ];
-	const panelId = `fbmb-detail-${ booking.reference }`;
+	const panelId = `mpfbsb-detail-${ booking.reference }`;
 
 	// English needs both forms, and a translator needs to see both to give the
 	// right ones for their language.
@@ -373,49 +372,44 @@ function HistoryRow( {
 		.join( ' · ' );
 
 	return (
-		<li className={ `fbmb-list__item${ open ? ' is-open' : '' }` }>
-			<div className="fbmb-list__row">
-				<div className="fbmb-list__ref">
-					<span className="fbmb-list__reference">{ booking.reference }</span>
+		<li className={ `mpfbsb-list__item${ open ? ' is-open' : '' }` }>
+			<div className="mpfbsb-list__row">
+				<div className="mpfbsb-list__ref">
+					<span className="mpfbsb-list__reference">{ booking.reference }</span>
 					<Badge tone={ tone( booking.status ) }>{ booking.status_label }</Badge>
 				</div>
 
-				<div className="fbmb-list__journey">
+				<div className="mpfbsb-list__journey">
 					{ leg ? (
 						<>
-							<span className="fbmb-list__route">
+							<span className="mpfbsb-list__route">
 								{ leg.origin !== '' && leg.destination !== ''
 									? tf( '%1$s to %2$s', leg.origin, leg.destination )
 									: leg.route }
 							</span>
-							<span className="fbmb-list__when">
+							<span className="mpfbsb-list__when">
 								{ `${ formatDate( leg.departure, true ) } · ${ time( leg.departure ) }` }
 								{ booking.legs.length > 1 ? ` · ${ t( 'return' ) }` : '' }
 							</span>
 						</>
 					) : (
-						<span className="fbmb-list__when">{ t( 'Crossing details are no longer available.' ) }</span>
+						<span className="mpfbsb-list__when">{ t( 'Crossing details are no longer available.' ) }</span>
 					) }
 				</div>
 
-				<div className="fbmb-list__party">{ party }</div>
+				<div className="mpfbsb-list__party">{ party }</div>
 
-				<div className="fbmb-list__money">
-					<span className="fbmb-list__total">{ money( booking.total ) }</span>
+				<div className="mpfbsb-list__money">
+					<span className="mpfbsb-list__total">{ money( booking.total ) }</span>
 					{ booking.balance > 0 ? (
-						<span className="fbmb-list__balance">{ tf( '%s to pay', money( booking.balance ) ) }</span>
+						<span className="mpfbsb-list__balance">{ tf( '%s to pay', money( booking.balance ) ) }</span>
 					) : null }
 				</div>
 
-				<div className="fbmb-list__actions">
-					{ ticket ? (
-						<a className="fbmb-button fbmb-button--secondary" href={ ticket.url }>
-							{ t( 'Ticket' ) }
-						</a>
-					) : null }
+				<div className="mpfbsb-list__actions">
 					<button
 						type="button"
-						className="fbmb-button fbmb-button--ghost"
+						className="mpfbsb-button mpfbsb-button--ghost"
 						aria-expanded={ open }
 						aria-controls={ panelId }
 						onClick={ onToggle }
@@ -425,7 +419,7 @@ function HistoryRow( {
 				</div>
 			</div>
 
-			<div className="fbmb-list__detail" id={ panelId } hidden={ ! open }>
+			<div className="mpfbsb-list__detail" id={ panelId } hidden={ ! open }>
 				<BookingCard booking={ booking } detailed />
 			</div>
 		</li>

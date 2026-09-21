@@ -1,0 +1,30 @@
+{
+	"generated": "2026-09-21T04:33:45.884Z",
+	"styles": [
+		"_next/static/chunks/09bvdr-mrcjsm.css"
+	],
+	"scripts": [
+		"_next/static/chunks/435gxfd5u61fv.js",
+		"_next/static/chunks/0286werhfg0o2.js",
+		"_next/static/chunks/turbopack-42fujuhel_9xh.js",
+		"_next/static/chunks/119xtivumj-oj.js",
+		"_next/static/chunks/23jn8gc6moenl.js",
+		"_next/static/chunks/turbopack-23rm8re0n9xko.js",
+		"_next/static/mpfbs/_buildManifest.js",
+		"_next/static/mpfbs/_ssgManifest.js",
+		"_next/static/mpfbs/_clientMiddlewareManifest.js"
+	],
+	"html": "<div class=\"mpfbs-app mpfbs-app--booting\" role=\"status\" aria-label=\"Loading the Ferry Manager dashboard\"><div class=\"mpfbs-sidebar\" aria-hidden=\"true\"><div class=\"mpfbs-sidebar__brand\"><span class=\"mpfbs-skeleton\" style=\"width:32px;height:32px;border-radius:6px\" aria-hidden=\"true\"></span><span class=\"mpfbs-skeleton\" style=\"width:120px;height:14px;border-radius:6px\" aria-hidden=\"true\"></span></div><div class=\"mpfbs-sidebar__list\"><div class=\"mpfbs-sidebar__item\"><span class=\"mpfbs-skeleton\" style=\"width:82%;height:16px;border-radius:6px\" aria-hidden=\"true\"></span></div><div class=\"mpfbs-sidebar__item\"><span class=\"mpfbs-skeleton\" style=\"width:82%;height:16px;border-radius:6px\" aria-hidden=\"true\"></span></div><div class=\"mpfbs-sidebar__item\"><span class=\"mpfbs-skeleton\" style=\"width:82%;height:16px;border-radius:6px\" aria-hidden=\"true\"></span></div><div class=\"mpfbs-sidebar__item\"><span class=\"mpfbs-skeleton\" style=\"width:82%;height:16px;border-radius:6px\" aria-hidden=\"true\"></span></div><div class=\"mpfbs-sidebar__item\"><span class=\"mpfbs-skeleton\" style=\"width:82%;height:16px;border-radius:6px\" aria-hidden=\"true\"></span></div><div class=\"mpfbs-sidebar__item\"><span class=\"mpfbs-skeleton\" style=\"width:82%;height:16px;border-radius:6px\" aria-hidden=\"true\"></span></div><div class=\"mpfbs-sidebar__item\"><span class=\"mpfbs-skeleton\" style=\"width:82%;height:16px;border-radius:6px\" aria-hidden=\"true\"></span></div><div class=\"mpfbs-sidebar__item\"><span class=\"mpfbs-skeleton\" style=\"width:82%;height:16px;border-radius:6px\" aria-hidden=\"true\"></span></div><div class=\"mpfbs-sidebar__item\"><span class=\"mpfbs-skeleton\" style=\"width:82%;height:16px;border-radius:6px\" aria-hidden=\"true\"></span></div></div></div><div class=\"mpfbs-app__body\"><div class=\"mpfbs-header\" aria-hidden=\"true\"><span class=\"mpfbs-skeleton\" style=\"width:280px;height:32px;border-radius:10px\" aria-hidden=\"true\"></span><span class=\"mpfbs-header__meta\"><span class=\"mpfbs-skeleton\" style=\"width:96px;height:20px;border-radius:999px\" aria-hidden=\"true\"></span><span class=\"mpfbs-skeleton\" style=\"width:28px;height:28px;border-radius:50%\" aria-hidden=\"true\"></span></span></div><div class=\"mpfbs-main\"><div class=\"mpfbs-main__inner\" aria-hidden=\"true\"><span class=\"mpfbs-skeleton\" style=\"width:220px;height:26px;border-radius:6px\" aria-hidden=\"true\"></span><div class=\"mpfbs-stat-grid\"><div class=\"mpfbs-stat\"><span class=\"mpfbs-skeleton\" style=\"width:55%;height:11px;border-radius:6px\" aria-hidden=\"true\"></span><div class=\"mpfbs-stat__value\"><span class=\"mpfbs-skeleton\" style=\"width:70%;height:24px;border-radius:6px\" aria-hidden=\"true\"></span></div></div><div class=\"mpfbs-stat\"><span class=\"mpfbs-skeleton\" style=\"width:55%;height:11px;border-radius:6px\" aria-hidden=\"true\"></span><div class=\"mpfbs-stat__value\"><span class=\"mpfbs-skeleton\" style=\"width:70%;height:24px;border-radius:6px\" aria-hidden=\"true\"></span></div></div><div class=\"mpfbs-stat\"><span class=\"mpfbs-skeleton\" style=\"width:55%;height:11px;border-radius:6px\" aria-hidden=\"true\"></span><div class=\"mpfbs-stat__value\"><span class=\"mpfbs-skeleton\" style=\"width:70%;height:24px;border-radius:6px\" aria-hidden=\"true\"></span></div></div><div class=\"mpfbs-stat\"><span class=\"mpfbs-skeleton\" style=\"width:55%;height:11px;border-radius:6px\" aria-hidden=\"true\"></span><div class=\"mpfbs-stat__value\"><span class=\"mpfbs-skeleton\" style=\"width:70%;height:24px;border-radius:6px\" aria-hidden=\"true\"></span></div></div><div class=\"mpfbs-stat\"><span class=\"mpfbs-skeleton\" style=\"width:55%;height:11px;border-radius:6px\" aria-hidden=\"true\"></span><div class=\"mpfbs-stat__value\"><span class=\"mpfbs-skeleton\" style=\"width:70%;height:24px;border-radius:6px\" aria-hidden=\"true\"></span></div></div><div class=\"mpfbs-stat\"><span class=\"mpfbs-skeleton\" style=\"width:55%;height:11px;border-radius:6px\" aria-hidden=\"true\"></span><div class=\"mpfbs-stat__value\"><span class=\"mpfbs-skeleton\" style=\"width:70%;height:24px;border-radius:6px\" aria-hidden=\"true\"></span></div></div></div></div></div></div></div>",
+	"nextData": {
+		"props": {
+			"pageProps": {}
+		},
+		"page": "/",
+		"query": {},
+		"buildId": "mpfbs",
+		"nextExport": true,
+		"autoExport": true,
+		"isFallback": false,
+		"scriptLoader": []
+	}
+}

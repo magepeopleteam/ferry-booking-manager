@@ -7,15 +7,15 @@
 
 declare( strict_types=1 );
 
-namespace FBM\REST\Controllers;
+namespace MPFBS\REST\Controllers;
 
-use FBM\Availability\AvailabilityService;
-use FBM\Pricing\PricingService;
-use FBM\Pricing\PricingSettings;
-use FBM\REST\AbstractController;
-use FBM\REST\Response;
-use FBM\Security\Capabilities;
-use FBM\Security\Permissions;
+use MPFBS\Availability\AvailabilityService;
+use MPFBS\Pricing\PricingService;
+use MPFBS\Pricing\PricingSettings;
+use MPFBS\REST\AbstractController;
+use MPFBS\REST\Response;
+use MPFBS\Security\Capabilities;
+use MPFBS\Security\Permissions;
 use WP_REST_Request;
 use WP_REST_Response;
 
@@ -81,10 +81,10 @@ final class PricingController extends AbstractController {
 			array(
 				array(
 					'methods'             => 'POST',
-					'callback'            => array( $this, 'create_quote' ),
+					'callback'            => $this->public_handler( 'quote', 90, array( $this, 'create_quote' ) ),
 					// A customer has to see a price before they have an account,
 					// and this returns nothing but arithmetic over public fares.
-					'permission_callback' => $this->permissions->rest_public_callback( 'quote', 90 ),
+					'permission_callback' => '__return_true',
 					'args'                => array(
 						'sailing_id'        => array(
 							'description'       => __( 'Outbound sailing id.', 'magepeople-ferry-booking-system' ),
@@ -143,7 +143,7 @@ final class PricingController extends AbstractController {
 		 * The whole payload is carried through, with the values this controller
 		 * validates put back on top. An add-on that prices something extra —
 		 * a cabin, a meal, a bag — reads its own keys from the request handed
-		 * to the fbm_quote filter, and rebuilding the array from four known
+		 * to the mpfbs_quote filter, and rebuilding the array from four known
 		 * fields would silently drop them.
 		 */
 		$quote = $this->pricing->quote(

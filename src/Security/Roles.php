@@ -7,7 +7,7 @@
 
 declare( strict_types=1 );
 
-namespace FBM\Security;
+namespace MPFBS\Security;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -15,20 +15,19 @@ defined( 'ABSPATH' ) || exit;
  * Creates and removes the operational roles shipped with the plugin.
  *
  * Roles are provisioned on activation and refreshed whenever the capability
- * catalogue version changes, so Pro can add capabilities without a manual step.
+ * catalogue version changes, so an extension can add capabilities without a
+ * manual step.
  */
 final class Roles {
 
-	public const FERRY_MANAGER   = 'fbm_ferry_manager';
-	public const BOOKING_MANAGER = 'fbm_booking_manager';
-	public const CASHIER         = 'fbm_cashier';
-	public const CHECKIN_STAFF   = 'fbm_checkin_staff';
-	public const AGENT           = 'fbm_agent';
+	public const FERRY_MANAGER   = 'mpfbs_ferry_manager';
+	public const BOOKING_MANAGER = 'mpfbs_booking_manager';
+	public const CASHIER         = 'mpfbs_cashier';
 
 	/**
 	 * Option storing the signature of the last provisioned capability map.
 	 */
-	public const SIGNATURE_OPTION = 'fbm_roles_signature';
+	public const SIGNATURE_OPTION = 'mpfbs_roles_signature';
 
 	/**
 	 * Returns the role definitions.
@@ -42,7 +41,7 @@ final class Roles {
 				'capabilities' => Capabilities::all(),
 			),
 			self::BOOKING_MANAGER => array(
-				'label'        => __( 'MagePeople Ferry Booking System', 'magepeople-ferry-booking-system' ),
+				'label'        => __( 'Ferry Booking Manager', 'magepeople-ferry-booking-system' ),
 				'capabilities' => array(
 					Capabilities::ACCESS_DASHBOARD,
 					Capabilities::MANAGE_SAILINGS,
@@ -50,8 +49,6 @@ final class Roles {
 					Capabilities::CREATE_BOOKING,
 					Capabilities::MODIFY_BOOKING,
 					Capabilities::CANCEL_BOOKING,
-					Capabilities::CHECKIN,
-					Capabilities::VIEW_REPORTS,
 				),
 			),
 			self::CASHIER         => array(
@@ -59,21 +56,6 @@ final class Roles {
 				'capabilities' => array(
 					Capabilities::ACCESS_DASHBOARD,
 					Capabilities::MANAGE_BOOKINGS,
-					Capabilities::CREATE_BOOKING,
-					Capabilities::CHECKIN,
-				),
-			),
-			self::CHECKIN_STAFF   => array(
-				'label'        => __( 'Ferry Check-In Staff', 'magepeople-ferry-booking-system' ),
-				'capabilities' => array(
-					Capabilities::ACCESS_DASHBOARD,
-					Capabilities::CHECKIN,
-				),
-			),
-			self::AGENT           => array(
-				'label'        => __( 'Ferry Agent', 'magepeople-ferry-booking-system' ),
-				'capabilities' => array(
-					Capabilities::ACCESS_DASHBOARD,
 					Capabilities::CREATE_BOOKING,
 				),
 			),
@@ -86,7 +68,7 @@ final class Roles {
 		 *
 		 * @param array<string, array{label: string, capabilities: string[]}> $definitions Role definitions.
 		 */
-		return (array) apply_filters( 'fbm_role_definitions', $definitions );
+		return (array) apply_filters( 'mpfbs_role_definitions', $definitions );
 	}
 
 	/**
@@ -190,6 +172,6 @@ final class Roles {
 
 		ksort( $map );
 
-		return md5( (string) wp_json_encode( $map ) . '|' . FBM_VERSION );
+		return md5( (string) wp_json_encode( $map ) . '|' . MPFBS_VERSION );
 	}
 }

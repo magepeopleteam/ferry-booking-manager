@@ -7,19 +7,19 @@
 
 declare( strict_types=1 );
 
-namespace FBM\REST\Controllers;
+namespace MPFBS\REST\Controllers;
 
-use FBM\Booking\BookingPresenter;
-use FBM\Booking\BookingService;
-use FBM\Booking\PartyPresenter;
-use FBM\Models\Booking;
-use FBM\Repositories\BookingRepository;
-use FBM\REST\AbstractController;
-use FBM\REST\Response;
-use FBM\Security\Capabilities;
-use FBM\Security\Permissions;
-use FBM\Support\Money;
-use FBM\Support\Time;
+use MPFBS\Booking\BookingPresenter;
+use MPFBS\Booking\BookingService;
+use MPFBS\Booking\PartyPresenter;
+use MPFBS\Models\Booking;
+use MPFBS\Repositories\BookingRepository;
+use MPFBS\REST\AbstractController;
+use MPFBS\REST\Response;
+use MPFBS\Security\Capabilities;
+use MPFBS\Security\Permissions;
+use MPFBS\Support\Money;
+use MPFBS\Support\Time;
 use WP_REST_Request;
 use WP_REST_Response;
 
@@ -135,8 +135,8 @@ final class BookingController extends AbstractController {
 				),
 				array(
 					'methods'             => 'POST',
-					'callback'            => array( $this, 'create_booking' ),
-					'permission_callback' => $this->permissions->rest_public_callback( 'bookings', 30 ),
+					'callback'            => $this->public_handler( 'bookings', 30, array( $this, 'create_booking' ) ),
+					'permission_callback' => '__return_true',
 					'args'                => $this->create_args(),
 				),
 			)
@@ -219,10 +219,10 @@ final class BookingController extends AbstractController {
 				array(
 					'methods'             => 'GET',
 					'callback'            => array( $this, 'get_my_bookings' ),
-					// Signed in is the whole permission: the handler only ever
-					// looks at bookings owned by the current user, so no
-					// capability is involved and a customer needs none.
-					'permission_callback' => 'is_user_logged_in',
+					// Any signed-in account may list its own bookings: every
+					// role holds `read`, and the handler only ever returns
+					// bookings owned by the current user.
+					'permission_callback' => $this->can( 'read' ),
 					'args'                => array(
 						'page'     => array(
 							'description'       => __( 'Page of the history.', 'magepeople-ferry-booking-system' ),
@@ -268,8 +268,8 @@ final class BookingController extends AbstractController {
 			array(
 				array(
 					'methods'             => 'POST',
-					'callback'            => array( $this, 'lookup_booking' ),
-					'permission_callback' => $this->permissions->rest_public_callback( 'lookup', 20 ),
+					'callback'            => $this->public_handler( 'lookup', 20, array( $this, 'lookup_booking' ) ),
+					'permission_callback' => '__return_true',
 					'args'                => array(
 						'reference' => array(
 							'description'       => __( 'Booking reference.', 'magepeople-ferry-booking-system' ),
@@ -341,7 +341,7 @@ final class BookingController extends AbstractController {
 
 		if ( ! $booking instanceof Booking || ! $this->may_read( $booking ) ) {
 			return $this->fail(
-				'fbm_booking_not_found',
+				'mpfbs_booking_not_found',
 				__( 'That booking could not be found.', 'magepeople-ferry-booking-system' ),
 				404
 			);
@@ -355,7 +355,7 @@ final class BookingController extends AbstractController {
 	 *
 	 * The capability behind the route says the user may work with bookings; it
 	 * does not say they may work with *this* one. Extensions that partition the
-	 * book of business — the agent portal, most obviously — answer that here.
+	 * bookings between staff members answer that here.
 	 *
 	 * @param Booking $booking Booking entity.
 	 * @return bool
@@ -369,7 +369,7 @@ final class BookingController extends AbstractController {
 		 * @param bool    $allowed Whether the read is permitted.
 		 * @param Booking $booking Booking entity.
 		 */
-		return (bool) apply_filters( 'fbm_can_view_booking', true, $booking );
+		return (bool) apply_filters( 'mpfbs_can_view_booking', true, $booking );
 	}
 
 	/**
@@ -387,7 +387,7 @@ final class BookingController extends AbstractController {
 		 * @param bool    $allowed Whether the change is permitted.
 		 * @param Booking $booking Booking entity.
 		 */
-		return (bool) apply_filters( 'fbm_can_edit_booking', true, $booking );
+		return (bool) apply_filters( 'mpfbs_can_edit_booking', true, $booking );
 	}
 
 	/**
@@ -400,7 +400,7 @@ final class BookingController extends AbstractController {
 	 */
 	private function refuse(): WP_REST_Response {
 		return $this->fail(
-			'fbm_booking_not_found',
+			'mpfbs_booking_not_found',
 			__( 'That booking could not be found.', 'magepeople-ferry-booking-system' ),
 			404
 		);
@@ -427,7 +427,7 @@ final class BookingController extends AbstractController {
 
 		if ( null === $result ) {
 			return $this->fail(
-				'fbm_booking_not_found',
+				'mpfbs_booking_not_found',
 				__( 'That booking could not be found.', 'magepeople-ferry-booking-system' ),
 				404
 			);
@@ -456,7 +456,7 @@ final class BookingController extends AbstractController {
 
 		if ( false === $handle ) {
 			return $this->fail(
-				'fbm_export_failed',
+				'mpfbs_export_failed',
 				__( 'The export could not be built.', 'magepeople-ferry-booking-system' ),
 				500
 			);
@@ -679,7 +679,7 @@ final class BookingController extends AbstractController {
 
 		// The stored travellers are JSON blobs, useless to a list and heavy to
 		// send. The single-booking route resolves them properly instead.
-		unset( $row['passengers'], $row['vehicles'], $row['extras'] );
+		unset( $row['passengers'], $row['vehicles'] );
 
 		return $row;
 	}
@@ -781,7 +781,7 @@ final class BookingController extends AbstractController {
 		 */
 		if ( null === $booking || 0 !== strcasecmp( (string) $booking->get( 'customer_email' ), $email ) ) {
 			return $this->fail(
-				'fbm_booking_not_found',
+				'mpfbs_booking_not_found',
 				__( 'No booking matches that reference and email address.', 'magepeople-ferry-booking-system' ),
 				404
 			);
@@ -824,7 +824,7 @@ final class BookingController extends AbstractController {
 
 		if ( ! $user instanceof \WP_User || 0 === (int) $user->ID ) {
 			return $this->fail(
-				'fbm_not_signed_in',
+				'mpfbs_not_signed_in',
 				__( 'Please sign in to see your bookings.', 'magepeople-ferry-booking-system' ),
 				401
 			);

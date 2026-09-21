@@ -128,11 +128,11 @@ export function Results( { title, subtitle, results, selectedId, onSelect }: Res
 
 	if ( results.length === 0 ) {
 		return (
-			<section className="fbmb-results">
-				<header className="fbmb-results__header">
+			<section className="mpfbsb-results">
+				<header className="mpfbsb-results__header">
 					<div>
-						<h3 className="fbmb-results__title">{ title }</h3>
-						<p className="fbmb-results__subtitle">{ subtitle }</p>
+						<h3 className="mpfbsb-results__title">{ title }</h3>
+						<p className="mpfbsb-results__subtitle">{ subtitle }</p>
 					</div>
 				</header>
 				<Empty title={ t( 'No sailings found.' ) } description={ t( 'Try a different date, or another crossing.' ) } />
@@ -141,14 +141,14 @@ export function Results( { title, subtitle, results, selectedId, onSelect }: Res
 	}
 
 	return (
-		<section className="fbmb-results">
-			<header className="fbmb-results__header">
+		<section className="mpfbsb-results">
+			<header className="mpfbsb-results__header">
 				<div>
-					<h3 className="fbmb-results__title">{ title }</h3>
-					<p className="fbmb-results__subtitle">{ subtitle }</p>
+					<h3 className="mpfbsb-results__title">{ title }</h3>
+					<p className="mpfbsb-results__subtitle">{ subtitle }</p>
 				</div>
 
-				<div className="fbmb-results__controls">
+				<div className="mpfbsb-results__controls">
 					{ vessels.length > 1 ? (
 						<Select
 							value={ vesselFilter }
@@ -169,7 +169,7 @@ export function Results( { title, subtitle, results, selectedId, onSelect }: Res
 						onChange={ ( value ) => setSort( value as SortKey ) }
 					/>
 
-					<label className="fbmb-checkbox">
+					<label className="mpfbsb-checkbox">
 						<input
 							type="checkbox"
 							checked={ hideSoldOut }
@@ -180,7 +180,7 @@ export function Results( { title, subtitle, results, selectedId, onSelect }: Res
 				</div>
 			</header>
 
-			<ul className="fbmb-results__list">
+			<ul className="mpfbsb-results__list">
 				{ visible.map( ( row ) => {
 					const seats = remainingLabel( row.availability.passengers );
 					const unavailable = row.availability.sold_out || row.fits === false;
@@ -188,20 +188,20 @@ export function Results( { title, subtitle, results, selectedId, onSelect }: Res
 
 					return (
 						<li key={ row.sailing_id }>
-							<article className={ `fbmb-sailing${ selected ? ' is-selected' : '' }${ unavailable ? ' is-unavailable' : '' }` }>
-								<div className="fbmb-sailing__times">
-									<span className="fbmb-sailing__time">{ time( row.departure ) }</span>
-									<span className="fbmb-sailing__line" aria-hidden="true">
-										<span className="fbmb-sailing__dot" />
-										<span className="fbmb-sailing__dash" />
-										<span className="fbmb-sailing__dot" />
+							<article className={ `mpfbsb-sailing${ selected ? ' is-selected' : '' }${ unavailable ? ' is-unavailable' : '' }` }>
+								<div className="mpfbsb-sailing__times">
+									<span className="mpfbsb-sailing__time">{ time( row.departure ) }</span>
+									<span className="mpfbsb-sailing__line" aria-hidden="true">
+										<span className="mpfbsb-sailing__dot" />
+										<span className="mpfbsb-sailing__dash" />
+										<span className="mpfbsb-sailing__dot" />
 									</span>
-									<span className="fbmb-sailing__time">{ time( row.arrival ) }</span>
+									<span className="mpfbsb-sailing__time">{ time( row.arrival ) }</span>
 								</div>
 
-								<div className="fbmb-sailing__detail">
-									<p className="fbmb-sailing__route">{ row.route_name }</p>
-									<p className="fbmb-sailing__meta">
+								<div className="mpfbsb-sailing__detail">
+									<p className="mpfbsb-sailing__route">{ row.route_name }</p>
+									<p className="mpfbsb-sailing__meta">
 										<span>{ formatDate( row.departure, true ) }</span>
 										<span aria-hidden="true">·</span>
 										<span>{ formatDuration( row.duration ) }</span>
@@ -212,7 +212,7 @@ export function Results( { title, subtitle, results, selectedId, onSelect }: Res
 											</>
 										) : null }
 									</p>
-									<p className="fbmb-sailing__badges">
+									<p className="mpfbsb-sailing__badges">
 										<Badge tone={ seats.tone }>{ seats.text }</Badge>
 										{ row.takes_vehicles ? (
 											<Badge tone={ Number( row.availability.vehicles.remaining ) === 0 ? 'danger' : 'neutral' }>
@@ -226,20 +226,20 @@ export function Results( { title, subtitle, results, selectedId, onSelect }: Res
 									</p>
 								</div>
 
-								<div className="fbmb-sailing__action">
+								<div className="mpfbsb-sailing__action">
 									{ row.price ? (
-										<p className="fbmb-sailing__price">
-											<span className="fbmb-sailing__amount">{ money( row.price.total ) }</span>
-											<span className="fbmb-sailing__pricemeta">{ t( 'total' ) }</span>
+										<p className="mpfbsb-sailing__price">
+											<span className="mpfbsb-sailing__amount">{ money( row.price.total ) }</span>
+											<span className="mpfbsb-sailing__pricemeta">{ t( 'total' ) }</span>
 										</p>
 									) : (
-										<p className="fbmb-sailing__price">
-											<span className="fbmb-sailing__pricemeta">{ t( 'Add a passenger to see fares.' ) }</span>
+										<p className="mpfbsb-sailing__price">
+											<span className="mpfbsb-sailing__pricemeta">{ t( 'Add a passenger to see fares.' ) }</span>
 										</p>
 									) }
 
 									{ unavailable ? (
-										<p className="fbmb-sailing__unavailable">{ row.unavailable ?? t( 'Sold out' ) }</p>
+										<p className="mpfbsb-sailing__unavailable">{ row.unavailable ?? t( 'Sold out' ) }</p>
 									) : (
 										<Button variant={ selected ? 'secondary' : 'primary' } onClick={ () => onSelect( row ) }>
 											{ selected ? t( 'Selected' ) : t( 'Choose' ) }

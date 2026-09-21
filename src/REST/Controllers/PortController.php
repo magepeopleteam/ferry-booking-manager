@@ -7,9 +7,9 @@
 
 declare( strict_types=1 );
 
-namespace FBM\REST\Controllers;
+namespace MPFBS\REST\Controllers;
 
-use FBM\REST\EntityController;
+use MPFBS\REST\EntityController;
 
 defined( 'ABSPATH' ) || exit;
 

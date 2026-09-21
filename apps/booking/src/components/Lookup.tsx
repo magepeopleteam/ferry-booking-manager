@@ -56,26 +56,26 @@ export function Lookup( { reference = '' }: LookupProps ): JSX.Element {
 	};
 
 	return (
-		<div className="fbmb-lookup">
-			<form className="fbmb-lookup__form" onSubmit={ submit } noValidate>
-				<h2 className="fbmb-lookup__title">{ t( 'Find my booking' ) }</h2>
-				<p className="fbmb-lookup__note">
+		<div className="mpfbsb-lookup">
+			<form className="mpfbsb-lookup__form" onSubmit={ submit } noValidate>
+				<h2 className="mpfbsb-lookup__title">{ t( 'Find my booking' ) }</h2>
+				<p className="mpfbsb-lookup__note">
 					{ t( 'Your reference is in the confirmation email we sent when you booked.' ) }
 				</p>
 
-				<div className="fbmb-lookup__fields">
-					<Field label={ t( 'Booking reference' ) } htmlFor="fbm-lookup-reference" required>
+				<div className="mpfbsb-lookup__fields">
+					<Field label={ t( 'Booking reference' ) } htmlFor="mpfbs-lookup-reference" required>
 						<Input
-							id="fbm-lookup-reference"
+							id="mpfbs-lookup-reference"
 							value={ ref }
 							autoComplete="off"
 							onChange={ setRef }
 						/>
 					</Field>
 
-					<Field label={ t( 'Email' ) } htmlFor="fbm-lookup-email" required>
+					<Field label={ t( 'Email' ) } htmlFor="mpfbs-lookup-email" required>
 						<Input
-							id="fbm-lookup-email"
+							id="mpfbs-lookup-email"
 							type="email"
 							value={ email }
 							autoComplete="email"
@@ -89,7 +89,7 @@ export function Lookup( { reference = '' }: LookupProps ): JSX.Element {
 				</div>
 
 				{ error !== '' ? (
-					<p className="fbmb-lookup__error" role="alert">
+					<p className="mpfbsb-lookup__error" role="alert">
 						{ error }
 					</p>
 				) : null }

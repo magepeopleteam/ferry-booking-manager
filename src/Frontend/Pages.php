@@ -7,9 +7,9 @@
 
 declare( strict_types=1 );
 
-namespace FBM\Frontend;
+namespace MPFBS\Frontend;
 
-use FBM\Support\Options;
+use MPFBS\Support\Options;
 use WP_Post;
 
 defined( 'ABSPATH' ) || exit;
@@ -42,7 +42,7 @@ final class Pages {
 	/**
 	 * Meta key marking a page as one the plugin created.
 	 */
-	public const MARKER = '_fbm_managed_page';
+	public const MARKER = '_mpfbs_managed_page';
 
 	/**
 	 * Returns the pages the plugin manages.
@@ -53,26 +53,26 @@ final class Pages {
 		$definitions = array(
 			'booking'      => array(
 				'title'       => __( 'Book a Crossing', 'magepeople-ferry-booking-system' ),
-				'block'       => 'ferry-booking-manager/booking',
-				'shortcode'   => 'fbm_booking',
+				'block'       => Components::NAMESPACE . '/booking',
+				'shortcode'   => 'mpfbs_booking',
 				'description' => __( 'Search, choose a sailing and pay. The whole booking flow lives here.', 'magepeople-ferry-booking-system' ),
 			),
 			'confirmation' => array(
 				'title'       => __( 'Booking Confirmation', 'magepeople-ferry-booking-system' ),
-				'block'       => 'ferry-booking-manager/confirmation',
-				'shortcode'   => 'fbm_confirmation',
-				'description' => __( 'Where a customer lands after paying. Shows their reference and tickets.', 'magepeople-ferry-booking-system' ),
+				'block'       => Components::NAMESPACE . '/confirmation',
+				'shortcode'   => 'mpfbs_confirmation',
+				'description' => __( 'Where a customer lands after paying. Shows their booking reference.', 'magepeople-ferry-booking-system' ),
 			),
 			'my_bookings'  => array(
 				'title'       => __( 'My Bookings', 'magepeople-ferry-booking-system' ),
-				'block'       => 'ferry-booking-manager/my-bookings',
-				'shortcode'   => 'fbm_my_bookings',
+				'block'       => Components::NAMESPACE . '/my-bookings',
+				'shortcode'   => 'mpfbs_my_bookings',
 				'description' => __( 'A customer’s upcoming and past crossings.', 'magepeople-ferry-booking-system' ),
 			),
 			'lookup'       => array(
 				'title'       => __( 'Find My Booking', 'magepeople-ferry-booking-system' ),
-				'block'       => 'ferry-booking-manager/lookup',
-				'shortcode'   => 'fbm_lookup',
+				'block'       => Components::NAMESPACE . '/lookup',
+				'shortcode'   => 'mpfbs_lookup',
 				'description' => __( 'Lets a guest retrieve a booking with a reference and email address.', 'magepeople-ferry-booking-system' ),
 			),
 		);
@@ -84,7 +84,7 @@ final class Pages {
 		 *
 		 * @param array<string, array<string, string>> $definitions Page definitions keyed by slug key.
 		 */
-		return (array) apply_filters( 'fbm_managed_pages', $definitions );
+		return (array) apply_filters( 'mpfbs_managed_pages', $definitions );
 	}
 
 	/**
@@ -164,7 +164,7 @@ final class Pages {
 		 *
 		 * @param array<string, int> $stored Page key => page id.
 		 */
-		do_action( 'fbm_pages_installed', $stored );
+		do_action( 'mpfbs_pages_installed', $stored );
 
 		return $stored;
 	}
@@ -279,7 +279,7 @@ final class Pages {
 		$definitions = self::definitions();
 
 		if ( isset( $definitions[ $key ] ) ) {
-			$states['fbm_page'] = sprintf(
+			$states['mpfbs_page'] = sprintf(
 				/* translators: %s: the ferry page's purpose, e.g. "Book a Crossing". */
 				__( 'Ferry — %s', 'magepeople-ferry-booking-system' ),
 				(string) $definitions[ $key ]['title']
@@ -366,7 +366,7 @@ final class Pages {
 		// The booking flow is a wide layout by default: a timetable in a
 		// 40rem prose column is unreadable, and an operator should not have to
 		// discover a width setting before their first sale.
-		$attributes = 'ferry-booking-manager/booking' === $block ? ' {"width":"wide"}' : '';
+		$attributes = Components::NAMESPACE . '/booking' === $block ? ' {"width":"wide"}' : '';
 
 		return sprintf( '<!-- wp:%1$s%2$s /-->', $block, $attributes );
 	}

@@ -16,15 +16,12 @@ import { PermissionGuard } from './PermissionGuard';
 import { Sidebar } from './Sidebar';
 import { EmptyState, LoadingState } from './States';
 import { ToastProvider } from './Toast';
-import { fbmCan } from '../lib/config';
-import { fbmText } from '../lib/i18n';
-import { useFbmHealth } from '../lib/health';
-import { useFbmMounted } from '../lib/mounted';
-import { fbmSetupBlocks, useFbmSetup } from '../lib/setup';
-import { useFbmLocation } from '../lib/router';
-import { fbmMatchRoute, type FbmRoute } from '../lib/routes';
+import { mpfbsText } from '../lib/i18n';
+import { useMpfbsHealth } from '../lib/health';
+import { useMpfbsMounted } from '../lib/mounted';
+import { useMpfbsLocation } from '../lib/router';
+import { mpfbsMatchRoute, type MpfbsRoute } from '../lib/routes';
 import { DashboardScreen } from '../screens/DashboardScreen';
-import { PlaceholderScreen } from '../screens/PlaceholderScreen';
 import { ResourceScreen } from '../screens/ResourceScreen';
 import { SailingsScreen } from '../screens/SailingsScreen';
 import { PassengersScreen, VehiclesScreen } from '../screens/TypeConfigScreen';
@@ -32,25 +29,16 @@ import { PricingScreen } from '../screens/PricingScreen';
 import { EmailsScreen } from '../screens/EmailsScreen';
 import { PaymentsScreen } from '../screens/PaymentsScreen';
 import { BookingsScreen } from '../screens/BookingsScreen';
-import { CheckinScreen } from '../screens/CheckinScreen';
-import { CalendarScreen } from '../screens/CalendarScreen';
-import { AgentsScreen } from '../screens/AgentsScreen';
-import { PosScreen } from '../screens/PosScreen';
-import { ManifestsScreen } from '../screens/ManifestsScreen';
-import { ReportsScreen } from '../screens/ReportsScreen';
 import { NewBookingScreen } from '../screens/NewBookingScreen';
 import { SettingsScreen } from '../screens/SettingsScreen';
 import { SetupScreen } from '../screens/SetupScreen';
 import { GetStartedScreen } from '../screens/GetStartedScreen';
-import { FBM_PORT_RESOURCE, FBM_ROUTE_RESOURCE, FBM_VESSEL_RESOURCE } from '../config/resources';
+import { MPFBS_PORT_RESOURCE, MPFBS_ROUTE_RESOURCE, MPFBS_VESSEL_RESOURCE } from '../config/resources';
 
 /**
  * Resolves a route to the screen that serves it.
- *
- * Destinations whose delivery phase has not been reached fall through to an
- * explicit placeholder rather than an empty page.
  */
-function renderScreen( route: FbmRoute, tab: string, sub: string ): JSX.Element {
+function renderScreen( route: MpfbsRoute, tab: string, sub: string ): JSX.Element {
 	switch ( route.id ) {
 		case 'dashboard':
 			return <DashboardScreen />;
@@ -66,13 +54,13 @@ function renderScreen( route: FbmRoute, tab: string, sub: string ): JSX.Element 
 		 * screen's heading.
 		 */
 		case 'ports':
-			return <ResourceScreen key="ports" config={ FBM_PORT_RESOURCE } />;
+			return <ResourceScreen key="ports" config={ MPFBS_PORT_RESOURCE } />;
 
 		case 'vessels':
-			return <ResourceScreen key="vessels" config={ FBM_VESSEL_RESOURCE } />;
+			return <ResourceScreen key="vessels" config={ MPFBS_VESSEL_RESOURCE } />;
 
 		case 'routes':
-			return <ResourceScreen key="routes" config={ FBM_ROUTE_RESOURCE } />;
+			return <ResourceScreen key="routes" config={ MPFBS_ROUTE_RESOURCE } />;
 
 		case 'setup':
 			return <SetupScreen key="setup" tab={ tab } sub={ sub } />;
@@ -102,31 +90,13 @@ function renderScreen( route: FbmRoute, tab: string, sub: string ): JSX.Element 
 			return <PricingScreen key="pricing" tab={ tab } />;
 
 		case 'emails':
-			return <EmailsScreen key="emails" tab={ tab } />;
-
-		case 'calendar':
-			return <CalendarScreen key="calendar" />;
-
-		case 'agents':
-			return <AgentsScreen key="agents" />;
-
-		case 'pos':
-			return <PosScreen key="pos" />;
+			return <EmailsScreen key="emails" />;
 
 		case 'payments':
 			return <PaymentsScreen key="payments" />;
 
-		case 'checkin':
-			return <CheckinScreen key="checkin" />;
-
-		case 'manifests':
-			return <ManifestsScreen key="manifests" />;
-
-		case 'reports':
-			return <ReportsScreen key="reports" />;
-
 		default:
-			return <PlaceholderScreen route={ route } />;
+			return <DashboardScreen />;
 	}
 }
 
@@ -134,12 +104,11 @@ function renderScreen( route: FbmRoute, tab: string, sub: string ): JSX.Element 
  * Renders the whole dashboard.
  */
 export function AdminShell(): JSX.Element {
-	const mounted = useFbmMounted();
-	const location = useFbmLocation();
+	const mounted = useMpfbsMounted();
+	const location = useMpfbsLocation();
 	const [ sidebarOpen, setSidebarOpen ] = useState( false );
 	const [ paletteOpen, setPaletteOpen ] = useState( false );
-	const { health, error } = useFbmHealth();
-	const { setup, failed: setupFailed } = useFbmSetup();
+	const { health, error } = useMpfbsHealth();
 
 	useEffect( () => {
 		const onKeyDown = ( event: KeyboardEvent ): void => {
@@ -170,25 +139,14 @@ export function AdminShell(): JSX.Element {
 		return <AppSkeleton />;
 	}
 
-	const route = location ? fbmMatchRoute( location.path ) : undefined;
+	const route = location ? mpfbsMatchRoute( location.path ) : undefined;
 
 	let content: JSX.Element;
 
 	if ( ! location ) {
 		content = <LoadingState rows={ 4 } />;
 	} else if ( ! route ) {
-		content = <EmptyState icon="compass" title={ fbmText( 'Page not found.' ) } description={ location.path } />;
-	} else if ( ! setup && ! setupFailed ) {
-		// Held until the setup state is known, so a locked install never
-		// flashes a screen it is about to take away.
-		content = <LoadingState rows={ 4 } />;
-	} else if ( fbmSetupBlocks( setup, route.id, fbmCan( 'fbm_manage_settings' ) ) ) {
-		/*
-		 * An install with nothing to sell shows only its setup steps. The
-		 * address is left as it was, so once setup is finished the screen
-		 * that was asked for is the one that appears.
-		 */
-		content = <GetStartedScreen key="get-started-lock" />;
+		content = <EmptyState icon="compass" title={ mpfbsText( 'Page not found.' ) } description={ location.path } />;
 	} else {
 		content = (
 			<PermissionGuard capability={ route.capability }>
@@ -204,15 +162,15 @@ export function AdminShell(): JSX.Element {
 	 * — from reaching the dashboard's controls.
 	 */
 	return (
-		<div className={ `fbm-app${ sidebarOpen ? ' fbm-app--nav-open' : '' }` }>
+		<div className={ `mpfbs-app${ sidebarOpen ? ' mpfbs-app--nav-open' : '' }` }>
 			<ToastProvider>
-				<a className="fbm-skip-link" href="#fbm-main">
-					{ fbmText( 'Skip to dashboard content' ) }
+				<a className="mpfbs-skip-link" href="#mpfbs-main">
+					{ mpfbsText( 'Skip to dashboard content' ) }
 				</a>
 
 				<Sidebar activeRouteId={ route?.id ?? null } open={ sidebarOpen } onNavigate={ closeSidebar } />
 
-				<div className="fbm-app__body">
+				<div className="mpfbs-app__body">
 					<Header
 						sidebarOpen={ sidebarOpen }
 						onToggleSidebar={ () => setSidebarOpen( ( open ) => ! open ) }
@@ -220,14 +178,14 @@ export function AdminShell(): JSX.Element {
 						connected={ error ? false : health ? true : null }
 					/>
 
-					<main className="fbm-main" id="fbm-main" tabIndex={ -1 }>
-						<div className="fbm-main__inner">{ content }</div>
+					<main className="mpfbs-main" id="mpfbs-main" tabIndex={ -1 }>
+						<div className="mpfbs-main__inner">{ content }</div>
 					</main>
 				</div>
 
 				<button
 					type="button"
-					className="fbm-app__scrim"
+					className="mpfbs-app__scrim"
 					aria-hidden={ ! sidebarOpen }
 					tabIndex={ -1 }
 					onClick={ closeSidebar }

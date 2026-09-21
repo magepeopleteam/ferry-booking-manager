@@ -7,7 +7,7 @@
 
 declare( strict_types=1 );
 
-namespace FBM\REST;
+namespace MPFBS\REST;
 
 use WP_Error;
 use WP_HTTP_Response;
@@ -16,7 +16,7 @@ use WP_REST_Response;
 defined( 'ABSPATH' ) || exit;
 
 /**
- * Builds the single response shape used by every `fbm/v1` endpoint.
+ * Builds the single response shape used by every `mpfbs/v1` endpoint.
  *
  * Success: { success: true, data: {...}, meta: {...} }
  * Failure: { success: false, code: "...", message: "...", data: {...} }
@@ -68,8 +68,8 @@ final class Response {
 		);
 
 		$response = self::success( array_values( $items ), $meta );
-		$response->header( 'X-FBM-Total', (string) max( 0, $total ) );
-		$response->header( 'X-FBM-Total-Pages', (string) $meta['total_pages'] );
+		$response->header( 'X-MPFBS-Total', (string) max( 0, $total ) );
+		$response->header( 'X-MPFBS-Total-Pages', (string) $meta['total_pages'] );
 
 		return $response;
 	}
@@ -77,7 +77,7 @@ final class Response {
 	/**
 	 * Builds an error envelope.
 	 *
-	 * @param string               $code    Machine readable, `fbm_`-prefixed error code.
+	 * @param string               $code    Machine readable, `mpfbs_`-prefixed error code.
 	 * @param string               $message Human readable, translated message.
 	 * @param array<string, mixed> $data    Additional error context (never secrets).
 	 * @param int                  $status  HTTP status code.
@@ -110,7 +110,7 @@ final class Response {
 		$message = (string) $error->get_error_message();
 
 		if ( '' === $code ) {
-			$code = 'fbm_error';
+			$code = 'mpfbs_error';
 		}
 
 		return self::error( $code, $message, $data, $status );
@@ -143,14 +143,14 @@ final class Response {
 		$status = $result->get_status();
 
 		if ( $status >= 400 ) {
-			$code    = is_array( $data ) && isset( $data['code'] ) ? (string) $data['code'] : 'fbm_error';
+			$code    = is_array( $data ) && isset( $data['code'] ) ? (string) $data['code'] : 'mpfbs_error';
 			$message = is_array( $data ) && isset( $data['message'] )
 				? (string) $data['message']
 				: __( 'The request could not be completed.', 'magepeople-ferry-booking-system' );
 			$extra   = is_array( $data ) && isset( $data['data'] ) && is_array( $data['data'] ) ? $data['data'] : array();
 
-			if ( 0 !== strpos( $code, 'fbm_' ) ) {
-				$code = 'fbm_' . ltrim( $code, '_' );
+			if ( 0 !== strpos( $code, 'mpfbs_' ) ) {
+				$code = 'mpfbs_' . ltrim( $code, '_' );
 			}
 
 			$normalized = self::error( $code, $message, $extra, $status );

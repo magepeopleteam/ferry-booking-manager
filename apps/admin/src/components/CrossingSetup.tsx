@@ -21,13 +21,13 @@ import { useCallback, useEffect, useMemo, useState, type JSX } from 'react';
 import { Drawer } from './Drawer';
 import { FormSteps } from './FormSteps';
 import { NumberField, SelectField, SwitchField, TextField, TimeListField, WeekdayField } from './Fields';
-import { useFbmToast } from './Toast';
-import { fbmRequest, FbmApiError } from './../lib/api';
-import { fbmConfig } from '../lib/config';
-import { fbmAddDays, fbmToday } from '../lib/datetime';
-import { fbmFormat, fbmText } from '../lib/i18n';
-import { fbmMoneyStep, fbmToMinor } from '../lib/money';
-import { fbmInvalidateReferences, useFbmReferences } from '../lib/references';
+import { useMpfbsToast } from './Toast';
+import { mpfbsRequest, MpfbsApiError } from './../lib/api';
+import { mpfbsConfig } from '../lib/config';
+import { mpfbsAddDays, mpfbsToday } from '../lib/datetime';
+import { mpfbsFormat, mpfbsText } from '../lib/i18n';
+import { mpfbsMoneyStep, mpfbsToMinor } from '../lib/money';
+import { mpfbsInvalidateReferences, useMpfbsReferences } from '../lib/references';
 
 export interface CrossingSetupProps {
 	open: boolean;
@@ -77,9 +77,9 @@ const EMPTY_VESSEL: VesselDraft = { id: 0, name: '', code: '', passenger_capacit
  * Renders the setup wizard.
  */
 export function CrossingSetup( { open, onClose, onCreated, inline = false }: CrossingSetupProps ): JSX.Element | null {
-	const toast = useFbmToast();
-	const { references } = useFbmReferences();
-	const currency = fbmConfig().currency;
+	const toast = useMpfbsToast();
+	const { references } = useMpfbsReferences();
+	const currency = mpfbsConfig().currency;
 
 	const [ step, setStep ] = useState( 0 );
 	const [ visited, setVisited ] = useState( 0 );
@@ -97,8 +97,8 @@ export function CrossingSetup( { open, onClose, onCreated, inline = false }: Cro
 	const [ takesVehicles, setTakesVehicles ] = useState( false );
 	const [ bothWays, setBothWays ] = useState( true );
 
-	const [ dateFrom, setDateFrom ] = useState( fbmToday() );
-	const [ dateTo, setDateTo ] = useState( fbmAddDays( fbmToday(), 30 ) );
+	const [ dateFrom, setDateFrom ] = useState( mpfbsToday() );
+	const [ dateTo, setDateTo ] = useState( mpfbsAddDays( mpfbsToday(), 30 ) );
 	const [ weekdays, setWeekdays ] = useState< number[] >( [ 1, 2, 3, 4, 5, 6, 0 ] );
 	const [ times, setTimes ] = useState< string[] >( [] );
 	const [ turnaround, setTurnaround ] = useState( 30 );
@@ -128,8 +128,8 @@ export function CrossingSetup( { open, onClose, onCreated, inline = false }: Cro
 		setDuration( 30 );
 		setTakesVehicles( false );
 		setBothWays( true );
-		setDateFrom( fbmToday() );
-		setDateTo( fbmAddDays( fbmToday(), 30 ) );
+		setDateFrom( mpfbsToday() );
+		setDateTo( mpfbsAddDays( mpfbsToday(), 30 ) );
 		setWeekdays( [ 1, 2, 3, 4, 5, 6, 0 ] );
 		setTimes( [] );
 		setTurnaround( 30 );
@@ -139,7 +139,7 @@ export function CrossingSetup( { open, onClose, onCreated, inline = false }: Cro
 
 	const portOptions = useMemo(
 		() => [
-			{ value: '0', label: fbmText( 'Add a new port…' ) },
+			{ value: '0', label: mpfbsText( 'Add a new port…' ) },
 			...references.ports.map( ( port ) => ( { value: String( port.id ), label: port.code ? `${ port.name } (${ port.code })` : port.name } ) ),
 		],
 		[ references.ports ]
@@ -147,7 +147,7 @@ export function CrossingSetup( { open, onClose, onCreated, inline = false }: Cro
 
 	const vesselOptions = useMemo(
 		() => [
-			{ value: '0', label: fbmText( 'Add a new vessel…' ) },
+			{ value: '0', label: mpfbsText( 'Add a new vessel…' ) },
 			...references.vessels.map( ( item ) => ( { value: String( item.id ), label: item.code ? `${ item.name } (${ item.code })` : item.name } ) ),
 		],
 		[ references.vessels ]
@@ -179,7 +179,7 @@ export function CrossingSetup( { open, onClose, onCreated, inline = false }: Cro
 	const problems = useCallback(
 		( index: number ): Record< string, string > => {
 			const missing: Record< string, string > = {};
-			const need = fbmText( 'This cannot be empty.' );
+			const need = mpfbsText( 'This cannot be empty.' );
 
 			const port = ( draft: PortDraft, prefix: string ): void => {
 				if ( draft.id > 0 ) {
@@ -195,25 +195,25 @@ export function CrossingSetup( { open, onClose, onCreated, inline = false }: Cro
 				port( destination, 'destination' );
 
 				if ( origin.id > 0 && origin.id === destination.id ) {
-					missing.destination_pick = fbmText( 'A crossing needs two different ports.' );
+					missing.destination_pick = mpfbsText( 'A crossing needs two different ports.' );
 				}
 			}
 
 			if ( index === 1 && vessel.id === 0 ) {
 				if ( vessel.name.trim() === '' ) { missing.vessel_name = need; }
 				if ( vessel.code.trim() === '' ) { missing.vessel_code = need; }
-				if ( vessel.passenger_capacity < 1 ) { missing.vessel_passenger_capacity = fbmText( 'A vessel has to carry somebody.' ); }
+				if ( vessel.passenger_capacity < 1 ) { missing.vessel_passenger_capacity = mpfbsText( 'A vessel has to carry somebody.' ); }
 			}
 
 			if ( index === 2 ) {
 				if ( routeName.trim() === '' ) { missing.route_name = need; }
-				if ( duration < 1 ) { missing.duration = fbmText( 'A crossing takes at least a minute.' ); }
+				if ( duration < 1 ) { missing.duration = mpfbsText( 'A crossing takes at least a minute.' ); }
 			}
 
 			if ( index === 3 ) {
-				if ( times.length === 0 ) { missing.times = fbmText( 'Add at least one departure time.' ); }
-				if ( weekdays.length === 0 ) { missing.weekdays = fbmText( 'Choose at least one day.' ); }
-				if ( dateTo < dateFrom ) { missing.date_to = fbmText( 'The last day cannot be before the first.' ); }
+				if ( times.length === 0 ) { missing.times = mpfbsText( 'Add at least one departure time.' ); }
+				if ( weekdays.length === 0 ) { missing.weekdays = mpfbsText( 'Choose at least one day.' ); }
+				if ( dateTo < dateFrom ) { missing.date_to = mpfbsText( 'The last day cannot be before the first.' ); }
 			}
 
 			/*
@@ -225,7 +225,7 @@ export function CrossingSetup( { open, onClose, onCreated, inline = false }: Cro
 				const base = references.passenger_types.find( ( type ) => type.is_base );
 
 				if ( base && base.price_mode === 'fixed' && base.base_price <= 0 && ! ( Number( passengerFares[ base.id ] ?? 0 ) > 0 ) ) {
-					missing.fares = fbmFormat( 'Set a fare for %s. It has no price of its own, so without one every ticket would be free.', base.name );
+					missing.fares = mpfbsFormat( 'Set a fare for %s. It has no price of its own, so without one every ticket would be free.', base.name );
 				}
 			}
 
@@ -285,11 +285,11 @@ export function CrossingSetup( { open, onClose, onCreated, inline = false }: Cro
 					return draft.id;
 				}
 
-				const made = await fbmRequest< { id: number } >( 'ports', {
+				const made = await mpfbsRequest< { id: number } >( 'ports', {
 					method: 'POST',
 					body: { name: draft.name, code: draft.code.toUpperCase(), city: draft.city, status: 'active' },
 				} );
-				note( fbmFormat( 'Port “%s” created.', draft.name ) );
+				note( mpfbsFormat( 'Port “%s” created.', draft.name ) );
 
 				return Number( made.data.id ?? 0 );
 			};
@@ -300,7 +300,7 @@ export function CrossingSetup( { open, onClose, onCreated, inline = false }: Cro
 			let vesselId = vessel.id;
 
 			if ( vesselId === 0 ) {
-				const made = await fbmRequest< { id: number } >( 'vessels', {
+				const made = await mpfbsRequest< { id: number } >( 'vessels', {
 					method: 'POST',
 					body: {
 						name: vessel.name,
@@ -312,7 +312,7 @@ export function CrossingSetup( { open, onClose, onCreated, inline = false }: Cro
 					},
 				} );
 				vesselId = Number( made.data.id ?? 0 );
-				note( fbmFormat( 'Vessel “%s” created.', vessel.name ) );
+				note( mpfbsFormat( 'Vessel “%s” created.', vessel.name ) );
 			}
 
 			const fareTables = (): Record< string, Record< string, number > > => {
@@ -320,12 +320,12 @@ export function CrossingSetup( { open, onClose, onCreated, inline = false }: Cro
 				const vehicles: Record< string, number > = {};
 
 				Object.entries( passengerFares ).forEach( ( [ id, value ] ) => {
-					if ( value !== '' ) { passengers[ id ] = fbmToMinor( Number( value ) ); }
+					if ( value !== '' ) { passengers[ id ] = mpfbsToMinor( Number( value ) ); }
 				} );
 
 				if ( takesVehicles ) {
 					Object.entries( vehicleFares ).forEach( ( [ id, value ] ) => {
-						if ( value !== '' ) { vehicles[ id ] = fbmToMinor( Number( value ) ); }
+						if ( value !== '' ) { vehicles[ id ] = mpfbsToMinor( Number( value ) ); }
 					} );
 				}
 
@@ -333,7 +333,7 @@ export function CrossingSetup( { open, onClose, onCreated, inline = false }: Cro
 			};
 
 			const makeRoute = async ( from: number, to: number, name: string, code: string ): Promise< number > => {
-				const made = await fbmRequest< { id: number } >( 'routes', {
+				const made = await mpfbsRequest< { id: number } >( 'routes', {
 					method: 'POST',
 					body: {
 						name,
@@ -347,7 +347,7 @@ export function CrossingSetup( { open, onClose, onCreated, inline = false }: Cro
 						...fareTables(),
 					},
 				} );
-				note( fbmFormat( 'Route “%s” created, with its fares.', name ) );
+				note( mpfbsFormat( 'Route “%s” created, with its fares.', name ) );
 
 				return Number( made.data.id ?? 0 );
 			};
@@ -371,12 +371,12 @@ export function CrossingSetup( { open, onClose, onCreated, inline = false }: Cro
 					.filter( ( time ) => time !== '' );
 
 				if ( shifted.length === 0 ) {
-					note( fbmFormat( 'No departures fitted the day for %s.', label ) );
+					note( mpfbsFormat( 'No departures fitted the day for %s.', label ) );
 
 					return;
 				}
 
-				const made = await fbmRequest< { created?: number } >( 'sailings/schedule', {
+				const made = await mpfbsRequest< { created?: number } >( 'sailings/schedule', {
 					method: 'POST',
 					body: {
 						route_id: routeId,
@@ -389,7 +389,7 @@ export function CrossingSetup( { open, onClose, onCreated, inline = false }: Cro
 						commit: true,
 					},
 				} );
-				note( fbmFormat( '%1$s sailings scheduled for %2$s.', String( made.data.created ?? 0 ), label ) );
+				note( mpfbsFormat( '%1$s sailings scheduled for %2$s.', String( made.data.created ?? 0 ), label ) );
 			};
 
 			await schedule( outboundId, 0, routeName );
@@ -401,21 +401,21 @@ export function CrossingSetup( { open, onClose, onCreated, inline = false }: Cro
 				await schedule( backId, duration + turnaround, backName );
 			}
 
-			fbmInvalidateReferences();
-			toast.notify( fbmText( 'The crossing is set up and on sale.' ), 'success' );
+			mpfbsInvalidateReferences();
+			toast.notify( mpfbsText( 'The crossing is set up and on sale.' ), 'success' );
 			onCreated();
 			onClose();
 		} catch ( caught: unknown ) {
-			if ( caught instanceof FbmApiError ) {
+			if ( caught instanceof MpfbsApiError ) {
 				setErrors( caught.details.fields && typeof caught.details.fields === 'object' ? ( caught.details.fields as Record< string, string > ) : {} );
 				setFormError( caught.message );
 			} else {
-				setFormError( fbmText( 'Something went wrong.' ) );
+				setFormError( mpfbsText( 'Something went wrong.' ) );
 			}
 
 			// Whatever did land stays listed, so it is clear what to finish by
 			// hand rather than being run again from the start.
-			fbmInvalidateReferences();
+			mpfbsInvalidateReferences();
 		} finally {
 			setBusy( false );
 		}
@@ -445,7 +445,7 @@ export function CrossingSetup( { open, onClose, onCreated, inline = false }: Cro
 			{ draft.id === 0 ? (
 				<>
 					<TextField
-						label={ fbmText( 'Port name' ) }
+						label={ mpfbsText( 'Port name' ) }
 						name={ `${ prefix }_name` }
 						value={ draft.name }
 						onChange={ ( value ) => set( { ...draft, name: value } ) }
@@ -453,16 +453,16 @@ export function CrossingSetup( { open, onClose, onCreated, inline = false }: Cro
 						required
 					/>
 					<TextField
-						label={ fbmText( 'Port code' ) }
+						label={ mpfbsText( 'Port code' ) }
 						name={ `${ prefix }_code` }
 						value={ draft.code }
 						onChange={ ( value ) => set( { ...draft, code: value } ) }
 						error={ errors[ `${ prefix }_code` ] }
-						hint={ fbmText( 'Shown on tickets and manifests.' ) }
+						hint={ mpfbsText( 'Shown on booking confirmations.' ) }
 						required
 					/>
 					<TextField
-						label={ fbmText( 'City' ) }
+						label={ mpfbsText( 'City' ) }
 						name={ `${ prefix }_city` }
 						value={ draft.city }
 						onChange={ ( value ) => set( { ...draft, city: value } ) }
@@ -475,23 +475,23 @@ export function CrossingSetup( { open, onClose, onCreated, inline = false }: Cro
 	const footer = (
 		<>
 			{ step > 0 ? (
-				<button type="button" className="fbm-button fbm-button--secondary" onClick={ () => goToStep( step - 1 ) } disabled={ busy }>
-					{ fbmText( 'Back' ) }
+				<button type="button" className="mpfbs-button mpfbs-button--secondary" onClick={ () => goToStep( step - 1 ) } disabled={ busy }>
+					{ mpfbsText( 'Back' ) }
 				</button>
 			) : inline ? null : (
-				<button type="button" className="fbm-button fbm-button--secondary" onClick={ onClose } disabled={ busy }>
-					{ fbmText( 'Cancel' ) }
+				<button type="button" className="mpfbs-button mpfbs-button--secondary" onClick={ onClose } disabled={ busy }>
+					{ mpfbsText( 'Cancel' ) }
 				</button>
 			) }
 
-			<div className={ inline ? 'fbm-wizard__footer-end' : 'fbm-drawer__footer-end' }>
+			<div className={ inline ? 'mpfbs-wizard__footer-end' : 'mpfbs-drawer__footer-end' }>
 				{ lastStep ? (
-					<button type="button" className="fbm-button fbm-button--primary" onClick={ () => void create() } disabled={ busy }>
-						{ busy ? fbmText( 'Setting up…' ) : fbmText( 'Create it all' ) }
+					<button type="button" className="mpfbs-button mpfbs-button--primary" onClick={ () => void create() } disabled={ busy }>
+						{ busy ? mpfbsText( 'Setting up…' ) : mpfbsText( 'Create it all' ) }
 					</button>
 				) : (
-					<button type="button" className="fbm-button fbm-button--primary" onClick={ () => goToStep( step + 1 ) } disabled={ busy }>
-						{ fbmText( 'Next' ) }
+					<button type="button" className="mpfbs-button mpfbs-button--primary" onClick={ () => goToStep( step + 1 ) } disabled={ busy }>
+						{ mpfbsText( 'Next' ) }
 					</button>
 				) }
 			</div>
@@ -499,7 +499,7 @@ export function CrossingSetup( { open, onClose, onCreated, inline = false }: Cro
 	);
 
 	const body = (
-			<form className="fbm-form" onSubmit={ ( event ) => event.preventDefault() }>
+			<form className="mpfbs-form" onSubmit={ ( event ) => event.preventDefault() }>
 				<FormSteps
 					steps={ STEPS }
 					current={ step }
@@ -508,28 +508,28 @@ export function CrossingSetup( { open, onClose, onCreated, inline = false }: Cro
 				/>
 
 				{ formError ? (
-					<div className="fbm-alert fbm-alert--error" role="alert">
+					<div className="mpfbs-alert mpfbs-alert--error" role="alert">
 						{ formError }
 					</div>
 				) : null }
 
 				{ step === 0 ? (
 					<>
-						<p className="fbm-form__note">
-							{ fbmText( 'Where the crossing runs between. Pick a terminal you already have, or describe a new one and it is created with everything else.' ) }
+						<p className="mpfbs-form__note">
+							{ mpfbsText( 'Where the crossing runs between. Pick a terminal you already have, or describe a new one and it is created with everything else.' ) }
 						</p>
-						{ portFields( origin, setOrigin, 'origin', fbmText( 'From' ) ) }
-						{ portFields( destination, setDestination, 'destination', fbmText( 'To' ) ) }
+						{ portFields( origin, setOrigin, 'origin', mpfbsText( 'From' ) ) }
+						{ portFields( destination, setDestination, 'destination', mpfbsText( 'To' ) ) }
 					</>
 				) : null }
 
 				{ step === 1 ? (
 					<>
-						<p className="fbm-form__note">
-							{ fbmText( 'The boat that works this crossing. Its capacities are what the crossing sells against, so a sailing can never be sold beyond the deck it has.' ) }
+						<p className="mpfbs-form__note">
+							{ mpfbsText( 'The boat that works this crossing. Its capacities are what the crossing sells against, so a sailing can never be sold beyond the deck it has.' ) }
 						</p>
 						<SelectField
-							label={ fbmText( 'Vessel' ) }
+							label={ mpfbsText( 'Vessel' ) }
 							name="vessel_pick"
 							value={ String( vessel.id ) }
 							options={ vesselOptions }
@@ -539,7 +539,7 @@ export function CrossingSetup( { open, onClose, onCreated, inline = false }: Cro
 						{ vessel.id === 0 ? (
 							<>
 								<TextField
-									label={ fbmText( 'Vessel name' ) }
+									label={ mpfbsText( 'Vessel name' ) }
 									name="vessel_name"
 									value={ vessel.name }
 									onChange={ ( value ) => setVessel( { ...vessel, name: value } ) }
@@ -547,7 +547,7 @@ export function CrossingSetup( { open, onClose, onCreated, inline = false }: Cro
 									required
 								/>
 								<TextField
-									label={ fbmText( 'Vessel code' ) }
+									label={ mpfbsText( 'Vessel code' ) }
 									name="vessel_code"
 									value={ vessel.code }
 									onChange={ ( value ) => setVessel( { ...vessel, code: value } ) }
@@ -555,11 +555,11 @@ export function CrossingSetup( { open, onClose, onCreated, inline = false }: Cro
 									required
 								/>
 								<NumberField
-									label={ fbmText( 'Passenger capacity' ) }
+									label={ mpfbsText( 'Passenger capacity' ) }
 									name="vessel_passenger_capacity"
 									value={ vessel.passenger_capacity }
 									min={ 0 }
-									suffix={ fbmText( 'seats' ) }
+									suffix={ mpfbsText( 'seats' ) }
 									onChange={ ( value ) => setVessel( { ...vessel, passenger_capacity: value } ) }
 									error={ errors.vessel_passenger_capacity }
 									required
@@ -568,31 +568,31 @@ export function CrossingSetup( { open, onClose, onCreated, inline = false }: Cro
 						) : null }
 
 						<SwitchField
-							label={ fbmText( 'This crossing carries vehicles' ) }
+							label={ mpfbsText( 'This crossing carries vehicles' ) }
 							checked={ takesVehicles }
-							hint={ fbmText( 'Turn off for a foot-passenger crossing. Vehicle fares and deck space are then not asked for.' ) }
+							hint={ mpfbsText( 'Turn off for a foot-passenger crossing. Vehicle fares and deck space are then not asked for.' ) }
 							onChange={ setTakesVehicles }
 						/>
 
 						{ takesVehicles && vessel.id === 0 ? (
 							<>
 								<NumberField
-									label={ fbmText( 'Vehicle capacity' ) }
+									label={ mpfbsText( 'Vehicle capacity' ) }
 									name="vessel_vehicle_capacity"
 									value={ vessel.vehicle_capacity }
 									min={ 0 }
-									suffix={ fbmText( 'vehicles' ) }
+									suffix={ mpfbsText( 'vehicles' ) }
 									onChange={ ( value ) => setVessel( { ...vessel, vehicle_capacity: value } ) }
 								/>
 								<NumberField
-									label={ fbmText( 'Lane metres' ) }
+									label={ mpfbsText( 'Lane metres' ) }
 									name="vessel_deck_capacity"
 									value={ vessel.deck_capacity }
 									min={ 0 }
 									step={ 0.5 }
 									suffix="m"
 									onChange={ ( value ) => setVessel( { ...vessel, deck_capacity: value } ) }
-									hint={ fbmText( 'The length of deck available. Long vehicles are sold against this, not against a headcount.' ) }
+									hint={ mpfbsText( 'The length of deck available. Long vehicles are sold against this, not against a headcount.' ) }
 								/>
 							</>
 						) : null }
@@ -601,11 +601,11 @@ export function CrossingSetup( { open, onClose, onCreated, inline = false }: Cro
 
 				{ step === 2 ? (
 					<>
-						<p className="fbm-form__note">
-							{ fbmText( 'The journey itself. A return leg is a separate route on the opposite ports, so an operator who only declares one direction cannot sell a return at all — which is why it is offered here.' ) }
+						<p className="mpfbs-form__note">
+							{ mpfbsText( 'The journey itself. A return leg is a separate route on the opposite ports, so an operator who only declares one direction cannot sell a return at all — which is why it is offered here.' ) }
 						</p>
 						<TextField
-							label={ fbmText( 'Route name' ) }
+							label={ mpfbsText( 'Route name' ) }
 							name="route_name"
 							value={ routeName }
 							onChange={ setRouteName }
@@ -613,26 +613,26 @@ export function CrossingSetup( { open, onClose, onCreated, inline = false }: Cro
 							required
 						/>
 						<TextField
-							label={ fbmText( 'Route code' ) }
+							label={ mpfbsText( 'Route code' ) }
 							name="route_code"
 							value={ routeCode }
 							onChange={ setRouteCode }
-							hint={ fbmText( 'Optional. Leave blank and the route is known by its name.' ) }
+							hint={ mpfbsText( 'Optional. Leave blank and the route is known by its name.' ) }
 						/>
 						<NumberField
-							label={ fbmText( 'Duration' ) }
+							label={ mpfbsText( 'Duration' ) }
 							name="duration"
 							value={ duration }
 							min={ 1 }
-							suffix={ fbmText( 'minutes' ) }
+							suffix={ mpfbsText( 'minutes' ) }
 							onChange={ setDuration }
 							error={ errors.duration }
 							required
 						/>
 						<SwitchField
-							label={ fbmText( 'Also create the return direction' ) }
+							label={ mpfbsText( 'Also create the return direction' ) }
 							checked={ bothWays }
-							hint={ fbmText( 'Creates the mirror route and its own timetable, so return journeys can be sold.' ) }
+							hint={ mpfbsText( 'Creates the mirror route and its own timetable, so return journeys can be sold.' ) }
 							onChange={ setBothWays }
 						/>
 					</>
@@ -640,12 +640,12 @@ export function CrossingSetup( { open, onClose, onCreated, inline = false }: Cro
 
 				{ step === 3 ? (
 					<>
-						<p className="fbm-form__note">
-							{ fbmText( 'When it sails. Every combination of a day and a time below becomes a sailing that can be booked.' ) }
+						<p className="mpfbs-form__note">
+							{ mpfbsText( 'When it sails. Every combination of a day and a time below becomes a sailing that can be booked.' ) }
 						</p>
-						<TextField label={ fbmText( 'First day' ) } name="date_from" type="date" value={ dateFrom } onChange={ setDateFrom } />
+						<TextField label={ mpfbsText( 'First day' ) } name="date_from" type="date" value={ dateFrom } onChange={ setDateFrom } />
 						<TextField
-							label={ fbmText( 'Last day' ) }
+							label={ mpfbsText( 'Last day' ) }
 							name="date_to"
 							type="date"
 							value={ dateTo }
@@ -653,28 +653,28 @@ export function CrossingSetup( { open, onClose, onCreated, inline = false }: Cro
 							error={ errors.date_to }
 						/>
 						<WeekdayField
-							label={ fbmText( 'Days it runs' ) }
+							label={ mpfbsText( 'Days it runs' ) }
 							values={ weekdays }
 							onChange={ setWeekdays }
 							error={ errors.weekdays }
 						/>
 						<TimeListField
-							label={ fbmText( 'Departure times' ) }
+							label={ mpfbsText( 'Departure times' ) }
 							values={ times }
 							onChange={ setTimes }
 							error={ errors.times }
-							hint={ fbmText( 'Outbound times. The return leg is offset automatically so the vessel is never in two places at once.' ) }
+							hint={ mpfbsText( 'Outbound times. The return leg is offset automatically so the vessel is never in two places at once.' ) }
 						/>
 
 						{ bothWays ? (
 							<NumberField
-								label={ fbmText( 'Turnaround' ) }
+								label={ mpfbsText( 'Turnaround' ) }
 								name="turnaround"
 								value={ turnaround }
 								min={ 0 }
-								suffix={ fbmText( 'minutes' ) }
+								suffix={ mpfbsText( 'minutes' ) }
 								onChange={ setTurnaround }
-								hint={ fbmFormat(
+								hint={ mpfbsFormat(
 									'The return leaves this long after the vessel arrives, so %s minutes after each outbound departure.',
 									String( duration + turnaround )
 								) }
@@ -685,28 +685,28 @@ export function CrossingSetup( { open, onClose, onCreated, inline = false }: Cro
 
 				{ step === 4 ? (
 					<>
-						<p className="fbm-form__note">
-							{ fbmText( 'What a ticket costs on this crossing. Leave a fare blank to charge the type’s own price; a percentage type works itself out from the base fare.' ) }
+						<p className="mpfbs-form__note">
+							{ mpfbsText( 'What a ticket costs on this crossing. Leave a fare blank to charge the type’s own price; a percentage type works itself out from the base fare.' ) }
 						</p>
 
 						{ errors.fares ? (
-							<div className="fbm-alert fbm-alert--error" role="alert">
+							<div className="mpfbs-alert mpfbs-alert--error" role="alert">
 								{ errors.fares }
 							</div>
 						) : null }
 
 						<FareRows
-							title={ fbmText( 'Passenger fares' ) }
+							title={ mpfbsText( 'Passenger fares' ) }
 							rows={ references.passenger_types.map( ( type ) => ( {
 								id: type.id,
 								name: type.name,
 								hint:
 									type.price_mode === 'percent'
-										? fbmFormat( '%s%% of the base fare', String( type.price_percent ) )
+										? mpfbsFormat( '%s%% of the base fare', String( type.price_percent ) )
 										: type.price_mode === 'free'
-											? fbmText( 'Always free' )
+											? mpfbsText( 'Always free' )
 											: type.is_base && type.base_price <= 0
-												? fbmText( 'Required: the base fare the other types are worked out from' )
+												? mpfbsText( 'Required: the base fare the other types are worked out from' )
 												: '',
 								disabled: type.price_mode !== 'fixed',
 							} ) ) }
@@ -717,7 +717,7 @@ export function CrossingSetup( { open, onClose, onCreated, inline = false }: Cro
 
 						{ takesVehicles ? (
 							<FareRows
-								title={ fbmText( 'Vehicle fares' ) }
+								title={ mpfbsText( 'Vehicle fares' ) }
 								rows={ references.vehicle_types.map( ( type ) => ( { id: type.id, name: type.name, hint: '', disabled: false } ) ) }
 								values={ vehicleFares }
 								symbol={ currency.symbol }
@@ -729,27 +729,27 @@ export function CrossingSetup( { open, onClose, onCreated, inline = false }: Cro
 
 				{ step === 5 ? (
 					<>
-						<p className="fbm-form__note">{ fbmText( 'Nothing has been written yet. This is what Create will make.' ) }</p>
+						<p className="mpfbs-form__note">{ mpfbsText( 'Nothing has been written yet. This is what Create will make.' ) }</p>
 
-						<dl className="fbm-record__grid">
-							<Row label={ fbmText( 'From' ) } value={ origin.id > 0 ? nameOf( origin ) : fbmFormat( '%s (new)', origin.name ) } />
-							<Row label={ fbmText( 'To' ) } value={ destination.id > 0 ? nameOf( destination ) : fbmFormat( '%s (new)', destination.name ) } />
+						<dl className="mpfbs-record__grid">
+							<Row label={ mpfbsText( 'From' ) } value={ origin.id > 0 ? nameOf( origin ) : mpfbsFormat( '%s (new)', origin.name ) } />
+							<Row label={ mpfbsText( 'To' ) } value={ destination.id > 0 ? nameOf( destination ) : mpfbsFormat( '%s (new)', destination.name ) } />
 							<Row
-								label={ fbmText( 'Vessel' ) }
-								value={ vessel.id > 0 ? ( references.vessels.find( ( v ) => v.id === vessel.id )?.name ?? '' ) : fbmFormat( '%s (new)', vessel.name ) }
+								label={ mpfbsText( 'Vessel' ) }
+								value={ vessel.id > 0 ? ( references.vessels.find( ( v ) => v.id === vessel.id )?.name ?? '' ) : mpfbsFormat( '%s (new)', vessel.name ) }
 							/>
-							<Row label={ fbmText( 'Routes' ) } value={ bothWays ? fbmText( 'Both directions' ) : fbmText( 'One direction' ) } />
-							<Row label={ fbmText( 'Crossing time' ) } value={ fbmFormat( '%s minutes', String( duration ) ) } />
-							<Row label={ fbmText( 'Runs' ) } value={ fbmFormat( '%1$s to %2$s', dateFrom, dateTo ) } />
+							<Row label={ mpfbsText( 'Routes' ) } value={ bothWays ? mpfbsText( 'Both directions' ) : mpfbsText( 'One direction' ) } />
+							<Row label={ mpfbsText( 'Crossing time' ) } value={ mpfbsFormat( '%s minutes', String( duration ) ) } />
+							<Row label={ mpfbsText( 'Runs' ) } value={ mpfbsFormat( '%1$s to %2$s', dateFrom, dateTo ) } />
 							<Row
-								label={ fbmText( 'Departures a week' ) }
+								label={ mpfbsText( 'Departures a week' ) }
 								value={ String( bothWays ? departures * 2 : departures ) }
 							/>
-							<Row label={ fbmText( 'Carries vehicles' ) } value={ takesVehicles ? fbmText( 'Yes' ) : fbmText( 'Foot passengers only' ) } />
+							<Row label={ mpfbsText( 'Carries vehicles' ) } value={ takesVehicles ? mpfbsText( 'Yes' ) : mpfbsText( 'Foot passengers only' ) } />
 						</dl>
 
 						{ progress.length > 0 ? (
-							<ul className="fbm-setup__progress">
+							<ul className="mpfbs-setup__progress">
 								{ progress.map( ( line, index ) => (
 									<li key={ index }>{ line }</li>
 								) ) }
@@ -762,9 +762,9 @@ export function CrossingSetup( { open, onClose, onCreated, inline = false }: Cro
 
 	if ( inline ) {
 		return (
-			<section className="fbm-panel fbm-wizard">
+			<section className="mpfbs-panel mpfbs-wizard">
 				{ body }
-				<div className="fbm-wizard__footer">{ footer }</div>
+				<div className="mpfbs-wizard__footer">{ footer }</div>
 			</section>
 		);
 	}
@@ -772,8 +772,8 @@ export function CrossingSetup( { open, onClose, onCreated, inline = false }: Cro
 	return (
 		<Drawer
 			open={ open }
-			title={ fbmText( 'Set up a crossing' ) }
-			description={ fbmText( 'Ports, vessel, route, timetable and fares — asked once, written together.' ) }
+			title={ mpfbsText( 'Set up a crossing' ) }
+			description={ mpfbsText( 'Ports, vessel, route, timetable and fares — asked once, written together.' ) }
 			onClose={ onClose }
 			width="xwide"
 			footer={ footer }
@@ -788,9 +788,9 @@ export function CrossingSetup( { open, onClose, onCreated, inline = false }: Cro
  */
 function Row( { label, value }: { label: string; value: string } ): JSX.Element {
 	return (
-		<div className="fbm-record__row">
-			<dt className="fbm-record__label">{ label }</dt>
-			<dd className="fbm-record__value">{ value }</dd>
+		<div className="mpfbs-record__row">
+			<dt className="mpfbs-record__label">{ label }</dt>
+			<dd className="mpfbs-record__value">{ value }</dd>
 		</div>
 	);
 }
@@ -813,27 +813,27 @@ function FareRows( {
 } ): JSX.Element {
 	return (
 		<>
-			<h3 className="fbm-subheading">{ title }</h3>
-			<div className="fbm-fieldgrid">
+			<h3 className="mpfbs-subheading">{ title }</h3>
+			<div className="mpfbs-fieldgrid">
 				{ rows.map( ( row ) => (
-					<div className="fbm-fieldrow" key={ row.id }>
-						<div className="fbm-fieldrow__label">
-							<span className="fbm-fieldrow__name">{ row.name }</span>
-							{ row.hint !== '' ? <span className="fbm-fieldrow__hint">{ row.hint }</span> : null }
+					<div className="mpfbs-fieldrow" key={ row.id }>
+						<div className="mpfbs-fieldrow__label">
+							<span className="mpfbs-fieldrow__name">{ row.name }</span>
+							{ row.hint !== '' ? <span className="mpfbs-fieldrow__hint">{ row.hint }</span> : null }
 						</div>
-						<div className="fbm-fare">
-							<span className="fbm-fare__symbol" aria-hidden="true">
+						<div className="mpfbs-fare">
+							<span className="mpfbs-fare__symbol" aria-hidden="true">
 								{ symbol }
 							</span>
 							<input
 								type="number"
-								className="fbm-input fbm-input--money"
+								className="mpfbs-input mpfbs-input--money"
 								min={ 0 }
-								step={ fbmMoneyStep() }
+								step={ mpfbsMoneyStep() }
 								value={ values[ row.id ] ?? '' }
 								disabled={ row.disabled }
-								placeholder={ fbmText( 'Default' ) }
-								aria-label={ fbmFormat( 'Fare for %s', row.name ) }
+								placeholder={ mpfbsText( 'Default' ) }
+								aria-label={ mpfbsFormat( 'Fare for %s', row.name ) }
 								onChange={ ( event ) => {
 									const next = { ...values };
 

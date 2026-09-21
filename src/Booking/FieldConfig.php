@@ -7,9 +7,9 @@
 
 declare( strict_types=1 );
 
-namespace FBM\Booking;
+namespace MPFBS\Booking;
 
-use FBM\Support\Options;
+use MPFBS\Support\Options;
 use WP_Error;
 
 defined( 'ABSPATH' ) || exit;
@@ -22,7 +22,7 @@ defined( 'ABSPATH' ) || exit;
  * record a travel document for every person aboard. Rather than shipping a
  * fixed form and a pile of filters, the catalogue below is data, each entry has
  * three states, and one validator enforces whatever the operator chose — so the
- * booking wizard, the counter form and the importer cannot disagree about what
+ * booking form, the staff booking form and the REST API cannot disagree about what
  * "required" means.
  */
 final class FieldConfig {
@@ -84,12 +84,12 @@ final class FieldConfig {
 	/**
 	 * Returns the built-in field catalogue for a group.
 	 *
-	 * `locked` marks a field the plugin will not let an operator switch off,
-	 * because the rest of the product depends on it: a manifest without names
-	 * is not a manifest, and a boarding list has to be sortable by someone.
+	 * `always_on` marks a field the plugin will not let an operator switch off,
+	 * because the rest of the product depends on it: every booking has to name
+	 * the people travelling.
 	 *
 	 * @param string $group One of the GROUP_* constants.
-	 * @return array<string, array{label: string, type: string, default: string, locked?: bool, hint?: string}>
+	 * @return array<string, array{label: string, type: string, default: string, always_on?: bool, hint?: string}>
 	 */
 	public static function catalogue( string $group ): array {
 		$catalogue = self::GROUP_VEHICLE === $group ? self::vehicle_catalogue() : self::passenger_catalogue();
@@ -102,7 +102,7 @@ final class FieldConfig {
 		 * @param array<string, array<string, mixed>> $catalogue Field definitions keyed by field key.
 		 * @param string                              $group     Field group.
 		 */
-		return (array) apply_filters( 'fbm_field_catalogue', $catalogue, $group );
+		return (array) apply_filters( 'mpfbs_field_catalogue', $catalogue, $group );
 	}
 
 	/**
@@ -113,17 +113,17 @@ final class FieldConfig {
 	private static function passenger_catalogue(): array {
 		return array(
 			'first_name'              => array(
-				'label'   => __( 'First name', 'magepeople-ferry-booking-system' ),
-				'type'    => 'text',
-				'default' => self::MODE_REQUIRED,
-				'locked'  => true,
-				'hint'    => __( 'Always collected: passenger manifests are named lists.', 'magepeople-ferry-booking-system' ),
+				'label'     => __( 'First name', 'magepeople-ferry-booking-system' ),
+				'type'      => 'text',
+				'default'   => self::MODE_REQUIRED,
+				'always_on' => true,
+				'hint'      => __( 'Always collected: every traveller needs a name.', 'magepeople-ferry-booking-system' ),
 			),
 			'last_name'               => array(
-				'label'   => __( 'Last name', 'magepeople-ferry-booking-system' ),
-				'type'    => 'text',
-				'default' => self::MODE_REQUIRED,
-				'locked'  => true,
+				'label'     => __( 'Last name', 'magepeople-ferry-booking-system' ),
+				'type'      => 'text',
+				'default'   => self::MODE_REQUIRED,
+				'always_on' => true,
 			),
 			'gender'                  => array(
 				'label'   => __( 'Gender', 'magepeople-ferry-booking-system' ),
@@ -264,7 +264,7 @@ final class FieldConfig {
 		$modes     = array();
 
 		foreach ( $catalogue as $key => $definition ) {
-			if ( ! empty( $definition['locked'] ) ) {
+			if ( ! empty( $definition['always_on'] ) ) {
 				$modes[ $key ] = (string) $definition['default'];
 				continue;
 			}
@@ -279,7 +279,7 @@ final class FieldConfig {
 	/**
 	 * Stores the mode for every field in a group.
 	 *
-	 * Unknown keys are dropped and locked fields keep their shipped mode, so a
+	 * Unknown keys are dropped and always-on fields keep their shipped mode, so a
 	 * crafted request cannot switch off a field the product depends on.
 	 *
 	 * A field the payload does not mention keeps the mode it already has. The
@@ -297,8 +297,8 @@ final class FieldConfig {
 		$clean     = Options::get_array( self::option_for( $group ) );
 
 		foreach ( $catalogue as $key => $definition ) {
-			if ( ! empty( $definition['locked'] ) ) {
-				// A locked field has no stored mode to keep, and must not gain
+			if ( ! empty( $definition['always_on'] ) ) {
+				// An always-on field has no stored mode to keep, and must not gain
 				// one that later diverges from the shipped value.
 				unset( $clean[ $key ] );
 				continue;
@@ -387,10 +387,10 @@ final class FieldConfig {
 			$mode = isset( $field['mode'] ) ? sanitize_key( (string) $field['mode'] ) : self::MODE_OPTIONAL;
 
 			$clean[] = array(
-				'key'   => $key,
-				'label' => $label,
-				'type'  => in_array( $type, $allowed, true ) ? $type : 'text',
-				'mode'  => in_array( $mode, self::modes(), true ) ? $mode : self::MODE_OPTIONAL,
+				'key'     => $key,
+				'label'   => $label,
+				'type'    => in_array( $type, $allowed, true ) ? $type : 'text',
+				'mode'    => in_array( $mode, self::modes(), true ) ? $mode : self::MODE_OPTIONAL,
 			);
 		}
 
@@ -406,7 +406,7 @@ final class FieldConfig {
 	 * Returns the full, resolved form definition for a group.
 	 *
 	 * @param string $group One of the GROUP_* constants.
-	 * @return array<int, array{key: string, label: string, type: string, mode: string, locked: bool, custom: bool, hint: string}>
+	 * @return array<int, array{key: string, label: string, type: string, mode: string, always_on: bool, custom: bool, hint: string}>
 	 */
 	public static function form( string $group ): array {
 		$group = self::normalise_group( $group );
@@ -415,25 +415,25 @@ final class FieldConfig {
 
 		foreach ( self::catalogue( $group ) as $key => $definition ) {
 			$form[] = array(
-				'key'    => $key,
-				'label'  => (string) $definition['label'],
-				'type'   => (string) $definition['type'],
-				'mode'   => $modes[ $key ] ?? self::MODE_OFF,
-				'locked' => ! empty( $definition['locked'] ),
-				'custom' => false,
-				'hint'   => isset( $definition['hint'] ) ? (string) $definition['hint'] : '',
+				'key'       => $key,
+				'label'     => (string) $definition['label'],
+				'type'      => (string) $definition['type'],
+				'mode'      => $modes[ $key ] ?? self::MODE_OFF,
+				'always_on' => ! empty( $definition['always_on'] ),
+				'custom'    => false,
+				'hint'      => isset( $definition['hint'] ) ? (string) $definition['hint'] : '',
 			);
 		}
 
 		foreach ( self::custom_fields( $group ) as $field ) {
 			$form[] = array(
-				'key'    => (string) $field['key'],
-				'label'  => (string) $field['label'],
-				'type'   => (string) $field['type'],
-				'mode'   => (string) $field['mode'],
-				'locked' => false,
-				'custom' => true,
-				'hint'   => '',
+				'key'       => (string) $field['key'],
+				'label'     => (string) $field['label'],
+				'type'      => (string) $field['type'],
+				'mode'      => (string) $field['mode'],
+				'always_on' => false,
+				'custom'    => true,
+				'hint'      => '',
 			);
 		}
 
@@ -486,7 +486,7 @@ final class FieldConfig {
 
 		if ( array() !== $errors ) {
 			return new WP_Error(
-				'fbm_validation_failed',
+				'mpfbs_validation_failed',
 				__( 'Please correct the highlighted fields.', 'magepeople-ferry-booking-system' ),
 				array(
 					'status' => 400,

@@ -7,10 +7,10 @@
 
 declare( strict_types=1 );
 
-namespace FBM\REST\Controllers;
+namespace MPFBS\REST\Controllers;
 
-use FBM\REST\AbstractController;
-use FBM\Security\Capabilities;
+use MPFBS\REST\AbstractController;
+use MPFBS\Security\Capabilities;
 use WP_REST_Request;
 use WP_REST_Response;
 use WP_User;
@@ -143,7 +143,7 @@ final class CustomerController extends AbstractController {
 
 		if ( ! is_email( $email ) ) {
 			return $this->fail(
-				'fbm_invalid_email',
+				'mpfbs_invalid_email',
 				__( 'That is not a valid email address.', 'magepeople-ferry-booking-system' ),
 				400,
 				array( 'fields' => array( 'email' => __( 'Enter a valid email address.', 'magepeople-ferry-booking-system' ) ) )
@@ -181,7 +181,7 @@ final class CustomerController extends AbstractController {
 
 		if ( is_wp_error( $user_id ) ) {
 			return $this->fail(
-				'fbm_customer_not_created',
+				'mpfbs_customer_not_created',
 				$user_id->get_error_message(),
 				400
 			);
