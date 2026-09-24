@@ -92,7 +92,7 @@ final class AvailabilityController extends AbstractController {
 				),
 				array(
 					'methods'             => 'GET',
-					'callback'            => $this->public_handler( 'availability', 120, array( $this, 'get_one' ) ),
+					'callback'            => array( $this, 'get_one' ),
 					'permission_callback' => '__return_true',
 					'args'                => $this->quote_args(),
 				),
@@ -105,7 +105,7 @@ final class AvailabilityController extends AbstractController {
 			array(
 				array(
 					'methods'             => 'GET',
-					'callback'            => $this->public_handler( 'availability', 120, array( $this, 'get_many' ) ),
+					'callback'            => array( $this, 'get_many' ),
 					'permission_callback' => '__return_true',
 					'args'                => array(
 						'sailings' => array(
@@ -127,6 +127,12 @@ final class AvailabilityController extends AbstractController {
 	 * @return WP_REST_Response
 	 */
 	public function get_one( WP_REST_Request $request ): WP_REST_Response {
+		$throttle = $this->permissions->public_access( 'availability', 120 );
+
+		if ( is_wp_error( $throttle ) ) {
+			return Response::from_wp_error( $throttle );
+		}
+
 		$availability = $this->availability->for_sailing( (int) $request->get_param( 'id' ) );
 
 		if ( is_wp_error( $availability ) ) {
@@ -159,6 +165,12 @@ final class AvailabilityController extends AbstractController {
 	 * @return WP_REST_Response
 	 */
 	public function get_many( WP_REST_Request $request ): WP_REST_Response {
+		$throttle = $this->permissions->public_access( 'availability', 120 );
+
+		if ( is_wp_error( $throttle ) ) {
+			return Response::from_wp_error( $throttle );
+		}
+
 		$raw = (string) $request->get_param( 'sailings' );
 		$ids = array_values(
 			array_unique(

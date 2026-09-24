@@ -130,12 +130,14 @@ final class BookingController extends AbstractController {
 				array(
 					'methods'             => 'GET',
 					'callback'            => array( $this, 'get_items' ),
-					'permission_callback' => $this->can( Capabilities::MANAGE_BOOKINGS ),
+					'permission_callback' => static function () {
+						return current_user_can( Capabilities::MANAGE_BOOKINGS );
+					},
 					'args'                => $this->collection_params(),
 				),
 				array(
 					'methods'             => 'POST',
-					'callback'            => $this->public_handler( 'bookings', 30, array( $this, 'create_booking' ) ),
+					'callback'            => array( $this, 'create_booking' ),
 					'permission_callback' => '__return_true',
 					'args'                => $this->create_args(),
 				),
@@ -157,18 +159,24 @@ final class BookingController extends AbstractController {
 				array(
 					'methods'             => 'GET',
 					'callback'            => array( $this, 'get_item' ),
-					'permission_callback' => $this->can( Capabilities::MANAGE_BOOKINGS ),
+					'permission_callback' => static function () {
+						return current_user_can( Capabilities::MANAGE_BOOKINGS );
+					},
 				),
 				array(
 					'methods'             => 'PUT, PATCH',
 					'callback'            => array( $this, 'update_item' ),
-					'permission_callback' => $this->can( Capabilities::MODIFY_BOOKING ),
+					'permission_callback' => static function () {
+						return current_user_can( Capabilities::MODIFY_BOOKING );
+					},
 					'args'                => $this->update_args(),
 				),
 				array(
 					'methods'             => 'DELETE',
 					'callback'            => array( $this, 'delete_item' ),
-					'permission_callback' => $this->can( Capabilities::CANCEL_BOOKING ),
+					'permission_callback' => static function () {
+						return current_user_can( Capabilities::CANCEL_BOOKING );
+					},
 				),
 			)
 		);
@@ -180,7 +188,9 @@ final class BookingController extends AbstractController {
 				array(
 					'methods'             => 'GET',
 					'callback'            => array( $this, 'export_items' ),
-					'permission_callback' => $this->can( Capabilities::MANAGE_BOOKINGS ),
+					'permission_callback' => static function () {
+						return current_user_can( Capabilities::MANAGE_BOOKINGS );
+					},
 					'args'                => array(
 						'search' => array(
 							'description'       => __( 'Reference, customer or email to match.', 'magepeople-ferry-booking-system' ),
@@ -206,7 +216,9 @@ final class BookingController extends AbstractController {
 				array(
 					'methods'             => 'POST',
 					'callback'            => array( $this, 'create_staff_booking' ),
-					'permission_callback' => $this->can( Capabilities::CREATE_BOOKING ),
+					'permission_callback' => static function () {
+						return current_user_can( Capabilities::CREATE_BOOKING );
+					},
 					'args'                => $this->create_args(),
 				),
 			)
@@ -222,7 +234,9 @@ final class BookingController extends AbstractController {
 					// Any signed-in account may list its own bookings: every
 					// role holds `read`, and the handler only ever returns
 					// bookings owned by the current user.
-					'permission_callback' => $this->can( 'read' ),
+					'permission_callback' => static function () {
+						return current_user_can( 'read' );
+					},
 					'args'                => array(
 						'page'     => array(
 							'description'       => __( 'Page of the history.', 'magepeople-ferry-booking-system' ),
@@ -268,7 +282,7 @@ final class BookingController extends AbstractController {
 			array(
 				array(
 					'methods'             => 'POST',
-					'callback'            => $this->public_handler( 'lookup', 20, array( $this, 'lookup_booking' ) ),
+					'callback'            => array( $this, 'lookup_booking' ),
 					'permission_callback' => '__return_true',
 					'args'                => array(
 						'reference' => array(
@@ -767,6 +781,12 @@ final class BookingController extends AbstractController {
 	 * @return WP_REST_Response
 	 */
 	public function create_booking( WP_REST_Request $request ): WP_REST_Response {
+		$throttle = $this->permissions->public_access( 'bookings', 30 );
+
+		if ( is_wp_error( $throttle ) ) {
+			return Response::from_wp_error( $throttle );
+		}
+
 		$payload = $request->get_json_params();
 		$payload = is_array( $payload ) ? $payload : array();
 
@@ -786,6 +806,12 @@ final class BookingController extends AbstractController {
 	 * @return WP_REST_Response
 	 */
 	public function lookup_booking( WP_REST_Request $request ): WP_REST_Response {
+		$throttle = $this->permissions->public_access( 'lookup', 20 );
+
+		if ( is_wp_error( $throttle ) ) {
+			return Response::from_wp_error( $throttle );
+		}
+
 		$reference = (string) $request->get_param( 'reference' );
 		$email     = (string) $request->get_param( 'email' );
 

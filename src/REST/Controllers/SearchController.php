@@ -93,7 +93,7 @@ final class SearchController extends AbstractController {
 			array(
 				array(
 					'methods'             => 'GET',
-					'callback'            => $this->public_handler( 'search', 90, array( $this, 'get_results' ) ),
+					'callback'            => array( $this, 'get_results' ),
 					'permission_callback' => '__return_true',
 					'args'                => $this->search_args(),
 				),
@@ -106,7 +106,7 @@ final class SearchController extends AbstractController {
 			array(
 				array(
 					'methods'             => 'GET',
-					'callback'            => $this->public_handler( 'fares', 120, array( $this, 'get_fares' ) ),
+					'callback'            => array( $this, 'get_fares' ),
 					'permission_callback' => '__return_true',
 					'args'                => array(
 						'origin'      => array(
@@ -132,7 +132,7 @@ final class SearchController extends AbstractController {
 			array(
 				array(
 					'methods'             => 'GET',
-					'callback'            => $this->public_handler( 'options', 120, array( $this, 'get_options' ) ),
+					'callback'            => array( $this, 'get_options' ),
 					'permission_callback' => '__return_true',
 				),
 			)
@@ -146,6 +146,12 @@ final class SearchController extends AbstractController {
 	 * @return WP_REST_Response
 	 */
 	public function get_results( WP_REST_Request $request ): WP_REST_Response {
+		$throttle = $this->permissions->public_access( 'search', 90 );
+
+		if ( is_wp_error( $throttle ) ) {
+			return Response::from_wp_error( $throttle );
+		}
+
 		$results = $this->search->search(
 			array(
 				'origin'        => (int) $request->get_param( 'origin' ),
@@ -183,6 +189,12 @@ final class SearchController extends AbstractController {
 	 * @return WP_REST_Response
 	 */
 	public function get_fares( WP_REST_Request $request ): WP_REST_Response {
+		$throttle = $this->permissions->public_access( 'fares', 120 );
+
+		if ( is_wp_error( $throttle ) ) {
+			return Response::from_wp_error( $throttle );
+		}
+
 		return $this->respond(
 			$this->search->fares(
 				(int) $request->get_param( 'origin' ),
@@ -198,6 +210,12 @@ final class SearchController extends AbstractController {
 	 * @return WP_REST_Response
 	 */
 	public function get_options( WP_REST_Request $request ): WP_REST_Response {
+		$throttle = $this->permissions->public_access( 'options', 120 );
+
+		if ( is_wp_error( $throttle ) ) {
+			return Response::from_wp_error( $throttle );
+		}
+
 		unset( $request );
 
 		$options = $this->search->options();

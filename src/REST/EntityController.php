@@ -79,13 +79,17 @@ abstract class EntityController extends AbstractController {
 				array(
 					'methods'             => 'GET',
 					'callback'            => array( $this, 'get_items' ),
-					'permission_callback' => $this->can( $capability ),
+					'permission_callback' => static function () use ( $capability ) {
+						return current_user_can( $capability );
+					},
 					'args'                => $this->get_collection_params(),
 				),
 				array(
 					'methods'             => 'POST',
 					'callback'            => array( $this, 'create_item' ),
-					'permission_callback' => $this->can( $capability ),
+					'permission_callback' => static function () use ( $capability ) {
+						return current_user_can( $capability );
+					},
 					'args'                => $this->get_write_params( true ),
 				),
 				'schema' => array( $this, 'get_public_item_schema' ),
@@ -107,18 +111,24 @@ abstract class EntityController extends AbstractController {
 				array(
 					'methods'             => 'GET',
 					'callback'            => array( $this, 'get_item' ),
-					'permission_callback' => $this->can( $capability ),
+					'permission_callback' => static function () use ( $capability ) {
+						return current_user_can( $capability );
+					},
 				),
 				array(
 					'methods'             => 'PUT, PATCH',
 					'callback'            => array( $this, 'update_item' ),
-					'permission_callback' => $this->can( $capability ),
+					'permission_callback' => static function () use ( $capability ) {
+						return current_user_can( $capability );
+					},
 					'args'                => $this->get_write_params( false ),
 				),
 				array(
 					'methods'             => 'DELETE',
 					'callback'            => array( $this, 'delete_item' ),
-					'permission_callback' => $this->can( $capability ),
+					'permission_callback' => static function () use ( $capability ) {
+						return current_user_can( $capability );
+					},
 					'args'                => array(
 						'force' => array(
 							'description' => __( 'Bypass the trash and delete permanently.', 'magepeople-ferry-booking-system' ),

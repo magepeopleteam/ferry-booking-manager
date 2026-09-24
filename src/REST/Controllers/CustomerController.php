@@ -55,7 +55,9 @@ final class CustomerController extends AbstractController {
 				array(
 					'methods'             => 'GET',
 					'callback'            => array( $this, 'search' ),
-					'permission_callback' => $this->can( Capabilities::CREATE_BOOKING ),
+					'permission_callback' => static function () {
+						return current_user_can( Capabilities::CREATE_BOOKING );
+					},
 					'args'                => array(
 						'search' => array(
 							'description'       => __( 'Name or email to search for.', 'magepeople-ferry-booking-system' ),
@@ -68,7 +70,9 @@ final class CustomerController extends AbstractController {
 				array(
 					'methods'             => 'POST',
 					'callback'            => array( $this, 'create' ),
-					'permission_callback' => $this->can( Capabilities::CREATE_BOOKING ),
+					'permission_callback' => static function () {
+						return current_user_can( Capabilities::CREATE_BOOKING );
+					},
 					'args'                => array(
 						'name'  => array(
 							'description'       => __( 'Customer name.', 'magepeople-ferry-booking-system' ),

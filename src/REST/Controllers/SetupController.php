@@ -68,7 +68,9 @@ final class SetupController extends AbstractController {
 				array(
 					'methods'             => 'GET',
 					'callback'            => array( $this, 'get_status' ),
-					'permission_callback' => $this->can( Capabilities::ACCESS_DASHBOARD ),
+					'permission_callback' => static function () {
+						return current_user_can( Capabilities::ACCESS_DASHBOARD );
+					},
 				),
 			)
 		);
@@ -85,7 +87,9 @@ final class SetupController extends AbstractController {
 				array(
 					'methods'             => 'POST',
 					'callback'            => array( $this, 'save_business' ),
-					'permission_callback' => $this->can( Capabilities::MANAGE_SETTINGS ),
+					'permission_callback' => static function () {
+						return current_user_can( Capabilities::MANAGE_SETTINGS );
+					},
 					'args'                => array(
 						'company_name'    => $text,
 						'support_email'   => array(
@@ -107,7 +111,9 @@ final class SetupController extends AbstractController {
 				array(
 					'methods'             => 'POST',
 					'callback'            => array( $this, 'complete' ),
-					'permission_callback' => $this->can( Capabilities::MANAGE_SETTINGS ),
+					'permission_callback' => static function () {
+						return current_user_can( Capabilities::MANAGE_SETTINGS );
+					},
 				),
 			)
 		);

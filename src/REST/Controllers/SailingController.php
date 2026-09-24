@@ -100,7 +100,9 @@ final class SailingController extends EntityController {
 				array(
 					'methods'             => 'POST',
 					'callback'            => array( $this, 'run_schedule' ),
-					'permission_callback' => $this->can( $capability ),
+					'permission_callback' => static function () use ( $capability ) {
+						return current_user_can( $capability );
+					},
 					'args'                => $this->schedule_params(),
 				),
 			)
