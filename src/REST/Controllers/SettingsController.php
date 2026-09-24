@@ -14,6 +14,7 @@ use MPFBS\Frontend\Pages;
 use MPFBS\Payment\PaymentGatewayRegistry;
 use MPFBS\Pricing\PricingSettings;
 use MPFBS\REST\AbstractController;
+use MPFBS\REST\Response;
 use MPFBS\Security\Capabilities;
 use MPFBS\Security\Permissions;
 use MPFBS\Security\RoleSettings;
@@ -82,12 +83,16 @@ final class SettingsController extends AbstractController {
 				array(
 					'methods'             => 'GET',
 					'callback'            => array( $this, 'get_settings' ),
-					'permission_callback' => $this->can( Capabilities::MANAGE_SETTINGS ),
+					'permission_callback' => static function () {
+						return current_user_can( Capabilities::MANAGE_SETTINGS );
+					},
 				),
 				array(
 					'methods'             => 'PUT, PATCH, POST',
 					'callback'            => array( $this, 'save_settings' ),
-					'permission_callback' => $this->can( Capabilities::MANAGE_SETTINGS ),
+					'permission_callback' => static function () {
+						return current_user_can( Capabilities::MANAGE_SETTINGS );
+					},
 				),
 			)
 		);
@@ -99,7 +104,9 @@ final class SettingsController extends AbstractController {
 				array(
 					'methods'             => 'POST',
 					'callback'            => array( $this, 'send_test_email' ),
-					'permission_callback' => $this->can( Capabilities::MANAGE_SETTINGS ),
+					'permission_callback' => static function () {
+						return current_user_can( Capabilities::MANAGE_SETTINGS );
+					},
 					'args'                => array(
 						'to' => array(
 							'description'       => __( 'Address to send the test to.', 'magepeople-ferry-booking-system' ),
@@ -118,7 +125,7 @@ final class SettingsController extends AbstractController {
 			array(
 				array(
 					'methods'             => 'GET',
-					'callback'            => $this->public_handler( 'payment-methods', 60, array( $this, 'get_payment_methods' ) ),
+					'callback'            => array( $this, 'get_payment_methods' ),
 					'permission_callback' => '__return_true',
 				),
 			)
@@ -302,6 +309,12 @@ final class SettingsController extends AbstractController {
 	 * @return WP_REST_Response
 	 */
 	public function get_payment_methods( WP_REST_Request $request ): WP_REST_Response {
+		$throttle = $this->permissions->public_access( 'payment-methods', 60 );
+
+		if ( is_wp_error( $throttle ) ) {
+			return Response::from_wp_error( $throttle );
+		}
+
 		unset( $request );
 
 		return $this->respond(

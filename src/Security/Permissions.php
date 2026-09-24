@@ -16,9 +16,9 @@ defined( 'ABSPATH' ) || exit;
 /**
  * Central authority for "may the current user do X".
  *
- * REST controllers, the admin menu and every service consult this class instead
- * of calling current_user_can() directly, so object-level rules (an agent may
- * only touch their own bookings, for example) have exactly one home.
+ * REST routes declare their own capability check inline, as WordPress expects.
+ * This class is where the rest lives: the throttle applied to public endpoints,
+ * and object-level rules that a capability alone cannot answer.
  */
 final class Permissions {
 
@@ -58,45 +58,6 @@ final class Permissions {
 		 * @param array<mixed> $args       Object arguments.
 		 */
 		return (bool) apply_filters( 'mpfbs_current_user_can', $allowed, $capability, $args );
-	}
-
-	/**
-	 * Returns a REST permission callback for a capability.
-	 *
-	 * @param string $capability Capability slug.
-	 * @return callable(): (true|WP_Error)
-	 */
-	public function rest_capability_callback( string $capability ): callable {
-		return function () use ( $capability ) {
-			return $this->authorize( $capability );
-		};
-	}
-
-	/**
-	 * Authorises a capability, returning a REST-ready error when denied.
-	 *
-	 * @param string $capability Capability slug.
-	 * @param mixed  ...$args    Optional object arguments.
-	 * @return true|WP_Error
-	 */
-	public function authorize( string $capability, ...$args ) {
-		if ( ! is_user_logged_in() ) {
-			return new WP_Error(
-				'mpfbs_not_authenticated',
-				__( 'You must be signed in to perform this action.', 'magepeople-ferry-booking-system' ),
-				array( 'status' => 401 )
-			);
-		}
-
-		if ( ! $this->current_user_can( $capability, ...$args ) ) {
-			return new WP_Error(
-				'mpfbs_forbidden',
-				__( 'You do not have permission to perform this action.', 'magepeople-ferry-booking-system' ),
-				array( 'status' => 403 )
-			);
-		}
-
-		return true;
 	}
 
 	/**

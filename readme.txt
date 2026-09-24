@@ -17,6 +17,16 @@ system. Manage your fleet and terminals, publish a timetable, sell passenger and
 vehicle tickets through WooCommerce or a built-in checkout, and run the quayside
 from one dashboard.
 
+**Source code for the compiled files**
+
+Nothing in this plugin is minified-only. The complete, human-readable source
+for every compiled file in `assets/` ships inside the plugin itself, under
+`apps/`, and is also published at
+https://github.com/magepeopleteam/ferry-booking-manager
+
+Build instructions are in "Source code and build tools" below and in the
+README.md file included with the plugin.
+
 **What the free plugin includes**
 
 * Unlimited vessels, ports, routes and sailings
@@ -115,31 +125,50 @@ direct edits to the plugin.
 5. Configure passenger types, vehicle types and checkout settings.
 6. Publish sailings and test a booking flow before going live.
 
-== Source code and build ==
+== Source code and build tools ==
 
-The JavaScript and CSS in `assets/` are compiled. Their full, human-readable
-source ships with the plugin, and is also public at
+Every compiled file shipped in `assets/` is built from source that is included
+in this plugin, and is also public at
 https://github.com/magepeopleteam/ferry-booking-manager
 
-* `apps/admin/` - the admin dashboard (Next.js, React, TypeScript). Its static
-  export is written to `assets/admin/app/`.
-* `apps/booking/` - the customer booking form (Preact, TypeScript, Vite). Its
-  bundle is written to `assets/frontend/`.
-* PHP runtime code lives in `src/` and is not compiled.
+**What is compiled, and where its source is**
 
-To rebuild the assets (Node.js 20 or newer):
+* `assets/admin/app/` (the admin dashboard, including the files under
+  `assets/admin/app/_next/static/chunks/`) is the production build of
+  `apps/admin/`. Our source is `apps/admin/src/` (TypeScript and React); the
+  build is produced by Next.js, whose bundler Turbopack also emits its own
+  runtime and the React library code into those chunk files.
+* `assets/frontend/` (the customer booking form) is the production build of
+  `apps/booking/`. Our source is `apps/booking/src/` (TypeScript and Preact),
+  bundled by Vite.
+* `assets/admin/css/`, `assets/admin/js/` and everything in `src/` are written
+  by hand and are not compiled or minified.
 
-`cd apps/admin && npm ci && npm run build`
-`cd apps/booking && npm ci && npm run build`
+**Build tools and how to use them**
 
-**Third-party libraries**
+The builds need Node.js 20 or newer and npm 10 or newer. From the plugin
+folder:
 
-The compiled bundles include these libraries, all under the MIT licence,
-which is compatible with the GPL:
+1. `cd apps/admin && npm ci && npm run build` - type-checks the sources,
+   builds the Next.js static export, and writes it to `assets/admin/app/`.
+2. `cd apps/booking && npm ci && npm run build` - type-checks the sources,
+   builds the Vite bundle, and writes it to `assets/frontend/`.
 
+`npm ci` installs the exact dependency versions pinned in each
+`package-lock.json`, which is included, so the build is reproducible.
+
+**Third-party libraries in the compiled files**
+
+These libraries are compiled into the bundles above. All are MIT licensed,
+which is GPL compatible, and all are publicly maintained. The exact versions
+used are pinned in `apps/admin/package-lock.json` and
+`apps/booking/package-lock.json`.
+
+* Next.js, including its Turbopack bundler runtime - https://github.com/vercel/next.js
 * React and React DOM - https://github.com/facebook/react
-* Next.js - https://github.com/vercel/next.js
 * Preact - https://github.com/preactjs/preact
+* TypeScript (build only) - https://github.com/microsoft/TypeScript
+* Vite (build only) - https://github.com/vitejs/vite
 
 == Privacy ==
 
@@ -165,6 +194,15 @@ works without it using its own checkout.
 = Does it create database tables? =
 
 No. Everything is stored in WordPress posts, post meta and options.
+
+= Where is the source code for the compiled JavaScript and CSS? =
+
+In the plugin, under `apps/admin/` and `apps/booking/`, and also at
+https://github.com/magepeopleteam/ferry-booking-manager - `apps/admin/src/`
+builds to `assets/admin/app/` and `apps/booking/src/` builds to
+`assets/frontend/`. The libraries compiled into those bundles (Next.js with
+its Turbopack runtime, React, Preact) are listed with links under "Source code
+and build tools". Build steps are in that section and in the included README.md.
 
 = Do I need Node.js on my server? =
 

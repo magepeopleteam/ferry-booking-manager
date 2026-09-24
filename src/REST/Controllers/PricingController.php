@@ -81,7 +81,7 @@ final class PricingController extends AbstractController {
 			array(
 				array(
 					'methods'             => 'POST',
-					'callback'            => $this->public_handler( 'quote', 90, array( $this, 'create_quote' ) ),
+					'callback'            => array( $this, 'create_quote' ),
 					// A customer has to see a price before they have an account,
 					// and this returns nothing but arithmetic over public fares.
 					'permission_callback' => '__return_true',
@@ -118,12 +118,16 @@ final class PricingController extends AbstractController {
 				array(
 					'methods'             => 'GET',
 					'callback'            => array( $this, 'get_settings' ),
-					'permission_callback' => $this->can( Capabilities::MANAGE_PRICING ),
+					'permission_callback' => static function () {
+						return current_user_can( Capabilities::MANAGE_PRICING );
+					},
 				),
 				array(
 					'methods'             => 'PUT, PATCH, POST',
 					'callback'            => array( $this, 'save_settings' ),
-					'permission_callback' => $this->can( Capabilities::MANAGE_PRICING ),
+					'permission_callback' => static function () {
+						return current_user_can( Capabilities::MANAGE_PRICING );
+					},
 				),
 			)
 		);
@@ -136,6 +140,12 @@ final class PricingController extends AbstractController {
 	 * @return WP_REST_Response
 	 */
 	public function create_quote( WP_REST_Request $request ): WP_REST_Response {
+		$throttle = $this->permissions->public_access( 'quote', 90 );
+
+		if ( is_wp_error( $throttle ) ) {
+			return Response::from_wp_error( $throttle );
+		}
+
 		$payload = $request->get_json_params();
 		$payload = is_array( $payload ) ? $payload : array();
 

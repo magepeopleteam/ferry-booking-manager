@@ -67,12 +67,16 @@ final class DemoController extends AbstractController {
 				array(
 					'methods'             => 'GET',
 					'callback'            => array( $this, 'get_status' ),
-					'permission_callback' => $this->can( Capabilities::MANAGE_SETTINGS ),
+					'permission_callback' => static function () {
+						return current_user_can( Capabilities::MANAGE_SETTINGS );
+					},
 				),
 				array(
 					'methods'             => 'POST',
 					'callback'            => array( $this, 'run_step' ),
-					'permission_callback' => $this->can( Capabilities::MANAGE_SETTINGS ),
+					'permission_callback' => static function () {
+						return current_user_can( Capabilities::MANAGE_SETTINGS );
+					},
 					'args'                => array(
 						'step' => array(
 							'description'       => __( 'Zero-based import step.', 'magepeople-ferry-booking-system' ),
@@ -86,7 +90,9 @@ final class DemoController extends AbstractController {
 				array(
 					'methods'             => 'DELETE',
 					'callback'            => array( $this, 'remove' ),
-					'permission_callback' => $this->can( Capabilities::MANAGE_SETTINGS ),
+					'permission_callback' => static function () {
+						return current_user_can( Capabilities::MANAGE_SETTINGS );
+					},
 				),
 			)
 		);
@@ -98,7 +104,9 @@ final class DemoController extends AbstractController {
 				array(
 					'methods'             => 'POST',
 					'callback'            => array( $this, 'dismiss' ),
-					'permission_callback' => $this->can( Capabilities::MANAGE_SETTINGS ),
+					'permission_callback' => static function () {
+						return current_user_can( Capabilities::MANAGE_SETTINGS );
+					},
 				),
 			)
 		);

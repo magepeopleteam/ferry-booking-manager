@@ -10,7 +10,6 @@ declare( strict_types=1 );
 namespace MPFBS\REST;
 
 use MPFBS\Security\Permissions;
-use WP_Error;
 use WP_REST_Request;
 use WP_REST_Response;
 
@@ -73,40 +72,6 @@ abstract class AbstractController {
 	 */
 	public function get_rest_base(): string {
 		return $this->rest_base;
-	}
-
-	/**
-	 * Builds a permission callback for a capability.
-	 *
-	 * @param string $capability Capability slug.
-	 * @return callable(): (true|WP_Error)
-	 */
-	protected function can( string $capability ): callable {
-		return $this->permissions->rest_capability_callback( $capability );
-	}
-
-	/**
-	 * Wraps the handler of an intentionally public endpoint.
-	 *
-	 * Public endpoints register `__return_true` as their permission callback.
-	 * The handler still runs behind the public-API switch and the per-visitor
-	 * rate limit, which this wrapper applies before calling it.
-	 *
-	 * @param string   $bucket  Rate-limit bucket name.
-	 * @param int      $limit   Requests allowed per minute.
-	 * @param callable $handler Route handler receiving the request.
-	 * @return callable(WP_REST_Request): (WP_REST_Response|WP_Error)
-	 */
-	protected function public_handler( string $bucket, int $limit, callable $handler ): callable {
-		return function ( WP_REST_Request $request ) use ( $bucket, $limit, $handler ) {
-			$access = $this->permissions->public_access( $bucket, $limit );
-
-			if ( true !== $access ) {
-				return $access;
-			}
-
-			return $handler( $request );
-		};
 	}
 
 	/**

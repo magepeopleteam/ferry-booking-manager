@@ -51,12 +51,16 @@ final class FieldConfigController extends AbstractController {
 				array(
 					'methods'             => 'GET',
 					'callback'            => array( $this, 'get_config' ),
-					'permission_callback' => $this->can( Capabilities::MANAGE_SETTINGS ),
+					'permission_callback' => static function () {
+						return current_user_can( Capabilities::MANAGE_SETTINGS );
+					},
 				),
 				array(
 					'methods'             => 'PUT, PATCH, POST',
 					'callback'            => array( $this, 'save_config' ),
-					'permission_callback' => $this->can( Capabilities::MANAGE_SETTINGS ),
+					'permission_callback' => static function () {
+						return current_user_can( Capabilities::MANAGE_SETTINGS );
+					},
 					'args'                => array(
 						'modes'  => array(
 							'description' => __( 'Field key to mode map.', 'magepeople-ferry-booking-system' ),

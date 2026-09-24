@@ -133,8 +133,7 @@ is written with the figure this endpoint returns.
 
 | Code | Meaning |
 | --- | --- |
-| `mpfbs_not_authenticated` | 401, no signed-in user |
-| `mpfbs_forbidden` | 403, capability missing |
+| `mpfbs_rest_forbidden` | 401 with no signed-in user, 403 when the capability is missing |
 | `mpfbs_not_found` | 404 |
 | `mpfbs_validation_failed` | 422, see `data.fields` |
 | `mpfbs_duplicate_value` | 409, an identifier is already in use |
