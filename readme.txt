@@ -8,228 +8,244 @@ Stable tag: 1.0.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-Ferry booking and operations management for WordPress: vessels, routes, sailings, availability, pricing and bookings.
+Sell ferry tickets on your own website: ports, vessels, routes, timetables, fares and bookings, all from one dashboard.
 
 == Description ==
 
-MagePeople Ferry Booking System turns WordPress into a ferry reservation and operations
-system. Manage your fleet and terminals, publish a timetable, sell passenger and
-vehicle tickets through WooCommerce or a built-in checkout, and run the quayside
-from one dashboard.
+MagePeople Ferry Booking System turns your WordPress site into a ferry
+reservation system. Set up your terminals and vessels, publish a timetable,
+and let customers search crossings, choose a sailing and pay online. Your
+staff run the whole operation from a single dashboard inside WordPress.
 
-**Source code for the compiled files**
+It is built for operators who carry both passengers and vehicles: one crossing
+can sell seats, cars, vans and motorcycles at the same time, each with its own
+fare and its own space on board.
 
-Nothing in this plugin is minified-only. The complete, human-readable source
-for every compiled file in `assets/` ships inside the plugin itself, under
-`apps/`, and is also published at
-https://github.com/magepeopleteam/ferry-booking-manager
+Everything described here works in this plugin. There is nothing to unlock, no
+trial period and no licence key.
 
-Build instructions are in "Source code and build tools" below and in the
-README.md file included with the plugin.
+= Set up once, then run your timetable =
 
-**What the free plugin includes**
+* Add your **ports**, with check-in times and boarding instructions
+* Add your **vessels**, with passenger seats, vehicle spaces and deck metres
+* Connect them with **routes**, in both directions
+* Create a whole season of **sailings** in one step from a simple weekday and
+  time pattern, and see exactly what will be created before it is created
+* Override the capacity of any single sailing when you swap a vessel or hold
+  seats back
 
-* Unlimited vessels, ports, routes and sailings
-* Bulk schedule generator with conflict detection and a preview before anything
-  is created
-* Per-sailing capacity overrides for passengers, vehicles and lane metres
-* Operational roles for ferry managers, booking managers and cashiers
-* Passenger and vehicle type management with server-validated configuration
-* Booking workflows that use the same availability and pricing rules in admin,
-  checkout and API requests
-* Native checkout support, with WooCommerce available when you want its taxes,
-  coupons, payment gateways and order workflows
-* REST endpoints for dashboard, search, availability, bookings, setup,
-  settings, pricing and reference data
+= Sell passenger and vehicle tickets =
 
-**Built for real operations**
+* Set a fare for every passenger type and vehicle type, per route
+* Create your own **passenger types** — adult, child, senior, student,
+  resident — with age rules, priced as a fixed fare, a percentage of the adult
+  fare, or free
+* Create your own **vehicle types** — car, van, motorcycle, bicycle — each
+  taking the deck space you give it
+* Add **taxes, booking fees, return discounts and group discounts**
+* Choose what the booking form asks for: names, phone, date of birth,
+  nationality, travel document details, vehicle registration and more
 
-* One authoritative availability engine - the storefront and staff bookings
-  can never disagree
-* Server-calculated prices; the interface only ever previews them
-* A vessel cannot be scheduled in two places at once
-* Records still in use cannot be deleted out from under a booking
-* Temporary holds and cached aggregates use transients and object cache, not
-  custom tables or hidden background services
-* Route, sailing and booking data are stored in normal WordPress post and meta
-  structures so site migration, backup and replication tools keep working
+= Take bookings and payments =
 
-**Built for WordPress**
+* A booking form for your customers: search, pick a crossing, enter who is
+  travelling, pay, done
+* One-way and return journeys
+* **Built-in checkout** with offline payment methods — cash, bank transfer,
+  pay at the port, or a manual arrangement
+* **WooCommerce checkout** instead, when you want card payments, coupons,
+  taxes and orders handled by WooCommerce
+* Seats are held while a customer pays, and released automatically if they do
+  not finish
+* Customers receive a confirmation email, can look up a booking with their
+  reference and email address, and signed-in customers get a "My Bookings"
+  page
+* Your staff can take bookings at the counter or over the phone from the
+  dashboard
 
-* No custom database tables. Your existing backups, migrations and multisite
-  tooling already understand the data.
-* No Node.js process on your server. The dashboard ships pre-built.
-* Translation-ready, RTL-ready, and compatible with WPML, Polylang and
-  TranslatePress.
-* Public `mpfbs_*` hooks let developers extend entities, validation,
-  capabilities, REST controllers, runtime configuration and dashboard
-  translations without patching core files
+= Run the quayside =
 
-**Data model**
+* A dashboard showing today's sailings, how full each one is, passengers and
+  vehicles travelling, money taken and payments still outstanding
+* A bookings list you can search by reference, customer or email, filter by
+  status, and export to CSV
+* Staff roles — **Ferry Manager** for everything, **Ferry Booking Manager**
+  for sailings and bookings, **Ferry Cashier** for taking bookings and
+  payments — plus a screen to fine-tune what each role may do
+* Overbooking is prevented in one place, so your website and your counter can
+  never sell the same seat twice
 
-The free plugin manages these core records:
+= Built the WordPress way =
 
-* Ports
-* Vessels
-* Routes
-* Sailings
-* Passenger types
-* Vehicle types
-* Bookings
+* **No custom database tables.** Everything is stored as ordinary WordPress
+  posts, meta and options, so your usual backup, staging and migration tools
+  already understand your data
+* **Translation ready**, and tested with WPML, Polylang and TranslatePress
+* Works with any theme, and the booking form is available as a block as well
+  as a shortcode
+* Developer friendly: a REST API and documented `mpfbs_*` hooks and filters
 
-Each property that needs filtering, sorting or reporting is stored in dedicated
-meta keys, with derived timestamps and date projections generated from authored
-values for reliable queries and calendar views.
+= Try it with demo data first =
 
-**Admin experience**
+On a new install the dashboard offers to set up a complete demo ferry
+operation — terminals, vessels, routes, fares and ten days of sailings, ready
+to book. It is the quickest way to see how everything fits together, and it
+can be removed again in one click without touching anything you created
+yourself.
 
-The admin workspace is a static Next.js export served from plugin assets inside
-wp-admin. That gives the plugin a modern application-style UI without needing a
-Node.js process on the production site. The exported shell is intentionally a
-structural skeleton so it can hydrate cleanly with live WordPress data such as
-permissions, translations and settings.
+= Up and running in five minutes =
 
-**Frontend and checkout**
-
-The free plugin supports:
-
-* Search and availability queries for passenger and vehicle transport
-* Server-authoritative booking validation
-* Native checkout without WooCommerce
-* Optional WooCommerce integration for stores that want its order, tax,
-  coupon and payment ecosystem
-* Booking, pricing and availability services shared across frontend,
-  admin and REST APIs
-
-**Developer and extension details**
-
-The public hook surface is versioned under the `mpfbs_` prefix. Extension points
-include:
-
-* `mpfbs_service_providers`
-* `mpfbs_entity_fields`
-* `mpfbs_validate_entity`
-* `mpfbs_rest_controllers`
-* `mpfbs_admin_config`
-* `mpfbs_js_translations`
-
-This keeps customisations inside normal WordPress hooks instead of requiring
-direct edits to the plugin.
+1. Activate the plugin and open **Ferry Manager** in your admin menu
+2. Follow the **Get started** checklist, or install the demo data to explore
+3. Add your ports, vessels and routes, then create your sailings
+4. Set your fares, taxes and payment methods
+5. Open the **Book a Crossing** page the plugin made for you and try a booking
 
 == Installation ==
 
-1. Upload the plugin to `/wp-content/plugins/magepeople-ferry-booking-system/`.
-2. Activate it through the Plugins screen.
-3. Open **Ferry Manager** in the admin menu.
-4. Add your ports, then your vessels, then the routes between them.
-5. Configure passenger types, vehicle types and checkout settings.
-6. Publish sailings and test a booking flow before going live.
+= From your WordPress dashboard =
 
-== Source code and build tools ==
+1. Go to **Plugins > Add New** and search for "MagePeople Ferry Booking System"
+2. Click **Install Now**, then **Activate**
+3. Open **Ferry Manager** in the admin menu and follow the **Get started**
+   checklist
 
-Every compiled file shipped in `assets/` is built from source that is included
-in this plugin, and is also public at
-https://github.com/magepeopleteam/ferry-booking-manager
+= Uploading the plugin =
 
-**What is compiled, and where its source is**
+1. Download the plugin zip file
+2. Go to **Plugins > Add New > Upload Plugin** and choose the zip
+3. Click **Install Now**, then **Activate**
+4. Open **Ferry Manager** in the admin menu
 
-* `assets/admin/app/` (the admin dashboard, including the files under
-  `assets/admin/app/_next/static/chunks/`) is the production build of
-  `apps/admin/`. Our source is `apps/admin/src/` (TypeScript and React); the
-  build is produced by Next.js, whose bundler Turbopack also emits its own
-  runtime and the React library code into those chunk files.
-* `assets/frontend/` (the customer booking form) is the production build of
-  `apps/booking/`. Our source is `apps/booking/src/` (TypeScript and Preact),
-  bundled by Vite.
-* `assets/admin/css/`, `assets/admin/js/` and everything in `src/` are written
-  by hand and are not compiled or minified.
+= What activation sets up for you =
 
-**Build tools and how to use them**
+Four pages are created automatically, so the booking flow works straight away:
 
-The builds need Node.js 20 or newer and npm 10 or newer. From the plugin
-folder:
+* **Book a Crossing** — the booking form
+* **Booking Confirmation** — what a customer sees after paying
+* **My Bookings** — a signed-in customer's own bookings
+* **Find My Booking** — looks a booking up from a reference and email address
 
-1. `cd apps/admin && npm ci && npm run build` - type-checks the sources,
-   builds the Next.js static export, and writes it to `assets/admin/app/`.
-2. `cd apps/booking && npm ci && npm run build` - type-checks the sources,
-   builds the Vite bundle, and writes it to `assets/frontend/`.
+Activation also adds the three staff roles and a starter set of passenger
+types you can rename or replace.
 
-`npm ci` installs the exact dependency versions pinned in each
-`package-lock.json`, which is included, so the build is reproducible.
+= Putting the booking form on your own pages =
 
-**Third-party libraries in the compiled files**
+Use the blocks — search for "ferry" in the block inserter — or these
+shortcodes:
 
-These libraries are compiled into the bundles above. All are MIT licensed,
-which is GPL compatible, and all are publicly maintained. The exact versions
-used are pinned in `apps/admin/package-lock.json` and
-`apps/booking/package-lock.json`.
+* `[mpfbs_booking]` — the full booking flow
+* `[mpfbs_search]` — a compact search form that sends people to the booking page
+* `[mpfbs_confirmation]` — the confirmation page
+* `[mpfbs_my_bookings]` — a customer's own bookings
+* `[mpfbs_lookup]` — find a booking by reference and email
 
-* Next.js, including its Turbopack bundler runtime - https://github.com/vercel/next.js
-* React and React DOM - https://github.com/facebook/react
-* Preact - https://github.com/preactjs/preact
-* TypeScript (build only) - https://github.com/microsoft/TypeScript
-* Vite (build only) - https://github.com/vitejs/vite
+= Requirements =
 
-== Privacy ==
-
-The plugin stores the booking details a customer or member of staff enters
-(names, email, phone, travel document fields you choose to collect) as
-WordPress posts and post meta on your own site. It does not send any data to
-external services and does not contact any server of its own.
-
-An optional setting on Settings > Integrations pushes a purchase event to the
-page's `dataLayer` when a booking completes, for a tag manager you already
-run. It is off by default and sends nothing by itself.
-
-Booking data is only deleted on uninstall when "Delete all ferry data when the
-plugin is deleted" is switched on under Settings > Advanced.
+WordPress 6.0 or newer and PHP 8.0 or newer. WooCommerce is optional.
 
 == Frequently Asked Questions ==
 
-= Does this require WooCommerce? =
+= Do I need WooCommerce? =
 
-No. WooCommerce is supported for checkout, coupons and taxes, and the plugin
-works without it using its own checkout.
+No. The plugin has its own checkout with offline payment methods. Add
+WooCommerce only if you want card payments, coupons or taxes handled by it,
+then switch to WooCommerce mode on the **Checkout** settings tab.
+
+= Can I sell vehicle spaces as well as passenger seats? =
+
+Yes. Vehicle types have their own fares and take up the deck space you give
+them, so a sailing stops selling cars once the deck is full even when seats
+are still available.
+
+= Can customers book a return journey? =
+
+Yes. Both legs are priced together, and you can offer a return discount.
+
+= Does it prevent overbooking? =
+
+Yes. Availability is worked out in one place for your website, your counter
+and the API, and seats are held while a customer is paying. You can also hold
+seats back from online sale on any sailing.
+
+= Do I have to create every sailing by hand? =
+
+No. Tell the schedule generator which days and times a route runs and between
+which dates, and it creates the whole timetable. It previews everything first
+and will not book one vessel into two places at once.
+
+= Will it work with my theme? =
+
+Yes. The booking form follows your theme's layout, and you can set an accent
+colour to match your branding in the settings.
 
 = Does it create database tables? =
 
-No. Everything is stored in WordPress posts, post meta and options.
+No. Everything is stored using standard WordPress posts, meta and options.
 
-= Where is the source code for the compiled JavaScript and CSS? =
+= Is my customer data sent anywhere? =
 
-In the plugin, under `apps/admin/` and `apps/booking/`, and also at
-https://github.com/magepeopleteam/ferry-booking-manager - `apps/admin/src/`
-builds to `assets/admin/app/` and `apps/booking/src/` builds to
-`assets/frontend/`. The libraries compiled into those bundles (Next.js with
-its Turbopack runtime, React, Preact) are listed with links under "Source code
-and build tools". Build steps are in that section and in the included README.md.
+No. Booking details stay in your own WordPress database, and the plugin does
+not contact any external service. There is an optional setting that pushes a
+purchase event to a tag manager you already run, and it is off by default.
 
-= Do I need Node.js on my server? =
+= What happens to my bookings if I delete the plugin? =
 
-No. Node is only used to build the dashboard before release.
+They stay. Deleting the plugin leaves your bookings and timetable in place,
+unless you first switch on "Delete all ferry data when the plugin is deleted"
+under **Settings > Advanced**.
 
-= Can developers extend the data model and dashboard? =
+= Can I translate it? =
 
-Yes. The plugin exposes a public `mpfbs_*` hook surface for entities,
-validation, capabilities, REST controllers, runtime config and translated UI
-strings.
+Yes. The plugin is fully translation-ready and works with WPML, Polylang and
+TranslatePress.
+
+= Can developers extend it? =
+
+Yes. There is a REST API under `mpfbs/v1` and documented `mpfbs_*` hooks and
+filters for entities, validation, capabilities, pricing, REST controllers and
+the dashboard. The plugin's complete source, including the readable source of
+its compiled JavaScript and CSS, ships inside the plugin under `apps/` and is
+published at https://github.com/magepeopleteam/ferry-booking-manager
+
+= Where can I get help? =
+
+In the support forum on this plugin's page. Please tell us what you were
+doing, what you expected, and what happened instead.
+
+== Screenshots ==
+
+1. The dashboard: today's crossings, how full each one is, and takings so far
+2. The booking form your customers use, from search through to payment
+3. Fleet and schedule: ports, vessels, routes and sailings in one place
+4. The schedule generator previewing a season of crossings before creating them
+5. Fares for every passenger and vehicle type on a route
+6. Bookings: search, filter, open a booking, export to CSV
+7. Settings for checkout, payments, emails and staff permissions
 
 == Changelog ==
 
 = 1.0.0 =
-* Initial release: vessels, ports, routes, sailings, passenger and vehicle
-  types, a bulk schedule generator, and a capacity-and-hold-aware
-  availability engine shared by search, the admin booking wizard and the
-  REST API.
-* Native checkout and optional WooCommerce integration, both driven by the
-  same server-authoritative pricing engine.
-* REST API (`mpfbs/v1`) with capability-gated endpoints for dashboard,
-  search, availability, bookings, setup, settings, pricing and reference
-  data.
-* Admin dashboard: a single "Ferry Manager" screen hosting a pre-built
-  Next.js application, with working Ports, Vessels, Routes and Sailings
-  management.
-* Eleven `mpfbs_` capabilities and three operational roles (Ferry Manager,
-  Booking Manager, Cashier) provisioned on activation.
-* No custom database tables; everything is stored in normal WordPress
-  posts, post meta and options.
+* First release.
+* Ports, vessels, routes, sailings, passenger types and vehicle types.
+* Schedule generator with a preview and vessel conflict detection.
+* Availability with capacity limits, held-back seats, booking windows, and
+  temporary holds while a customer pays.
+* Fares per route and per type, taxes, booking fees, return and group
+  discounts.
+* Customer booking form with one-way and return journeys, booking lookup and
+  a My Bookings page.
+* Built-in checkout with offline payment methods, plus optional WooCommerce
+  checkout.
+* Staff bookings, a bookings list with CSV export, and a dashboard of the
+  day's operation.
+* Three staff roles with editable permissions.
+* Confirmation, cancellation and staff notification emails.
+* A demo ferry operation that installs and removes in one click.
+* REST API and `mpfbs_*` hooks for developers.
+* No custom database tables.
+
+== Upgrade Notice ==
+
+= 1.0.0 =
+First release.
