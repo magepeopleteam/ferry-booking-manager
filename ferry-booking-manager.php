@@ -24,6 +24,28 @@
 
 defined( 'ABSPATH' ) || exit;
 
+/*
+ * Appneck SDK bootstrap. Must run unconditionally at the top level, like the
+ * activation/deactivation hooks below, so its own register_activation_hook()
+ * call is in place before WordPress fires the activation action. Guarded on
+ * PHP_VERSION rather than placed after the compatibility gate above: the SDK
+ * itself only guarantees PHP 7.2+ (see lib/appneck/.../composer.json), which
+ * is still below this file's own PHP-7.0 parseability floor. Bundled under
+ * lib/, not vendor/: vendor/ here is Composer's own regenerated autoloader
+ * output, gitignored and left out of the shipped package by .distignore.
+ */
+if ( version_compare( PHP_VERSION, '7.2', '>=' ) ) {
+	require_once __DIR__ . '/lib/appneck/wordpress-sdk/appneck-wordpress-sdk/appneck-sdk.php';
+	appneck_sdk_load_latest();
+
+	$GLOBALS['my_plugin_sdk'] = \Appneck\Sdk\Sdk::bootstrap(
+		'pk_yDGKDFYRW8FAXlAzA0srrOHHw0m7bN0Q',  // your API key
+		'sk_52YB4UdK6eaeNDHoG9RkgjYDhzDzUkFUyfxedldC4d21yW7B', // your product secret
+		'https://appneck.com',                  // the Appneck server URL
+		__FILE__                                // so the SDK can hook activation/deactivation
+	);
+}
+
 define( 'MPFBS_VERSION', '1.0.0' );
 define( 'MPFBS_PLUGIN_FILE', __FILE__ );
 define( 'MPFBS_PATH', plugin_dir_path( __FILE__ ) );
