@@ -185,9 +185,11 @@ No. Everything is stored using standard WordPress posts, meta and options.
 
 = Is my customer data sent anywhere? =
 
-No. Booking details stay in your own WordPress database, and the plugin does
-not contact any external service. There is an optional setting that pushes a
-purchase event to a tag manager you already run, and it is off by default.
+No. Booking details stay in your own WordPress database. There is an optional
+setting that pushes a purchase event to a tag manager you already run, and it
+is off by default. The plugin also includes an opt-in telemetry SDK (see
+External Services below) that only starts sending anything after you
+confirm it in the admin notice it shows.
 
 = What happens to my bookings if I delete the plugin? =
 
@@ -222,6 +224,17 @@ doing, what you expected, and what happened instead.
 5. Fares for every passenger and vehicle type on a route
 6. Bookings: search, filter, open a booking, export to CSV
 7. Settings for checkout, payments, emails and staff permissions
+
+== External Services ==
+
+This plugin can connect to third-party services when you turn them on. Nothing is sent to these services unless you enable the related feature.
+
+= Appneck =
+
+This plugin uses the [Appneck](https://appneck.com) SDK to collect some telemetry data upon your confirmation, to troubleshoot problems faster and make product improvements. Appneck does not gather any data by default; the SDK only starts gathering basic telemetry data when you allow it via the admin notice.
+
+* Service: [Appneck](https://appneck.com)
+* Privacy policy: https://appneck.com/privacy-policy/
 
 == Changelog ==
 
