@@ -4,7 +4,7 @@ Tags: ferry, booking, ticketing, woocommerce, transport
 Requires at least: 6.0
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 1.0.0
+Stable tag: 1.0.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -237,6 +237,9 @@ This plugin uses the [Appneck](https://appneck.com) SDK to collect some telemetr
 * Privacy policy: https://appneck.com/privacy-policy/
 
 == Changelog ==
+
+= 1.0.1 =
+* New: added the Appneck SDK for opt-in telemetry and update tracking. It does not collect any data by default; it only starts after you confirm via the admin notice. See External services in this readme.
 
 = 1.0.0 =
 * First release.
