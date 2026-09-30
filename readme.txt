@@ -4,7 +4,7 @@ Tags: ferry, booking, ticketing, woocommerce, transport
 Requires at least: 6.0
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 1.0.1
+Stable tag: 1.0.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -231,12 +231,14 @@ This plugin can connect to third-party services when you turn them on. Nothing i
 
 = Appneck =
 
-This plugin uses the [Appneck](https://appneck.com) SDK to collect some telemetry data upon your confirmation, to troubleshoot problems faster and make product improvements. Appneck does not gather any data by default; the SDK only starts gathering basic telemetry data when you allow it via the admin notice.
-
-* Service: [Appneck](https://appneck.com)
-* Privacy policy: https://appneck.com/privacy-policy/
+This Plugin uses [Appneck](https://appneck.com) SDK to collect some telemetry data upon the user's confirmation to troubleshoot problems faster & make product improvements.
+Appneck SDK **does not gather any data by default.** The SDK only starts gathering basic telemetry data **when a user allows it via the admin notice**. We collect the data to ensure a great user experience for all our users. Integrating Appneck SDK **DOES NOT IMMEDIATELY** start gathering data, **without confirmation from users in any case.**
+Learn more about how [Appneck collects and uses this data](https://appneck.com/privacy-policy/).
 
 == Changelog ==
+
+= 1.0.2 =
+* Fix: Corrected the Appneck privacy disclosure text in External Services to match the standard wording used across our plugins.
 
 = 1.0.1 =
 * New: added the Appneck SDK for opt-in telemetry and update tracking. It does not collect any data by default; it only starts after you confirm via the admin notice. See External services in this readme.
