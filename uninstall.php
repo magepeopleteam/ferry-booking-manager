@@ -14,7 +14,7 @@ require_once __DIR__ . '/src/Core/Autoloader.php';
 MPFBS\Core\Autoloader::register( 'MPFBS\\', __DIR__ . '/src/' );
 
 if ( ! defined( 'MPFBS_VERSION' ) ) {
-	define( 'MPFBS_VERSION', '1.0.1' );
+	define( 'MPFBS_VERSION', '1.0.2' );
 }
 
 /**
