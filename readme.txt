@@ -238,7 +238,7 @@ Learn more about how [Appneck collects and uses this data](https://appneck.com/p
 == Changelog ==
 
 = 1.0.4 =
-* Fix: Updated the bundled Appneck SDK to the latest version. The SDK could previously contact Appneck's server before a site owner answered the telemetry consent prompt; it now only registers or sends any data after consent is explicitly accepted.
+* Fix: Updated the bundled Appneck SDK to the latest version.
 
 = 1.0.3 =
 * New: Updated the bundled Appneck SDK to the latest version.
