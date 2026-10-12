@@ -1,5 +1,5 @@
 === MagePeople Ferry Booking System ===
-Contributors: magepeopleteam
+Contributors: magepeopleteam, raselsha
 Tags: ferry, booking, ticketing, woocommerce, transport
 Requires at least: 6.0
 Tested up to: 7.1
