@@ -4,7 +4,7 @@ Tags: ferry, booking, ticketing, woocommerce, transport
 Requires at least: 6.0
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 1.0.3
+Stable tag: 1.0.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -236,6 +236,9 @@ Appneck SDK **does not gather any data by default.** The SDK only starts gatheri
 Learn more about how [Appneck collects and uses this data](https://appneck.com/privacy-policy/).
 
 == Changelog ==
+
+= 1.0.4 =
+* Fix: Updated the bundled Appneck SDK to the latest version.
 
 = 1.0.3 =
 * New: Updated the bundled Appneck SDK to the latest version.

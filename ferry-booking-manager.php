@@ -3,7 +3,7 @@
  * Plugin Name:       MagePeople Ferry Booking System
  * Plugin URI:        https://github.com/magepeopleteam/ferry-booking-manager
  * Description:       Production-grade ferry booking and ferry operations management for WordPress. Vessels, ports, routes, sailings, passengers, vehicles, availability, pricing, bookings, WooCommerce and native checkout.
- * Version:           1.0.3
+ * Version:           1.0.4
  * Requires at least: 6.0
  * Requires PHP:      8.0
  * Author:            MagePeople Team
@@ -46,7 +46,7 @@ if ( version_compare( PHP_VERSION, '7.2', '>=' ) ) {
 	);
 }
 
-define( 'MPFBS_VERSION', '1.0.3' );
+define( 'MPFBS_VERSION', '1.0.4' );
 define( 'MPFBS_PLUGIN_FILE', __FILE__ );
 define( 'MPFBS_PATH', plugin_dir_path( __FILE__ ) );
 define( 'MPFBS_URL', plugin_dir_url( __FILE__ ) );
