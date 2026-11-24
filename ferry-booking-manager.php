@@ -38,7 +38,7 @@ if ( version_compare( PHP_VERSION, '7.2', '>=' ) ) {
 	require_once __DIR__ . '/lib/appneck/wordpress-sdk/appneck-wordpress-sdk/appneck-sdk.php';
 	appneck_sdk_load_latest();
 
-	$GLOBALS['my_plugin_sdk'] = \Appneck\Sdk\Sdk::bootstrap(
+	$GLOBALS['magepeople_ferry_booking_system_appneck_sdk'] = \Appneck\Sdk\Sdk::bootstrap(
 		'pk_yDGKDFYRW8FAXlAzA0srrOHHw0m7bN0Q',  // your API key
 		'sk_52YB4UdK6eaeNDHoG9RkgjYDhzDzUkFUyfxedldC4d21yW7B', // your product secret
 		'https://appneck.com',                  // the Appneck server URL
